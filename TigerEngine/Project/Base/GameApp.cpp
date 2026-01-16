@@ -1,4 +1,4 @@
-﻿#include "GameApp.h"
+#include "GameApp.h"
 #include "pch.h"
 #include "Helper.h"
 #include "Renderer/DirectX11Renderer.h"
@@ -134,7 +134,19 @@ bool GameApp::Initialize(UINT Width, UINT Height)
 	// 타이머 초기화
 	GameTimer::Instance().Reset();
 
+    ConsoleInitialize();
+
 	return true;
+}
+
+void GameApp::Uninialize()
+{
+    ConsoleUninitalize();
+}
+
+bool GameApp::OnUnitialize()
+{
+    return true;
 }
 
 bool GameApp::OnInitialize()
@@ -162,6 +174,8 @@ bool GameApp::Run()
 			Render();
 		}
 	}
+
+    Uninialize();
 	return 0;
 }
 

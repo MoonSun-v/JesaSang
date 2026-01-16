@@ -1,5 +1,5 @@
 #pragma once
-#include <directxtk/SimpleMath.h>
+#include "../pch.h"
 
 using namespace DirectX::SimpleMath;
 

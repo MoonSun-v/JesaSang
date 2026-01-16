@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "pch.h"
 #include <windows.h>
 #include "System/TimeSystem.h"
@@ -36,6 +36,8 @@ public:
 	bool isResize = false;
 public:
 	bool Initialize(UINT Width, UINT Height);
+    void Uninialize();
+    virtual bool OnUnitialize();
 	virtual bool OnInitialize();
 
 	virtual bool Run();
@@ -44,6 +46,9 @@ public:
 	void Render();
 	virtual void OnUpdate();		// Update
 	virtual void OnRender() = 0;	// Render
+
+    void ConsoleInitialize();
+    void ConsoleUninitalize();
 
 	virtual LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,

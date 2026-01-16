@@ -21,8 +21,10 @@ public:
 	void OnUpdate() override;
 	void OnRender() override;
 
+#if _DEBUG
 	std::unique_ptr<ImguiRenderer> imguiRenderer{};
 	std::unique_ptr<Editor> editor{};
+#endif
 	
 	vector<std::shared_ptr<IRenderPass>> renderPasses;
 
@@ -31,12 +33,26 @@ public:
 		const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker) override;
 
 private:
+
+	/// <summary>
+	/// ComponentFactory에 사용하는 컴포넌트 등록하는 함수
+	/// </summary>
 	void RegisterAllComponents();
 
+	/// <summary>
+	/// 매 프레임마다 렌더링 시작할 때 호출
+	/// </summary>
 	void BeginRender();
+
+	/// <summary>
+	/// 매 프레임 마다 렌더링 끝날 때 호출
+	/// </summary>
 	void EndRender();
 
-    void LoadClientDLL();
+    void LoadSavedFirstScene();
+
+    std::optional<std::filesystem::path> FindDirectoryInAssets(std::string dirName);
+    std::filesystem::path GetExeDir();
 
 	std::shared_ptr<DirectX11Renderer> dxRenderer{};
 };

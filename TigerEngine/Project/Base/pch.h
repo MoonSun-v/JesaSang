@@ -26,15 +26,17 @@
 #include <algorithm>
 #include <functional>
 
+#if _DEBUG
 #include <imgui.h>
-#include <directxtk/SimpleMath.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+#endif
+
+#include <directxtk/SimpleMath.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-namespace Math = DirectX::SimpleMath;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 using namespace DirectX::SimpleMath;

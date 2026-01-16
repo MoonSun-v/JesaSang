@@ -1,4 +1,5 @@
-﻿#pragma once
+#if _DEBUG
+#pragma once
 #include "pch.h"
 #include "System/InputSystem.h"
 #include "Entity/GameObject.h"
@@ -59,3 +60,4 @@ public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,
 		const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker) override;
 };
+#endif

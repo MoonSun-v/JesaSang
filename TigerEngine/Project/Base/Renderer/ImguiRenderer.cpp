@@ -1,4 +1,5 @@
-﻿#include "ImguiRenderer.h"
+#if _DEBUG
+#include "ImguiRenderer.h"
 
 void ImguiRenderer::BeginRender()
 {
@@ -58,3 +59,4 @@ void ImguiRenderer::Initialize(HWND hwnd, ComPtr<ID3D11Device> device, ComPtr<ID
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(device.Get(), deviceContex.Get());
 }
+#endif
