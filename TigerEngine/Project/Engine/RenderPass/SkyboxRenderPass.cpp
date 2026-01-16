@@ -1,5 +1,6 @@
 #include "SkyboxRenderPass.h"
 #include "directxtk/DDSTextureLoader.h"
+#include "../Util/PathHelper.h"
 
 struct ConstantBuffer   // TODO 정리하기
 {
@@ -183,8 +184,11 @@ void SkyboxRenderPass::CreateCube(const ComPtr<ID3D11Device>& device)
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
+    std::wstring shadersPath = PathHelper::FindDirectory("Engine\\Shaders").value().wstring();
+    std::wstring path = shadersPath + L"\\VS_Skybox.hlsl";
+
 	ComPtr<ID3DBlob> vertexShaderBuffer = nullptr;
-	HR_T(CompileShaderFromFile(L"Shaders\\VS_Skybox.hlsl", "main", "vs_5_0", &vertexShaderBuffer));
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", &vertexShaderBuffer));
 	HR_T(device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), inputLayout.GetAddressOf()));
 
     /* --------------------------------- 버텍스 버퍼 --------------------------------- */
@@ -222,7 +226,10 @@ void SkyboxRenderPass::CreateCube(const ComPtr<ID3D11Device>& device)
 	HR_T(device->CreateBuffer(&bufferDesc, &ibData, skyboxIndexBuffer.GetAddressOf()));
 
 	/* ------------------------------- 픽셀 셰이더 만들기 ------------------------------- */
+
+    path = shadersPath + L"\\PS_Skybox.hlsl";
+
 	ComPtr<ID3DBlob> sbPixelShaderBuffer = nullptr;
-	HR_T(CompileShaderFromFile(L"Shaders\\PS_Skybox.hlsl", "main", "ps_5_0", &sbPixelShaderBuffer));
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", &sbPixelShaderBuffer));
 	HR_T(device->CreatePixelShader(sbPixelShaderBuffer->GetBufferPointer(), sbPixelShaderBuffer->GetBufferSize(), NULL, pixelShader.GetAddressOf()));
 }

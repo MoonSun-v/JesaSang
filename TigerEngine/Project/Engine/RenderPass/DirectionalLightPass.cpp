@@ -4,6 +4,7 @@
 
 #include "System/CameraSystem.h"
 #include "../Manager/WorldManager.h"
+#include "../Util/PathHelper.h"
 
 struct ConstantBuffer   // TODO 정리하기
 {
@@ -37,6 +38,7 @@ struct QuadVertex
 
 void DirectionalLightPass::Init(const ComPtr<ID3D11Device> &device)
 {
+    std::wstring assetPath = PathHelper::FindDirectory("Engine\\Shaders").value().wstring();
     CreateQuad(device);
 
     /* ---------------------------- 인풋 레이아웃 만들기 ---------------------------- */
@@ -49,12 +51,14 @@ void DirectionalLightPass::Init(const ComPtr<ID3D11Device> &device)
     /* --------------------------------- 셰이더 만들기 -------------------------------- */
 	ComPtr<ID3DBlob> vertexShaderBuffer{};
 	// Light Pass
-	HR_T(CompileShaderFromFile(L"Shaders\\VS_DirectionalLight.hlsl", "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
+    std::wstring path = assetPath + L"\\VS_DirectionalLight.hlsl";
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
 	HR_T(device->CreateInputLayout(layout, ARRAYSIZE(layout),vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), inputLayout.GetAddressOf()));
 	HR_T(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, vertexShader.GetAddressOf()));
 
+    path = assetPath + L"\\PS_DirectionalLight.hlsl";
     ComPtr<ID3DBlob> pixelShaderBuffer{};
-	HR_T(CompileShaderFromFile(L"Shaders\\PS_DirectionalLight.hlsl", "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
 	HR_T(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, pixelShader.GetAddressOf()));
 
     /* --------------------------------- 샘플러 만들기 -------------------------------- */
@@ -105,7 +109,10 @@ void DirectionalLightPass::Init(const ComPtr<ID3D11Device> &device)
 	HR_T(device->CreateBlendState(&blendDesc, blendState.GetAddressOf()));
 
     /* ------------------------------- IBL 텍스처 로드 ------------------------------- */
-    HR_T(CreateDDSTextureFromFile(device.Get(), L"..\\Assets\\Resource\\skyboxDiffuseHDR.dds", nullptr, IBLIrradiance.GetAddressOf()));
+
+    std::wstring resourcePath = PathHelper::FindDirectory("Assets\\Resource").value().wstring();
+    path = resourcePath + L"\\skyboxDiffuseHDR.dds";
+    HR_T(CreateDDSTextureFromFile(device.Get(), path.c_str(), nullptr, IBLIrradiance.GetAddressOf()));
 	HR_T(CreateDDSTextureFromFile(device.Get(), L"..\\Assets\\Resource\\skyboxSpecularHDR.dds", nullptr, IBLSpecular.GetAddressOf()));
 	HR_T(CreateDDSTextureFromFile(device.Get(), L"..\\Assets\\Resource\\skyboxBrdf.dds", nullptr, IBLLookUpTable.GetAddressOf()));
 
@@ -244,7 +251,9 @@ void DirectionalLightPass::CreateQuad(const ComPtr<ID3D11Device> &device)
 	ComPtr<ID3DBlob> vertexShaderBuffer{};
 	// Light Pass
 	vertexShaderBuffer.Reset();
-	HR_T(CompileShaderFromFile(L"Shaders\\VS_DirectionalLight.hlsl", "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
+    std::wstring shadersPath = PathHelper::FindDirectory("Engine\\Shaders").value().wstring();
+    std::wstring path = shadersPath + L"\\VS_DirectionalLight.hlsl";
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
 	HR_T(device->CreateInputLayout(layout, ARRAYSIZE(layout),vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), inputLayout.GetAddressOf()));
 	HR_T(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, vertexShader.GetAddressOf()));
 

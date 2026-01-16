@@ -40,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -133,7 +133,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App\Editor.cpp" />
-    <ClCompile Include="App\EngineApp.cpp" />
     <ClCompile Include="Commands\DrawAABBBox.cpp" />
     <ClCompile Include="Commands\DrawFBXCommand.cpp" />
     <ClCompile Include="Commands\DrawMeshCommand.cpp" />
@@ -143,6 +142,7 @@
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Manager\WorldManager.cpp" />
+    <ClCompile Include="Util\PathHelper.cpp" />
     <ClCompile Include="RenderPass\BasicRenderPass.cpp" />
     <ClCompile Include="RenderPass\DebugDrawPass.cpp" />
     <ClCompile Include="RenderPass\DirectionalLightPass.cpp" />
@@ -150,11 +150,9 @@
     <ClCompile Include="RenderPass\ShadowRenderPass.cpp" />
     <ClCompile Include="RenderPass\SkyboxRenderPass.cpp" />
     <ClCompile Include="Util\DebugDraw.cpp" />
-    <ClCompile Include="winMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
-    <ClInclude Include="App\EngineApp.h" />
     <ClInclude Include="Commands\DrawAABBBox.h" />
     <ClInclude Include="Commands\DrawFBXCommand.h" />
     <ClInclude Include="Commands\DrawMeshCommand.h" />
@@ -163,6 +161,7 @@
     <ClInclude Include="Components\MeshRenderer.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
+    <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="RenderPass\BasicRenderPass.h" />
     <ClInclude Include="RenderPass\DebugDrawPass.h" />
     <ClInclude Include="RenderPass\DirectionalLightPass.h" />

@@ -3,6 +3,7 @@
 #include "../System/ComponentFactory.h"
 #include "../System/ScriptSystem.h"
 #include "../System/RenderSystem.h"
+#include "../System/InputSystem.h"
 
 RTTR_REGISTRATION
 {
@@ -47,6 +48,11 @@ void GameObject::RemoveComponent(Component* comp)
             else
             {
                 ScriptSystem::Instance().UnRegister(objPtr);
+            }
+
+            if (auto inputComp = dynamic_cast<InputProcesser*>(objPtr))
+            {
+                InputSystem::Instance().UnRegister(inputComp);
             }
 
             handles.erase(it);
@@ -211,6 +217,11 @@ void GameObject::ClearAll()
         else
         {
             ScriptSystem::Instance().UnRegister(objPtr);
+        }
+
+        if (auto inputComp = dynamic_cast<InputProcesser*>(objPtr))
+        {
+            InputSystem::Instance().UnRegister(inputComp);
         }
 
         it = handles.erase(it);

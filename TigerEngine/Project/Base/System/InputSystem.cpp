@@ -36,6 +36,18 @@ void InputSystem::Register(InputProcesser *input)
 	registered.push_back(input);
 }
 
+void InputSystem::UnRegister(InputProcesser* comp)
+{
+    for (auto it = registered.begin(); it != registered.end(); it++)
+    {
+        if (*it == comp)
+        {
+            registered.erase(it);
+            break;
+        }
+    }
+}
+
 void InputSystem::UpdateRegisterInput(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)
 {
 	for(auto& e : registered)

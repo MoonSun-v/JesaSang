@@ -2,6 +2,7 @@
 #include "Entity/GameObject.h"
 #include "../Manager/WorldManager.h"
 #include "System/CameraSystem.h"
+#include "../Util/PathHelper.h"
 
 struct ConstantBuffer   // TODO 정리하기
 {
@@ -20,6 +21,8 @@ struct ConstantBuffer   // TODO 정리하기
 
 void ShadowRenderPass::Init(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext, Camera* cam)
 {
+    std::wstring assetPath = PathHelper::FindDirectory("Engine\\Shaders").value().wstring();
+
     /* ------------------------------- inputLayout ------------------------------ */
     D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -32,14 +35,16 @@ void ShadowRenderPass::Init(const ComPtr<ID3D11Device>& device, const ComPtr<ID3
 		{ "BLENDWEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
     ComPtr<ID3DBlob> vertexShaderBuffer{};
-    HR_T(CompileShaderFromFile(L"Shaders\\VS_DepthOnlyPass.hlsl", "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
+    std::wstring path = assetPath + L"\\VS_DepthOnlyPass.hlsl";
+    HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
     HR_T(device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), inputLayout.GetAddressOf()));
     HR_T(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, vertexShader.GetAddressOf()));
 
     /* ----------------------------------- ps ----------------------------------- */
 	ComPtr<ID3DBlob> pixelShaderBuffer = nullptr;
 	pixelShaderBuffer.Reset();
-	HR_T(CompileShaderFromFile(L"Shaders\\PS_DepthOnlyPass.hlsl", "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
+    path = assetPath + L"\\PS_DepthOnlyPass.hlsl";
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
 	HR_T(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, pixelShader.GetAddressOf()));
 
     /* --------------------------------- sampler -------------------------------- */

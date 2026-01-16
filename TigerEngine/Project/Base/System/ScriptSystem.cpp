@@ -7,7 +7,7 @@ void ScriptSystem::Register(Component* comp)
 
 void ScriptSystem::UnRegister(Component* comp)
 {
-    for (auto it = comps.begin(); it != comps.end();)
+    for (auto it = comps.begin(); it != comps.end(); it++)
     {
         if (*it == comp)
         {

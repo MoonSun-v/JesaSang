@@ -3,19 +3,18 @@
 #endif
 
 #include "GameApp.h"
-#include "GameApp.h"
 #include "EngineApp.h"
 
 
-#include "../Manager/FBXResourceManager.h"
-#include "../Manager/ShaderManager.h"
-#include "../Manager/WorldManager.h"
+#include "Manager/FBXResourceManager.h"
+#include "Manager/ShaderManager.h"
+#include "Manager/WorldManager.h"
 
-#include "../RenderPass/DirectionalLightPass.h"
-#include "../RenderPass/GBufferRenderPass.h"
-#include "../RenderPass/SkyboxRenderPass.h"
-#include "../RenderPass/ShadowRenderPass.h"
-#include "../RenderPass/DebugDrawPass.h"
+#include "RenderPass/DirectionalLightPass.h"
+#include "RenderPass/GBufferRenderPass.h"
+#include "RenderPass/SkyboxRenderPass.h"
+#include "RenderPass/ShadowRenderPass.h"
+#include "RenderPass/DebugDrawPass.h"
 
 #include "Entity/Object.h"
 #include "Entity/GameObject.h"
@@ -183,9 +182,11 @@ void EngineApp::EndRender()
 #endif
 }
 
+#include "Util/PathHelper.h"
+
 void EngineApp::LoadSavedFirstScene()
 {
-    auto sceneDir = FindDirectoryInAssets("Scenes");
+    auto sceneDir = PathHelper::FindDirectory("Assets/Scenes");
     if (!sceneDir) // Assets/Scenes가 존재하지 않음
     {
         throw std::runtime_error("Failed find scene directory");
@@ -214,31 +215,6 @@ void EngineApp::LoadSavedFirstScene()
     }
 }
 
-std::optional<fs::path> EngineApp::FindDirectoryInAssets(std::string dirName)
-{
-    fs::path cur = GetExeDir(); // fx::current_path는 IDE와 환경에 따라 다를 수 있으므로 따로 이름 가져오기
-    for (int i = 0; i < 5; i++)
-    {
-        fs::path candidate = cur /"Assets" / dirName; // 현재 폴더
-        if (fs::exists(candidate) && fs::is_directory(candidate)) // 해당 위치에 assets/scene 폴더가 존재한다.
-        {
-            return candidate;
-        }
-        cur = cur.parent_path();
-    }   
-
-    std::string errorMessage = "failed find scenes directory\n Dir : module/Asssets/" + dirName;
-    MessageBoxA(hwnd, errorMessage.c_str(), "Error", MB_OK);
-    return std::nullopt;
-}
-
-std::filesystem::path EngineApp::GetExeDir()
-{
-    char buffer[MAX_PATH];
-    GetModuleFileNameA(nullptr, buffer, MAX_PATH);
-    return std::filesystem::path(buffer).parent_path();
-}
-
 // Forward declare message handler from imgui_impl_win32.cpp
 #if _DEBUG
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -265,16 +241,22 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 
 // ================= 컴포넌트 등록 =================
 
-#include "../Components/FBXData.h"
-#include "../Components/FBXRenderer.h"
+#include "Components/FBXData.h"
+#include "Components/FBXRenderer.h"
 #include "Entity/Transform.h"
 #include "Entity/Camera.h"
 #include "System/ComponentFactory.h"
+
+#include "Player/Player1.h"
+#include "Player/Weapon.h"
 
 void EngineApp::RegisterAllComponents()
 {
 	ComponentFactory::Instance().Register<FBXData>("FBXData");
 	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
 	ComponentFactory::Instance().Register<Transform>("Transform");
-	ComponentFactory::Instance().Register<Transform>("Camera");
+	ComponentFactory::Instance().Register<Camera>("Camera");
+
+	ComponentFactory::Instance().Register<Player1>("Player1");
+	ComponentFactory::Instance().Register<Weapon>("Weapon");
 }

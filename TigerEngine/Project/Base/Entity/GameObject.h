@@ -6,6 +6,7 @@
 #include "../Scene/Scene.h"
 #include "../System/RenderSystem.h"
 #include "../System/ObjectSystem.h"
+#include "../System/ScriptSystem.h"
 
 class RenderComponent; // NOTE : Component 있는 거랑 순환 참조 조심하기
 
@@ -92,6 +93,10 @@ inline T* GameObject::AddComponent()
 	{
         RenderSystem::Instance().Register(renderComp);
 	}
+    else
+    {
+        ScriptSystem::Instance().Register(renderComp);
+    }
 
 	return comp;
 }

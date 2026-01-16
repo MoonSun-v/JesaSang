@@ -4,7 +4,7 @@
 #include "System/SceneSystem.h"
 #include "Renderer/ImguiRenderer.h"
 #include "Renderer/RenderQueue.h"
-#include "Editor.h"
+#include "App/Editor.h"
 #include <map>
 #include "Renderer/DirectX11Renderer.h"
 

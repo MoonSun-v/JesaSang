@@ -1,7 +1,7 @@
 #include "GBufferRenderPass.h"
 #include "Entity/GameObject.h"
+#include "../Util/PathHelper.h"
 
-#include <filesystem>
 namespace fs = std::filesystem;
 
 struct ConstantBuffer   // TODO 정리하기
@@ -21,6 +21,7 @@ struct ConstantBuffer   // TODO 정리하기
 
 void GBufferRenderPass::Init(const ComPtr<ID3D11Device> &device, const ComPtr<ID3D11DeviceContext>& deviceContext,  UINT width, UINT height)
 {
+    std::wstring assetPath = PathHelper::FindDirectory("Engine\\Shaders").value().wstring();
     bufferCount = static_cast<int>(EGbuffer::Count);
     clientWidth = width;
     clientHeight = height;
@@ -40,14 +41,15 @@ void GBufferRenderPass::Init(const ComPtr<ID3D11Device> &device, const ComPtr<ID
 	};
 
     /* -------------------------------- 셰이더 파일 생성 ------------------------------- */
+    std::wstring path = assetPath + L"\\VS_GBuffer.hlsl";
     ComPtr<ID3DBlob> vertexShaderBuffer = nullptr;
-    fs::path curPath = fs::current_path();
-    HR_T(CompileShaderFromFile(L"Shaders\\VS_GBuffer.hlsl", "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
+    HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", vertexShaderBuffer.GetAddressOf()));
     HR_T(device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), inputLayout.GetAddressOf()));
 	HR_T(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, vertexShader.GetAddressOf()));
 
+    path = assetPath + L"\\PS_Gbuffer.hlsl";
     ComPtr<ID3DBlob> pixelShaderBuffer{};
-	HR_T(CompileShaderFromFile(L"Shaders\\PS_Gbuffer.hlsl", "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
+	HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", pixelShaderBuffer.GetAddressOf()));
 	HR_T(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, pixelShader.GetAddressOf()));
 
     /* ------------------------------ 래스터라이저 상태 만들기 ----------------------------- */
