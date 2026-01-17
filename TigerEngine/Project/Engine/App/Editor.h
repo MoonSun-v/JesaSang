@@ -25,6 +25,7 @@ private:
     void RenderMenuBar(HWND& hwnd);
     void RenderHierarchy();
     void RenderInspector();
+    void RenderPlayModeControls();
 
     template<typename T>
     void RenderComponentInfo(std::string name, T* comp);
@@ -55,6 +56,8 @@ private:
     // flags
     bool isDiretionalLightDebugOpen = false;
     void DirectionalLightDebug();
+
+    std::string currScenePath{};
 
 public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,

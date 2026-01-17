@@ -50,4 +50,10 @@ public:
 
 	// 컴포넌트 찾기를 위한 이름 setter
 	void SetName(std::string str) { name = str; }
+
+    /// <summary>
+    /// 플레이 모드에서만 실행가능 여부
+    /// </summary>
+    /// <returns>true면 플레이 모드에서만 update 호출 아니면 false</returns>
+    virtual bool IsPlayModeOnly() { return false; }
 };

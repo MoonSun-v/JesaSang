@@ -91,11 +91,18 @@ inline T* GameObject::AddComponent()
 
 	if (auto renderComp = dynamic_cast<RenderComponent*>(comp))
 	{
+        // 렌더 컴포넌트
         RenderSystem::Instance().Register(renderComp);
 	}
+    else if(auto scriptComp = dynamic_cast<ScriptComponent*>(comp))
+    {
+        // 사용자 정의 컴포넌트
+        ScriptSystem::Instance().RegisterScript(scriptComp);
+    }
     else
     {
-        ScriptSystem::Instance().Register(renderComp);
+        // 엔진 기본 컴포넌트
+        ScriptSystem::Instance().Register(comp);
     }
 
 	return comp;

@@ -21,6 +21,7 @@
 
 #include "System/CameraSystem.h"
 #include "System/ObjectSystem.h"
+#include "System/PlayModeSystem.h"
 
 namespace fs = std::filesystem;
 
@@ -95,19 +96,20 @@ bool EngineApp::OnInitialize()
 
     LoadSavedFirstScene();
 
+#if _DEBUG
+#else
+    PlayModeSystem::Instance().SetPlayMode(PlayModeState::Playing);
+#endif
+
 	return true;
 }
 
 void EngineApp::OnUpdate()
 {
-	SceneSystem::Instance().BeforUpdate();
-	
-	// Scene의 오브젝트 업데이트 호출
-	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
-
+	SceneSystem::Instance().BeforUpdate();	
 	CameraSystem::Instance().FreeCameraUpdate(GameTimer::Instance().DeltaTime());
-
 	WorldManager::Instance().Update();
+	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
 
 #if _DEBUG
 	editor->Update();

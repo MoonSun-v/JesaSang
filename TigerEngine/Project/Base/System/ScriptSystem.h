@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include "../Entity/Component.h"
+#include "../Entity/ScriptComponent.h"
 
 /// <summary>
 /// 렌더링을 하지 않는 단순 컴포넌트를 상속받은 컴포넌트들을 관리합니다.
@@ -13,7 +14,7 @@ public:
     ~ScriptSystem() = default;
 
     /// <summary>
-    /// 시스템에 컴포넌트 등록
+    /// 일반 컴포넌트 등록
     /// </summary>
     void Register(Component* comp);
 
@@ -21,6 +22,18 @@ public:
     /// 해당 컴포넌트 등록 해제
     /// </summary>
     void UnRegister(Component* comp);
+
+    /// <summary>
+    /// 스크립트 컴포넌트 등록
+    /// </summary>
+    /// <param name="comp">ScriptComponent 객체</param>
+    void RegisterScript(Component* comp);
+
+    /// <summary>
+    /// 스크립트 컴포넌트 등록 해제
+    /// </summary>
+    /// <param name="comp">ScriptComponent 객체</param>
+    void UnRegisterScript(Component* comp);
 
     /// <summary>
     /// 등록된 컴포넌트 호출
@@ -32,4 +45,9 @@ private:
     /// 등록된 컴포넌드 목록
     /// </summary>
     std::vector<Component*> comps{};
+
+    /// <summary>
+    /// Play모드에만 돌아가는 스크립트 컴포넌트 목록
+    /// </summary>
+    std::vector<Component*> scriptComps{};
 };

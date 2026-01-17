@@ -1,6 +1,7 @@
 #include "Scene.h"	
 #include "../Entity/GameObject.h"
 #include "../System/ObjectSystem.h"
+#include "../System/ScriptSystem.h"
 
 void Scene::OnRender(std::unique_ptr<RenderQueue>& renderQueue)
 {
@@ -13,14 +14,7 @@ void Scene::OnRender(std::unique_ptr<RenderQueue>& renderQueue)
 
 void Scene::OnUpdate(float deltaTime)
 {
-	for(auto it = gameObjects.begin(); it != gameObjects.end(); it++)
-	{
-		auto gameObject = it->second;
-		for(auto& rComp : gameObject.objPtr->GetComponents())
-		{
-			rComp->OnUpdate(deltaTime);
-		}
-	}
+    ScriptSystem::Instance().Update(deltaTime);
 }
 
 void Scene::CheckDestroy()

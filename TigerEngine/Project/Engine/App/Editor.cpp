@@ -10,6 +10,7 @@
 #include "Entity/Camera.h"
 #include "../Util/DebugDraw.h"
 #include "../Manager/WorldManager.h"
+#include "System/PlayModeSystem.h"
 
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
 {
@@ -74,6 +75,8 @@ void Editor::RenderMenuBar(HWND& hwnd)
             }
             ImGui::EndMenu();
         }
+
+        RenderPlayModeControls();
     }
     ImGui::EndMainMenuBar();
 }
@@ -190,6 +193,84 @@ void Editor::RenderInspector()
         }
     }
     ImGui::End();
+}
+
+void Editor::RenderPlayModeControls()
+{
+    auto& playMode = PlayModeSystem::Instance();
+    PlayModeState currentState = playMode.GetPlayMode();
+
+    // 현재 상태에 따라 버튼 색상 설정
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f)); // Play - 초록색
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
+
+    // Play 버튼
+    if (ImGui::Button("Play"))
+    {
+        playMode.SetPlayMode(PlayModeState::Playing);
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+
+    // Pause 버튼 - 노란색
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.7f, 0.2f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.8f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.6f, 0.1f, 1.0f));
+
+    if (ImGui::Button("Pause"))
+    {
+        if (currentState == PlayModeState::Playing)
+        {
+            playMode.SetPlayMode(PlayModeState::Paused);
+        }
+        else if (currentState == PlayModeState::Paused)
+        {
+            playMode.SetPlayMode(PlayModeState::Playing);
+        }
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+
+    // Stop 버튼 - 빨간색
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.2f, 0.2f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+
+    if (ImGui::Button("Stop"))
+    {
+        playMode.SetPlayMode(PlayModeState::Stopped);
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+    ImGui::Separator();
+    ImGui::SameLine();
+
+    // 현재 상태 표시
+    const char* stateText = "";
+    ImVec4 stateColor;
+    switch (currentState)
+    {
+    case PlayModeState::Stopped:
+        stateText = "Stopped";
+        stateColor = ImVec4(0.7f, 0.7f, 0.7f, 1.0f); // 회색
+        break;
+    case PlayModeState::Playing:
+        stateText = "Playing";
+        stateColor = ImVec4(0.2f, 0.7f, 0.2f, 1.0f); // 초록색
+        break;
+    case PlayModeState::Paused:
+        stateText = "Paused";
+        stateColor = ImVec4(0.7f, 0.7f, 0.2f, 1.0f); // 노란색
+        break;
+    }
+
+    ImGui::PushStyleColor(ImGuiCol_Text, stateColor);
+    ImGui::Text(" [%s]", stateText);
+    ImGui::PopStyleColor();
 }
 
 template<typename T>
@@ -316,6 +397,23 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             }
         } 
     }
+    else // TODO : Value 테스트
+    {
+        rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
+        ImGui::Text(t.get_name().to_string().c_str());
+        for (auto& prop : t.get_properties())
+        {
+            rttr::variant value = prop.get_value(*comp);            // 프로퍼티 값
+            std::string name = prop.get_name().to_string();         // 프로퍼티 이름
+
+            if (value.is_type<float>())
+            {
+                float v = value.get_value<float>();
+                ImGui::DragFloat(name.c_str(), &v, 0.1f);
+                prop.set_value(*comp, v);
+            }
+        }
+    }
 
     if (compName != "Transform") 
     {
@@ -387,7 +485,7 @@ void Editor::SaveCurrentScene(HWND& hwnd)
 	// GameWorld를 파일에 저장
 	if (SceneSystem::Instance().GetCurrentScene()->SaveToJson(filename))
 	{
-		MessageBoxA(hwnd, "Scene saved successfully!", "Save", MB_OK | MB_ICONINFORMATION);
+		MessageBoxA(hwnd, "Scene saved successfully!", "Save", MB_OK | MB_ICONINFORMATION);        
 	}
 	else
 	{
