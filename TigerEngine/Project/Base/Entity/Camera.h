@@ -5,7 +5,7 @@
 
 using namespace DirectX::SimpleMath;
 
-class Camera : public Component, public InputProcesser
+class Camera : public Component
 {
 	RTTR_ENABLE(Component)
 public:
@@ -46,8 +46,6 @@ public:
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
-	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,
-		const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker) override;
 private:
 	Matrix projection = Matrix::Identity;
 

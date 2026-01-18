@@ -16,8 +16,6 @@ RTTR_REGISTRATION
 
 void Player1::OnInitialize()
 {
-    InputSystem::Instance().Register(this);
-
     weapon = GetOwner()->AddComponent<Weapon>();
 }
 
@@ -40,25 +38,14 @@ void Player1::OnUpdate(float delta)
     if (r > 1.0f) r = 0.f;
     if (g > 1.0f) g = 0.f;
     if (b > 1.0f) b = 0.f;
-}
 
-void Player1::OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker, const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker)
-{
     auto trans = GetOwner()->GetTransform();
-    if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::W))
-    {
-        trans->Translate({ 0, 1.f, 0 });
-    }
-    else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::S))
-    {
-        trans->Translate({ 0, -1.f, 0 });
-    }
-    if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::A))
-    {
+    if (Input::GetKey(DirectX::Keyboard::Keys::W))
+        trans->Translate({ 0, 0, 1.f });
+    else if (Input::GetKey(DirectX::Keyboard::Keys::S))
+        trans->Translate({ 0, 0, -1.f });
+    if (Input::GetKey(DirectX::Keyboard::Keys::A))
         trans->Translate({ -1.f, 0, 0 });
-    }
-    else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D))
-    {
+    else if (Input::GetKey(DirectX::Keyboard::Keys::D))
         trans->Translate({ 1.f, 0, 0 });
-    }
 }

@@ -23,7 +23,7 @@ public:
     /// @brief 프로그램 초기화 시 실행되는 프리캠 생성 함수
     /// @param width 화면 넓이
     /// @param height 화면 높이
-    void CreateFreeCamera(int width, int height, Scene* currScene);
+    Handle CreateFreeCamera(int width, int height, Scene* currScene);
     Camera* GetFreeCamera();
 
     void Register(Camera* cam);

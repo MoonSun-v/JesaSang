@@ -50,11 +50,6 @@ void GameObject::RemoveComponent(Component* comp)
                 ScriptSystem::Instance().UnRegister(objPtr);
             }
 
-            if (auto inputComp = dynamic_cast<InputProcesser*>(objPtr))
-            {
-                InputSystem::Instance().UnRegister(inputComp);
-            }
-
             objPtr->OnDestory();
             ObjectSystem::Instance().Destory(*it);
             handles.erase(it);
@@ -219,11 +214,6 @@ void GameObject::ClearAll()
         else
         {
             ScriptSystem::Instance().UnRegister(objPtr);
-        }
-
-        if (auto inputComp = dynamic_cast<InputProcesser*>(objPtr))
-        {
-            InputSystem::Instance().UnRegister(inputComp);
         }
 
         it = handles.erase(it);

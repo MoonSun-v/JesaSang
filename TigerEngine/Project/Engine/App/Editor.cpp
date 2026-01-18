@@ -388,9 +388,9 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             if(value.is_type<DirectX::SimpleMath::Vector3>() && name == "Rotation")
             {
                 DirectX::SimpleMath::Vector3 rot = value.get_value<DirectX::SimpleMath::Vector3>();
-                DirectX::SimpleMath::Vector3 rotEuler = { XMConvertToDegrees(rot.x), XMConvertToDegrees(rot.y),  XMConvertToDegrees(rot.z) };
-                ImGui::DragFloat3("Rotation", &rotEuler.x, 0.1f);
-                rot = { XMConvertToRadians(rotEuler.x), XMConvertToRadians(rotEuler.y),  XMConvertToRadians(rotEuler.z) };
+                DirectX::SimpleMath::Vector3 eulerDegree = { XMConvertToDegrees(rot.x), XMConvertToDegrees(rot.y),  XMConvertToDegrees(rot.z) };
+                ImGui::DragFloat3("Rotation", &eulerDegree.x, 0.1f);
+                rot = { XMConvertToRadians(eulerDegree.x), XMConvertToRadians(eulerDegree.y),  XMConvertToRadians(eulerDegree.z) };
                 prop.set_value(*comp, rot);
             }
             else if (value.is_type<DirectX::SimpleMath::Vector3>())

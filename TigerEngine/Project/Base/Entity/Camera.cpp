@@ -77,7 +77,6 @@ void Camera::SetInputVec(const Vector3 &inputVec)
 
 void Camera::OnInitialize()
 {
-	InputSystem::Instance().Register(this);
     CameraSystem::Instance().Register(this);
     Vector2 screen = CameraSystem::Instance().GetScreenSize();
     screenWidth = screen.x;
@@ -187,67 +186,5 @@ void Camera::Deserialize(nlohmann::json data)
             auto v = propData["farDist"];
             prop.set_value(*this, v);
         }
-	}
-}
-
-void Camera::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)
-{
-	Vector3 forward = GetForward();
-	Vector3 right = GetRight();
-
-	if (KeyTracker.IsKeyPressed(Keyboard::Keyboard::R))
-	{
-		//Reset();
-	}
-
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::W))
-	{
-		SetInputVec(forward);
-	}
-	else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::S))
-	{
-		SetInputVec(-forward);
-	}
-
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::A))
-	{
-		SetInputVec(-right);
-	}
-	else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D))
-	{
-		SetInputVec(right);
-	}
-
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::E))
-	{
-		Matrix world = owner->GetTransform()->GetWorldTransform();		
-		SetInputVec(-world.Up());
-	}
-	else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::Q))
-	{
-		Matrix world = owner->GetTransform()->GetWorldTransform();		
-		SetInputVec(world.Up());
-	}
-
-	// 속도 추가
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D1))
-	{
-		moveSpeed = 20;
-	}
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D2))
-	{
-		moveSpeed = 100;
-	}
-	if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D3))
-	{
-		moveSpeed = 200;
-	}
-
-	Singleton<InputSystem>::Instance().m_Mouse->SetMode(MouseState.rightButton ? Mouse::MODE_RELATIVE : Mouse::MODE_ABSOLUTE);
-	if (MouseState.positionMode == Mouse::MODE_RELATIVE)
-	{
-		Vector3 delta = Vector3(float(MouseState.x), float(MouseState.y), 0.f) * rotSpeed;
-		AddPitch(delta.y);
-		AddYaw(delta.x);
 	}
 }

@@ -88,7 +88,7 @@ void CameraSystem::FreeCameraUpdate(float delta)
     }
 }
 
-void CameraSystem::CreateFreeCamera(int clientWidth, int clientHeight, Scene *currScene)
+Handle CameraSystem::CreateFreeCamera(int clientWidth, int clientHeight, Scene *currScene)
 {
     // TODO 카메라 씬에 등록하기 아니면 다른 업데이트 방법 찾기
     Handle handle = ObjectSystem::Instance().Create<GameObject>();
@@ -97,4 +97,6 @@ void CameraSystem::CreateFreeCamera(int clientWidth, int clientHeight, Scene *cu
     freeCamera = freeCamObj->AddComponent<Camera>();
 
 	freeCamera->SetProjection(DirectX::XM_PIDIV2, clientWidth, clientHeight, 0.1, 3000);
+
+    return handle;
 }

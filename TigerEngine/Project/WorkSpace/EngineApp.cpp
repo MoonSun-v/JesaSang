@@ -23,6 +23,8 @@
 #include "System/ObjectSystem.h"
 #include "System/PlayModeSystem.h"
 
+#include "Components/FreeCamera.h"
+
 namespace fs = std::filesystem;
 
 EngineApp::EngineApp(HINSTANCE hInstance)
@@ -64,7 +66,9 @@ bool EngineApp::OnInitialize()
 	CameraSystem::Instance().SetScreenSize(clientWidth, clientHeight);
 
 #if _DEBUG
-	CameraSystem::Instance().CreateFreeCamera(clientWidth, clientHeight, SceneSystem::Instance().GetCurrentScene().get());
+	auto freeCamHandle = CameraSystem::Instance().CreateFreeCamera(clientWidth, clientHeight, SceneSystem::Instance().GetCurrentScene().get());
+    auto freeCamObjPtr = ObjectSystem::Instance().Get<GameObject>(freeCamHandle);
+    freeCamObjPtr->AddComponent<FreeCamera>();
 #endif
 
     // == find scene ==
@@ -261,7 +265,6 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #if _DEBUG
 	editor->OnInputProcess(KeyState, KeyTracker, MouseState, MouseTracker);
 #endif
-	InputSystem::Instance().UpdateRegisterInput(KeyState,KeyTracker, MouseState, MouseTracker);
 }
 
 // ================= 컴포넌트 등록 =================

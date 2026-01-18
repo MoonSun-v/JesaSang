@@ -4,6 +4,7 @@
       "properties": {
         "Name": "Sphere",
         "components": {
+          "": {},
           "FBXData": {
             "properties": {
               "DataPath": "..\\Assets\\Resource\\sphere.fbx"
@@ -13,9 +14,9 @@
           "FBXRenderer": {
             "properties": {
               "Color": [
-                0.4950980544090271,
-                0.4950980544090271,
-                0.4950980544090271,
+                0.30333325266838074,
+                0.44897618889808655,
+                0.8370717167854309,
                 1.0
               ],
               "Metalic": 0.0,
@@ -23,12 +24,13 @@
             },
             "type": "FBXRenderer"
           },
+          "Player1": {},
           "Transform": {
             "properties": {
               "Position": [
+                25.0,
                 0.0,
-                0.0,
-                0.0
+                44.0
               ],
               "Rotation": [
                 0.0,
@@ -54,7 +56,7 @@
           "Camera": {
             "properties": {
               "farDist": 2000.0,
-              "moveSpeed": 200.0,
+              "moveSpeed": 100.0,
               "nearDist": 0.009999999776482582,
               "rotSpeed": 0.004000000189989805
             },

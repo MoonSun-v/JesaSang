@@ -139,6 +139,7 @@
     <ClCompile Include="Components\FBXData.cpp" />
     <ClCompile Include="Components\FBXRenderer.cpp" />
     <ClCompile Include="Components\MeshRenderer.cpp" />
+    <ClCompile Include="Components\FreeCamera.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Manager\WorldManager.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Components\FBXData.h" />
     <ClInclude Include="Components\FBXRenderer.h" />
     <ClInclude Include="Components\MeshRenderer.h" />
+    <ClInclude Include="Components\FreeCamera.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Util\PathHelper.h" />

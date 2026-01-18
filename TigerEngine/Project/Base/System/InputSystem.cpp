@@ -15,7 +15,6 @@ void InputSystem::Update(float DeltaTime)
 	m_KeyboardState = m_Keyboard->GetState();
 	m_KeyboardStateTracker.Update(m_KeyboardState);
 
-
 	if (m_pInputProcessers != nullptr)
 	{
 		m_pInputProcessers->OnInputProcess(m_KeyboardState, m_KeyboardStateTracker, m_MouseState, m_MouseStateTracker);
@@ -31,27 +30,66 @@ bool InputSystem::Initialize(HWND hWnd, InputProcesser* processer)
 	return true;
 }
 
-void InputSystem::Register(InputProcesser *input)
+void InputSystem::SetMouseMode(Mouse::Mode mode)
 {
-	registered.push_back(input);
+	if (m_Mouse)
+		m_Mouse->SetMode(mode);
+
+    // m_MouseState.positionMode = mode;
 }
 
-void InputSystem::UnRegister(InputProcesser* comp)
+bool InputSystem::GetKey(Keyboard::Keys key) const
 {
-    for (auto it = registered.begin(); it != registered.end(); it++)
-    {
-        if (*it == comp)
-        {
-            registered.erase(it);
-            break;
-        }
-    }
+	return m_KeyboardState.IsKeyDown(key);
 }
 
-void InputSystem::UpdateRegisterInput(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)
+bool InputSystem::GetKeyDown(Keyboard::Keys key) const
 {
-	for(auto& e : registered)
+	return m_KeyboardStateTracker.IsKeyPressed(key);
+}
+
+bool InputSystem::GetKeyUp(Keyboard::Keys key) const
+{
+	return m_KeyboardStateTracker.IsKeyReleased(key);
+}
+
+bool InputSystem::GetMouseButton(int button) const
+{
+	switch (button)
 	{
-		e->OnInputProcess(KeyState, KeyTracker, MouseState, MouseTracker);
+	case 0: return m_MouseState.leftButton;
+	case 1: return m_MouseState.rightButton;
+	case 2: return m_MouseState.middleButton;
+	case 3: return m_MouseState.xButton1;
+	case 4: return m_MouseState.xButton2;
+	default: return false;
+	}
+}
+
+bool InputSystem::GetMouseButtonDown(int button) const
+{
+	using B = Mouse::ButtonStateTracker;
+	switch (button)
+	{
+	case 0: return m_MouseStateTracker.leftButton == B::PRESSED;
+	case 1: return m_MouseStateTracker.rightButton == B::PRESSED;
+	case 2: return m_MouseStateTracker.middleButton == B::PRESSED;
+	case 3: return m_MouseStateTracker.xButton1 == B::PRESSED;
+	case 4: return m_MouseStateTracker.xButton2 == B::PRESSED;
+	default: return false;
+	}
+}
+
+bool InputSystem::GetMouseButtonUp(int button) const
+{
+	using B = Mouse::ButtonStateTracker;
+	switch (button)
+	{
+	case 0: return m_MouseStateTracker.leftButton == B::RELEASED;
+	case 1: return m_MouseStateTracker.rightButton == B::RELEASED;
+	case 2: return m_MouseStateTracker.middleButton == B::RELEASED;
+	case 3: return m_MouseStateTracker.xButton1 == B::RELEASED;
+	case 4: return m_MouseStateTracker.xButton2 == B::RELEASED;
+	default: return false;
 	}
 }
