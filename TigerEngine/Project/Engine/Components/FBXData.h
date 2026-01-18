@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <pch.h>
 #include "Entity/Component.h"
 #include "Datas/Mesh.h"
@@ -9,8 +9,8 @@ class FBXData : public Component
     RTTR_ENABLE(Component)
 public:
     void OnInitialize() override;
-    const std::vector<Mesh>& GetMesh() const;
-    const std::shared_ptr<FBXResourceAsset> GetFBXInfo() const;
+    std::vector<Mesh>& GetMesh();
+    std::shared_ptr<FBXResourceAsset> GetFBXInfo();
 
     void ChangeData(std::string path);
 

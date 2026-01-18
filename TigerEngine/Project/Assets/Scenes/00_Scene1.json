@@ -4,7 +4,6 @@
       "properties": {
         "Name": "1",
         "components": {
-          "": {},
           "FBXData": {
             "properties": {
               "DataPath": "..\\Assets\\Resource\\sphere.fbx"
@@ -24,7 +23,6 @@
             },
             "type": "FBXRenderer"
           },
-          "Player1": {},
           "Transform": {
             "properties": {
               "Position": [
@@ -1680,6 +1678,43 @@
               "Rotation": [
                 0.0,
                 0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "main camera",
+        "components": {
+          "Camera": {
+            "properties": {
+              "farDist": 2000.0,
+              "moveSpeed": 100.0,
+              "nearDist": 0.009999999776482582,
+              "rotSpeed": 0.004000000189989805
+            },
+            "type": "Camera"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                161.03221130371094,
+                37.02536392211914,
+                34.274696350097656
+              ],
+              "Rotation": [
+                0.2759983241558075,
+                -1.11198890209198,
                 0.0
               ],
               "Scale": [

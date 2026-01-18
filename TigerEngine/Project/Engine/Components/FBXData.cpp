@@ -24,19 +24,20 @@ void FBXData::OnInitialize()
     if(renderer != nullptr) renderer->OnInitialize();
 }
 
-const std::vector<Mesh>& FBXData::GetMesh() const
+std::vector<Mesh>& FBXData::GetMesh()
 {
     return meshes;
 }
 
-const std::shared_ptr<FBXResourceAsset> FBXData::GetFBXInfo() const
+std::shared_ptr<FBXResourceAsset> FBXData::GetFBXInfo()
 {
     return fbxAsset;
 }
 
 void FBXData::ChangeData(std::string path)
 {
-    fbxAsset = FBXResourceManager::Instance().LoadFBXByPath(path);
+    auto getData = FBXResourceManager::Instance().LoadFBXByPath(path);
+    fbxAsset.swap(getData);
     meshes = fbxAsset->meshes; 
     this->path = path;
     owner->SetAABB(fbxAsset->boxMin, fbxAsset->boxMax, fbxAsset->boxCenter);

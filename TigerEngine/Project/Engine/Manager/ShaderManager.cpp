@@ -8,14 +8,21 @@ struct CameraData
     Matrix view;
     Matrix projection;
     Matrix positionWS;
+
+    Matrix shadowView;
+    Matrix shadowProjection;
+
+    Vector4 ambient;	// 환경광
+    Vector4 diffuse;	// 난반사
+    Vector4 specular;	// 정반사
+    FLOAT shininess;	// 광택지수
+    Vector3 CameraPos;	// 카메라 위치
 };
 
 struct DirectionalLightData
 {
-    Vector4 ambient;
-    Vector4 diffuse;
-    Vector4 specular;
-    Vector4 shininess;
+    Vector4 lightDirection;
+    Vector4 lightColor;
 };
 
 void ShaderManager::CreateCB(const ComPtr<ID3D11Device> &dev)

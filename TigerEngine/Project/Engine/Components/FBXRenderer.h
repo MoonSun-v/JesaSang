@@ -38,9 +38,9 @@ public:
 	Color GetColor() { return color; }
 	void SetColor(Color value) { color = value; }
 
-private:
     void CreateBoneInfo();
 
+private:
     FBXData* fbxData{};                 // 참조할 FBX 데이터
 
 	// 모델 인스턴스 데이터

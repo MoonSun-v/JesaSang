@@ -58,18 +58,16 @@ void FBXRenderer::OnUpdate(float delta)
 	for (auto& bone : bones)
 	{
 		// 애니메이션 업데이트
-		if (bone.m_boneAnimation.m_boneName != "")
+		if (bone.m_boneAnimation.m_boneName != "" && bone.m_boneAnimation.m_keys.size() >= 1)
 		{
 			Vector3 positionVec = Vector3::Zero;
-			Vector3 scaleVec = Vector3::Zero;
+			Vector3 scaleVec = Vector3::One;
 			Quaternion rotationQuat = Quaternion::Identity;
 			bone.m_boneAnimation.Evaluate(progressAnimationTime, positionVec, rotationQuat, scaleVec);
 
-			if (positionVec != Vector3::Zero || rotationQuat != Quaternion::Identity || scaleVec != Vector3::Zero) // 움직이지 않는 본들은 갱신 안함
-			{
-				Matrix mat = Matrix::CreateScale(scaleVec) * Matrix::CreateFromQuaternion(rotationQuat) * Matrix::CreateTranslation(positionVec);
-				bone.m_localTransform = mat.Transpose();
-			}
+			// 애니메이션이 있으면 항상 transform 갱신 (기본값이 아닐 수도 있음)
+			Matrix mat = Matrix::CreateScale(scaleVec) * Matrix::CreateFromQuaternion(rotationQuat) * Matrix::CreateTranslation(positionVec);
+			bone.m_localTransform = mat.Transpose();
 		}
 
 		// 위치 갱신
@@ -94,6 +92,8 @@ void FBXRenderer::OnRender(ComPtr<ID3D11DeviceContext>& context)
 {
     if (fbxData == nullptr) return; // 그릴 메쉬가 없음 -> data 없음
 
+    auto& meshData = fbxData->GetMesh();
+
     context->UpdateSubresource(bonePoseCB.Get(), 0, nullptr, &bonePoses, 0, 0);
     context->UpdateSubresource(boneOffsetCB.Get(), 0, nullptr, &fbxData->GetFBXInfo()->m_BoneOffsets, 0, 0);
     context->VSSetConstantBuffers(3, 1, bonePoseCB.GetAddressOf());
@@ -103,7 +103,6 @@ void FBXRenderer::OnRender(ComPtr<ID3D11DeviceContext>& context)
     tb.isRigid = fbxData->GetFBXInfo()->skeletalInfo.IsRigid();
     tb.world = XMMatrixTranspose(owner->GetTransform()->GetWorldTransform());
 
-    auto meshData = fbxData->GetMesh();
     int size = meshData.size();
     for (size_t i = 0; i < size; i++)
     {
@@ -205,7 +204,7 @@ void FBXRenderer::CreateBoneInfo()
 		}
 
 		Matrix localMat = boneInfo.relativeTransform;
-		Matrix worldMat = parentBoneIndex > 0 ? bones[parentBoneIndex].m_worldTransform * localMat : localMat;
+		Matrix worldMat = parentBoneIndex != -1 ? bones[parentBoneIndex].m_worldTransform * localMat : localMat;
 
 		// Bone 정보 생성
 		Bone bone;
@@ -213,10 +212,12 @@ void FBXRenderer::CreateBoneInfo()
 
 		BoneAnimation boneAnim;
 		bool hasAnim = !modelAsset->animations.empty();
-		if (parentBoneIndex != -1 && hasAnim)
+		if (hasAnim)
 		{
-			modelAsset->animations[animationIndex].GetBoneAnimationByName(boneName, boneAnim);
-			bone.m_boneAnimation = boneAnim;	// 임시 -> 0번째 애니메이션 받기
+			if (modelAsset->animations[animationIndex].GetBoneAnimationByName(boneName, boneAnim))
+			{
+				bone.m_boneAnimation = boneAnim;
+			}
 		}
 
 		bones.push_back(bone);
