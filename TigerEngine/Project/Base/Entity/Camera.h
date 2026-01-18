@@ -26,21 +26,22 @@ public:
 	void OnInitialize() override;
 	void OnStart() override;
 	void OnUpdate(float delta) override;
+    void OnDestory() override;
 
 	float GetSpeed() const { return moveSpeed; }
 	void SetSpeed(float value) {  moveSpeed = value; }
 
 	float GetRotateSpeed() const { return rotSpeed; }
-	void SetRotateSpeed(float value) { rotSpeed = value;}
+	void SetRotateSpeed(float value) { rotSpeed = value; }
 
 	float GetPovAngle() const { return povAngle; }
-	void SetPovAngle(float angle) { povAngle = angle; }
+	void SetPovAngle(float angle) { povAngle = angle; SetProjection(povAngle, screenWidth, screenHeight, nearDist, farDist); }
 
 	float GetNearDist() const { return nearDist; }
-	void SetNearDist(float value) { nearDist = value; }
+	void SetNearDist(float value) { nearDist = value; SetProjection(povAngle, screenWidth, screenHeight, nearDist, farDist); }
 	
 	float GetFarDist() const { return farDist; }
-	void SetFarDist(float value) { farDist = value; }
+	void SetFarDist(float value) { farDist = value; SetProjection(povAngle, screenWidth, screenHeight, nearDist, farDist); }
 
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
@@ -48,14 +49,18 @@ public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,
 		const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker) override;
 private:
-	Matrix view = Matrix::Identity;
 	Matrix projection = Matrix::Identity;
 
 	Vector3 inputVec{};
 	float moveSpeed = 100.0f;
 	float rotSpeed = 0.004f;
 
-	float povAngle = DirectX::XM_1DIV2PI;
+	float povAngle = DirectX::XM_PIDIV2;
 	float nearDist = 0.01f;
 	float farDist = 2000.0f;
+
+    int screenWidth = 0;
+    int screenHeight = 0;
+
+    bool isMainCamera = false;
 };

@@ -15,7 +15,10 @@ public:
 	void CreateDirectionalLightFrustum();
 	void Update();
 
-	// Directional Light
+    int GetCameraIndex();
+    void SetCameraIndex(int index);
+
+	// Directional Light - 햇빛
 	Matrix directionalLightView{};
 	Matrix directionalLightProj{};
 
@@ -36,4 +39,7 @@ public:
 	const float directionalLightMinFar = 1001.0f;
 
 	ComPtr<ID3D11ShaderResourceView> shaderResourceView{};
+
+private:
+    int cameraIndex = 0;
 };

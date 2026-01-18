@@ -11,7 +11,8 @@ RTTR_REGISTRATION
 		.property("moveSpeed", 	&Camera::GetSpeed, 			&Camera::SetSpeed)
 		.property("rotSpeed", 	&Camera::GetRotateSpeed,	&Camera::SetRotateSpeed)
 		.property("nearDist", 	&Camera::GetNearDist, 		&Camera::SetNearDist)
-		.property("farDist", 	&Camera::GetFarDist, 		&Camera::SetFarDist);
+		.property("farDist", 	&Camera::GetFarDist, 		&Camera::SetFarDist)
+		.property("angle", 	    &Camera::GetPovAngle, 		&Camera::SetPovAngle);
 }
 
 Vector3 Camera::GetForward()
@@ -30,41 +31,42 @@ Matrix Camera::GetView()
 {
 	Matrix world = owner->GetTransform()->GetWorldTransform();
 	Vector3 eye = world.Translation();
-	Vector3 target = world.Translation() + GetForward();
+	Vector3 target = eye + GetForward();
 	Vector3 up = world.Up();
 
-	this->view = DirectX::XMMatrixLookAtLH(eye, target, up);
-	return view;
+	return DirectX::XMMatrixLookAtLH(eye, target, up);
 }
 
 void Camera::AddPitch(float value)
 {
-	auto& rot = owner->GetTransform()->rotation;
+    float eps = 0.0001f;
+	auto rot = owner->GetTransform()->GetEuler();
 	rot.x += value;
-
-	if(rot.x > XM_PI)
-	{
-		rot.x -= XM_2PI;
-	}
-	else if(rot.x < -XM_PI)
-	{
-		rot.x += XM_2PI;
-	}
+    if (rot.x > XM_PI)
+    {
+        rot.x -= XM_2PI;
+    }
+    else if (rot.x < -XM_PI)
+    {
+        rot.x += XM_2PI;
+    }
+    owner->GetTransform()->SetEuler(rot);
 }
 
 void Camera::AddYaw(float value)
 {
-	auto& rot = owner->GetTransform()->rotation;
+    float eps = 0.0001f;
+	auto rot = owner->GetTransform()->GetEuler();
 	rot.y += value;
-
-	if(rot.y > XM_PI)
-	{
-		rot.y -= XM_2PI;
-	}
-	else if(rot.y < -XM_PI)
-	{
-		rot.y += XM_2PI;
-	}
+    if (rot.y > XM_PI)
+    {
+        rot.y -= XM_2PI;
+    }
+    else if (rot.y < -XM_PI)
+    {
+        rot.y += XM_2PI;
+    }
+    owner->GetTransform()->SetEuler(rot);
 }
 
 void Camera::SetInputVec(const Vector3 &inputVec)
@@ -76,6 +78,12 @@ void Camera::SetInputVec(const Vector3 &inputVec)
 void Camera::OnInitialize()
 {
 	InputSystem::Instance().Register(this);
+    CameraSystem::Instance().Register(this);
+    Vector2 screen = CameraSystem::Instance().GetScreenSize();
+    screenWidth = screen.x;
+    screenHeight = screen.y;
+
+    SetProjection(povAngle, screenWidth, screenHeight, nearDist, farDist);
 }
 
 void Camera::OnStart()
@@ -85,15 +93,16 @@ void Camera::OnStart()
 void Camera::OnUpdate(float delta)
 {
 	auto& transform = *owner->GetTransform();
-	auto& position = transform.position;
-	auto& rotation = transform.rotation;
-	if (inputVec.Length() > 0.0f)
+	if (inputVec.LengthSquared() > 0.0f)
 	{
-		position += inputVec * moveSpeed * delta;
+        transform.Translate(inputVec * moveSpeed * delta);
 		inputVec = Vector3::Zero;
 	}
+}
 
-	transform.Translate(Matrix::CreateFromYawPitchRoll(rotation) * Matrix::CreateTranslation(position));
+void Camera::OnDestory()
+{
+    CameraSystem::Instance().RemoveCamera(this);
 }
 
 void Camera::SetProjection(float povAngle, int width, int height, float targetNear, float targetFar)

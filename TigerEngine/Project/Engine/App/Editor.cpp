@@ -12,9 +12,62 @@
 #include "../Manager/WorldManager.h"
 #include "System/PlayModeSystem.h"
 
+// 사용자 정의 미리 등록 (SimpleMath 등)
+RTTR_REGISTRATION
+{
+    rttr::registration::class_<DirectX::SimpleMath::Vector2>("Vector2")
+        .constructor<>()
+        .constructor<float, float>()
+        .property("x", &Vector2::x)
+        .property("y", &Vector2::y);
+
+    rttr::registration::class_<DirectX::SimpleMath::Vector3>("Vector3")
+        .constructor<>()
+        .constructor<float, float, float>()
+        .property("x", &Vector3::x)
+        .property("y", &Vector3::y)
+        .property("z", &Vector3::z);
+
+    rttr::registration::class_<DirectX::SimpleMath::Vector4>("Vector4")
+        .constructor<>()
+        .constructor<float, float, float, float>()
+        .property("x", &Vector4::x)
+        .property("y", &Vector4::y)
+        .property("z", &Vector4::z)
+        .property("w", &Vector4::w);
+
+    rttr::registration::class_<DirectX::SimpleMath::Quaternion>("Quaternion")
+        .constructor<>()
+        .constructor<float, float, float, float>()
+        .property("x", &Quaternion::x)
+        .property("y", &Quaternion::y)
+        .property("z", &Quaternion::z)
+        .property("w", &Quaternion::w);
+
+    rttr::registration::class_<DirectX::SimpleMath::Matrix>("Matrix")
+        .constructor<>()
+        .property("_11", &Matrix::_11)
+        .property("_12", &Matrix::_12)
+        .property("_13", &Matrix::_13)
+        .property("_14", &Matrix::_14)
+        .property("_21", &Matrix::_21)
+        .property("_22", &Matrix::_22)
+        .property("_23", &Matrix::_23)
+        .property("_24", &Matrix::_24)
+        .property("_31", &Matrix::_31)
+        .property("_32", &Matrix::_32)
+        .property("_33", &Matrix::_33)
+        .property("_34", &Matrix::_34)
+        .property("_41", &Matrix::_41)
+        .property("_42", &Matrix::_42)
+        .property("_43", &Matrix::_43)
+        .property("_44", &Matrix::_44);
+}
+
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
 {
     DebugDraw::Initialize(device, deviceContext);
+
     this->device = device;
     this->context = deviceContext;
 }
@@ -36,6 +89,8 @@ void Editor::Render(HWND &hwnd)
     RenderInspector();
     RenderDebugAABBDraw();
     DirectionalLightDebug();
+    RenderCameraFrustum();
+    RenderWorldSettings();
 }
 
 void Editor::RenderEnd(const ComPtr<ID3D11DeviceContext>& context)
@@ -72,6 +127,14 @@ void Editor::RenderMenuBar(HWND& hwnd)
             if (ImGui::MenuItem("Directional Shadow"))
             {
                 isDiretionalLightDebugOpen = !isDiretionalLightDebugOpen;
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("World Setting"))
+        {
+            if (ImGui::MenuItem("World Setting"))
+            {
+                isWorldSettingOpen = !isWorldSettingOpen;
             }
             ImGui::EndMenu();
         }
@@ -273,6 +336,42 @@ void Editor::RenderPlayModeControls()
     ImGui::PopStyleColor();
 }
 
+void Editor::RenderCameraFrustum()
+{
+    auto cams = CameraSystem::Instance().GetAllCamera();
+
+    DebugDraw::g_Batch->Begin();
+    for (auto& cam : cams)
+    {
+        if (cam->GetOwner()->GetName() == "FreeCamera") continue;
+
+        DirectX::BoundingFrustum frustum;
+        DirectX::BoundingFrustum::CreateFromMatrix(
+            frustum,
+            cam->GetProjection()
+        );
+
+        Matrix frustumWorld = cam->GetView().Transpose();
+        frustum.Transform(frustum, frustumWorld);
+        
+        Matrix camWorld = cam->GetOwner()->GetTransform()->GetWorldTransform();
+        frustum.Transform(frustum, camWorld);
+
+        DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
+    }
+    DebugDraw::g_Batch->End();
+}
+
+void Editor::RenderWorldSettings()
+{
+    if (isWorldSettingOpen)
+    {
+        int camIndex = WorldManager::Instance().GetCameraIndex();
+        ImGui::InputInt("Main Camera index", &camIndex);
+        WorldManager::Instance().SetCameraIndex(camIndex);
+    }
+}
+
 template<typename T>
 void Editor::RenderComponentInfo(std::string compName, T* comp)
 {
@@ -294,7 +393,12 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                 rot = { XMConvertToRadians(rotEuler.x), XMConvertToRadians(rotEuler.y),  XMConvertToRadians(rotEuler.z) };
                 prop.set_value(*comp, rot);
             }
-
+            else if (value.is_type<DirectX::SimpleMath::Vector3>())
+            {
+                DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
+                ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
+                prop.set_value(*comp, vec);
+            }
         } 
     }
     else if(compName == "FBXData")
@@ -373,6 +477,12 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                 ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
                 prop.set_value(*comp, vec);
             }
+            else if (value.is_type<Color>())
+            {
+                Color color = value.get_value<Color>();
+                ImGui::ColorEdit3(name.c_str(), &color.x, 0.1f);
+                prop.set_value(*comp, color);
+            }
         }
     }
 
@@ -393,10 +503,20 @@ void Editor::RenderDebugAABBDraw()
     context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencliView.Get());
 
     // DebugDraw의 BasicEffect 설정
-    auto cam = CameraSystem::Instance().GetFreeCamera();
-    DebugDraw::g_BatchEffect->SetWorld(Matrix::Identity);
+    
+    Camera* cam{}; 
+    if (PlayModeSystem::Instance().IsPlaying())
+    {
+        cam = CameraSystem::Instance().GetCurrCamera();
+    }
+    else
+    {
+        cam = CameraSystem::Instance().GetFreeCamera();
+    }
     DebugDraw::g_BatchEffect->SetView(cam->GetView());
     DebugDraw::g_BatchEffect->SetProjection(cam->GetProjection());
+
+    DebugDraw::g_BatchEffect->SetWorld(Matrix::Identity);
     DebugDraw::g_BatchEffect->Apply(context.Get());
 
     // InputLayout 설정

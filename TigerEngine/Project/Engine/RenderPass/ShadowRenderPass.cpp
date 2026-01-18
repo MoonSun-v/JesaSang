@@ -112,11 +112,11 @@ void ShadowRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared
 
 	//상수 버퍼 갱신
 	ConstantBuffer cb;
-	cb.cameraView = XMMatrixTranspose(CameraSystem::Instance().GetFreeCamera()->GetView());
-	cb.cameraProjection = XMMatrixTranspose(CameraSystem::Instance().GetFreeCamera()->GetProjection());
-	cb.shadowView = XMMatrixTranspose(WorldManager::Instance().directionalLightView);
-	cb.shadowProjection = XMMatrixTranspose(WorldManager::Instance().directionalLightProj);
-	cb.CameraPos = CameraSystem::Instance().GetFreeCamera()->GetOwner()->GetTransform()->position;
+	cb.cameraView = XMMatrixTranspose(cam->GetView());
+    cb.cameraProjection = XMMatrixTranspose(cam->GetProjection());
+    cb.shadowView = XMMatrixTranspose(WorldManager::Instance().directionalLightView);
+    cb.shadowProjection = XMMatrixTranspose(WorldManager::Instance().directionalLightProj);
+    cb.CameraPos = cam->GetOwner()->GetTransform()->GetPosition();
 
 	// 뷰포트 설정 + DSV 초기화, RS, OM 설정
 	auto dlviewport = WorldManager::Instance().directionalLightViewport;

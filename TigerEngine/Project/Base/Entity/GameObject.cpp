@@ -55,6 +55,8 @@ void GameObject::RemoveComponent(Component* comp)
                 InputSystem::Instance().UnRegister(inputComp);
             }
 
+            objPtr->OnDestory();
+            ObjectSystem::Instance().Destory(*it);
             handles.erase(it);
             break;
         }
@@ -173,8 +175,8 @@ void GameObject::Deserialize(const nlohmann::json objData)
 void GameObject::UpdateAABB()
 {
     Transform* trans = transform;
-    Vector3 updatedExtent = aabbBoxExtent * trans->scale;
-    aabbBox.Center = trans->position + aabbCenter;
+    Vector3 updatedExtent = aabbBoxExtent * trans->GetScale();
+    aabbBox.Center = trans->GetPosition() + aabbCenter;
     aabbBox.Extents = updatedExtent;
 }
 
@@ -194,7 +196,7 @@ void GameObject::SetAABB(Vector3 min, Vector3 max, Vector3 centor)
 {
     auto tran = transform;
 
-    aabbBox.Center = tran->position;
+    aabbBox.Center = tran->GetPosition();
     aabbBoxExtent = (max - min) / 2.0f;
     aabbCenter = centor;
 }

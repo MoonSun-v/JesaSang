@@ -44,20 +44,21 @@ void Player1::OnUpdate(float delta)
 
 void Player1::OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker, const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker)
 {
+    auto trans = GetOwner()->GetTransform();
     if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::W))
     {
-        GetOwner()->GetTransform()->position.y += 1.0f;
+        trans->Translate({ 0, 1.f, 0 });
     }
     else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::S))
     {
-        GetOwner()->GetTransform()->position.y -= 1.0f;
+        trans->Translate({ 0, -1.f, 0 });
     }
     if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::A))
     {
-        GetOwner()->GetTransform()->position.x -= 1.0f;
+        trans->Translate({ -1.f, 0, 0 });
     }
     else if (KeyState.IsKeyDown(DirectX::Keyboard::Keys::D))
     {
-        GetOwner()->GetTransform()->position.x += 1.0f;
+        trans->Translate({ 1.f, 0, 0 });
     }
 }

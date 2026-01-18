@@ -6,14 +6,14 @@
 
 void WorldManager::CreateDirectionalLightFrustum()
 {
-	// TODO main Ä· ¼³Á¤À¸·Î ¹Ù²ã¾ßÇÔ.
+	// TODO main ìº  ì„¤ì •ìœ¼ë¡œ ë°”ê¿”ì•¼í•¨.
 
 	auto camera = CameraSystem::Instance().GetFreeCamera();
 
 	auto camTran = camera->GetOwner()->GetTransform();
-	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // ±×¸²ÀÚ ÀýµÎÃ¼
-	directionalLightLookAt = camTran->position + camera->GetForward() * directionalLightForwardDistFromCamera;	// ¹Ù¶óº¸´Â ¹æÇâ = Ä«¸Þ¶ó À§Ä¡ + Ä«¸Þ¶ó ¹Ù¶óº¸´Â ¹æÇâÀ¸·ÎºÎÅÍ ¶³¾îÁø ÅÂ¾çÀÇ À§Ä¡
-	directionalLightPos = camTran->position + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// À§Ä¡
+	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // ê·¸ë¦¼ìž ì ˆë‘ì²´
+	directionalLightLookAt = camTran->GetPosition() + camera->GetForward() * directionalLightForwardDistFromCamera;	// ë°”ë¼ë³´ëŠ” ë°©í–¥ = ì¹´ë©”ë¼ ìœ„ì¹˜ + ì¹´ë©”ë¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ìœ¼ë¡œë¶€í„° ë–¨ì–´ì§„ íƒœì–‘ì˜ ìœ„ì¹˜
+	directionalLightPos = camTran->GetPosition() + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// ìœ„ì¹˜
 	directionalLightView = XMMatrixLookAtLH(directionalLightPos, directionalLightLookAt, Vector3(0.0f, 1.0f, 0.0f));
 }
 
@@ -22,8 +22,18 @@ void WorldManager::Update()
 	auto camera = CameraSystem::Instance().GetFreeCamera();
 
 	auto camTran = camera->GetOwner()->GetTransform();
-	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // ±×¸²ÀÚ ÀýµÎÃ¼
-	directionalLightLookAt = camTran->position + camera->GetForward() * directionalLightForwardDistFromCamera;	// ¹Ù¶óº¸´Â ¹æÇâ = Ä«¸Þ¶ó À§Ä¡ + Ä«¸Þ¶ó ¹Ù¶óº¸´Â ¹æÇâÀ¸·ÎºÎÅÍ ¶³¾îÁø ÅÂ¾çÀÇ À§Ä¡
-	directionalLightPos = camTran->position + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// À§Ä¡
+	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // ê·¸ë¦¼ìž ì ˆë‘ì²´
+	directionalLightLookAt = camTran->GetPosition() + camera->GetForward() * directionalLightForwardDistFromCamera;	// ë°”ë¼ë³´ëŠ” ë°©í–¥ = ì¹´ë©”ë¼ ìœ„ì¹˜ + ì¹´ë©”ë¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ìœ¼ë¡œë¶€í„° ë–¨ì–´ì§„ íƒœì–‘ì˜ ìœ„ì¹˜
+	directionalLightPos = camTran->GetPosition() + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// ìœ„ì¹˜
 	directionalLightView = XMMatrixLookAtLH(directionalLightPos, directionalLightLookAt, Vector3(0.0f, 1.0f, 0.0f));
+}
+
+int WorldManager::GetCameraIndex()
+{
+    return cameraIndex;
+}
+
+void WorldManager::SetCameraIndex(int index)
+{
+    cameraIndex = CameraSystem::Instance().SetCurrCamera(index);
 }

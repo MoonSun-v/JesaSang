@@ -61,7 +61,11 @@ bool EngineApp::OnInitialize()
 	SceneSystem::Instance().SetCurrentSceneByIndex(); 	// render first scene
 
 	// == create free camera ==
+	CameraSystem::Instance().SetScreenSize(clientWidth, clientHeight);
+
+#if _DEBUG
 	CameraSystem::Instance().CreateFreeCamera(clientWidth, clientHeight, SceneSystem::Instance().GetCurrentScene().get());
+#endif
 	WorldManager::Instance().CreateDirectionalLightFrustum(); // create directional light 
 
 
@@ -121,21 +125,40 @@ void EngineApp::OnRender()
 	BeginRender(); 					// 업데이트 준비
 	
 	auto freeCam = CameraSystem::Instance().GetFreeCamera();	
+    auto currCam = CameraSystem::Instance().GetCurrCamera();
 
 	for(auto& pass : renderPasses)
 	{	
-		if(typeid(*pass) == typeid(GBufferRenderPass))
-		{
-			dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam);
-		}
-		else if(typeid(*pass) == typeid(ShadowRenderPass))
-		{
-			dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam); 
-		}
-		else
-		{
-			dxRenderer->ProcessScene(nullptr, pass, freeCam);  // 렌더러가 씬을 렌더링
-		}
+        if (PlayModeSystem::Instance().IsPlaying())
+        {
+            if (typeid(*pass) == typeid(GBufferRenderPass))
+            {
+                dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, currCam);
+            }
+            else if (typeid(*pass) == typeid(ShadowRenderPass))
+            {
+                dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, currCam);
+            }
+            else
+            {
+                dxRenderer->ProcessScene(nullptr, pass, currCam);  // 렌더러가 씬을 렌더링
+            }
+        }
+        else
+        {
+		    if(typeid(*pass) == typeid(GBufferRenderPass))
+		    {
+			    dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam);
+		    }
+		    else if(typeid(*pass) == typeid(ShadowRenderPass))
+		    {
+			    dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam); 
+		    }
+		    else
+		    {
+			    dxRenderer->ProcessScene(nullptr, pass, freeCam);  // 렌더러가 씬을 렌더링
+		    }
+        }
 	}
 
 #if _DEBUG

@@ -10,7 +10,7 @@ Camera *CameraSystem::GetFreeCamera()
 void CameraSystem::Register(Camera *cam)
 {
     registered.push_back(cam);
-    mappedRegistered.insert({cam->GetOwner()->GetName(), cam });
+    mappedRegistered[mappedRegistered.size()] = cam;
 }
 
 void CameraSystem::RemoveCamera(Camera *cam)
@@ -29,13 +29,33 @@ void CameraSystem::RemoveCamera(Camera *cam)
     }
 
     // map에서 제거
-    std::string name = cam->GetOwner()->GetName();
-    mappedRegistered.erase(name);
+    for (auto it = mappedRegistered.begin(); it != mappedRegistered.end(); it++)
+    {
+        if (it->second == cam)
+        {
+            mappedRegistered.erase(it);
+            break;
+        }
+    }
 }
 
-Camera *CameraSystem::GetCameraByObjectName(std::string name)
+int CameraSystem::SetCurrCamera(int index)
 {
-    if(auto it = mappedRegistered.find(name); it != mappedRegistered.end())
+    if (index < 0 || index > registered.size()) // 잘못된 인덱스 선택 방지
+    {
+        currCameraIndex = 0;
+    }
+    else
+    {
+        currCameraIndex = index;
+    }
+
+    return currCameraIndex;
+}
+
+Camera *CameraSystem::GetCameraByIndex(int index)
+{
+    if(auto it = mappedRegistered.find(index); it != mappedRegistered.end())
     {
         return it->second;
     }
@@ -50,6 +70,12 @@ void CameraSystem::Clear()
 {
     registered.clear();
     mappedRegistered.clear();
+}
+
+void CameraSystem::SetScreenSize(int width, int height)
+{
+    screenWidth = width;
+    screenHeight = height;
 }
 
 void CameraSystem::FreeCameraUpdate(float delta)
@@ -71,5 +97,4 @@ void CameraSystem::CreateFreeCamera(int clientWidth, int clientHeight, Scene *cu
     freeCamera = freeCamObj->AddComponent<Camera>();
 
 	freeCamera->SetProjection(DirectX::XM_PIDIV2, clientWidth, clientHeight, 0.1, 3000);
-    Register(freeCamera);
 }

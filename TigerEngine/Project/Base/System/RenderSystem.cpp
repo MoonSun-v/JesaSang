@@ -11,7 +11,7 @@ void RenderSystem::UnRegister(RenderComponent* comp)
     for (auto it = comps.begin(); it != comps.end(); it++)
     {
         if (*it == comp)
-        {
+        {            
             comps.erase(it);
             return;
         }

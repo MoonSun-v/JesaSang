@@ -139,7 +139,7 @@ void DirectionalLightPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::sh
 	lightdirCB.lightColor = lightColor;
 
 	ConstantBuffer cb;
-	cb.CameraPos = CameraSystem::Instance().GetFreeCamera()->GetOwner()->GetTransform()->position;
+	cb.CameraPos = cam->GetOwner()->GetTransform()->GetPosition();
 	cb.shadowView = XMMatrixTranspose(WorldManager::Instance().directionalLightView);
 	cb.shadowProjection = XMMatrixTranspose(WorldManager::Instance().directionalLightProj);
 

@@ -26,6 +26,8 @@ private:
     void RenderHierarchy();
     void RenderInspector();
     void RenderPlayModeControls();
+    void RenderCameraFrustum();
+    void RenderWorldSettings();
 
     template<typename T>
     void RenderComponentInfo(std::string name, T* comp);
@@ -55,6 +57,7 @@ private:
 
     // flags
     bool isDiretionalLightDebugOpen = false;
+    bool isWorldSettingOpen = false;
     void DirectionalLightDebug();
 
     std::string currScenePath{};

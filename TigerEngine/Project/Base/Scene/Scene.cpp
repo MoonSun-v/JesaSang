@@ -17,7 +17,7 @@ void Scene::CheckDestroy()
 		{	
             // 맵 요소 제거
             auto container = mappedGameObjects[entity.objPtr->GetName()];
-            for (auto mapContainerIt = container.begin(); mapContainerIt != container.end();)
+            for (auto mapContainerIt = container.begin(); mapContainerIt != container.end(); mapContainerIt++)
             {
                 auto& [handle, index] = *mapContainerIt;
                 if (entity.handle.generation == handle.generation &&

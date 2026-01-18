@@ -128,7 +128,7 @@ void GBufferRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::share
 	cb.cameraView = XMMatrixTranspose(cam->GetView());
 	cb.cameraProjection = XMMatrixTranspose(cam->GetProjection());
 
-	cb.CameraPos = cam->GetOwner()->GetTransform()->position;
+	cb.CameraPos = cam->GetOwner()->GetTransform()->GetPosition();
 	context->UpdateSubresource(cbCamera.Get(), 0, nullptr, &cb, 0, 0);
 
 	context->IASetInputLayout(inputLayout.Get());
