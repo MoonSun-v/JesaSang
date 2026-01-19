@@ -24,7 +24,14 @@
             },
             "type": "FBXRenderer"
           },
-          "Player1": {},
+          "Player1": {
+            "properties": {
+              "b": 0.0,
+              "g": 0.0,
+              "r": 0.0
+            },
+            "type": "Player1"
+          },
           "Transform": {
             "properties": {
               "Position": [
