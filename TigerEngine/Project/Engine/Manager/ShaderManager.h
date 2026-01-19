@@ -131,6 +131,26 @@ public:
     ComPtr<ID3D11Buffer>& GetEffectCB();
 
 
+public:
+    // Util funcs
+    // Texture, RTV, SRV Create Utils
+    void CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
+        ID3D11Texture2D** outTex, ID3D11RenderTargetView** outRTV, ID3D11ShaderResourceView** outSRV);
+
+    // mip 해상도 구하기 (baseW/baseH는 bloom base 해상도)
+    void GetMipSize(UINT baseW, UINT baseH, UINT mip, UINT& outW, UINT& outH);
+
+    // mip 기준 texel size 구하기
+    void GetMipTexelSize(UINT baseW, UINT baseH, UINT mip, float& outTx, float& outTy);
+
+    // viewport 설정
+    void SetViewport(const ComPtr<ID3D11DeviceContext>& ctx, UINT width, UINT height);
+
+    // bloom mip용 viewport 설정
+    void SetViewportForMip(const ComPtr<ID3D11DeviceContext>& ctx, UINT baseW, UINT baseH, UINT mip);
+
+
+
 private:
     /* ---------------------------- constant Buffers ---------------------------- */
     ComPtr<ID3D11Buffer> frameCB;

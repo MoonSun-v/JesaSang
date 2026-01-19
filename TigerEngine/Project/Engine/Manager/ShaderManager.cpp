@@ -20,7 +20,7 @@ void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11Dev
 }
 
 
-// --------------------------------------------------------------
+// [ Create Funcs ] --------------------------------------------------------------
 void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
 {
     // create DSS (depth test on + write on)
@@ -285,7 +285,7 @@ void ShaderManager::CreateHDRResource(const ComPtr<ID3D11Device>& dev, int width
 
 
 // G-buffer util funcs
-bool CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
+void CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
     ID3D11Texture2D** outTex, ID3D11RenderTargetView** outRTV, ID3D11ShaderResourceView** outSRV)
 {
     D3D11_TEXTURE2D_DESC td = {};
@@ -302,15 +302,8 @@ bool CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_
     td.MiscFlags = 0;
 
     HRESULT hr = device->CreateTexture2D(&td, nullptr, outTex);
-    if (FAILED(hr)) return false;
-
     hr = device->CreateRenderTargetView(*outTex, nullptr, outRTV);
-    if (FAILED(hr)) return false;
-
     hr = device->CreateShaderResourceView(*outTex, nullptr, outSRV);
-    if (FAILED(hr)) return false;
-
-    return true;
 }
 
 void ShaderManager::CreateGbufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -321,32 +314,32 @@ void ShaderManager::CreateGbufferResource(const ComPtr<ID3D11Device>& dev, int s
     const DXGI_FORMAT EMISSIVE_FMT = DXGI_FORMAT_R16G16B16A16_FLOAT;
 
     // Albedo
-    if (!CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
+    CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
         ALBEDO_FMT,
         albedoTex.GetAddressOf(),
         albedoRTV.GetAddressOf(),
-        albedoSRV.GetAddressOf()));
+        albedoSRV.GetAddressOf());
 
     // Normal
-    if (!CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
+    CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
         NORMAL_FMT,
         normalTex.GetAddressOf(),
         normalRTV.GetAddressOf(),
-        normalSRV.GetAddressOf()));
+        normalSRV.GetAddressOf());
 
     // Metal/Rough
-    if (!CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
+    CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
         METALROUGH_FMT,
         metalRoughTex.GetAddressOf(),
         metalRoughRTV.GetAddressOf(),
-        metalRoughSRV.GetAddressOf()));
+        metalRoughSRV.GetAddressOf());
 
     // Emissive
-    if (!CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
+    CreateRTTex_RTV_SRV(dev, screenWidth, screenHeight,
         EMISSIVE_FMT,
         emissiveTex.GetAddressOf(),
         emissiveRTV.GetAddressOf(),
-        emissiveSRV.GetAddressOf()));
+        emissiveSRV.GetAddressOf());
 }
 
 void ShaderManager::CreateBloomResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -700,8 +693,65 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
 }
 
 
+// [ Util Funcs ] --------------------------------------------------------------
+void ShaderManager::CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
+    ID3D11Texture2D** outTex, ID3D11RenderTargetView** outRTV, ID3D11ShaderResourceView** outSRV)
+{
+    D3D11_TEXTURE2D_DESC td = {};
+    td.Width = w;
+    td.Height = h;
+    td.MipLevels = 1;
+    td.ArraySize = 1;
+    td.Format = fomat;
+    td.SampleDesc.Count = 1;
+    td.SampleDesc.Quality = 0;
+    td.Usage = D3D11_USAGE_DEFAULT;
+    td.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    td.CPUAccessFlags = 0;
+    td.MiscFlags = 0;
 
-// --------------------------------------------------------------
+    HRESULT hr = device->CreateTexture2D(&td, nullptr, outTex);
+    hr = device->CreateRenderTargetView(*outTex, nullptr, outRTV);
+    hr = device->CreateShaderResourceView(*outTex, nullptr, outSRV);
+}
+
+void ShaderManager::GetMipSize(UINT baseW, UINT baseH, UINT mip, UINT& outW, UINT& outH)
+{
+    outW = std::max<UINT>(1, baseW >> mip);     // baseW / 2^mip
+    outH = std::max<UINT>(1, baseH >> mip);     // baseH / 2^mip
+}
+
+void ShaderManager::GetMipTexelSize(UINT baseW, UINT baseH, UINT mip, float& outTx, float& outTy)
+{
+    UINT w, h;
+    GetMipSize(baseW, baseH, mip, w, h);
+    outTx = 1.0f / (float)w;
+    outTy = 1.0f / (float)h;
+}
+
+void ShaderManager::SetViewport(const ComPtr<ID3D11DeviceContext>& ctx, UINT width, UINT height)
+{
+    D3D11_VIEWPORT vp{};
+    vp.TopLeftX = 0.0f;
+    vp.TopLeftY = 0.0f;
+    vp.Width = (float)std::max<UINT>(1, width);
+    vp.Height = (float)std::max<UINT>(1, height);
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+
+    ctx->RSSetViewports(1, &vp);
+}
+
+void ShaderManager::SetViewportForMip(const ComPtr<ID3D11DeviceContext>& ctx, UINT baseW, UINT baseH, UINT mip)
+{
+    UINT w, h;
+    GetMipSize(baseW, baseH, mip, w, h);
+    SetViewport(ctx, w, h);
+}
+
+
+
+// [ CB Getter ] --------------------------------------------------------------
 ComPtr<ID3D11Buffer>& ShaderManager::GetFrameCB()
 {
     return frameCB;
