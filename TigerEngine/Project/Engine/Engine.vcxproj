@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\include;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\inc;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -123,7 +123,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\include;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -138,6 +138,7 @@
     <ClCompile Include="Components\MeshRenderer.cpp" />
     <ClCompile Include="Components\FreeCamera.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Manager\WorldManager.cpp" />
     <ClCompile Include="Util\PathHelper.cpp" />
@@ -148,6 +149,12 @@
     <ClCompile Include="RenderPass\ShadowRenderPass.cpp" />
     <ClCompile Include="RenderPass\SkyboxRenderPass.cpp" />
     <ClCompile Include="Util\DebugDraw.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioClip.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioListener.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioListenerComponent.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSource.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSourceComponent.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
@@ -156,6 +163,7 @@
     <ClInclude Include="Components\MeshRenderer.h" />
     <ClInclude Include="Components\FreeCamera.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="RenderPass\BasicRenderPass.h" />
@@ -166,6 +174,13 @@
     <ClInclude Include="RenderPass\SkyboxRenderPass.h" />
     <ClInclude Include="Util\DebugDraw.h" />
     <ClInclude Include="Manager\WorldManager.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioClip.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioListener.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioListenerComponent.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSource.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSourceComponent.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSystem.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.vcxproj">

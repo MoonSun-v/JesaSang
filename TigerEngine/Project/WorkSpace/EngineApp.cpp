@@ -7,6 +7,7 @@
 
 
 #include "Manager/FBXResourceManager.h"
+#include "Manager/AudioManager.h"
 #include "Manager/ShaderManager.h"
 #include "Manager/WorldManager.h"
 
@@ -24,8 +25,69 @@
 #include "System/PlayModeSystem.h"
 
 #include "Components/FreeCamera.h"
+#include "AudioListenerComponent.h"
+#include "AudioSourceComponent.h"
+#include "AudioClip.h"
 
 namespace fs = std::filesystem;
+
+namespace
+{
+    AudioListenerComponent g_audioListener;
+    AudioSourceComponent g_audioSource;
+    std::shared_ptr<AudioClip> g_audioClip;
+
+    DirectX::XMFLOAT3 g_listenerPos{ 0.0f, 0.0f, 0.0f };
+    DirectX::XMFLOAT3 g_listenerVel{ 0.0f, 0.0f, 0.0f };
+    DirectX::XMFLOAT3 g_listenerFwd{ 0.0f, 0.0f, 1.0f };
+    DirectX::XMFLOAT3 g_listenerUp{ 0.0f, 1.0f, 0.0f };
+
+    DirectX::XMFLOAT3 g_sourcePos{ 0.0f, 0.0f, 0.0f };
+    DirectX::XMFLOAT3 g_sourceVel{ 0.0f, 0.0f, 0.0f };
+
+    bool g_audioReady = false;
+    bool g_audioStarted = false;
+
+    void TrySetupAudioTest()
+    {
+        auto& audioMgr = AudioManager::Instance();
+        auto entry = audioMgr.GetEntry("SFX_TestLoop");
+        if (!entry)
+        {
+            return;
+        }
+
+        audioMgr.GetSystem().Set3DSettings(1.0f, 1.0f, 1.0f);
+
+        g_audioClip = audioMgr.GetOrCreateClip(entry->id);
+        if (!g_audioClip)
+        {
+            return;
+        }
+
+        g_audioListener.Init(&audioMgr.GetSystem());
+        g_audioSource.Init(&audioMgr.GetSystem());
+
+        AudioTransformRef listenerRef{};
+        listenerRef.position = &g_listenerPos;
+        listenerRef.velocity = &g_listenerVel;
+        listenerRef.forward = &g_listenerFwd;
+        listenerRef.up = &g_listenerUp;
+        g_audioListener.BindTransform(listenerRef);
+
+        AudioTransformRef sourceRef{};
+        sourceRef.position = &g_sourcePos;
+        sourceRef.velocity = &g_sourceVel;
+        g_audioSource.BindTransform(sourceRef);
+
+        g_audioSource.SetClip(g_audioClip);
+        g_audioSource.SetLoop(entry->loop);
+        g_audioSource.SetVolume(entry->defaultVolume);
+        g_audioSource.Set3DMinMaxDistance(1.0f, 200.0f);
+
+        g_audioReady = true;
+    }
+}
 
 EngineApp::EngineApp(HINSTANCE hInstance)
 	: GameApp(hInstance)
@@ -34,6 +96,7 @@ EngineApp::EngineApp(HINSTANCE hInstance)
 
 EngineApp::~EngineApp()
 {
+    AudioManager::Instance().Shutdown();
 }
 
 bool EngineApp::OnInitialize()
@@ -50,6 +113,8 @@ bool EngineApp::OnInitialize()
 	// == init system ==
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 	ShaderManager::Instance().CreateCB(dxRenderer->GetDevice());
+    AudioManager::Instance().Initialize();
+    TrySetupAudioTest();
 
 #if _DEBUG
 	editor = std::make_unique<Editor>();
@@ -118,6 +183,39 @@ void EngineApp::OnUpdate()
 	CameraSystem::Instance().FreeCameraUpdate(GameTimer::Instance().DeltaTime());
 	WorldManager::Instance().Update();
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
+    AudioManager::Instance().Update();
+
+    if (g_audioReady)
+    {
+        auto currCam = CameraSystem::Instance().GetCurrCamera();
+        if (currCam && currCam->GetOwner())
+        {
+            auto transform = currCam->GetOwner()->GetTransform();
+            if (transform)
+            {
+                const auto& pos = transform->GetPosition();
+                g_listenerPos = { pos.x, pos.y, pos.z };
+            }
+
+            auto forward = currCam->GetForward();
+            g_listenerFwd = { forward.x, forward.y, forward.z };
+        }
+
+        g_sourcePos = {
+            g_listenerPos.x + g_listenerFwd.x * 5.0f,
+            g_listenerPos.y + g_listenerFwd.y * 5.0f,
+            g_listenerPos.z + g_listenerFwd.z * 5.0f
+        };
+
+        g_audioListener.Update();
+        g_audioSource.Update3D();
+
+        if (!g_audioStarted)
+        {
+            g_audioSource.Play();
+            g_audioStarted = true;
+        }
+    }
 
 #if _DEBUG
 	editor->Update();
