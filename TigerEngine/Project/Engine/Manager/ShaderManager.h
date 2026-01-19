@@ -15,6 +15,7 @@ public:
 private:
     void CreateDSS(const ComPtr<ID3D11Device>& dev);
     void CreateRS(const ComPtr<ID3D11Device>& dev);
+    void CreateSampler(const ComPtr<ID3D11Device>& dev);
     void CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx);
     void CreateCB(const ComPtr<ID3D11Device>& dev);
 
@@ -30,6 +31,11 @@ public:
     // RS
     ComPtr<ID3D11RasterizerState>     cullfrontRS;         // cullmode = front : 앞면 버리고 뒷면만 남김
     ComPtr<ID3D11RasterizerState>     cullNoneRS;          // 컬링 안하고 모든 영역을 그림
+
+    // Sampler
+    ComPtr<ID3D11SamplerState>	linearSamplerState;       // linear    
+    ComPtr<ID3D11SamplerState>  shadowSamplerState;       // clmap
+    ComPtr<ID3D11SamplerState>	linearClamSamplerState;   // linear + clamp    
 
     // IA
     ComPtr<ID3D11InputLayout> inputLayout_Vertex;

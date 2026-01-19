@@ -8,11 +8,13 @@ void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11Dev
 {
     CreateDSS(dev);
     CreateRS(dev);
+    CreateSampler(dev);
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
 }
 
 
+// --------------------------------------------------------------
 void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
 {
     // create DSS (depth test on + write on)
@@ -120,6 +122,49 @@ void ShaderManager::CreateRS(const ComPtr<ID3D11Device>& dev)
         rsDesc.DepthClipEnable = TRUE;
         HR_T(dev->CreateRasterizerState(&rsDesc, cullNoneRS.GetAddressOf()));
     }
+}
+
+void ShaderManager::CreateSampler(const ComPtr<ID3D11Device>& dev)
+{
+    // create smapler state (linear)
+    {
+        D3D11_SAMPLER_DESC sample_Desc = {};
+        sample_Desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;			// 상하좌우 텍셀 보간
+        sample_Desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;				// 0~1 범위를 벗어난 uv는 소수 부분만 사용
+        sample_Desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sample_Desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sample_Desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+        sample_Desc.MinLOD = 0;
+        sample_Desc.MaxLOD = D3D11_FLOAT32_MAX;
+        HR_T(dev->CreateSamplerState(&sample_Desc, linearSamplerState.GetAddressOf()));
+    }
+
+    // create smapler state (clamp)
+    {
+        D3D11_SAMPLER_DESC sampDesc = {};
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        HR_T(dev->CreateSamplerState(&sampDesc, shadowSamplerState.GetAddressOf()));
+    }
+
+    // create smapler state (linear + clamp) 
+    {
+        D3D11_SAMPLER_DESC sampDesc = {};
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.MipLODBias = 0.0f;
+        sampDesc.MaxAnisotropy = 1;
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+        sampDesc.MinLOD = 0.0f;
+        sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+        HR_T(dev->CreateSamplerState(&sampDesc, linearClamSamplerState.GetAddressOf()));
+    }
+
 }
 
 void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx)
@@ -400,6 +445,8 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
     }
 }
 
+
+// --------------------------------------------------------------
 ComPtr<ID3D11Buffer>& ShaderManager::GetFrameCB()
 {
     return frameCB;
