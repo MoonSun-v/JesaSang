@@ -7,10 +7,10 @@
 void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx)
 {
     CreateDSS(dev);
+    CreateRS(dev);
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
 }
-
 
 
 void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
@@ -97,6 +97,28 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         dsDesc.StencilEnable = FALSE;
 
         HR_T(dev->CreateDepthStencilState(&dsDesc, disableDSS.GetAddressOf()));
+    }
+}
+
+void ShaderManager::CreateRS(const ComPtr<ID3D11Device>& dev)
+{
+    // create RS (skybox 큐브의 안쪽이 그려지도록 cull mode front)
+    {
+        D3D11_RASTERIZER_DESC rsDesc = {};
+        rsDesc.FillMode = D3D11_FILL_SOLID;
+        rsDesc.CullMode = D3D11_CULL_FRONT;
+        rsDesc.DepthClipEnable = TRUE;
+        HR_T(dev->CreateRasterizerState(&rsDesc, cullfrontRS.GetAddressOf()));
+    }
+
+    // create RS
+    {
+        D3D11_RASTERIZER_DESC rsDesc = {};
+        rsDesc.FillMode = D3D11_FILL_SOLID;
+        rsDesc.CullMode = D3D11_CULL_NONE;
+        rsDesc.FrontCounterClockwise = FALSE;
+        rsDesc.DepthClipEnable = TRUE;
+        HR_T(dev->CreateRasterizerState(&rsDesc, cullNoneRS.GetAddressOf()));
     }
 }
 

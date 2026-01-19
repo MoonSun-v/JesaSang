@@ -14,6 +14,7 @@ public:
 
 private:
     void CreateDSS(const ComPtr<ID3D11Device>& dev);
+    void CreateRS(const ComPtr<ID3D11Device>& dev);
     void CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx);
     void CreateCB(const ComPtr<ID3D11Device>& dev);
 
@@ -25,6 +26,10 @@ public:
     ComPtr<ID3D11DepthStencilState>   depthTestStencilWriteDSS;   // depth test only / stencil write on (stencil test ALWAYS)
     ComPtr<ID3D11DepthStencilState>   stencilTestOnlyDSS;         // stencil test only
     ComPtr<ID3D11DepthStencilState>   disableDSS;                 // all disable
+
+    // RS
+    ComPtr<ID3D11RasterizerState>     cullfrontRS;         // cullmode = front : 앞면 버리고 뒷면만 남김
+    ComPtr<ID3D11RasterizerState>     cullNoneRS;          // 컬링 안하고 모든 영역을 그림
 
     // IA
     ComPtr<ID3D11InputLayout> inputLayout_Vertex;
