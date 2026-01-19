@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\include;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\inc;%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -124,7 +124,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\include;$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\inc;%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -153,6 +153,7 @@
     <ClCompile Include="Manager\ComponentFactory.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
     <ClCompile Include="EngineSystem\PlayModeSystem.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Manager\WorldManager.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
@@ -174,6 +175,12 @@
     <ClCompile Include="Util\DebugDraw.cpp" />
     <ClCompile Include="Util\PhysicsFilterShader.cpp" />
     <ClCompile Include="Util\PhysicsLayerMatrix.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioClip.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioListener.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioListenerComponent.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSource.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSourceComponent.cpp" />
+    <ClCompile Include="..\Externals\AudioModule_FMOD\src\AudioSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
@@ -197,6 +204,7 @@
     <ClInclude Include="Manager\ComponentFactory.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
     <ClInclude Include="EngineSystem\PlayModeSystem.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\WorldData\ShaderWorldData.hpp" />
     <ClInclude Include="Object\Component.h" />
@@ -224,6 +232,13 @@
     <ClInclude Include="Util\PhysicsLayerMatrix.h" />
     <ClInclude Include="Util\PhysXUtils.h" />
     <ClInclude Include="Util\RaycastHit.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioClip.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioListener.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioListenerComponent.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSource.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSourceComponent.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioSystem.h" />
+    <ClInclude Include="..\Externals\AudioModule_FMOD\include\AudioTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.vcxproj">

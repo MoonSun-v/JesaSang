@@ -110,7 +110,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+        xcopy /Y /D "$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\bin\fmodL.dll" "$(OutDir)"
+        xcopy /Y /D "$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\bin\fmodL.dll" "$(SolutionDir)bin\$(ProjectName)\"
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -126,7 +134,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+        xcopy /Y /D "$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\bin\fmod.dll" "$(OutDir)"
+        xcopy /Y /D "$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\bin\fmod.dll" "$(SolutionDir)bin\$(ProjectName)\"
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EngineApp.h" />

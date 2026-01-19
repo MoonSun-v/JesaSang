@@ -7,6 +7,7 @@
 
 
 #include "Manager/FBXResourceManager.h"
+#include "Manager/AudioManager.h"
 #include "Manager/ShaderManager.h"
 #include "Manager/WorldManager.h"
 
@@ -29,6 +30,7 @@ EngineApp::EngineApp(HINSTANCE hInstance)
 
 EngineApp::~EngineApp()
 {
+    AudioManager::Instance().Shutdown();
 }
 
 bool EngineApp::OnInitialize()
@@ -45,6 +47,7 @@ bool EngineApp::OnInitialize()
 	// == init system ==
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 	ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
+    AudioManager::Instance().Initialize();
 
     auto& sm = ShaderManager::Instance();
     sm.viewport_screen = dxRenderer->GetRenderViewPort();
@@ -120,6 +123,7 @@ void EngineApp::OnUpdate()
 	CameraSystem::Instance().LightCameraUpdate(GameTimer::Instance().DeltaTime());
 	WorldManager::Instance().Update(dxRenderer->GetDeviceContext(), freeCam, clientWidth, clientHeight);
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
+    AudioManager::Instance().Update();
 
 #if _DEBUG
 	editor->Update();
@@ -290,6 +294,8 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "Components/FBXRenderer.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
+#include "Components/AudioListenerComponent.h"
+#include "Components/AudioSourceComponent.h"
 #include "Manager/ComponentFactory.h"
 
 #include "Player/Player1.h"
@@ -301,6 +307,8 @@ void EngineApp::RegisterAllComponents()
 	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
 	ComponentFactory::Instance().Register<Transform>("Transform");
 	ComponentFactory::Instance().Register<Camera>("Camera");
+    ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
+    ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
 
 	ComponentFactory::Instance().Register<Player1>("Player1");
 	ComponentFactory::Instance().Register<Weapon>("Weapon");
