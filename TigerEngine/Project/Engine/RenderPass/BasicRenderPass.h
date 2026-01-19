@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "Renderer/IRenderPass.h"
+#include "IRenderPass.h"
 
 class BasicRenderPass : public IRenderPass
 {
@@ -22,9 +22,9 @@ private:
 	D3D11_VIEWPORT 						renderViewport = {};
 public:
 	virtual void Init(ComPtr<ID3D11Device>& device);
-	void Execute( ComPtr<ID3D11DeviceContext>& context, 
-					std::shared_ptr<Scene> scene,
-					Camera* cam) override;
+	void Execute(ComPtr<ID3D11DeviceContext>& context,
+                RenderQueue& queue,
+                Camera* cam) override;
 
 protected:
 };

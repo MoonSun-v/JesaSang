@@ -1,15 +1,15 @@
 #pragma once
 #include "pch.h"
-#include "Renderer/IRenderPass.h"
+#include "IRenderPass.h"
 #include "GBufferRenderPass.h"
 
 class DirectionalLightPass : public IRenderPass
 {
 public:
 	virtual void Init(const ComPtr<ID3D11Device>& device);
-	void Execute(ComPtr<ID3D11DeviceContext>& context, 
-					std::shared_ptr<Scene> scene,
-					Camera* cam) override;    
+	void Execute(ComPtr<ID3D11DeviceContext>& context,
+                 RenderQueue& queue,
+                 Camera* cam) override;
     void End(ComPtr<ID3D11DeviceContext>& context) override;
 
     void SetClient(UINT width, UINT height);

@@ -1,14 +1,17 @@
 #pragma once
 #include "pch.h"
-#include "Renderer/IRenderPass.h"
+#include "IRenderPass.h"
+#include "Datas/MaterialData.h"
+#include "Datas/TransformData.h"
+#include "Datas/FBXResourceData.h"
 
 class GBufferRenderPass : public IRenderPass
 {
 public:
 	void Init(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext, UINT width, UINT height);
-	void Execute(ComPtr<ID3D11DeviceContext>& context, 
-					std::shared_ptr<Scene> scene,
-					Camera* cam) override;    
+	void Execute(ComPtr<ID3D11DeviceContext>& context,
+        RenderQueue& queue,
+        Camera* cam) override;
     void End(ComPtr<ID3D11DeviceContext>& context) override;
     void SetDepthStencilView(const ComPtr<ID3D11DepthStencilView>& dsv);
 
@@ -36,6 +39,10 @@ private:
     ComPtr<ID3D11RasterizerState>       rasterizerState{};
 	
 	ComPtr<ID3D11Buffer> 				cbCamera{};
+    ComPtr<ID3D11Buffer>               materialCB{};
+    ComPtr<ID3D11Buffer>               transformCB{};
+    ComPtr<ID3D11Buffer>               bonePoseCB{};
+    ComPtr<ID3D11Buffer>               boneOffsetCB{};
 	
 	D3D11_VIEWPORT 						renderViewport = {};
     UINT clientWidth{};
@@ -56,6 +63,8 @@ private:
 	};
 
     int bufferCount = 0; // GBuffer 사용하는 개수
+    BonePoseBuffer        identityPose{};
+    BoneOffsetBuffer      identityOffset{};
 
     void CreateGBuffers(const ComPtr<ID3D11Device> &device);
 };

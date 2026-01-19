@@ -1,5 +1,5 @@
 #include "RenderSystem.h"
-#include "../System/TimeSystem.h"
+#include "System/TimeSystem.h"
 
 void RenderSystem::Register(RenderComponent* comp)
 {
@@ -18,11 +18,11 @@ void RenderSystem::UnRegister(RenderComponent* comp)
     }
 }
 
-void RenderSystem::Render(ComPtr<ID3D11DeviceContext>& context)
+void RenderSystem::Render(RenderQueue& queue)
 {
     for (auto& e : comps)
     {
         e->OnUpdate(GameTimer::Instance().DeltaTime());
-        e->OnRender(context);
+        e->OnRender(queue);
     }
 }

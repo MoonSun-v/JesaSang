@@ -1,9 +1,9 @@
 #include "GameObject.h"
 #include "DirectXCollision.h"
-#include "../System/ComponentFactory.h"
-#include "../System/ScriptSystem.h"
-#include "../System/RenderSystem.h"
-#include "../System/InputSystem.h"
+#include "../Manager/ComponentFactory.h"
+#include "../EngineSystem/ScriptSystem.h"
+#include "../EngineSystem/RenderSystem.h"
+#include "System/InputSystem.h"
 
 RTTR_REGISTRATION
 {

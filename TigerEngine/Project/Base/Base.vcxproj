@@ -133,24 +133,12 @@
     <ClCompile Include="Datas\Bone.cpp" />
     <ClCompile Include="Datas\Mesh.cpp" />
     <ClCompile Include="Datas\SkeletonInfo.cpp" />
-    <ClCompile Include="Entity\Camera.cpp" />
-    <ClCompile Include="Entity\GameObject.cpp" />
-    <ClCompile Include="Entity\Transform.cpp" />
-    <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Entity\Object.cpp" />
-    <ClCompile Include="System\PlayModeSystem.cpp" />
-    <ClCompile Include="System\RenderSystem.cpp" />
-    <ClCompile Include="System\ScriptSystem.cpp" />
     <ClCompile Include="System\ObjectSystem.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Renderer\DirectX11Renderer.cpp" />
     <ClCompile Include="Renderer\ImguiRenderer.cpp" />
-    <ClCompile Include="Scene\Scene.cpp" />
-    <ClCompile Include="System\CameraSystem.cpp" />
-    <ClCompile Include="System\ComponentFactory.cpp" />
     <ClCompile Include="System\InputSystem.cpp" />
-    <ClCompile Include="System\SceneSystem.cpp" />
     <ClCompile Include="System\TimeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,30 +152,14 @@
     <ClInclude Include="Datas\SkeletonInfo.h" />
     <ClInclude Include="Datas\TransformData.h" />
     <ClInclude Include="Datas\Vertex.h" />
-    <ClInclude Include="Entity\Camera.h" />
-    <ClInclude Include="Entity\GameObject.h" />
-    <ClInclude Include="Entity\Component.h" />
-    <ClInclude Include="Entity\RenderComponent.h" />
-    <ClInclude Include="Entity\ScriptComponent.h" />
-    <ClInclude Include="Entity\Transform.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GameApp.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Entity\Object.h" />
-    <ClInclude Include="System\PlayModeSystem.h" />
-    <ClInclude Include="System\RenderSystem.h" />
-    <ClInclude Include="System\ScriptSystem.h" />
     <ClInclude Include="System\ObjectSystem.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Renderer\DirectX11Renderer.h" />
     <ClInclude Include="Renderer\ImguiRenderer.h" />
     <ClInclude Include="Renderer\IRenderer.h" />
-    <ClInclude Include="Renderer\IRenderPass.h" />
-    <ClInclude Include="Scene\Scene.h" />
-    <ClInclude Include="System\CameraSystem.h" />
-    <ClInclude Include="System\ComponentFactory.h" />
     <ClInclude Include="System\InputSystem.h" />
-    <ClInclude Include="System\SceneSystem.h" />
     <ClInclude Include="System\Singleton.h" />
     <ClInclude Include="System\TimeSystem.h" />
   </ItemGroup>

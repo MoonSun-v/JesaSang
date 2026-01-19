@@ -1,5 +1,5 @@
 #include "ScriptSystem.h"
-#include "PlayModeSystem.h"
+#include "../EngineSystem/PlayModeSystem.h"
 
 void ScriptSystem::Register(Component* comp)
 {

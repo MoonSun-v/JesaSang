@@ -1,8 +1,8 @@
 #include "DirectionalLightPass.h"
 #include "directxtk/DDSTextureLoader.h"
-#include "Entity/GameObject.h"
+#include "../Object/GameObject.h"
 
-#include "System/CameraSystem.h"
+#include "../EngineSystem/CameraSystem.h"
 #include "../Manager/WorldManager.h"
 #include "../Util/PathHelper.h"
 
@@ -132,7 +132,9 @@ void DirectionalLightPass::Init(const ComPtr<ID3D11Device> &device)
 	HR_T(device->CreateBuffer(&bufferDesc, nullptr, cameraCB.GetAddressOf()));
 }
 
-void DirectionalLightPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared_ptr<Scene> scene, Camera* cam)
+void DirectionalLightPass::Execute(ComPtr<ID3D11DeviceContext>& context,
+                                    RenderQueue& queue,
+                                    Camera* cam)
 {
 	LightDirectionCB lightdirCB;
 	lightdirCB.lightDirection = Vector4(lightDir.x, lightDir.y, lightDir.z, lightIntensity);

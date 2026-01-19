@@ -1,7 +1,7 @@
 #include "ShadowRenderPass.h"
-#include "Entity/GameObject.h"
+#include "../Object/GameObject.h"
 #include "../Manager/WorldManager.h"
-#include "System/CameraSystem.h"
+#include "../EngineSystem/CameraSystem.h"
 #include "../Util/PathHelper.h"
 
 struct ConstantBuffer   // TODO 정리하기
@@ -103,7 +103,9 @@ void ShadowRenderPass::Init(const ComPtr<ID3D11Device>& device, const ComPtr<ID3
 	HR_T(device->CreateBuffer(&bufferDesc, nullptr, constantBuffer.GetAddressOf()));
 }
 
-void ShadowRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared_ptr<Scene> scene, Camera* cam)
+void ShadowRenderPass::Execute(ComPtr<ID3D11DeviceContext>& context,
+    RenderQueue& queue,
+    Camera* cam)
 {
     // 바인딩 해제
 	ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
@@ -144,6 +146,11 @@ void ShadowRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared
 	context->VSSetShader(vertexShader.Get(), 0, 0);
 	// m_pDeviceContext->PSSetShader(NULL, NULL, 0); // 렌더 타겟에 기록할 RGBA가 없으므로 실행하지 않는다.
 	context->PSSetShader(pixelShader.Get(), NULL, 0); // 
+
+    for (auto& e : queue.GetSkeletaItems())
+    {
+        e.mesh->Draw(context);
+    }
 }
 
 void ShadowRenderPass::End(ComPtr<ID3D11DeviceContext> &context)

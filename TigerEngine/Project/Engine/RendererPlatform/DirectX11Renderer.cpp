@@ -1,13 +1,13 @@
 #include "DirectX11Renderer.h"
 #include <algorithm>
-#include "../Helper.h"
-#include "../System/RenderSystem.h"
+#include "Helper.h"
+#include "../EngineSystem/RenderSystem.h"
 
 // datas
-#include "../Datas/Mesh.h"
-#include "../Datas/Vertex.h"
-#include "../Datas/MaterialData.h"
-#include "../Datas/TransformData.h"
+#include "Datas/Mesh.h"
+#include "Datas/Vertex.h"
+#include "Datas/MaterialData.h"
+#include "Datas/TransformData.h"
 
 struct ConstantBuffer
 {
@@ -161,18 +161,10 @@ void DirectX11Renderer::EndRender()
 }
 
 void DirectX11Renderer::ProcessScene
-	(std::shared_ptr<Scene> scene, std::shared_ptr<IRenderPass> renderPass, Camera* cam)
+	(RenderQueue& queue, IRenderPass& renderPass, Camera* cam)
 {
-	renderPass->Execute(deviceContext, scene, cam);	
-
-	if(scene)
-	{		
-        // render pass 스테이지 설정
-        // add command from render system
-        RenderSystem::Instance().Render(deviceContext);		
-	}
-
-	renderPass->End(deviceContext);
+	renderPass.Execute(deviceContext, queue, cam);
+	renderPass.End(deviceContext);
 }
 
 ComPtr<ID3D11Device> DirectX11Renderer::GetDevice() const

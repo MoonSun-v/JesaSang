@@ -1,6 +1,6 @@
 #include "FBXData.h"
 #include "Helper.h"
-#include "System/ComponentFactory.h"
+#include "../Manager/ComponentFactory.h"
 #include "../Components/FBXRenderer.h"
 
 RTTR_REGISTRATION

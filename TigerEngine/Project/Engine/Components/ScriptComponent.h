@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "../Object/Component.h"
 
 /// <summary>
 /// 사용자 정의 컴포넌트가 상속 받은 컴포넌트 클래스

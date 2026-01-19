@@ -1,7 +1,7 @@
 #pragma once
-#include "Singleton.h"
-#include "../Entity/Component.h"
-#include "../Entity/ScriptComponent.h"
+#include "System/Singleton.h"
+#include "../Object/Component.h"
+#include "../Components/ScriptComponent.h"
 
 /// <summary>
 /// 렌더링을 하지 않는 단순 컴포넌트를 상속받은 컴포넌트들을 관리합니다.

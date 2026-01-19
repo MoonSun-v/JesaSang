@@ -10,18 +10,12 @@
 #include "Manager/ShaderManager.h"
 #include "Manager/WorldManager.h"
 
-#include "RenderPass/DirectionalLightPass.h"
-#include "RenderPass/GBufferRenderPass.h"
-#include "RenderPass/SkyboxRenderPass.h"
-#include "RenderPass/ShadowRenderPass.h"
-#include "RenderPass/DebugDrawPass.h"
-
 #include "Entity/Object.h"
-#include "Entity/GameObject.h"
+#include "Object/GameObject.h"
 
-#include "System/CameraSystem.h"
 #include "System/ObjectSystem.h"
-#include "System/PlayModeSystem.h"
+#include "EngineSystem/CameraSystem.h"
+#include "EngineSystem/PlayModeSystem.h"
 
 #include "Components/FreeCamera.h"
 
@@ -51,6 +45,8 @@ bool EngineApp::OnInitialize()
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 	ShaderManager::Instance().CreateCB(dxRenderer->GetDevice());
 
+    renderQueue = std::make_unique<RenderQueue>();
+
 #if _DEBUG
 	editor = std::make_unique<Editor>();
 	editor->GetScreenSize(clientWidth, clientHeight);
@@ -79,30 +75,26 @@ bool EngineApp::OnInitialize()
 
 	// == init renderpass ==
 	// NOTE : 랜더링하는 순서대로 추가 할 것
-	auto shadowPass = std::make_shared<ShadowRenderPass>();
+    shadowPass = std::make_unique<ShadowRenderPass>();
 	shadowPass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), CameraSystem::Instance().GetCurrCamera());
-	renderPasses.push_back(shadowPass);
 
 	WorldManager::Instance().shaderResourceView = shadowPass->GetShadowSRV();
 
-	auto gpass = std::make_shared<GBufferRenderPass>();
-	gpass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
-	gpass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
-	renderPasses.push_back(gpass);
+    gbufferPass = std::make_unique<GBufferRenderPass>();
+    gbufferPass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
+    gbufferPass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
 
-	auto dlpass = std::make_shared<DirectionalLightPass>();
-	dlpass->Init(dxRenderer->GetDevice());
-	dlpass->SetGBufferSRV(gpass->GetShaderResourceViews());
-	dlpass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
-	dlpass->SetRenderTargetView(dxRenderer->GetBackBufferRTV());
-	dlpass->SetShadowSRV(shadowPass->GetShadowSRV());
-	renderPasses.push_back(dlpass);
+    directionalLightPass = std::make_unique<DirectionalLightPass>();
+    directionalLightPass->Init(dxRenderer->GetDevice());
+    directionalLightPass->SetGBufferSRV(gbufferPass->GetShaderResourceViews());
+    directionalLightPass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
+    directionalLightPass->SetRenderTargetView(dxRenderer->GetBackBufferRTV());
+    directionalLightPass->SetShadowSRV(shadowPass->GetShadowSRV());
 
-	auto sbpass = std::make_shared<SkyboxRenderPass>();
-	sbpass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
-	sbpass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
-	sbpass->SetRenderTargetView(dxRenderer->GetBackBufferRTV());
-	renderPasses.push_back(sbpass);
+    skyboxPass = std::make_unique<SkyboxRenderPass>();
+    skyboxPass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
+    skyboxPass->SetDepthStencilView(dxRenderer->GetDepthStencilView());
+    skyboxPass->SetRenderTargetView(dxRenderer->GetBackBufferRTV());
 
 #if _DEBUG
 #else
@@ -127,43 +119,26 @@ void EngineApp::OnUpdate()
 void EngineApp::OnRender()
 {
 	BeginRender(); 					// 업데이트 준비
+
+    RenderSystem::Instance().Render(*renderQueue);
 	
 	auto freeCam = CameraSystem::Instance().GetFreeCamera();	
     auto currCam = CameraSystem::Instance().GetCurrCamera();
 
-	for(auto& pass : renderPasses)
-	{	
-        if (PlayModeSystem::Instance().IsPlaying())
-        {
-            if (typeid(*pass) == typeid(GBufferRenderPass))
-            {
-                dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, currCam);
-            }
-            else if (typeid(*pass) == typeid(ShadowRenderPass))
-            {
-                dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, currCam);
-            }
-            else
-            {
-                dxRenderer->ProcessScene(nullptr, pass, currCam);  // 렌더러가 씬을 렌더링
-            }
-        }
-        else
-        {
-		    if(typeid(*pass) == typeid(GBufferRenderPass))
-		    {
-			    dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam);
-		    }
-		    else if(typeid(*pass) == typeid(ShadowRenderPass))
-		    {
-			    dxRenderer->ProcessScene(SceneSystem::Instance().GetCurrentScene(), pass, freeCam); 
-		    }
-		    else
-		    {
-			    dxRenderer->ProcessScene(nullptr, pass, freeCam);  // 렌더러가 씬을 렌더링
-		    }
-        }
-	}
+    if (PlayModeSystem::Instance().IsPlaying())
+    {
+        dxRenderer->ProcessScene(*renderQueue, *shadowPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *gbufferPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *directionalLightPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, currCam);
+    }
+    else
+    {
+        dxRenderer->ProcessScene(*renderQueue, *shadowPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *gbufferPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *directionalLightPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
+    }
 
 #if _DEBUG
 	editor->Render(hwnd); 	// 엔진 오버레이 렌더링
@@ -201,6 +176,7 @@ void EngineApp::BeginRender()
 	imguiRenderer->BeginRender();
 #endif
 	renderer->BeginRender();
+    renderQueue->Clear();
 }
 
 void EngineApp::EndRender()
@@ -271,9 +247,9 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 
 #include "Components/FBXData.h"
 #include "Components/FBXRenderer.h"
-#include "Entity/Transform.h"
-#include "Entity/Camera.h"
-#include "System/ComponentFactory.h"
+#include "Components/Transform.h"
+#include "Components/Camera.h"
+#include "Manager/ComponentFactory.h"
 
 #include "Player/Player1.h"
 #include "Player/Weapon.h"

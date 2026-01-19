@@ -133,13 +133,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App\Editor.cpp" />
+    <ClCompile Include="Components\Camera.cpp" />
     <ClCompile Include="Components\FBXData.cpp" />
     <ClCompile Include="Components\FBXRenderer.cpp" />
     <ClCompile Include="Components\MeshRenderer.cpp" />
     <ClCompile Include="Components\FreeCamera.cpp" />
+    <ClCompile Include="EngineSystem\RenderSystem.cpp" />
+    <ClCompile Include="EngineSystem\SceneSystem.cpp" />
+    <ClCompile Include="EngineSystem\ScriptSystem.cpp" />
+    <ClCompile Include="EngineSystem\CameraSystem.cpp" />
+    <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="Manager\ComponentFactory.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
+    <ClCompile Include="EngineSystem\PlayModeSystem.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Manager\WorldManager.cpp" />
+    <ClCompile Include="Object\GameObject.cpp" />
+    <ClCompile Include="Components\Transform.cpp" />
+    <ClCompile Include="RendererPlatform\DirectX11Renderer.cpp" />
+    <ClCompile Include="RenderQueue\RenderQueue.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Util\PathHelper.cpp" />
     <ClCompile Include="RenderPass\BasicRenderPass.cpp" />
     <ClCompile Include="RenderPass\DebugDrawPass.cpp" />
@@ -151,12 +164,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
+    <ClInclude Include="Components\Camera.h" />
     <ClInclude Include="Components\FBXData.h" />
     <ClInclude Include="Components\FBXRenderer.h" />
     <ClInclude Include="Components\MeshRenderer.h" />
     <ClInclude Include="Components\FreeCamera.h" />
+    <ClInclude Include="Components\RenderComponent.h" />
+    <ClInclude Include="Components\ScriptComponent.h" />
+    <ClInclude Include="EngineSystem\RenderSystem.h" />
+    <ClInclude Include="EngineSystem\SceneSystem.h" />
+    <ClInclude Include="EngineSystem\ScriptSystem.h" />
+    <ClInclude Include="EngineSystem\CameraSystem.h" />
+    <ClInclude Include="GameApp.h" />
+    <ClInclude Include="Manager\ComponentFactory.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
+    <ClInclude Include="EngineSystem\PlayModeSystem.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
+    <ClInclude Include="Object\Component.h" />
+    <ClInclude Include="Object\GameObject.h" />
+    <ClInclude Include="Components\Transform.h" />
+    <ClInclude Include="RendererPlatform\DirectX11Renderer.h" />
+    <ClInclude Include="RenderPass\IRenderPass.h" />
+    <ClInclude Include="RenderQueue\RenderQueue.h" />
+    <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="RenderPass\BasicRenderPass.h" />
     <ClInclude Include="RenderPass\DebugDrawPass.h" />

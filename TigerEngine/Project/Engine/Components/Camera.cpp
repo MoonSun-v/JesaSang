@@ -1,7 +1,7 @@
 #include "Camera.h"
-#include "GameObject.h"
-#include "../System/ComponentFactory.h"
-#include "../System/CameraSystem.h"
+#include "../Object/GameObject.h"
+#include "../Manager/ComponentFactory.h"
+#include "../EngineSystem/CameraSystem.h"
 
 RTTR_REGISTRATION
 {

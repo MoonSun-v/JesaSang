@@ -1,6 +1,6 @@
 #pragma once
 #include "System/InputSystem.h"
-#include "Entity/ScriptComponent.h"
+#include "Components/ScriptComponent.h"
 #include "Weapon.h"
 
 /// <summary>

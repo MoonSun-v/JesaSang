@@ -1,15 +1,15 @@
 #pragma once
 #include "pch.h"
-#include "Renderer/IRenderPass.h"
-#include "Entity/Camera.h"
+#include "IRenderPass.h"
+#include "../Components/Camera.h"
 
 class ShadowRenderPass : public IRenderPass
 {
 public:
 	virtual void Init(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext, Camera* cam);
-	void Execute( ComPtr<ID3D11DeviceContext>& context, 
-					std::shared_ptr<Scene> scene,
-					Camera* cam) override;    
+	void Execute(ComPtr<ID3D11DeviceContext>& context,
+        RenderQueue& queue,
+        Camera* cam) override;
     void End(ComPtr<ID3D11DeviceContext>& context) override;
 
 	ComPtr<ID3D11ShaderResourceView> GetShadowSRV() { return shaderResourceView; };

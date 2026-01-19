@@ -1,6 +1,6 @@
 #pragma once
-#include "../pch.h"
-#include "../Entity/RenderComponent.h"
+#include "pch.h"
+#include "../Components/RenderComponent.h"
 #include <map>
 
 class GameObject;

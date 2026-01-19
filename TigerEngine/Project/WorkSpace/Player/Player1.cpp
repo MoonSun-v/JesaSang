@@ -1,7 +1,7 @@
 #include "Player1.h"
-#include "Entity/GameObject.h"
+#include "Object/GameObject.h"
 #include "System/InputSystem.h"
-#include "Entity/Component.h"
+#include "Object/Component.h"
 #include "Components/FBXRenderer.h"
 
 RTTR_REGISTRATION

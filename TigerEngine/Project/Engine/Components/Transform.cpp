@@ -1,5 +1,5 @@
 #include "Transform.h"
-#include "../System/ComponentFactory.h"
+#include "../Manager/ComponentFactory.h"
 
 RTTR_REGISTRATION
 {

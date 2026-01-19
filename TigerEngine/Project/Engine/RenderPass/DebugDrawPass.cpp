@@ -8,7 +8,9 @@ void DebugDrawPass::Init(const ComPtr<ID3D11Device> &device, const ComPtr<ID3D11
     DebugDraw::Initialize(device, deviceContext);
 }
 
-void DebugDrawPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared_ptr<Scene> scene, Camera *cam)
+void DebugDrawPass::Execute(ComPtr<ID3D11DeviceContext>& context,
+    RenderQueue& queue,
+    Camera* cam)
 {
     // 렌더타겟 다시 설정 (ImGui가 변경했을 수 있음)
 	context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencliView.Get());

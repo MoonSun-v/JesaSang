@@ -1,9 +1,9 @@
 #include "GameApp.h"
 #include "pch.h"
 #include "Helper.h"
-#include "Renderer/DirectX11Renderer.h"
 #include "System/InputSystem.h"
 #include "System/TimeSystem.h"
+#include "RendererPlatform/DirectX11Renderer.h"
 
 // Debug 모듈관련 헤더 파일 및 라이브러리
 // #include "Helper.h"
