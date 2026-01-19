@@ -10,7 +10,8 @@ public:
     ShaderManager(token) {};
     ~ShaderManager() = default;
 
-    void Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx);
+    void Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx
+             , float width, float heig);
 
 private:
     void CreateDSS(const ComPtr<ID3D11Device>& dev);
@@ -18,6 +19,7 @@ private:
     void CreateSampler(const ComPtr<ID3D11Device>& dev);
     void CreateBS(const ComPtr<ID3D11Device>& dev);
     void CreateShadowResource(const ComPtr<ID3D11Device>& dev);
+    void CreateHDRResource(const ComPtr<ID3D11Device>& dev, int width, int height);
     void CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx);
     void CreateCB(const ComPtr<ID3D11Device>& dev);
 
@@ -48,6 +50,11 @@ public:
     ComPtr<ID3D11DepthStencilView>    shadowDSV;
     ComPtr<ID3D11ShaderResourceView>  shadowSRV;            // ShadowMap Texture
     D3D11_VIEWPORT viewport_shadowMap;
+
+    // HDR
+    ComPtr<ID3D11Texture2D>           sceneHDRTex;
+    ComPtr<ID3D11RenderTargetView>    sceneHDRRTV;          // HDR RTV
+    ComPtr<ID3D11ShaderResourceView>  sceneHDRSRV;          // HDR SRV
 
     // IA
     ComPtr<ID3D11InputLayout> inputLayout_Vertex;

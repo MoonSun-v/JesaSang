@@ -4,12 +4,15 @@
 #include "../Base/Datas/ConstantBuffer.hpp"
 #include "../Base/Datas/Vertex.h"
 
-void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx)
+void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx
+                                , float width, float height)
 {
     CreateDSS(dev);
     CreateRS(dev);
     CreateSampler(dev);
     CreateBS(dev);
+    CreateShadowResource(dev);
+    CreateHDRResource(dev, width, height);
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
 }
@@ -241,6 +244,41 @@ void ShaderManager::CreateShadowResource(const ComPtr<ID3D11Device>& dev)
     srvDesc.Texture2D.MipLevels = 1;
     hr = dev->CreateShaderResourceView(shadowMap.Get(), &srvDesc, shadowSRV.GetAddressOf());
     if (FAILED(hr)) { OutputDebugStringA("FAILED Create Shadow Shader Resource View"); }
+}
+
+void ShaderManager::CreateHDRResource(const ComPtr<ID3D11Device>& dev, int width, int height)
+{
+    // create HDR RTV, SRV
+    // texture
+    D3D11_TEXTURE2D_DESC texDesc = {};
+    texDesc.Width = width;
+    texDesc.Height = height;
+    texDesc.MipLevels = 1;
+    texDesc.ArraySize = 1;
+    texDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;       // HDR 포멧
+    texDesc.SampleDesc.Count = 1;
+    texDesc.Usage = D3D11_USAGE_DEFAULT;
+    texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+    HRESULT hr = dev->CreateTexture2D(&texDesc, nullptr, sceneHDRTex.GetAddressOf());
+    if (FAILED(hr)) { OutputDebugStringA("FAILED Create HDR Texture"); }
+
+    // RTV
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+    rtvDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;       // HDR 포멧
+    rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+    rtvDesc.Texture2D.MipSlice = 0;
+    hr = dev->CreateRenderTargetView(sceneHDRTex.Get(), &rtvDesc, sceneHDRRTV.GetAddressOf());
+    if (FAILED(hr)) { OutputDebugStringA("FAILED Create HDR RTV"); }
+
+    // SRV
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;       // HDR 포멧
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = 1;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    hr = dev->CreateShaderResourceView(sceneHDRTex.Get(), &srvDesc, sceneHDRSRV.GetAddressOf());
+    if (FAILED(hr)) { OutputDebugStringA("FAILED Create HDR SRV"); }
 }
 
 void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx)

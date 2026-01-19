@@ -43,7 +43,7 @@ bool EngineApp::OnInitialize()
 
 	// == init system ==
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
-	ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
+	ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
 
     renderQueue = std::make_unique<RenderQueue>();
 
