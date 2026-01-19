@@ -146,11 +146,10 @@
     <ClInclude Include="Datas\AnimationKey.h" />
     <ClInclude Include="Datas\Bone.h" />
     <ClInclude Include="Datas\BoneAnimation.h" />
+    <ClInclude Include="Datas\ConstantBuffer.hpp" />
     <ClInclude Include="Datas\FBXResourceData.h" />
-    <ClInclude Include="Datas\MaterialData.h" />
     <ClInclude Include="Datas\Mesh.h" />
     <ClInclude Include="Datas\SkeletonInfo.h" />
-    <ClInclude Include="Datas\TransformData.h" />
     <ClInclude Include="Datas\Vertex.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Helper.h" />

@@ -6,7 +6,6 @@
 #include "../Helper.h"
 #include "assimp/material.h"
 #include "Vertex.h"
-#include "MaterialData.h"
 
 using namespace std;
 using namespace DirectX::SimpleMath;

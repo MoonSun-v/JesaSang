@@ -1,101 +1,143 @@
 #include "ShaderManager.h"
 #include <Datas/Vertex.h>
 #include <Datas/FBXResourceData.h>
-#include <Datas/TransformData.h>
+#include "../Base/Datas/ConstantBuffer.hpp"
 
-struct CameraData
+
+void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
 {
-    Matrix view;
-    Matrix projection;
-    Matrix positionWS;
+    // 1. Frame CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(FrameCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &frameCB));
+    }
 
-    Matrix shadowView;
-    Matrix shadowProjection;
+    // 2. TransformCB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(TransformCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &transformCB));
+    }
 
-    Vector4 ambient;	// 환경광
-    Vector4 diffuse;	// 난반사
-    Vector4 specular;	// 정반사
-    FLOAT shininess;	// 광택지수
-    Vector3 CameraPos;	// 카메라 위치
-};
+    // 3. LightingCB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(LightingCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &lightingCB));
+    }
 
-struct DirectionalLightData
-{
-    Vector4 lightDirection;
-    Vector4 lightColor;
-};
+    // 4. MaterialCB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(MaterialCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &materialCB));
+    }
 
-void ShaderManager::CreateCB(const ComPtr<ID3D11Device> &dev)
-{
-    D3D11_BUFFER_DESC mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(CameraData);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, cameraCB.GetAddressOf()));
+    // 5. OffsetMatrixCB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(OffsetMatrixCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &offsetMatrixCB));
+    }
 
-    mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(MaterialData);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, materialCB.GetAddressOf()));
-    
-    mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(TransformData);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, transformCB.GetAddressOf()));
+    // 6. PoseMatrixCB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(PoseMatrixCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &poseMatrixCB));
+    }
 
-    mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(BonePoseBuffer);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, bonePoseCB.GetAddressOf()));
+    // 7. PostProcess CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(PostProcessCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &postProcessCB));
+    }
 
-    mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(BoneOffsetBuffer);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, boneOffsetCB.GetAddressOf()));
+    // 8. Bloom CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(BloomCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &bloomCB));
+    }
 
-    mbd = {};
-	mbd.Usage = D3D11_USAGE_DEFAULT;
-	mbd.ByteWidth = sizeof(DirectionalLightData);
-	mbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	mbd.CPUAccessFlags = 0;
-	HR_T(dev->CreateBuffer(&mbd, nullptr, directionalLightCB.GetAddressOf()));
+    // 9. Effect CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(EffectCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &effectCB));
+    }
 }
 
-ComPtr<ID3D11Buffer> &ShaderManager::GetCameraCB()
+ComPtr<ID3D11Buffer>& ShaderManager::GetFrameCB()
 {
-    return cameraCB;
+    return frameCB;
 }
 
-ComPtr<ID3D11Buffer> &ShaderManager::GetMaterialCB()
-{
-    return materialCB;
-}
-
-ComPtr<ID3D11Buffer> &ShaderManager::GetTransformCB()
+ComPtr<ID3D11Buffer>& ShaderManager::GetTransformCB()
 {
     return transformCB;
 }
 
-ComPtr<ID3D11Buffer> &ShaderManager::GetBonePoseCB()
+ComPtr<ID3D11Buffer>& ShaderManager::GetLightingCB()
 {
-    return bonePoseCB;
+    return lightingCB;
 }
 
-ComPtr<ID3D11Buffer> &ShaderManager::GetBoneOffsetCB()
+ComPtr<ID3D11Buffer>& ShaderManager::GetMaterialCB()
 {
-    return boneOffsetCB;
+    return materialCB;
 }
 
-ComPtr<ID3D11Buffer> &ShaderManager::GetDirectionalLightCB()
+ComPtr<ID3D11Buffer>& ShaderManager::GetOffsetMatrixCB()
 {
-    return directionalLightCB;
+    return offsetMatrixCB;
+}
+
+ComPtr<ID3D11Buffer>& ShaderManager::GetPoseMatrixCB()
+{
+    return poseMatrixCB;
+}
+
+ComPtr<ID3D11Buffer>& ShaderManager::GetPostProcessCB()
+{
+    return postProcessCB;
+}
+
+ComPtr<ID3D11Buffer>& ShaderManager::GetBloomCB()
+{
+    return bloomCB;
+}
+
+ComPtr<ID3D11Buffer>& ShaderManager::GetEffectCB()
+{
+    return effectCB;
 }

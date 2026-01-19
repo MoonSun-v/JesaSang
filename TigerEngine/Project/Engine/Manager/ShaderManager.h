@@ -11,20 +11,28 @@ public:
     ~ShaderManager() = default;
 
     void CreateCB(const ComPtr<ID3D11Device>& dev);
-    
-    ComPtr<ID3D11Buffer>& GetCameraCB();
-    ComPtr<ID3D11Buffer>& GetMaterialCB();
+
+    // CB Getter
+    ComPtr<ID3D11Buffer>& GetFrameCB();
     ComPtr<ID3D11Buffer>& GetTransformCB();
-    ComPtr<ID3D11Buffer>& GetBonePoseCB();
-    ComPtr<ID3D11Buffer>& GetBoneOffsetCB();
-    ComPtr<ID3D11Buffer>& GetDirectionalLightCB();
+    ComPtr<ID3D11Buffer>& GetLightingCB();
+    ComPtr<ID3D11Buffer>& GetMaterialCB();
+    ComPtr<ID3D11Buffer>& GetOffsetMatrixCB();
+    ComPtr<ID3D11Buffer>& GetPoseMatrixCB();
+    ComPtr<ID3D11Buffer>& GetPostProcessCB();
+    ComPtr<ID3D11Buffer>& GetBloomCB();
+    ComPtr<ID3D11Buffer>& GetEffectCB();
+
 
 private:
     /* ---------------------------- constant Buffers ---------------------------- */
-    ComPtr<ID3D11Buffer> cameraCB;
-    ComPtr<ID3D11Buffer> materialCB;
+    ComPtr<ID3D11Buffer> frameCB;
     ComPtr<ID3D11Buffer> transformCB;
-    ComPtr<ID3D11Buffer> bonePoseCB;
-    ComPtr<ID3D11Buffer> boneOffsetCB;
-    ComPtr<ID3D11Buffer> directionalLightCB;
+    ComPtr<ID3D11Buffer> lightingCB;
+    ComPtr<ID3D11Buffer> materialCB;
+    ComPtr<ID3D11Buffer> offsetMatrixCB;
+    ComPtr<ID3D11Buffer> poseMatrixCB;
+    ComPtr<ID3D11Buffer> postProcessCB;
+    ComPtr<ID3D11Buffer> bloomCB;
+    ComPtr<ID3D11Buffer> effectCB;
 };
