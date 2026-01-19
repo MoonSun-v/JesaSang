@@ -1,6 +1,6 @@
 #include "MeshRenderer.h"
-#include "System/ComponentFactory.h"
-#include "Scene/Scene.h"
+#include "../Manager/ComponentFactory.h"
+#include "../Scene/Scene.h"
 #include "../Components/FBXData.h"
 
 void MeshRenderer::OnInitialize()
@@ -16,6 +16,6 @@ void MeshRenderer::OnUpdate(float delta)
 {
 }
 
-void MeshRenderer::OnRender(ComPtr<ID3D11DeviceContext>& context)
+void MeshRenderer::OnRender(RenderQueue& queue)
 {
 }

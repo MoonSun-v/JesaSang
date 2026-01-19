@@ -1,6 +1,7 @@
 #include "GBufferRenderPass.h"
-#include "Entity/GameObject.h"
+#include "../Object/GameObject.h"
 #include "../Util/PathHelper.h"
+#include "../Manager/WorldManager.h"
 
 namespace fs = std::filesystem;
 
@@ -107,13 +108,32 @@ void GBufferRenderPass::Init(const ComPtr<ID3D11Device> &device, const ComPtr<ID
     /* -------------------------------- 상수 버퍼 만들기 ------------------------------- */
     D3D11_BUFFER_DESC bufferDesc = {};
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(ConstantBuffer);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = 0;
+
+    bufferDesc.ByteWidth = sizeof(ConstantBuffer);
 	HR_T(device->CreateBuffer(&bufferDesc, nullptr, cbCamera.GetAddressOf()));
+
+    bufferDesc.ByteWidth = sizeof(MaterialData);
+    HR_T(device->CreateBuffer(&bufferDesc, nullptr, materialCB.GetAddressOf()));
+
+    bufferDesc.ByteWidth = sizeof(TransformData);
+    HR_T(device->CreateBuffer(&bufferDesc, nullptr, transformCB.GetAddressOf()));
+
+    bufferDesc.ByteWidth = sizeof(BonePoseBuffer);
+    HR_T(device->CreateBuffer(&bufferDesc, nullptr, bonePoseCB.GetAddressOf()));
+
+    bufferDesc.ByteWidth = sizeof(BoneOffsetBuffer);
+    HR_T(device->CreateBuffer(&bufferDesc, nullptr, boneOffsetCB.GetAddressOf()));
+
+    // 기본 포즈 / 오프셋 아이덴티티 초기화 (스켈레톤 없는 메쉬 대비)
+    for (auto& m : identityPose.modelMatricies)   m = Matrix::Identity;
+    for (auto& m : identityOffset.boneOffset)     m = Matrix::Identity;
 }
 
-void GBufferRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::shared_ptr<Scene> scene, Camera* cam)
+void GBufferRenderPass::Execute(ComPtr<ID3D11DeviceContext>& context,
+    RenderQueue& queue,
+    Camera* cam)
 {
     // GBuffer 초기화
 	float clearValue[4] = { 0,0,0,0 };
@@ -127,7 +147,13 @@ void GBufferRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::share
 	ConstantBuffer cb;
 	cb.cameraView = XMMatrixTranspose(cam->GetView());
 	cb.cameraProjection = XMMatrixTranspose(cam->GetProjection());
-
+    cb.shadowView = XMMatrixTranspose(WorldManager::Instance().directionalLightView);
+    cb.shadowProjection = XMMatrixTranspose(WorldManager::Instance().directionalLightProj);
+    // 조명 값은 아직 별도 관리 없음 -> 기본값 유지
+    cb.ambient = Vector4::One;
+    cb.diffuse = Vector4::One;
+    cb.specular = Vector4::One;
+    cb.shininess = 1.0f;
 	cb.CameraPos = cam->GetOwner()->GetTransform()->GetPosition();
 	context->UpdateSubresource(cbCamera.Get(), 0, nullptr, &cb, 0, 0);
 
@@ -145,6 +171,38 @@ void GBufferRenderPass::Execute(ComPtr<ID3D11DeviceContext> &context, std::share
 	context->PSSetSamplers(0, 1, samplerLinear.GetAddressOf());
 	context->PSSetSamplers(1, 1, samplerPoint.GetAddressOf());
     context->OMSetDepthStencilState(dpethStencliState.Get(), 1);
+
+    // 스켈레톤 기본 바인딩
+    context->UpdateSubresource(bonePoseCB.Get(), 0, nullptr, &identityPose, 0, 0);
+    context->UpdateSubresource(boneOffsetCB.Get(), 0, nullptr, &identityOffset, 0, 0);
+    context->VSSetConstantBuffers(3, 1, bonePoseCB.GetAddressOf());
+    context->VSSetConstantBuffers(4, 1, boneOffsetCB.GetAddressOf());
+
+    TransformData tb{};
+
+    // Skeletal 메쉬
+    for (auto& e : queue.GetSkeletaItems())
+    {
+        tb.world = XMMatrixTranspose(e.world);
+        tb.isRigid = e.isRigid;
+        tb.refBoneIndex = e.refBoneIndex;
+
+        context->UpdateSubresource(transformCB.Get(), 0, nullptr, &tb, 0, 0);
+        context->VSSetConstantBuffers(2, 1, transformCB.GetAddressOf());
+
+        context->UpdateSubresource(materialCB.Get(), 0, nullptr, &e.material, 0, 0);
+        context->PSSetConstantBuffers(1, 1, materialCB.GetAddressOf());
+
+        // 본 정보 업데이트
+        context->UpdateSubresource(bonePoseCB.Get(), 0, nullptr, e.poses, 0, 0);
+        context->UpdateSubresource(boneOffsetCB.Get(), 0, nullptr, e.offsets, 0, 0);
+
+        e.mesh->Draw(context);
+
+        // 다음 메쉬를 위해 기본 포즈로 초기화
+        context->UpdateSubresource(bonePoseCB.Get(), 0, nullptr, &identityPose, 0, 0);
+        context->UpdateSubresource(boneOffsetCB.Get(), 0, nullptr, &identityOffset, 0, 0);
+    }
 }
 
 void GBufferRenderPass::End(ComPtr<ID3D11DeviceContext> &context)

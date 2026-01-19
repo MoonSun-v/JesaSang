@@ -1,7 +1,7 @@
 #pragma once
-#include "../pch.h"
-#include "../System/InputSystem.h"
-#include "Component.h"
+#include "pch.h"
+#include "System/InputSystem.h"
+#include "../Object/Component.h"
 
 using namespace DirectX::SimpleMath;
 

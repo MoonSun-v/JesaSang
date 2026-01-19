@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity/Component.h"
+#include "../Object/Component.h"
 
 /// <summary>
 /// free camera에 붙일 컴포넌트

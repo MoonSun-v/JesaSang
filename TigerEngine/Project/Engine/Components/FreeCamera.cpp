@@ -1,5 +1,5 @@
 #include "FreeCamera.h"
-#include "Entity/GameObject.h"
+#include "../Object/GameObject.h"
 #include "System/InputSystem.h"
 #include "System/TimeSystem.h"
 

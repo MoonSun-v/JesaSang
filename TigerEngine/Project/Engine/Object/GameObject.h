@@ -1,12 +1,12 @@
 #pragma once
-#include "../pch.h"
-#include "Transform.h"
+#include "pch.h"
+#include "../Components/Transform.h"
 #include <string> 
 #include <vector>
 #include "../Scene/Scene.h"
-#include "../System/RenderSystem.h"
-#include "../System/ObjectSystem.h"
-#include "../System/ScriptSystem.h"
+#include "System/ObjectSystem.h"
+#include "../EngineSystem/RenderSystem.h"
+#include "../EngineSystem/ScriptSystem.h"
 
 class RenderComponent; // NOTE : Component 있는 거랑 순환 참조 조심하기
 

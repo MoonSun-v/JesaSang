@@ -2,7 +2,7 @@
 #pragma once
 #include "pch.h"
 #include "System/InputSystem.h"
-#include "Entity/GameObject.h"
+#include "../Object/GameObject.h"
 
 /// @brief imgui를 사용하고 렌더링 하는 객체
 /// @date 26 01 07

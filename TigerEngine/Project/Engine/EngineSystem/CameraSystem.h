@@ -1,7 +1,7 @@
 #pragma once
-#include "../pch.h"
-#include "../System/Singleton.h"
-#include "../System/SceneSystem.h"
+#include "pch.h"
+#include "System/Singleton.h"
+#include "../EngineSystem/SceneSystem.h"
 
 class Camera;
 class GameObject;

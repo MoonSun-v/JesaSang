@@ -1,19 +1,19 @@
 #pragma once
 #include <pch.h>
-#include "Entity/RenderComponent.h"
+#include "../Components/RenderComponent.h"
 #include "../Components/FBXData.h"
 #include "Datas/FBXResourceData.h"
 #include "Datas/Bone.h"
 
 class FBXRenderer : public RenderComponent
 {
-	RTTR_ENABLE(Component)
+	RTTR_ENABLE(RenderComponent)
 public:
 	void OnInitialize() override;
 	void OnStart() override;
 	void OnUpdate(float delta) override;
     void OnDestory() override;
-    void OnRender(ComPtr<ID3D11DeviceContext>& context) override;
+    void OnRender(RenderQueue& queue) override;
 	
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
@@ -57,10 +57,4 @@ private:
 	float roughness = 0.0f;
 	float metalic = 0.0f;
 	Color color{};
-
-    // == ID3D11Bufers ==
-    ComPtr<ID3D11Buffer> bonePoseCB;
-    ComPtr<ID3D11Buffer> boneOffsetCB;
-    ComPtr<ID3D11Buffer> transformCB;
-    ComPtr<ID3D11Buffer> materialCB;
 };

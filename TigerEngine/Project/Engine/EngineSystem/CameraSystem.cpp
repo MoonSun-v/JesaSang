@@ -1,6 +1,6 @@
-#include "../System/CameraSystem.h"
-#include "../Entity/GameObject.h"
-#include "../Entity/Camera.h"
+#include "CameraSystem.h"
+#include "../Object/GameObject.h"
+#include "../Components/Camera.h"
 
 Camera *CameraSystem::GetFreeCamera()
 {

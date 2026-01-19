@@ -1,6 +1,6 @@
 #pragma once
-#include "../pch.h"
-#include "../System/ObjectSystem.h"
+#include "pch.h"
+#include "System/ObjectSystem.h"
 
 class GameObject; // forward declear
 

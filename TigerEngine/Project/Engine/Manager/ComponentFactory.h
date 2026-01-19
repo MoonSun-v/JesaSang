@@ -1,7 +1,7 @@
 #pragma once
-#include "../pch.h"
-#include "../System/Singleton.h"
-#include "../Entity/GameObject.h"
+#include "pch.h"
+#include "System/Singleton.h"
+#include "../Object/GameObject.h"
 
 using createCompFunc = std::function<Component*(GameObject*)>;
 

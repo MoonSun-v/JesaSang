@@ -6,11 +6,11 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "psapi.lib")
 
-#include "../pch.h"
-#include "../Renderer/IRenderer.h"
+#include "pch.h"
+#include "Renderer/IRenderer.h"
 #include "../Scene/Scene.h"
-#include "../Renderer/IRenderPass.h"
-#include "../Entity/Camera.h"
+#include "../RenderPass/IRenderPass.h"
+#include "../Components/Camera.h"
 
 /// <summary>
 /// DirectX11 기능을 사용하는 클래스
@@ -24,8 +24,8 @@ public:
 	void EndRender() override;
 
 	// 매 랜더링 시 호출되는 함수
-	void ProcessScene(std::shared_ptr<Scene> scene, 
-					  std::shared_ptr<IRenderPass> renderPass,
+	void ProcessScene(RenderQueue& queue, 
+					  IRenderPass& renderPass,
 					  Camera* cam);
 
 	ComPtr<ID3D11Device> GetDevice() const;

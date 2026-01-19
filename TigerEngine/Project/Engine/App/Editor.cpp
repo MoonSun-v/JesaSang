@@ -1,16 +1,17 @@
 #if _DEBUG
 #include "Editor.h"
-#include <System/CameraSystem.h>
-#include <System/ComponentFactory.h>
-#include "System/SceneSystem.h"
+#include "../EngineSystem/CameraSystem.h"
+#include "../Manager/ComponentFactory.h"
+#include "../EngineSystem/SceneSystem.h"
 
 #include <commdlg.h>
 #include "imguiFileDialog/ImGuiFileDialog.h"
 #include "../Components/FBXData.h"
-#include "Entity/Camera.h"
+#include "../Object/GameObject.h"
 #include "../Util/DebugDraw.h"
 #include "../Manager/WorldManager.h"
-#include "System/PlayModeSystem.h"
+#include "../EngineSystem/PlayModeSystem.h"
+#include "../Components/Camera.h"
 
 // 사용자 정의 미리 등록 (SimpleMath 등)
 RTTR_REGISTRATION
@@ -222,6 +223,8 @@ void Editor::RenderInspector()
 
                     for (auto& [name, creatorFunc] : componentsMap)
                     {
+                        if (name == "Transform") continue; // transform은 무시 ( 왜나면 Transform은 한 게임 오브젝트에 한 개만 존재한다. )
+
                         // 컴포넌트 이름을 버튼 (MenuItem)으로 노출
                         if (ImGui::MenuItem(name.c_str()))
                         {

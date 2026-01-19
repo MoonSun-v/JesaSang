@@ -1,7 +1,7 @@
 #include "Scene.h"	
-#include "../Entity/GameObject.h"
-#include "../System/ObjectSystem.h"
-#include "../System/ScriptSystem.h"
+#include "../Object/GameObject.h"
+#include "System/ObjectSystem.h"
+#include "../EngineSystem/ScriptSystem.h"
 
 void Scene::OnUpdate(float deltaTime)
 {

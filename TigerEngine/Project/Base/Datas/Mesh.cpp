@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "../Helper.h"
 
-void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext)
+void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
 {
     ID3D11ShaderResourceView* nullSRV[4] = { nullptr };
     pDeviceContext->PSSetShaderResources(0, 4, nullSRV);
@@ -71,7 +71,7 @@ void Mesh::setupMesh()
     }
 }
 
-void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int index)
+void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int index) const
 {
     string typeName = textures[index].type;
 

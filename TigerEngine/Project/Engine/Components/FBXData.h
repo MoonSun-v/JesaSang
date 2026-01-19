@@ -1,6 +1,6 @@
 #pragma once
 #include <pch.h>
-#include "Entity/Component.h"
+#include "../Object/Component.h"
 #include "Datas/Mesh.h"
 #include "../Manager/FBXResourceManager.h"
 

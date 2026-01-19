@@ -1,9 +1,10 @@
 #include "FBXRenderer.h"
-#include "System/ComponentFactory.h"
-#include "Scene/Scene.h"
+#include "../Manager/ComponentFactory.h"
+#include "../Scene/Scene.h"
 #include "../Components/FBXData.h"
 #include "../Manager/ShaderManager.h"
 #include "Datas/TransformData.h"
+#include "../Object/GameObject.h"
 
 RTTR_REGISTRATION
 {
@@ -31,12 +32,7 @@ void FBXRenderer::OnInitialize()
 {
     fbxData = owner->GetComponent<FBXData>();
 	bones.clear();
-	if(fbxData != nullptr) CreateBoneInfo(); // 임시
-
-    bonePoseCB      = ShaderManager::Instance().GetBonePoseCB();
-    boneOffsetCB    = ShaderManager::Instance().GetBoneOffsetCB();
-    materialCB      = ShaderManager::Instance().GetMaterialCB();
-    transformCB     = ShaderManager::Instance().GetTransformCB();
+	if(fbxData != nullptr) CreateBoneInfo(); 
 }
 
 void FBXRenderer::OnStart()
@@ -88,38 +84,32 @@ void FBXRenderer::OnDestory()
 {
 }
 
-void FBXRenderer::OnRender(ComPtr<ID3D11DeviceContext>& context)
+void FBXRenderer::OnRender(RenderQueue& queue)
 {
     if (fbxData == nullptr) return; // 그릴 메쉬가 없음 -> data 없음
 
     auto& meshData = fbxData->GetMesh();
+    auto world = owner->GetTransform()->GetWorldTransform();
 
-    context->UpdateSubresource(bonePoseCB.Get(), 0, nullptr, &bonePoses, 0, 0);
-    context->UpdateSubresource(boneOffsetCB.Get(), 0, nullptr, &fbxData->GetFBXInfo()->m_BoneOffsets, 0, 0);
-    context->VSSetConstantBuffers(3, 1, bonePoseCB.GetAddressOf());
-    context->VSSetConstantBuffers(4, 1, boneOffsetCB.GetAddressOf());
-
-    TransformData tb = {};
-    tb.isRigid = fbxData->GetFBXInfo()->skeletalInfo.IsRigid();
-    tb.world = XMMatrixTranspose(owner->GetTransform()->GetWorldTransform());
-
-    int size = meshData.size();
-    for (size_t i = 0; i < size; i++)
+    for (auto& mesh : meshData)
     {
-        MaterialData meshMaterial = meshData[i].GetMaterial();
+        SkeletalRenderItem item{};
+        item.mesh = &mesh;
+        item.world = world;
+        item.poses = &bonePoses;
+        item.offsets = &fbxData->GetFBXInfo()->m_BoneOffsets;
+        item.refBoneIndex = mesh.refBoneIndex;
+        item.isRigid = fbxData->GetFBXInfo()->skeletalInfo.IsRigid();
 
-        // NOTE : 260104 FBXRenderer의 매개변수인 roughness와 matalic을 반영한다 -> 모든 메쉬가 다 변함
-        meshMaterial.Roughness = roughness;
-        meshMaterial.Matalness = metalic;
-        meshMaterial.ambient = color;
+        // Mesh 기본 Material 복사
+        item.material = mesh.GetMaterial();
 
-        context->UpdateSubresource(materialCB.Get(), 0, nullptr, &meshMaterial, 0, 0);
-        tb.refBoneIndex = meshData[i].refBoneIndex;
+        // 인스턴스별 override
+        item.material.Roughness = roughness;
+        item.material.Matalness = metalic;
+        item.material.ambient = color;
 
-        context->UpdateSubresource(transformCB.Get(), 0, nullptr, &tb, 0, 0);
-        context->VSSetConstantBuffers(2, 1, transformCB.GetAddressOf());
-        context->PSSetConstantBuffers(1, 1, materialCB.GetAddressOf());
-        meshData[i].Draw(context);
+        queue.AddSkeletal(item);
     }
 }
 

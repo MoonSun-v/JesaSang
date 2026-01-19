@@ -1,9 +1,9 @@
 #pragma once
-#include "../pch.h"
+#include "pch.h"
 #include "../Scene/Scene.h"
 #include <map>
 #include <vector>
-#include "../System/Singleton.h"
+#include "System/Singleton.h"
 
 class SceneSystem : public Singleton<SceneSystem>
 {
