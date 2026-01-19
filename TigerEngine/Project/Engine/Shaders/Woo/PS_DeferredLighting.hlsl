@@ -2,8 +2,8 @@
     [ PBR Lighting Pass Pixel Shader ] 
     * Deferred Rendering *
 
-    Full Screen Quad¸¦ ±×¸®¸ç, G-buffer¿¡ ±â·ÏµÈ Á¤º¸¸¦ È°¿ëÇÏ¿©
-    ÃÖÁ¾ °¡½Ã ÇÈ¼¿¿¡ ´ëÇØ¼­¸¸ ¶óÀÌÆÃ ¿¬»êÀ» ÁøÇàÇÕ´Ï´Ù.
+    Full Screen Quadë¥¼ ê·¸ë¦¬ë©°, G-bufferì— ê¸°ë¡ëœ ì •ë³´ë¥¼ í™œìš©í•˜ì—¬
+    ìµœì¢… ê°€ì‹œ í”½ì…€ì— ëŒ€í•´ì„œë§Œ ë¼ì´íŒ… ì—°ì‚°ì„ ì§„í–‰í•©ë‹ˆë‹¤.
 
     - Direct BRDF(Cook-Torrance)
     - Indirect IBL(BRDF)
@@ -42,7 +42,7 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     float depth = depthTex.Sample(samLinearClamp, uv).r;
 
     if (depth >= 0.999999f)
-        return 0; // ¹è°æ ÇÈ¼¿ ½ºÅµ
+        return 0; // ë°°ê²½ í”½ì…€ ìŠ¤í‚µ
     
     float4 clip;
     clip.x = uv.x * 2.0f - 1.0f;
@@ -75,7 +75,7 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     // --- [ ShadowMapping ] ------------------------------------
     float shadowFactor = 1.0f;
     
-    // ÇÏ³ªÀÇ SunLight¿¡ ´ëÇØ¼­¸¸ Shadow
+    // í•˜ë‚˜ì˜ SunLightì— ëŒ€í•´ì„œë§Œ Shadow
     if (isSunLight)
     {
         float4 posShadow = mul(float4(worldPos, 1), shadowView);
@@ -95,10 +95,10 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
             float2(-1, 1), float2(0, 1), float2(1, 1)
             };
             
-            float2 texelSize = 1.0 / shadowMapSize; // ÅØ¼¿ Å©±â (ShadowMap ÇØ»óµµ ±âÁØ)
+            float2 texelSize = 1.0 / shadowMapSize; // í…ì…€ í¬ê¸° (ShadowMap í•´ìƒë„ ê¸°ì¤€)
             shadowFactor = 0.0f;
        
-       //  PCF - 9 texel Æò±ÕÀ¸·Î ±×¸²ÀÚ ÆÑÅÍ °è»ê
+       //  PCF - 9 texel í‰ê· ìœ¼ë¡œ ê·¸ë¦¼ì íŒ©í„° ê³„ì‚°
        [unroll]
             for (int i = 0; i < 9; i++)
             {
@@ -125,10 +125,6 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     // Point Light
     else if (lightType == 1)
     {
-        // debug
-        if (lightVolumeON)
-            return float4(1, 1, 1, 1);
-        
         // defualt
         attenuation = 0.0f;
         L = 0.0f;
@@ -138,7 +134,7 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
         float distSq = dot(toLight, toLight);
         float rangeSq = lightRange * lightRange;
 
-        // ¹üÀ§
+        // ë²”ìœ„
         if (lightRange > 1e-4f && distSq < rangeSq)
         {
             float dist = sqrt(distSq);
@@ -149,20 +145,16 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
             float smooth = saturate(1.0f - x);
             smooth *= smooth;
 
-            // ¹°¸®Àû °Å¸® °¨¼è
+            // ë¬¼ë¦¬ì  ê±°ë¦¬ ê°ì‡ 
             float invSq = 1.0f / max(distSq, 1e-4f);
 
-            // ÃÖÁ¾ °¨¼è
+            // ìµœì¢… ê°ì‡ 
             attenuation = smooth * invSq;
         }
     }
     // Spot Light
     else if (lightType == 2)
     {
-        // debug
-        if (lightVolumeON)
-            return float4(1, 1, 1, 1);
-        
         // defualt
         attenuation = 0.0f;
         spotFactor = 0.0f;
@@ -174,13 +166,13 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
         float range = lightRange;
         float rangeSq = range * range;
 
-        // ¹üÀ§
+        // ë²”ìœ„
         if (range > 1e-4f && distSq < rangeSq)
         {
             float dist = sqrt(distSq);
             L = toLight / max(dist, 1e-4f);
             
-            // °Å¸® °¨¼è
+            // ê±°ë¦¬ ê°ì‡ 
             float x = distSq / max(rangeSq, 1e-4f);
             float smoothRange = saturate(1.0f - x);
             smoothRange *= smoothRange;
@@ -188,25 +180,25 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
             float invSq = 1.0f / max(distSq, 1e-4f);
             float rangeAttenuation = smoothRange * invSq;
             
-            // Spot Cone °¨¼è
+            // Spot Cone ê°ì‡ 
             float3 spotDir = normalize(lightDirection);
             float cosTheta = dot(spotDir, -L);
-            float cosInner = cos(radians(innerAngle)); // inputÀº degree ±âÁØ
+            float cosInner = cos(radians(innerAngle)); // inputì€ degree ê¸°ì¤€
             float cosOuter = cos(radians(outerAngle));
 
-            // µÚÁıÈû ¹æÁö
+            // ë’¤ì§‘í˜ ë°©ì§€
             float lo = min(cosOuter, cosInner);
             float hi = max(cosOuter, cosInner);
 
             float cone = smoothstep(lo, hi, cosTheta);
             cone = pow(cone, 4.0f);
             
-            // ÃÖÁ¾
+            // ìµœì¢…
             spotFactor = cone;
             float inv = 1.0f / max(dist, 1e-4f); // 1/d
             attenuation = smoothRange * inv * cone;
             
-             // ÄÜ ¹ÛÀÌ¸é »ç½Ç»ó 0
+             // ì½˜ ë°–ì´ë©´ ì‚¬ì‹¤ìƒ 0
             if (spotFactor <= 1e-4f)
             {
                 attenuation = 0.0f;
@@ -225,15 +217,15 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     // --- [Direct Light]  ------------------------------------
     // Specular BRDF (Cook-Torrance)
     float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), base_color, metallic);
-    float D = D_NDFGGXTR(N, H, roughness); // ¹Ì¼¼¸é Á¤·ÄÁ¤µµ
-    float3 F = F_Schlick(H, V, F0); // ÇÁ·¹³Ú ¹İ»çÀ²
+    float D = D_NDFGGXTR(N, H, roughness); // ë¯¸ì„¸ë©´ ì •ë ¬ì •ë„
+    float3 F = F_Schlick(H, V, F0); // í”„ë ˆë„¬ ë°˜ì‚¬ìœ¨
     float G = G_Smith(N, V, L, roughness); // shadowing & masking
     
     float denom = 4.0f * max(NdotL, 0.001) * max(NdotV, 0.001);
     float3 SpecularBRDF = (D * F * G) / denom;
     
     // Diffuse BRDF (Lambertian)
-    float3 kd = lerp(1.0 - F, 0.0, metallic); // Ç¥¸é»ê¶õ °è¼ö
+    float3 kd = lerp(1.0 - F, 0.0, metallic); // í‘œë©´ì‚°ë€ ê³„ìˆ˜
     float3 DiffuseBRDF = (base_color / PI) * kd;
     
     // Final DirectLight
@@ -247,7 +239,7 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     if (useIBL && isSunLight)
     {
         // Diffuse Term --------------------------
-        // Irradiance - diffuse BRDF ÀûºĞ°ª
+        // Irradiance - diffuse BRDF ì ë¶„ê°’
         float3 Irradiance = IBL_IrradianceMap.Sample(samLinear, N).rgb;
         float3 DiffuseIBL = base_color * Irradiance * kd;
         
@@ -257,11 +249,11 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
         float maxLevel = max(1.0, (float) (specularTextureLevels - 1));
         float mip = saturate(roughness) * maxLevel;
         
-        // Prefiltered - È¯°æ Radiance + D(¹Ì¼¼¸é ºĞÆ÷) + roughness °ü·Ã ÀûºĞ°ª
+        // Prefiltered - í™˜ê²½ Radiance + D(ë¯¸ì„¸ë©´ ë¶„í¬) + roughness ê´€ë ¨ ì ë¶„ê°’
         float3 R = normalize(reflect(-V, N));
         float3 PrefilteredColor = IBL_SpecularEnvMap.SampleLevel(samLinear, R, mip).rgb;
 
-        // LUT - F + G ÀûºĞ°ª
+        // LUT - F + G ì ë¶„ê°’
         float2 BRDF_LUT = IBL_BRDF_LUT.Sample(samLinearClamp, float2(NdotV, roughness)).rg;
         
         // Specular IBL
@@ -276,7 +268,7 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
     // --- [Final Color]  ----------------------------------
     float3 finalColor = (DirectColor * shadowFactor) + IndirectColor + emissive;
 
-     // LDR ´Üµ¶ÆĞ½ºÀÏ ¶§¸¸ °¨¸¶º¸Á¤
+     // LDR ë‹¨ë…íŒ¨ìŠ¤ì¼ ë•Œë§Œ ê°ë§ˆë³´ì •
     if (useDefaultGamma && !isHDR)
         finalColor = LinearToSRGB(finalColor);
 
