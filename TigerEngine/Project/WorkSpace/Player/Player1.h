@@ -14,6 +14,9 @@ public:
     void OnStart() override;
     void OnUpdate(float delta) override;
 
+    nlohmann::json Serialize() override;
+    void Deserialize(nlohmann::json data) override;
+
     float r = 0.0f;
     float g = 0.0f;
     float b = 0.0f;

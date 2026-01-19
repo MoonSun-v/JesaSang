@@ -49,3 +49,52 @@ void Player1::OnUpdate(float delta)
     else if (Input::GetKey(DirectX::Keyboard::Keys::D))
         trans->Translate({ 1.f, 0, 0 });
 }
+
+nlohmann::json Player1::Serialize()
+{
+    nlohmann::json datas;
+
+    rttr::type t = rttr::type::get(*this);
+    datas["type"] = t.get_name().to_string();
+    datas["properties"] = nlohmann::json::object(); // 객체 생성
+
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(*this);
+        if (value.is_type<float>())
+        {
+            auto v = value.get_value<float>();
+            datas["properties"][propName] = v;
+        }
+    }
+
+    return datas;
+}
+
+void Player1::Deserialize(nlohmann::json data)
+{
+    auto propData = data["properties"];
+
+    rttr::type t = rttr::type::get(*this);
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(*this);
+        if (value.is_type<float>() && propName == "r")
+        {
+            float data = propData["r"];
+            prop.set_value(*this, data);
+        }
+        else if (value.is_type<float>() && propName == "g")
+        {
+            float data = propData["g"];
+            prop.set_value(*this, data);
+        }
+        else if (value.is_type<Color>() && propName == "b")
+        {
+            float data = propData["b"];
+            prop.set_value(*this, data);
+        }
+    }
+}
