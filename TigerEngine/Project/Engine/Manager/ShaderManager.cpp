@@ -9,6 +9,7 @@ void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11Dev
     CreateDSS(dev);
     CreateRS(dev);
     CreateSampler(dev);
+    CreateBS(dev);
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
 }
@@ -165,6 +166,37 @@ void ShaderManager::CreateSampler(const ComPtr<ID3D11Device>& dev)
         HR_T(dev->CreateSamplerState(&sampDesc, linearClamSamplerState.GetAddressOf()));
     }
 
+}
+
+void ShaderManager::CreateBS(const ComPtr<ID3D11Device>& dev)
+{
+    // create blend state
+    {
+        D3D11_BLEND_DESC blendDesc = {};
+        blendDesc.RenderTarget[0].BlendEnable = TRUE;
+        blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+        blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+        blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        dev->CreateBlendState(&blendDesc, alphaBlendState.GetAddressOf());
+    }
+
+    // create blend state
+    {
+        D3D11_BLEND_DESC blendDesc = {};
+        blendDesc.RenderTarget[0].BlendEnable = TRUE;
+        blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+        blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        dev->CreateBlendState(&blendDesc, additiveBlendState.GetAddressOf());
+    }
 }
 
 void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx)

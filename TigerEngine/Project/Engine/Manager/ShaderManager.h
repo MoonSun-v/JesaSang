@@ -16,6 +16,7 @@ private:
     void CreateDSS(const ComPtr<ID3D11Device>& dev);
     void CreateRS(const ComPtr<ID3D11Device>& dev);
     void CreateSampler(const ComPtr<ID3D11Device>& dev);
+    void CreateBS(const ComPtr<ID3D11Device>& dev);
     void CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11DeviceContext>& ctx);
     void CreateCB(const ComPtr<ID3D11Device>& dev);
 
@@ -37,6 +38,10 @@ public:
     ComPtr<ID3D11SamplerState>  shadowSamplerState;       // clmap
     ComPtr<ID3D11SamplerState>	linearClamSamplerState;   // linear + clamp    
 
+    // Blend State
+    ComPtr<ID3D11BlendState>  alphaBlendState;          // alpha
+    ComPtr<ID3D11BlendState>  additiveBlendState;       // additive (multiple light)
+    
     // IA
     ComPtr<ID3D11InputLayout> inputLayout_Vertex;
     ComPtr<ID3D11InputLayout> inputLayout_Position;
