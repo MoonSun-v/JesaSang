@@ -231,9 +231,9 @@ FMOD_MODE AudioManager::ParseMode(const std::string& text)
     std::transform(upper.begin(), upper.end(), upper.begin(),
         [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
 
-    if (upper == "3D")
+    if (upper == "3D" || upper == "3D_INVERSE" || upper == "INVERSE")
     {
-        return FMOD_3D;
+        return FMOD_3D | FMOD_3D_INVERSEROLLOFF;
     }
     if (upper == "2D")
     {

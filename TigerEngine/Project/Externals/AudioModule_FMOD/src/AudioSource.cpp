@@ -67,7 +67,10 @@ void AudioSource::Play(bool restart)
         m_Channel = nullptr;
     }
 
-    FMOD_MODE mode = m_Loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;
+    FMOD_MODE mode = 0;
+    m_Clip->GetSound()->getMode(&mode);
+    mode &= ~(FMOD_LOOP_NORMAL | FMOD_LOOP_OFF);
+    mode |= (m_Loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
     m_Clip->GetSound()->setMode(mode);
 
     m_System->playSound(m_Clip->GetSound(), nullptr, false, &m_Channel);
@@ -90,7 +93,11 @@ void AudioSource::PlayOneShot()
         m_Channel = nullptr;
     }
 
-    m_Clip->GetSound()->setMode(FMOD_LOOP_OFF);
+    FMOD_MODE mode = 0;
+    m_Clip->GetSound()->getMode(&mode);
+    mode &= ~(FMOD_LOOP_NORMAL | FMOD_LOOP_OFF);
+    mode |= FMOD_LOOP_OFF;
+    m_Clip->GetSound()->setMode(mode);
     m_System->playSound(m_Clip->GetSound(), nullptr, false, &m_Channel);
     if (m_Channel) {
         m_Channel->setVolume(m_Volume);
