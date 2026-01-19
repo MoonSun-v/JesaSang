@@ -1,8 +1,8 @@
 #include "WorldManager.h"
-#include "System/CameraSystem.h"
+#include "../EngineSystem/CameraSystem.h"
 
-#include "Entity/Camera.h"
-#include "Entity/GameObject.h"
+#include "../Components/Camera.h"
+#include "../Object/GameObject.h"
 
 void WorldManager::CreateDirectionalLightFrustum()
 {
