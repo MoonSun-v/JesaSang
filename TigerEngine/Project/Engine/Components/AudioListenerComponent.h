@@ -18,6 +18,9 @@ public:
     void OnUpdate(float delta) override;
     void OnDestory() override;
 
+    nlohmann::json Serialize() override;
+    void Deserialize(nlohmann::json data) override;
+
     void Init(AudioSystem* system);
     void BindTransform(const AudioTransformRef& ref);
     void SetFallback(const AudioTransform& transform);
