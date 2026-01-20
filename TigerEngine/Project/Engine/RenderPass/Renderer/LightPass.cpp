@@ -6,6 +6,12 @@
 
 using namespace std;
 
+LightPass::~LightPass()
+{
+    if (sphereVolume) delete sphereVolume;
+    if (coneVolume) delete coneVolume;
+}
+
 void LightPass::Init(ComPtr<ID3D11Device>& device)
 {
     // light volume create

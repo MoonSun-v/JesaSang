@@ -53,6 +53,8 @@ private:
     float clearColor[4] = { 0,0,0,1 };
 
 public:
+    ~LightPass() override;
+
     void Init(ComPtr<ID3D11Device>& device);
     void Execute(ComPtr<ID3D11DeviceContext>& context,
         RenderQueue& queue, Camera* cam) override;
