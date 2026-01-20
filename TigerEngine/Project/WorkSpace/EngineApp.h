@@ -8,11 +8,14 @@
 #include "RendererPlatform/DirectX11Renderer.h"
 #include "RenderQueue/RenderQueue.h"
 
-#include "RenderPass/DirectionalLightPass.h"
-#include "RenderPass/GBufferRenderPass.h"
-#include "RenderPass/SkyboxRenderPass.h"
-#include "RenderPass/ShadowRenderPass.h"
 #include "RenderPass/DebugDrawPass.h"
+#include "RenderPass/Renderer/ShadowPass.h"
+#include "RenderPass/Renderer/GeometryPass.h"
+#include "RenderPass/Renderer/LightPass.h"
+#include "RenderPass/Renderer/SkyboxPass.h"
+#include "RenderPass/Renderer/BloomPass.h"
+#include "RenderPass/Renderer/PostProcessPass.h"
+
 
 /// <summary>
 /// 렌더 파이프라인이 흐름을 관리하는 앱
@@ -32,11 +35,14 @@ public:
 	std::unique_ptr<Editor> editor{};
 #endif
 
-    // renderpasses
-    std::unique_ptr<ShadowRenderPass>       shadowPass{};
-    std::unique_ptr<GBufferRenderPass>      gbufferPass{};
-    std::unique_ptr<DirectionalLightPass>   directionalLightPass{};
-    std::unique_ptr<SkyboxRenderPass>       skyboxPass{};
+    // [ Render Pass ] ---------------------------------
+    std::unique_ptr<ShadowPass>       shadowPass{};
+    std::unique_ptr<GeometryPass>     geometryPass{};
+    std::unique_ptr<LightPass>        lightPass{};
+    std::unique_ptr<SkyboxPass>       skyboxPass{};
+    std::unique_ptr<BloomPass>        bloomPass{};
+    std::unique_ptr<PostProcessPass>  postProcessPass{};
+    // TODO :: Particle Pass
 
 
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;

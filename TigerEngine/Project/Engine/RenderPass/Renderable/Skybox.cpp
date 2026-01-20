@@ -4,7 +4,7 @@
 #include <Directxtk/DDSTextureLoader.h>
 using namespace DirectX;
 
-void SkyBox::Create(ComPtr<ID3D11Device>& device, const std::wstring& filePath)
+void SkyBox::Create(const ComPtr<ID3D11Device>& device, const std::wstring& filePath)
 {
     // Vertex Buffer, Index Buffer
     Position_Vertex vertices[] =

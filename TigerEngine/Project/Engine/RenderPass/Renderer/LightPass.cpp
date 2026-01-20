@@ -12,7 +12,7 @@ LightPass::~LightPass()
     if (coneVolume) delete coneVolume;
 }
 
-void LightPass::Init(ComPtr<ID3D11Device>& device)
+void LightPass::Init(const ComPtr<ID3D11Device>& device)
 {
     // light volume create
     sphereVolume = CreateLightVolumeSphere(device.Get(), 24, 16);

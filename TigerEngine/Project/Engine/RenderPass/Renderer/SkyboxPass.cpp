@@ -12,7 +12,7 @@ SkyboxPass::~SkyboxPass()
     if (skybox) delete skybox;
 }
 
-void SkyboxPass::Init(ComPtr<ID3D11Device>& device)
+void SkyboxPass::Init(const ComPtr<ID3D11Device>& device)
 {
     skybox->Create(device, L"..\\Assets\\Resource\\skyboxEnvHDR.dds");
 }

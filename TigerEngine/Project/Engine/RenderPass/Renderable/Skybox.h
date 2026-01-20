@@ -19,7 +19,7 @@ class SkyBox
     UINT indexCount = 0;
 
 public:
-    void Create(ComPtr<ID3D11Device>& device, const std::wstring& filePath);
+    void Create(const ComPtr<ID3D11Device>& device, const std::wstring& filePath);
     void Draw(ComPtr<ID3D11DeviceContext>& context) const;
 };
 

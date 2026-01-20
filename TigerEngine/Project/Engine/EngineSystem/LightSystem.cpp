@@ -29,7 +29,7 @@ Vector3 LightSystem::GetSunDirection()
         }
     }
 
-    return Vector3();
+    return lightDir;
 }
 
 std::vector<Light*> LightSystem::GetComponents()
