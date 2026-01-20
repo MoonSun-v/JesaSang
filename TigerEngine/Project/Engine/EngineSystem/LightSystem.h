@@ -25,4 +25,7 @@ public:
 
     // SunLight Direction Getter
     Vector3 GetSunDirection();
+
+    // Lights Getter
+    std::vector<Light*> GetComponents();
 };

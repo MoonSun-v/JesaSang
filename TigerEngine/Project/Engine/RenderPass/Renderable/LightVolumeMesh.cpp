@@ -1,13 +1,9 @@
 #include "LightVolumeMesh.h"
-#include "Light.h"
-#include "Structures.hpp"
-#include "Camera.h"
-#include "D3D.h"
-
-#include <vector>
-#include <cstdint>
-#include <cmath>
-#include <algorithm>
+#include "../../Components/Light.h"
+#include "../../Components/Camera.h"
+#include "../../../Base/Datas/Vertex.h"
+#include "../../../Base/Datas/ConstantBuffer.hpp"
+#include "../../Manager/ShaderManager.h"
 
 
 LightVolumeMesh::LightVolumeMesh()
@@ -46,19 +42,21 @@ void LightVolumeMesh::UpdateWolrd(const Light& light)
     }
 }
 
-void LightVolumeMesh::Draw(const Light& light, const Camera& camera) const
+void LightVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>& context, const Camera& camera) const
 {
+    auto& sm = ShaderManager::Instance();
+
     // CB
-    D3D::transformCBData.world = XMMatrixTranspose(world);
-    D3D::deviceContext->UpdateSubresource(D3D::transformBuffer.Get(), 0, nullptr, &D3D::transformCBData, 0, 0);
+    sm.transformCBData.world = XMMatrixTranspose(world);
+    context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
     // VB, IB
     UINT offset = 0;
-    D3D::deviceContext.Get()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-    D3D::deviceContext.Get()->IASetIndexBuffer(indexBuffer.Get(), indexFormat, 0);
+    context.Get()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    context.Get()->IASetIndexBuffer(indexBuffer.Get(), indexFormat, 0);
 
     // Draw Call
-    D3D::deviceContext.Get()->DrawIndexed(indexCount, 0, 0);
+    context.Get()->DrawIndexed(indexCount, 0, 0);
 }
 
 bool LightVolumeMesh::IsInsidePointLight(const Vector3& camPos, const Vector3& lightPos, float radius) const
@@ -78,13 +76,13 @@ bool LightVolumeMesh::IsInsideSpotLight(const Vector3& camPos, const Vector3& li
     float vy = camPos.y - lightPos.y;
     float vz = camPos.z - lightPos.z;
 
-    // 1) range Ã¼Å© (À¯ÇÑ ÄÜ)
+    // 1) range ì²´í¬ (ìœ í•œ ì½˜)
     float dist2 = vx * vx + vy * vy + vz * vz;
     if (dist2 > range * range) return false;
 
-    // 2) ÄÜ °¢ Ã¼Å©: cos(theta) >= cos(outer)
+    // 2) ì½˜ ê° ì²´í¬: cos(theta) >= cos(outer)
     float dist = sqrtf(dist2);
-    // dist==0ÀÌ¸é ¶óÀÌÆ® ¿øÁ¡ÀÌ¹Ç·Î inside Ãë±Ş
+    // dist==0ì´ë©´ ë¼ì´íŠ¸ ì›ì ì´ë¯€ë¡œ inside ì·¨ê¸‰
     if (dist < 1e-6f) return true;
 
     float invDist = 1.0f / dist;
@@ -274,7 +272,7 @@ void BuildUnitCone(int slices, bool capBase,
         uint32_t v1 = baseStart + i;
         uint32_t v2 = baseStart + i + 1;
 
-        // winding: ÇÊ¿äÇÏ¸é v1/v2 swap
+        // winding: í•„ìš”í•˜ë©´ v1/v2 swap
         outIndices.push_back(v0);
         outIndices.push_back(v1);
         outIndices.push_back(v2);
@@ -290,7 +288,7 @@ void BuildUnitCone(int slices, bool capBase,
             uint32_t v1 = baseStart + i;
             uint32_t v2 = baseStart + i + 1;
 
-            // base cap triangles (fan) - winding ÁÖÀÇ
+            // base cap triangles (fan) - winding ì£¼ì˜
             outIndices.push_back(baseCenter);
             outIndices.push_back(v2);
             outIndices.push_back(v1);

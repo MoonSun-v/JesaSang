@@ -1,14 +1,7 @@
 #pragma once
 #define NOMINMAX
 
-#include <DirectXMath.h>
-#include <directxtk/simplemath.h>
-#include <d3d11.h>
-#include <wrl/client.h>
-
-using namespace DirectX;
-using namespace DirectX::SimpleMath;
-using Microsoft::WRL::ComPtr;
+#include "pch.h"
 
 class Light;
 class Camera;
@@ -23,12 +16,12 @@ enum class LightVolumeType {
 /*
     [Light Volume Mesh]
 
-    Deferred RenderingÀÇ ¸ÖÆ¼ ¶óÀÌÆ® Ã³¸®(Point, Spot)½Ã¿¡
-    ¶óÀÌÆÃ ¿¬»ê ¿µ¿ªÀ» ÇÊÅÍ¸µ ÇÏ±â À§ÇØ »ç¿ëÇÏ´Â Mesh
+    Deferred Renderingì˜ ë©€í‹° ë¼ì´íŠ¸ ì²˜ë¦¬(Point, Spot)ì‹œì—
+    ë¼ì´íŒ… ì—°ì‚° ì˜ì—­ì„ í•„í„°ë§ í•˜ê¸° ìœ„í•´ ì‚¬ìš©í•˜ëŠ” Mesh
 
-    - Stencil Pass¸¦ ÅëÇØ ¶óÀÌÆÃ ¿¬»ê ÈÄº¸ ÇÈ¼¿À» ¸¶Å·ÇÏ°í
-    - Lighting Pass¿¡¼­ Stencil Test¸¦ ÅëÇØ ÇØ´ç ÇÈ¼¿µé¿¡ ´ëÇØ¼­¸¸ ¶óÀÌÆÃÀ» °è»êÇÑ´Ù.
-    - Lighting Volume RenderingÀº Ä«¸Ş¶ó°¡ º¼·ı ¿ÜºÎ¿¡ ÀÖ´Â °æ¿ì¿¡¸¸ È£ÃâµÈ´Ù.
+    - Stencil Passë¥¼ í†µí•´ ë¼ì´íŒ… ì—°ì‚° í›„ë³´ í”½ì…€ì„ ë§ˆí‚¹í•˜ê³ 
+    - Lighting Passì—ì„œ Stencil Testë¥¼ í†µí•´ í•´ë‹¹ í”½ì…€ë“¤ì— ëŒ€í•´ì„œë§Œ ë¼ì´íŒ…ì„ ê³„ì‚°í•œë‹¤.
+    - Lighting Volume Renderingì€ ì¹´ë©”ë¼ê°€ ë³¼ë¥¨ ì™¸ë¶€ì— ìˆëŠ” ê²½ìš°ì—ë§Œ í˜¸ì¶œëœë‹¤.
       * Inside : Stencil Test off + FullScreenPass
       * Outside : Stencil Test on + CullBack + Lighting Volume Pass
 */
@@ -52,7 +45,7 @@ private:
 public:
     LightVolumeMesh();
     void UpdateWolrd(const Light& light);
-    void Draw(const Light& light, const Camera& camera) const;
+    void Draw(ComPtr<ID3D11DeviceContext>& context, const Camera& camera) const;
 
     bool IsInsidePointLight(const Vector3& camPos, const Vector3& lightPos, float radius) const;
     bool IsInsideSpotLight(const Vector3& camPos, const Vector3& lightPos,
@@ -66,7 +59,7 @@ public:
         const std::vector<uint32_t>& indices, LightVolumeMesh* outMesh);
 };
 
-// ¿ÜºÎ Create Functions
+// ì™¸ë¶€ Create Functions
 LightVolumeMesh* CreateLightVolumeSphere(ID3D11Device* device, int slices = 24, int stacks = 16);
 LightVolumeMesh* CreateLightVolumeCone(ID3D11Device* device, int slices = 24, bool capBase = false);
 
