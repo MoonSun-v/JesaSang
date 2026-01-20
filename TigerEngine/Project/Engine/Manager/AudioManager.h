@@ -9,8 +9,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "AudioClip.h"
-#include "AudioSystem.h"
+#include "..\\..\\Externals\\AudioModule_FMOD\\include\\AudioClip.h"
+#include "..\\..\\Externals\\AudioModule_FMOD\\include\\AudioSystem.h"
 
 struct AudioManifestEntry
 {
