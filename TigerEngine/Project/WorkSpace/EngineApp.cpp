@@ -20,116 +20,14 @@
 
 #include "Components/FreeCamera.h"
 #include "Components/FBXData.h"
-#include "..\\Externals\\AudioModule_FMOD\\include\\AudioController.h"
+#include "AudioSceneController.h"
 #include <limits>
 
 namespace fs = std::filesystem;
 
 namespace
 {
-    AudioController g_audioController;
-
-    DirectX::XMFLOAT3 g_listenerPos{ 0.0f, 0.0f, 0.0f };
-    DirectX::XMFLOAT3 g_listenerVel{ 0.0f, 0.0f, 0.0f };
-    DirectX::XMFLOAT3 g_listenerFwd{ 0.0f, 0.0f, 1.0f };
-    DirectX::XMFLOAT3 g_listenerUp{ 0.0f, 1.0f, 0.0f };
-
-    DirectX::XMFLOAT3 g_sourcePos{ 0.0f, 0.0f, 0.0f };
-    DirectX::XMFLOAT3 g_sourceVel{ 0.0f, 0.0f, 0.0f };
-    Transform* g_sourceTransform = nullptr;
-
-    bool g_audioReady = false;
-    bool g_audioStarted = false;
-    bool g_sourceLocked = false;
-
-    void FindNearestSphereTransform(const Vector3& listenerPos)
-    {
-        auto scene = SceneSystem::Instance().GetCurrentScene();
-        if (!scene)
-        {
-            return;
-        }
-
-        float bestDist = std::numeric_limits<float>::max();
-        Transform* best = nullptr;
-        scene->ForEachGameObject([&](GameObject* obj)
-        {
-            auto fbx = obj->GetComponent<FBXData>();
-            if (!fbx)
-            {
-                return;
-            }
-
-            if (fbx->path.find("sphere.fbx") == std::string::npos)
-            {
-                return;
-            }
-
-            auto transform = obj->GetTransform();
-            if (!transform)
-            {
-                return;
-            }
-
-            float dist = (transform->GetPosition() - listenerPos).Length();
-            if (dist < bestDist)
-            {
-                bestDist = dist;
-                best = transform;
-            }
-        });
-
-        if (best)
-        {
-            g_sourceTransform = best;
-        }
-    }
-
-    void TrySetupAudioTest()
-    {
-        if (g_audioReady)
-        {
-            return;
-        }
-
-        auto& audioMgr = AudioManager::Instance();
-        auto entry = audioMgr.GetEntry("SFX_TestLoop1");
-        if (!entry)
-        {
-            OutputDebugStringA("[AudioTest] Missing manifest entry: SFX_TestLoop1\n");
-            return;
-        }
-
-        audioMgr.GetSystem().Set3DSettings(1.0f, 1.0f, 1.0f);
-
-        auto clip = audioMgr.GetOrCreateClip(entry->id);
-        if (!clip)
-        {
-            OutputDebugStringA("[AudioTest] Failed to create clip for SFX_TestLoop1\n");
-            return;
-        }
-
-        g_audioController.Init(&audioMgr.GetSystem());
-
-        AudioTransformRef listenerRef{};
-        listenerRef.position = &g_listenerPos;
-        listenerRef.velocity = &g_listenerVel;
-        listenerRef.forward = &g_listenerFwd;
-        listenerRef.up = &g_listenerUp;
-        g_audioController.BindListener(listenerRef);
-
-        AudioTransformRef sourceRef{};
-        sourceRef.position = &g_sourcePos;
-        sourceRef.velocity = &g_sourceVel;
-        g_audioController.BindSource(sourceRef);
-
-        g_audioController.SetClip(clip);
-        g_audioController.SetLoop(entry->loop);
-        g_audioController.SetVolume(entry->defaultVolume);
-        g_audioController.Set3DMinMaxDistance(8.0f, 1200.0f);
-
-        g_audioReady = true;
-    }
+    AudioSceneController g_audioScene;
 }
 
 EngineApp::EngineApp(HINSTANCE hInstance)
@@ -139,13 +37,7 @@ EngineApp::EngineApp(HINSTANCE hInstance)
 
 EngineApp::~EngineApp()
 {
-    if (g_audioReady)
-    {
-        g_audioController.Stop();
-        g_audioController.SetClip({});
-        g_audioReady = false;
-        g_audioStarted = false;
-    }
+    g_audioScene.Shutdown();
     AudioManager::Instance().Shutdown();
 }
 
@@ -189,7 +81,7 @@ bool EngineApp::OnInitialize()
 
     // == find scene ==
     LoadSavedFirstScene();
-    TrySetupAudioTest();
+    g_audioScene.Init("SFX_TestLoop1");
 
 	WorldManager::Instance().CreateDirectionalLightFrustum(); // create directional light 
 
@@ -233,48 +125,7 @@ void EngineApp::OnUpdate()
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
     AudioManager::Instance().Update();
 
-    if (g_audioReady)
-    {
-        auto currCam = CameraSystem::Instance().GetCurrCamera();
-        if (currCam && currCam->GetOwner())
-        {
-            auto transform = currCam->GetOwner()->GetTransform();
-            if (transform)
-            {
-                const auto& pos = transform->GetPosition();
-                g_listenerPos = { pos.x, pos.y, pos.z };
-            }
-
-            auto forward = currCam->GetForward();
-            g_listenerFwd = { forward.x, forward.y, forward.z };
-        }
-
-        FindNearestSphereTransform(Vector3{ g_listenerPos.x, g_listenerPos.y, g_listenerPos.z });
-
-        if (g_sourceTransform)
-        {
-            const auto& pos = g_sourceTransform->GetPosition();
-            g_sourcePos = { pos.x, pos.y, pos.z };
-        }
-        else if (!g_sourceLocked)
-        {
-            auto right = currCam ? currCam->GetRight() : Vector3::Right;
-            g_sourcePos = {
-                g_listenerPos.x - right.x * 5.0f,
-                g_listenerPos.y - right.y * 5.0f,
-                g_listenerPos.z - right.z * 5.0f
-            };
-            g_sourceLocked = true;
-        }
-
-        g_audioController.Update();
-
-        if (!g_audioStarted)
-        {
-            g_audioController.Play();
-            g_audioStarted = true;
-        }
-    }
+    g_audioScene.UpdateFromCamera(CameraSystem::Instance().GetCurrCamera());
 
 #if _DEBUG
 	editor->Update();
