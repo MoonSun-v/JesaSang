@@ -1,7 +1,6 @@
 #include "ParticleQuadMesh.h"
-#include "D3D.h"
 
-void ParticleQuadMesh::Init()
+void ParticleQuadMesh::Create(ComPtr<ID3D11Device>& device)
 {
     // Quad: corner(-0.5~0.5), UV(0~1)
     ParticleQuadVertex vertices[4] =
@@ -30,7 +29,7 @@ void ParticleQuadMesh::Init()
     D3D11_SUBRESOURCE_DATA vbData = {};
     vbData.pSysMem = vertices;
 
-    D3D::device.Get()->CreateBuffer(&vbDesc, &vbData, vertexBuffer.GetAddressOf());
+    device.Get()->CreateBuffer(&vbDesc, &vbData, vertexBuffer.GetAddressOf());
 
     // --- Index Buffer ---
     D3D11_BUFFER_DESC ibDesc = {};
@@ -42,23 +41,22 @@ void ParticleQuadMesh::Init()
     D3D11_SUBRESOURCE_DATA ibData = {};
     ibData.pSysMem = indices;
 
-    D3D::device.Get()->CreateBuffer(&ibDesc, &ibData, indexBuffer.GetAddressOf());
+    device.Get()->CreateBuffer(&ibDesc, &ibData, indexBuffer.GetAddressOf());
 }
 
-void ParticleQuadMesh::DrawIndexedInstanced(UINT instanceCount, ID3D11Buffer* instanceVB, UINT instanceStride)
+void ParticleQuadMesh::DrawIndexedInstanced(ComPtr<ID3D11DeviceContext>& context, 
+    UINT instanceCount, ID3D11Buffer* instanceVB, UINT instanceStride)
 {
-    auto* ctx = D3D::deviceContext.Get();
-
     // VB, IB
     // Vertex Data + Instance Data
     ID3D11Buffer* vbs[] = { vertexBuffer.Get(), instanceVB };
     UINT strides[] = { stride, instanceStride };
     UINT offsets[] = { 0, 0 };
 
-    ctx->IASetVertexBuffers(0, 2, vbs, strides, offsets);
-    ctx->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+    context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
+    context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
     // Draw Call
-    // Quad 1°³ + Instance N°³ -> N¹ø ¹Ýº¹ÇØ¼­ Draw
-    ctx->DrawIndexedInstanced(indexCount, instanceCount, 0, 0, 0);
+    // Quad 1ê°œ + Instance Nê°œ -> Në²ˆ ë°˜ë³µí•´ì„œ Draw
+    context->DrawIndexedInstanced(indexCount, instanceCount, 0, 0, 0);
 }

@@ -1,17 +1,15 @@
 #pragma once
-#include "Structures.hpp"
-#include <d3d11.h>
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
+#include "pch.h"
+#include "../../../Base/Datas/Vertex.h"
 
 /*
     [ Particle Quad Mesh ]
 
-    ÀÌÆåÆ®(Flipbook/Particle) Àü¿ë QuadÀÔ´Ï´Ù.
-    - Á¤Á¡¿¡ ¿ùµå positionÀÌ ¾ø°í corner(+uv)¸¸ °¡Áö¹Ç·Î,
-      ÀÏ¹İ Mesh ÆÄÀÌÇÁ¶óÀÎ(¿ùµåÇà·Ä·Î º¯È¯)¿¡´Â ±×´ë·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.
-    - ¿ùµå À§Ä¡´Â VS¿¡¼­ (ParticlePos + CamRight/Up * corner * size)·Î °è»êÇÕ´Ï´Ù.
-    - Particle Instance Data¸¦ ¹Ş¾Æ µÎ Vertexbuffer¸¦ ÇÕÃÄ ¹ÙÀÎµùÇÕ´Ï´Ù.
+    ì´í™íŠ¸(Flipbook/Particle) ì „ìš© Quadì…ë‹ˆë‹¤.
+    - ì •ì ì— ì›”ë“œ positionì´ ì—†ê³  corner(+uv)ë§Œ ê°€ì§€ë¯€ë¡œ,
+      ì¼ë°˜ Mesh íŒŒì´í”„ë¼ì¸(ì›”ë“œí–‰ë ¬ë¡œ ë³€í™˜)ì—ëŠ” ê·¸ëŒ€ë¡œ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
+    - ì›”ë“œ ìœ„ì¹˜ëŠ” VSì—ì„œ (ParticlePos + CamRight/Up * corner * size)ë¡œ ê³„ì‚°í•©ë‹ˆë‹¤.
+    - Particle Instance Dataë¥¼ ë°›ì•„ ë‘ Vertexbufferë¥¼ í•©ì³ ë°”ì¸ë”©í•©ë‹ˆë‹¤.
 */
 
 class ParticleQuadMesh
@@ -24,7 +22,8 @@ private:
     UINT stride = sizeof(ParticleQuadVertex);
 
 public:
-    void Init();
-    void DrawIndexedInstanced(UINT instanceCount, ID3D11Buffer* instanceVB, UINT instanceStride);
+    void Create(ComPtr<ID3D11Device>& device);
+    void DrawIndexedInstanced(ComPtr<ID3D11DeviceContext>& context,
+        UINT instanceCount, ID3D11Buffer* instanceVB, UINT instanceStride);
 };
 
