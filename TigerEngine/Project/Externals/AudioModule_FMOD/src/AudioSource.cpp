@@ -1,5 +1,5 @@
-#include "AudioSource.h"
-#include "AudioClip.h"
+#include "..\\include\\AudioSource.h"
+#include "..\\include\\AudioClip.h"
 
 void AudioSource::Init(FMOD::System* system)
 {

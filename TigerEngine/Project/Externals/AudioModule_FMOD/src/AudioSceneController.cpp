@@ -1,12 +1,12 @@
-#include "AudioSceneController.h"
+#include "..\\include\\AudioSceneController.h"
 
 #include <limits>
 
-#include "Manager/AudioManager.h"
-#include "EngineSystem/SceneSystem.h"
-#include "Components/FBXData.h"
-#include "Components/Camera.h"
-#include "Object/GameObject.h"
+#include "..\\..\\..\\Engine\\Manager\\AudioManager.h"
+#include "..\\..\\..\\Engine\\EngineSystem\\SceneSystem.h"
+#include "..\\..\\..\\Engine\\Components\\FBXData.h"
+#include "..\\..\\..\\Engine\\Components\\Camera.h"
+#include "..\\..\\..\\Engine\\Object\\GameObject.h"
 
 void AudioSceneController::Init(const std::string& entryId)
 {

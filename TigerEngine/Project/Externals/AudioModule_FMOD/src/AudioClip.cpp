@@ -1,6 +1,6 @@
-#include "AudioClip.h"
+#include "..\\include\\AudioClip.h"
 #include <Windows.h>
-#include <fmod_errors.h>
+#include "..\\fmod\\inc\\fmod_errors.h"
 
 AudioClip::AudioClip(FMOD::System* system, const std::string& path, FMOD_MODE mode)
 {

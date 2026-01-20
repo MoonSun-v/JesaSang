@@ -1,5 +1,5 @@
-#include "AudioSourceComponent.h"
-#include "AudioSystem.h"
+#include "..\\include\\AudioSourceComponent.h"
+#include "..\\include\\AudioSystem.h"
 
 void AudioSourceComponent::Init(AudioSystem* system)
 {

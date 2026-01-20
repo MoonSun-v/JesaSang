@@ -1,5 +1,5 @@
-#include "AudioListenerComponent.h"
-#include "AudioSystem.h"
+#include "..\\include\\AudioListenerComponent.h"
+#include "..\\include\\AudioSystem.h"
 
 void AudioListenerComponent::Init(AudioSystem* system)
 {

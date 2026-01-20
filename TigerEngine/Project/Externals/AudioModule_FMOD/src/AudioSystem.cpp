@@ -1,7 +1,7 @@
-#include "AudioSystem.h"
-#include "AudioClip.h"
+#include "..\\include\\AudioSystem.h"
+#include "..\\include\\AudioClip.h"
 #include <Windows.h>
-#include <fmod_errors.h>
+#include "..\\fmod\\inc\\fmod_errors.h"
 
 bool AudioSystem::Init()
 {
