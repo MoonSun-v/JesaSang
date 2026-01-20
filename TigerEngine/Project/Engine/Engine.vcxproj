@@ -136,8 +136,11 @@
     <ClCompile Include="Components\Camera.cpp" />
     <ClCompile Include="Components\FBXData.cpp" />
     <ClCompile Include="Components\FBXRenderer.cpp" />
+    <ClCompile Include="Components\Light.cpp" />
     <ClCompile Include="Components\MeshRenderer.cpp" />
     <ClCompile Include="Components\FreeCamera.cpp" />
+    <ClCompile Include="Components\ShadowCamera\DirectionalShadowCamera.cpp" />
+    <ClCompile Include="EngineSystem\LightSystem.cpp" />
     <ClCompile Include="EngineSystem\RenderSystem.cpp" />
     <ClCompile Include="EngineSystem\SceneSystem.cpp" />
     <ClCompile Include="EngineSystem\ScriptSystem.cpp" />
@@ -171,10 +174,13 @@
     <ClInclude Include="Components\Camera.h" />
     <ClInclude Include="Components\FBXData.h" />
     <ClInclude Include="Components\FBXRenderer.h" />
+    <ClInclude Include="Components\Light.h" />
     <ClInclude Include="Components\MeshRenderer.h" />
     <ClInclude Include="Components\FreeCamera.h" />
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\ScriptComponent.h" />
+    <ClInclude Include="Components\ShadowCamera\DirectionalShadowCamera.h" />
+    <ClInclude Include="EngineSystem\LightSystem.h" />
     <ClInclude Include="EngineSystem\RenderSystem.h" />
     <ClInclude Include="EngineSystem\SceneSystem.h" />
     <ClInclude Include="EngineSystem\ScriptSystem.h" />
