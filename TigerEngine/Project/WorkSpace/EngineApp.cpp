@@ -16,6 +16,7 @@
 #include "System/ObjectSystem.h"
 #include "EngineSystem/CameraSystem.h"
 #include "EngineSystem/PlayModeSystem.h"
+#include "EngineSystem/LightSystem.h"
 
 #include "Components/FreeCamera.h"
 
@@ -63,10 +64,10 @@ bool EngineApp::OnInitialize()
 	editor->GetRTV(dxRenderer->GetBackBufferRTV());
 #endif
 
-	SceneSystem::Instance().AddScene();				// create first scene
+	SceneSystem::Instance().AddScene();			    	// create first scene
 	SceneSystem::Instance().SetCurrentSceneByIndex(); 	// render first scene
 
-	// == create free camera ==
+	// create free camera
 	CameraSystem::Instance().SetScreenSize(clientWidth, clientHeight);
 
 #if _DEBUG
@@ -271,4 +272,5 @@ void EngineApp::RegisterAllComponents()
 
 	ComponentFactory::Instance().Register<Player1>("Player1");
 	ComponentFactory::Instance().Register<Weapon>("Weapon");
+	ComponentFactory::Instance().Register<Light>("Light");
 }
