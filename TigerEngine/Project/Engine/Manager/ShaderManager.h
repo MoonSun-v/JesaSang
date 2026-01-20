@@ -28,6 +28,13 @@ private:
 
 
 public:
+    // DX11 Base
+    D3D11_VIEWPORT viewport_screen;                                   // TODO :: DX11Renderer에서 받아오기
+    ComPtr<ID3D11RenderTargetView>    backBufferRTV;                  // TODO :: DX11Renderer에서 받아오기
+    ComPtr<ID3D11DepthStencilView>    depthStencilView;               // TODO :: DX11Renderer에서 받아오기
+    ComPtr<ID3D11DepthStencilView>    depthStencilReadOnlyView;       // TODO :: DX11Renderer에서 받아오기
+    ComPtr<ID3D11ShaderResourceView>  depthSRV;                       // TODO :: DX11Renderer에서 받아오기
+
     // DSS
     ComPtr<ID3D11DepthStencilState>   defualtDSS;                 // depth test on + write on
     ComPtr<ID3D11DepthStencilState>   depthTestOnlyDSS;           // depth test only

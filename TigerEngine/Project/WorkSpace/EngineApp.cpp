@@ -45,6 +45,14 @@ bool EngineApp::OnInitialize()
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 	ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
 
+    auto& sm = ShaderManager::Instance();
+    sm.viewport_screen = dxRenderer->GetRenderViewPort();
+    sm.backBufferRTV = dxRenderer->GetBackBufferRTV();
+    sm.depthStencilView = dxRenderer->GetDepthStencilView();
+    sm.depthStencilReadOnlyView = dxRenderer->GetDepthStencilReadOnlyView();
+    sm.depthSRV = dxRenderer->GetDepthSRV();
+
+
     renderQueue = std::make_unique<RenderQueue>();
 
 #if _DEBUG
