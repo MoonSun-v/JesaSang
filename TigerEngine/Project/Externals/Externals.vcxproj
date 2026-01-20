@@ -139,6 +139,7 @@
     <ClInclude Include="AudioModule_FMOD\include\AudioController.h" />
     <ClInclude Include="AudioModule_FMOD\include\AudioListener.h" />
     <ClInclude Include="AudioModule_FMOD\include\AudioListenerComponent.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioSceneController.h" />
     <ClInclude Include="AudioModule_FMOD\include\AudioSource.h" />
     <ClInclude Include="AudioModule_FMOD\include\AudioSourceComponent.h" />
     <ClInclude Include="AudioModule_FMOD\include\AudioSystem.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="AudioModule_FMOD\src\AudioController.cpp" />
     <ClCompile Include="AudioModule_FMOD\src\AudioListener.cpp" />
     <ClCompile Include="AudioModule_FMOD\src\AudioListenerComponent.cpp" />
+    <ClCompile Include="AudioModule_FMOD\src\AudioSceneController.cpp" />
     <ClCompile Include="AudioModule_FMOD\src\AudioSource.cpp" />
     <ClCompile Include="AudioModule_FMOD\src\AudioSourceComponent.cpp" />
     <ClCompile Include="AudioModule_FMOD\src\AudioSystem.cpp" />
