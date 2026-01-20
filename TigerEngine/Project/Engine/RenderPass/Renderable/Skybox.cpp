@@ -68,14 +68,14 @@ void SkyBox::Create(ComPtr<ID3D11Device>& device, const std::wstring& filePath)
     );
 }
 
-void SkyBox::Draw(ComPtr<ID3D11DeviceContext>& context, const Matrix& view, const Matrix& projection) const
+void SkyBox::Draw(ComPtr<ID3D11DeviceContext>& context) const
 {
     // VB, IB
     context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &vertexBufferStride, &vertexBufferOffset);
     context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
     // SRV
-    context->PSSetShaderResources(4, 1, skyboxSRV.GetAddressOf());
+    context->PSSetShaderResources(15, 1, skyboxSRV.GetAddressOf());
 
     // Draw
     context->DrawIndexed(indexCount, 0, 0);

@@ -20,6 +20,6 @@ class SkyBox
 
 public:
     void Create(ComPtr<ID3D11Device>& device, const std::wstring& filePath);
-    void Draw(ComPtr<ID3D11DeviceContext>& context, const Matrix& view, const Matrix& projection) const;
+    void Draw(ComPtr<ID3D11DeviceContext>& context) const;
 };
 
