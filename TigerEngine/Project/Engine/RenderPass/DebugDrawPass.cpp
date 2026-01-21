@@ -1,5 +1,6 @@
 #include "DebugDrawPass.h"
 #include "../Util/DebugDraw.h"
+#include "../Manager/ShaderManager.h"
 
 using namespace DebugDraw;
 
@@ -13,7 +14,8 @@ void DebugDrawPass::Execute(ComPtr<ID3D11DeviceContext>& context,
     Camera* cam)
 {
     // 렌더타겟 다시 설정 (ImGui가 변경했을 수 있음)
-	context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencliView.Get());
+    auto& sm = ShaderManager::Instance();
+	context->OMSetRenderTargets(1, sm.backBufferRTV.GetAddressOf(), sm.depthStencilReadOnlyView.Get());
 
 	// DebugDraw의 BasicEffect 설정
 	DebugDraw::g_BatchEffect->SetWorld(Matrix::Identity);
@@ -36,14 +38,4 @@ void DebugDrawPass::End(ComPtr<ID3D11DeviceContext> &context)
 	context->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(nullptr, 0);
 	context->RSSetState(nullptr);
-}
-
-void DebugDrawPass::SetDepthStencilView(const ComPtr<ID3D11DepthStencilView> &dsv)
-{
-    depthStencliView = dsv;
-}
-
-void DebugDrawPass::SetRenderTargetView(const ComPtr<ID3D11RenderTargetView> &rtv)
-{
-    renderTargetView = rtv;
 }

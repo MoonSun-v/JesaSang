@@ -28,6 +28,8 @@ private:
 
 
 public:
+    void CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight);
+
     // DX11 Base
     D3D11_VIEWPORT viewport_screen;                                  
     ComPtr<ID3D11RenderTargetView>    backBufferRTV;                 
@@ -165,4 +167,8 @@ public:
 
     // bloom mip용 viewport 설정
     void SetViewportForMip(const ComPtr<ID3D11DeviceContext>& ctx, UINT baseW, UINT baseH, UINT mip);
+
+    // backbuffer 관련 객체 초기화
+    void ReleaseBackBufferResources();
+
 };

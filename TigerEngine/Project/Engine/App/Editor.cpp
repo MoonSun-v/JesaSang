@@ -168,6 +168,12 @@ void Editor::SelectObject(GameObject* obj)
     selectedObject = obj;
 }
 
+void Editor::ReleaseBackBufferResources()
+{
+    depthStencliView.Reset();
+    renderTargetView.Reset();
+}
+
 void Editor::RenderMenuBar(HWND& hwnd)
 {
     if (ImGui::BeginMainMenuBar())

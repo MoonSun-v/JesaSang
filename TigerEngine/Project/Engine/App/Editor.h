@@ -21,6 +21,8 @@ public:
 
     void SelectObject(GameObject* obj);
 
+    void ReleaseBackBufferResources();
+
 private:
     void RenderMenuBar(HWND& hwnd);
     void RenderHierarchy();
