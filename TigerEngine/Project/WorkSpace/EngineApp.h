@@ -68,6 +68,10 @@ private:
 
     void LoadSavedFirstScene();
 
+    // resize
+    void ResizeScreen(int width, int height);
+    void ResizeResource();
+
 	std::shared_ptr<DirectX11Renderer> dxRenderer{};
     std::unique_ptr<RenderQueue> renderQueue{};
 };

@@ -266,6 +266,46 @@ void EngineApp::LoadSavedFirstScene()
     }
 }
 
+void EngineApp::ResizeScreen(int width, int height)
+{
+    if (!hwnd) return;
+
+    clientWidth = max(width, 1);
+    clientHeight = max(height, 1);
+
+    ResizeResource();
+}
+
+void EngineApp::ResizeResource()
+{
+    // clear
+    auto& sm = ShaderManager::Instance();
+
+    sm.ReleaseBackBufferResources();
+    editor->ReleaseBackBufferResources();
+
+    dxRenderer->OnResize(clientWidth, clientHeight);
+    sm.CreateBackBufferResource(dxRenderer->GetDevice(), clientWidth, clientHeight);
+
+    // shadowManager 초기화
+    sm.backBufferRTV = dxRenderer->GetBackBufferRTV();
+    sm.depthStencilView = dxRenderer->GetDepthStencilView();
+    sm.depthStencilReadOnlyView = dxRenderer->GetDepthStencilReadOnlyView();
+    sm.depthSRV = dxRenderer->GetDepthSRV();
+    sm.viewport_screen = dxRenderer->GetRenderViewPort();
+
+    // editor 참조
+    editor->GetDSV(dxRenderer->GetDepthStencilView());
+    editor->GetRTV(dxRenderer->GetBackBufferRTV());
+
+    // Camera
+    auto cams = CameraSystem::Instance().GetAllCamera();
+    for (auto& e : cams)
+    {
+        e->SetProjection(e->GetPovAngle(), clientWidth, clientHeight, e->GetNearDist(), e->GetFarDist());
+    }
+}
+
 // Forward declare message handler from imgui_impl_win32.cpp
 #if _DEBUG
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -277,6 +317,25 @@ LRESULT EngineApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
         return true;
 #endif
+
+    switch (message)
+    {
+    case WM_ENTERSIZEMOVE:
+        isResize = true;
+        break;
+    case WM_EXITSIZEMOVE:
+        isResize = false;
+        RECT rc;
+        GetClientRect(hWnd, &rc);
+
+        if (rc.right - rc.left == clientWidth && rc.bottom - rc.top == clientHeight) break;
+
+        ResizeScreen(rc.right - rc.left, rc.bottom - rc.top);
+
+        break;
+    default:
+        break;
+    }
 
 	return __super::WndProc(hWnd, message, wParam, lParam);
 }

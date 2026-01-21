@@ -89,8 +89,6 @@ void PostProcessPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue&
     sm.bloomCBData.bloom_scatter = data.bloom_scatter;
     sm.bloomCBData.bloom_clamp = data.bloom_clamp;
     sm.bloomCBData.bloom_tint = data.bloom_tint;
-    sm.bloomCBData.srcMip = data.srcMip;
-    sm.bloomCBData.srcTexelSize = data.srcTexelSize;
     
     context->UpdateSubresource(sm.postProcessCB.Get(), 0, nullptr, &sm.postProcessCBData, 0, 0);
     context->UpdateSubresource(sm.bloomCB.Get(), 0, nullptr, &sm.bloomCBData, 0, 0);

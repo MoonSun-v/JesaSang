@@ -1,8 +1,21 @@
-#include "Shared.hlsli"
+// [ PS_Skybox ]
 
-float4 main(PS_INPUT_Sky input) : SV_TARGET
+#include <PBR_Common.fxh>
+
+// --- Texture Bind Slot ------------------
+TextureCube skyboxTex : register(t15);
+
+// --- Sampler Bind Slot ------------------
+SamplerState samplerLinear : register(s0);
+
+
+float4 main(PS_Skybox_INPUT input) : SV_TARGET
 {
-    float4 diffuse_texture = txCubemap.Sample(samLinear, input.Pos);
-    return diffuse_texture;
-
+    float3 color = skyboxTex.Sample(samplerLinear, normalize(input.texCoord));
+    
+    // LDR 단독패스일 때만 감마보정
+    if (useDefaultGamma && !isHDR)
+        color = LinearToSRGB(color);
+    
+    return float4(color, 1);
 }
