@@ -6,6 +6,7 @@ PS_INPUT main(VS_Weight_INPUT input)
 {
     PS_INPUT output = (PS_INPUT) 0;
 
+    // world matrix
     Matrix finalWorld;
     
     // skeletal
@@ -24,13 +25,13 @@ PS_INPUT main(VS_Weight_INPUT input)
         weightedOffsetPose += mul(input.boneWeights.w, offsetPos[3]);
        
         finalWorld = mul(weightedOffsetPose, world);
-        output.finalWorld = finalWorld;
     }
     // static, rigid
     else
     {
         finalWorld = mul(bonePose[refBoneIndex], world);
     }
+    output.finalWorld = finalWorld;
     
     // clip space
     output.pos = mul(float4(input.pos, 1.0f), finalWorld); // local -> world
