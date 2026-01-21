@@ -11,9 +11,6 @@ public:
                 Camera* cam) override;
     void End(ComPtr<ID3D11DeviceContext>& context) override;
 
-    void SetDepthStencilView(const ComPtr<ID3D11DepthStencilView>& dsv);
-    void SetRenderTargetView(const ComPtr<ID3D11RenderTargetView>& rtv);
-
 private:
 	ComPtr<ID3D11InputLayout> 			inputLayout{};
 

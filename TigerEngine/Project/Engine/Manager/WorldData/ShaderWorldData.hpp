@@ -1,3 +1,15 @@
+#pragma once
+
+struct ShadowOrthoDesc
+{
+    float lookPointDist = 500.f;
+    float shadowLightDist = 1000.f;
+    float shadowWidth = 3000.0f;
+    float shadowHeight = 3000.0f;
+    float shadowNear = 0.01f;
+    float shadowFar = 5000.0f;
+};
+
 struct PostProcessWorldData
 {
     // Base
@@ -56,8 +68,6 @@ struct PostProcessWorldData
     float bloom_scatter = 0.5f;
     float bloom_clamp = 0.0f;
     Vector3 bloom_tint = { 1.0f, 1.0f, 1.0f };
-    int     srcMip = 0;                      // SampleLevel용 mip 인덱스
-    Vector2 srcTexelSize = { 0.0f, 0.0f };   // 패스에서 읽고 있는 mip 레벨의 텍스처 해상도를 기준으로 한 texel size
 };
 
 

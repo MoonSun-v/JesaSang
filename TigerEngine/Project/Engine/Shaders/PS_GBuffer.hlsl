@@ -1,83 +1,111 @@
-#include <Shared.hlsli>
-
-struct GBufferOut
-{
-    float4 Albedo   : SV_Target0;
-    float4 Normal   : SV_Target1;
-    float4 Position : SV_Target2;
-    float1 Metal    : SV_Target3;
-    float1 Rough    : SV_Target4;
-    float1 Specular : SV_Target5;
-    float4 Emission : SV_Target6;
-};
-
-GBufferOut main(PS_INPUT_MODEL input)
-{
-    GBufferOut gOut;
-    gOut.Position = float4(input.PosWS, 1.0f);
+/*
+    [ PBR Geomatry Pass Pixel Shader ] 
+    * Deferred Rendering *
     
-    // ����ó�� �κ� =====================================================================
-    // base(diffuse) texture Sampling 
-    float4 albedo = txDiffuse.Sample(samLinear, input.Tex);
-    if (!hasDiffuse)
+    MTR을 활용하여 라이팅 연산에 필요한 정보들을 Gbuffer에 기록
+     RT0 : Albedo (RGB)
+     RT1 : Normal (RGB)
+     RT2 : Metallic (R), Roughness (G)
+     RT3 : Emissive (RGB)
+     -> Position은 depth buffer를 복원하여 사용합니다.
+*/
+
+#include <shared.fxh>
+
+// --- Texture Bind Slot ------------------
+Texture2D diffuseMap : register(t0);
+Texture2D normalMap : register(t1);
+Texture2D metallicMap : register(t2);
+Texture2D roughnessMap : register(t3);
+Texture2D emissiveMap : register(t4);
+
+// --- Sampler Bind Slot ------------------
+SamplerState samLinear : register(s0);
+
+
+PS_Output main(PS_INPUT input) : SV_TARGET
+{
+    PS_Output output = (PS_Output) 0;
+    
+    // --- [ Default ] ----------------------------------
+    
+    float3 base_color = float3(1.0f, 1.0f, 1.0f);
+    float3 normal = float3(0, 0, 0);
+    float3 emissive = float3(0.0f, 0.0f, 0.0f);
+    float metallic = 0.0f;
+    float roughness = 0.0f;
+    float alpha = 1.0f;
+    
+    
+    // ---[ Material Texture ]----------------------------------
+    
+    // base color
+    if (useDiffuse)
     {
-        albedo = matAmbient;
+        base_color = diffuseMap.Sample(samLinear, input.texCoord).rgb;
+        alpha = diffuseMap.Sample(samLinear, input.texCoord).a;
     }
     
-    if (albedo.a < 0.5f) // alpha cliping
+    if (alpha < 0.5)
         discard;
     
-    albedo.rgb = pow(albedo.rgb, 2.2); // gamma -> linear
-    gOut.Albedo = albedo;
-    
-    // specularSample
-    float specularIntensity = txSpec.Sample(samLinear, input.Tex).r;
-    if (!hasSpecular)
+    // normal
+    if (useNormal)
     {
-        specularIntensity = 1.0f;
+        float3 local_normal = normalMap.Sample(samLinear, input.texCoord).xyz * 2.0f - 1.0f;
+        float3 world_normal = normalize(mul(local_normal, input.TBN));
+        normal = normalize(world_normal);
     }
-    gOut.Specular = specularIntensity;
-    
-    // EmissionSample
-    float4 textureEmission = txEmission.Sample(samLinear, input.Tex);
-    if (!hasEmissive)
+    else
     {
-        textureEmission = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    }
-    gOut.Emission = textureEmission;
-    
-    // normalSample
-    float3x3 TBN = float3x3(input.Tangent, input.Bitangent, input.NormWS);
-    float3 normalMapSample = txNormal.Sample(samLinear, input.Tex).rgb;
-    // normal map�� ���� ��츦 ���
-    if (!hasNormal)
-    {
-        normalMapSample = float3(0.5f, 0.5f, 1.0f); // flat normal (no perturbation)
-    }
-    float3 normalTexture = normalize(DecodeNormal(normalMapSample)); //  Convert normal map color (RGB [0,1]) to normal vector in range [-1,1] 
-    float3 TBNSpace = normalize(mul(normalTexture, TBN));  
-    float3 finalNorm = float4(EncodeNormal(TBNSpace), 1.0f);
-    gOut.Normal = float4(finalNorm, 1.0f);
-    
-    // MetalnessSample
-    float metalnessSample = txMetalness.Sample(samLinear, input.Tex).r; // grayScale
-    if(!hasMetalness)
-    {
-        metalnessSample = 1;
+        normal = normalize(mul(input.normal, (float3x3) input.finalWorld));
     }
     
-    float finalMetalness = metalnessSample * Metalness;
-    gOut.Metal = finalMetalness;
+    // emission
+    if (useEmissive)
+        emissive = emissiveMap.Sample(samLinear, input.texCoord).rgb;
     
-    // RoughnessSample
-    float roughnessSample = txRoughness.Sample(samLinear, input.Tex).r; // grayScale
-    if(!hasRoughness)
+    // metallic
+    if (useMetallic)
+        metallic = metallicMap.Sample(samLinear, input.texCoord).r;
+
+    // roughness
+    if (useRoughness)
     {
-        roughnessSample = hasShininess ? 1 - roughnessSample : 1;
+        roughness = roughnessMap.Sample(samLinear, input.texCoord).r;
+        if (roughnessFromShininess)
+            roughness = 1 - roughness;
     }
     
-    float finalRoughness = roughnessSample * Roughness;
-    gOut.Rough = finalRoughness;
     
-    return gOut;    
+    // --- [Override] ----------------------------------
+    
+    if (useBaseColorOverride)
+        base_color = baseColorOverride;
+    if (useEmissiveOverride)
+        emissive = emissiveOverride;
+    if (useMetallicOverride)
+        metallic = metallicOverride;
+    if (useRoughnessOverride)
+        roughness = roughnessOverride;
+    
+    roughness = max(roughness, 0.04);
+    
+    // --- [Factor] -----------------------------------
+    
+    emissive *= emissiveFactor;
+    metallic *= metallicFactor;
+    float rf = max(roughnessFactor, 0.04);
+    roughness *= rf;
+
+
+    // ---[ Write G-Buffer ]----------------------------------
+
+    output.Base_color = float4(base_color, alpha);
+    output.Normal = float4(EncodeNormal(normal), 1.0f); // -1,0,1 => 0,1
+    output.Material = float4(metallic, roughness, 1.0f, 1.0f);
+    output.Emissive = float4(emissive, 1.0f);
+    
+
+    return output;
 }

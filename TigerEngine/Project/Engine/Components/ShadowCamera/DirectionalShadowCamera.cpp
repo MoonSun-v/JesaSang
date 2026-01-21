@@ -1,12 +1,13 @@
 #include "DirectionalShadowCamera.h"
-
 #include "../../Object/GameObject.h"
 #include "../../EngineSystem/LightSystem.h"
+#include "../../Manager/WorldManager.h"
 
 void DirectionalShadowCamera::Update(Camera* camera)
 {
+    ShadowOrthoDesc desc = WorldManager::Instance().shadowData;
+
     Vector3 lightDir = LightSystem::Instance().GetSunDirection();
-    //lightDir = Vector3::Forward;
     Vector3 camPos = camera->GetOwner()->GetTransform()->GetPosition();
 
     Vector3 sceneCenter = camPos + camera->GetForward() * desc.lookPointDist;

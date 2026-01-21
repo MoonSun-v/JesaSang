@@ -16,20 +16,22 @@
 // 사용자 정의 미리 등록 (SimpleMath 등)
 RTTR_REGISTRATION
 {
-    rttr::registration::class_<DirectX::SimpleMath::Vector2>("Vector2")
+    using namespace rttr;
+
+    registration::class_<DirectX::SimpleMath::Vector2>("Vector2")
         .constructor<>()
         .constructor<float, float>()
         .property("x", &Vector2::x)
         .property("y", &Vector2::y);
 
-    rttr::registration::class_<DirectX::SimpleMath::Vector3>("Vector3")
+    registration::class_<DirectX::SimpleMath::Vector3>("Vector3")
         .constructor<>()
         .constructor<float, float, float>()
         .property("x", &Vector3::x)
         .property("y", &Vector3::y)
         .property("z", &Vector3::z);
 
-    rttr::registration::class_<DirectX::SimpleMath::Vector4>("Vector4")
+    registration::class_<DirectX::SimpleMath::Vector4>("Vector4")
         .constructor<>()
         .constructor<float, float, float, float>()
         .property("x", &Vector4::x)
@@ -37,7 +39,7 @@ RTTR_REGISTRATION
         .property("z", &Vector4::z)
         .property("w", &Vector4::w);
 
-    rttr::registration::class_<DirectX::SimpleMath::Quaternion>("Quaternion")
+    registration::class_<DirectX::SimpleMath::Quaternion>("Quaternion")
         .constructor<>()
         .constructor<float, float, float, float>()
         .property("x", &Quaternion::x)
@@ -45,7 +47,7 @@ RTTR_REGISTRATION
         .property("z", &Quaternion::z)
         .property("w", &Quaternion::w);
 
-    rttr::registration::class_<DirectX::SimpleMath::Matrix>("Matrix")
+    registration::class_<DirectX::SimpleMath::Matrix>("Matrix")
         .constructor<>()
         .property("_11", &Matrix::_11)
         .property("_12", &Matrix::_12)
@@ -63,6 +65,67 @@ RTTR_REGISTRATION
         .property("_42", &Matrix::_42)
         .property("_43", &Matrix::_43)
         .property("_44", &Matrix::_44);
+
+    // Manager/WorldData/PostProcessWorldData.hpp
+    registration::class_<PostProcessWorldData>("PostProcessWorldData")
+        .constructor<>()
+
+        // Base
+        .property("isHDR", &PostProcessWorldData::isHDR)
+        .property("useDefaultGamma", &PostProcessWorldData::useDefaultGamma)
+        .property("defaultGamma", &PostProcessWorldData::defaultGamma)
+        .property("exposure", &PostProcessWorldData::exposure)
+
+        // Enable
+        .property("useColorAdjustments", &PostProcessWorldData::useColorAdjustments)
+        .property("useWhiteBalance", &PostProcessWorldData::useWhiteBalance)
+        .property("useLGG", &PostProcessWorldData::useLGG)
+        .property("useVignette", &PostProcessWorldData::useVignette)
+        .property("useFilmGrain", &PostProcessWorldData::useFilmGrain)
+        .property("useBloom", &PostProcessWorldData::useBloom)
+
+        // Color Adjustments
+        .property("contrast", &PostProcessWorldData::contrast)
+        .property("saturation", &PostProcessWorldData::saturation)
+        .property("useHueShift", &PostProcessWorldData::useHueShift)
+        .property("hueShift", &PostProcessWorldData::hueShift)
+        .property("useColorTint", &PostProcessWorldData::useColorTint)
+        .property("colorTint", &PostProcessWorldData::colorTint)
+        .property("colorTint_strength", &PostProcessWorldData::colorTint_strength)
+
+        // White Balance
+        .property("temperature", &PostProcessWorldData::temperature)
+        .property("tint", &PostProcessWorldData::tint)
+
+        // Lift / Gamma / Gain
+        .property("useLift", &PostProcessWorldData::useLift)
+        .property("useGamma", &PostProcessWorldData::useGamma)
+        .property("useGain", &PostProcessWorldData::useGain)
+
+        .property("lift", &PostProcessWorldData::lift)
+        .property("lift_strength", &PostProcessWorldData::lift_strength)
+        .property("gamma", &PostProcessWorldData::gamma)
+        .property("gamma_strength", &PostProcessWorldData::gamma_strength)
+        .property("gain", &PostProcessWorldData::gain)
+        .property("gain_strength", &PostProcessWorldData::gain_strength)
+
+        // Vignette
+        .property("vignette_intensity", &PostProcessWorldData::vignette_intensity)
+        .property("vignette_smoothness", &PostProcessWorldData::vignette_smoothness)
+        .property("vignetteCenter", &PostProcessWorldData::vignetteCenter)
+        .property("vignetteColor", &PostProcessWorldData::vignetteColor)
+
+        // FilmGrain
+        .property("grain_intensity", &PostProcessWorldData::grain_intensity)
+        .property("grain_response", &PostProcessWorldData::grain_response)
+        .property("grain_scale", &PostProcessWorldData::grain_scale)
+
+        // Bloom
+        .property("bloom_threshold", &PostProcessWorldData::bloom_threshold)
+        .property("bloom_intensity", &PostProcessWorldData::bloom_intensity)
+        .property("bloom_scatter", &PostProcessWorldData::bloom_scatter)
+        .property("bloom_clamp", &PostProcessWorldData::bloom_clamp)
+        .property("bloom_tint", &PostProcessWorldData::bloom_tint);
 }
 
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
@@ -89,7 +152,6 @@ void Editor::Render(HWND &hwnd)
     RenderHierarchy();
     RenderInspector();
     RenderDebugAABBDraw();
-    DirectionalLightDebug();
     RenderCameraFrustum();
     RenderWorldSettings();
 }
@@ -104,6 +166,12 @@ void Editor::RenderEnd(const ComPtr<ID3D11DeviceContext>& context)
 void Editor::SelectObject(GameObject* obj)
 {
     selectedObject = obj;
+}
+
+void Editor::ReleaseBackBufferResources()
+{
+    depthStencliView.Reset();
+    renderTargetView.Reset();
 }
 
 void Editor::RenderMenuBar(HWND& hwnd)
@@ -362,6 +430,20 @@ void Editor::RenderCameraFrustum()
 
         DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
     }
+
+    {
+        auto lightCam = CameraSystem::Instance().lightCamera;
+        DirectX::BoundingFrustum frustum;
+        DirectX::BoundingFrustum::CreateFromMatrix(
+            frustum,
+            lightCam->GetProjection()
+        );
+
+        Matrix frustumWorld = lightCam->GetView().Transpose();
+        frustum.Transform(frustum, frustumWorld);
+        DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
+    }
+
     DebugDraw::g_Batch->End();
 }
 
@@ -369,14 +451,27 @@ void Editor::RenderWorldSettings()
 {
     if (isWorldSettingOpen)
     {
-        //int camIndex = WorldManager::Instance().GetCameraIndex();
-        //ImGui::InputInt("Main Camera index", &camIndex);
-        //WorldManager::Instance().SetCameraIndex(camIndex);
+        RenderWorldManager();
     }
 
     // TODO :: world manager data 추가
     // - World Light Data 
     // - PostProcess Data
+}
+
+void Editor::RenderWorldManager()
+{
+    // Read
+    WorldManager& wm = WorldManager::Instance(); // 또는 Instance() 등 프로젝트 방식대로
+
+    rttr::instance inst = wm;
+    rttr::type t = rttr::type::get(inst);
+    ReadVariants<rttr::instance>(&inst);
+
+    // 2) postProcessData 전체 가져오기
+    rttr::variant ppVar = t.get_property("PostProcessWorldData").get_value(inst);
+    ReadVariants<rttr::variant>(&ppVar);
+
 }
 
 template<typename T>
@@ -440,10 +535,13 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                         std::string currFilePath = ImGuiFileDialog::Instance()->GetCurrentFileName();   // 진짜 파일 이름만 뜸
                         std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();           // 절대 경로만 뜸
                         std::string fileFilterPath = ImGuiFileDialog::Instance()->GetCurrentFilter();   // 확장자만 나옴
+
+                        std::filesystem::path relativePath = std::filesystem::relative(filePathName);
+                        std::string relativePathStr = relativePath.string();
                         // action
 
                         FBXData* fbxDataComp = dynamic_cast<FBXData*>(comp);
-                        fbxDataComp->ChangeData(filePathName);
+                        fbxDataComp->ChangeData(relativePathStr);
                     }
                     // close
                     ImGuiFileDialog::Instance()->Close();
@@ -451,46 +549,9 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             }
         }        
     }
-    else // TODO : Value 테스트
+    else
     {
-        rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
-        ImGui::Text(t.get_name().to_string().c_str());
-        for (auto& prop : t.get_properties())
-        {
-            rttr::variant value = prop.get_value(*comp);            // 프로퍼티 값
-            std::string name = prop.get_name().to_string();         // 프로퍼티 이름
-
-            if (value.is_type<float>())
-            {
-                float v = value.get_value<float>();
-                ImGui::DragFloat(name.c_str(), &v, 0.1f);
-                prop.set_value(*comp, v);
-            }
-            else if (value.is_type<int>())
-            {
-                int v = value.get_value<int>();
-                ImGui::DragInt(name.c_str(), &v, 0.1f);
-                prop.set_value(*comp, v);
-            }
-            else if (value.is_type<bool>())
-            {
-                bool v = value.get_value<bool>();
-                ImGui::Checkbox(name.c_str(), &v);
-                prop.set_value(*comp, v);
-            }
-            else if (value.is_type<DirectX::SimpleMath::Vector3>())
-            {
-                DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
-                ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
-                prop.set_value(*comp, vec);
-            }
-            else if (value.is_type<Color>())
-            {
-                Color color = value.get_value<Color>();
-                ImGui::ColorEdit3(name.c_str(), &color.x, 0.1f);
-                prop.set_value(*comp, color);
-            }
-        }
+        ReadVariants<T>(comp);
     }
 
     if (compName != "Transform") 
@@ -501,6 +562,49 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             selectedObject->RemoveComponent(comp);
         }
         ImGui::PopID();
+    }
+}
+
+template<typename T>
+void Editor::ReadVariants(T* typePtr)
+{
+    rttr::type t = rttr::type::get(typePtr); // 역참조로 실제 인스턴스 정보 가져오기
+    ImGui::Text(t.get_name().to_string().c_str());
+    for (auto& prop : t.get_properties())
+    {
+        rttr::variant value = prop.get_value(typePtr);            // 프로퍼티 값
+        std::string name = prop.get_name().to_string();         // 프로퍼티 이름
+
+        if (value.is_type<float>())
+        {
+            float v = value.get_value<float>();
+            ImGui::DragFloat(name.c_str(), &v, 0.1f);
+            prop.set_value(typePtr, v);
+        }
+        else if (value.is_type<int>())
+        {
+            int v = value.get_value<int>();
+            ImGui::DragInt(name.c_str(), &v, 0.1f);
+            prop.set_value(typePtr, v);
+        }
+        else if (value.is_type<bool>())
+        {
+            bool v = value.get_value<bool>();
+            ImGui::Checkbox(name.c_str(), &v);
+            prop.set_value(typePtr, v);
+        }
+        else if (value.is_type<DirectX::SimpleMath::Vector3>())
+        {
+            DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
+            ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
+            prop.set_value(typePtr, vec);
+        }
+        else if (value.is_type<Color>())
+        {
+            Color color = value.get_value<Color>();
+            ImGui::ColorEdit3(name.c_str(), &color.x, 0.1f);
+            prop.set_value(typePtr, color);
+        }
     }
 }
 
@@ -616,102 +720,6 @@ void Editor::LoadScene(HWND &hwnd)
     {
     	MessageBoxA(hwnd, "Failed to load scene! File not found.", "Error", MB_OK | MB_ICONERROR);
     }
-}
-
-void Editor::DirectionalLightDebug()
-{
-    //if (!isDiretionalLightDebugOpen) return;
-
-    //ImGui::Begin("ShadowMap");
-    //{
-    //    ImTextureID img = (ImTextureID)(intptr_t)(WorldManager::Instance().shaderResourceView.Get());
-    //    ImGui::Image(img, ImVec2(256, 256));
-
-
-    //    // Direction
-    //    auto& world = WorldManager::Instance();
-
-    //    // Direction
-    //    ImGui::Text("Light Direction");
-    //    ImGui::SliderFloat3(
-    //        "Direction",
-    //        &world.lightDirection.x,
-    //        -1.0f,
-    //        1.0f
-    //    );
-    //    if (ImGui::Button("Normalize Direction"))
-    //    {
-    //        XMVECTOR dir = XMVectorSet(
-    //            world.lightDirection.x,
-    //            world.lightDirection.y,
-    //            world.lightDirection.z,
-    //            0.0f
-    //        );
-    //        dir = XMVector3Normalize(dir);
-    //        XMStoreFloat4(&world.lightDirection, dir);
-    //    }
-    //    ImGui::Separator();
-    //    // LookAt / Position
-    //    ImGui::Text("Light Transform");
-    //    ImGui::DragFloat3(
-    //        "LookAt",
-    //        &world.directionalLightLookAt.x,
-    //        1.0f
-    //    );
-    //    ImGui::DragFloat3(
-    //        "Position",
-    //        &world.directionalLightPos.x,
-    //        1.0f
-    //    );
-    //    ImGui::DragFloat3(
-    //        "Up Offset",
-    //        &world.directionalLightUpDistFromLookAt.x,
-    //        1.0f,
-    //        -5000.0f,
-    //        5000.0f
-    //    );
-    //    ImGui::Separator();
-    //    // Frustum
-    //    ImGui::Text("Frustum");
-    //    ImGui::SliderAngle(
-    //        "Frustum Angle",
-    //        &world.directionalLightFrustumAngle,
-    //        1.0f,
-    //        120.0f
-    //    );
-    //    ImGui::DragFloat(
-    //        "Forward Dist From Camera",
-    //        &world.directionalLightForwardDistFromCamera,
-    //        1.0f,
-    //        0.0f,
-    //        5000.0f
-    //    );
-    //    ImGui::DragFloat(
-    //        "Near Plane",
-    //        &world.directionalLightNear,
-    //        1.0f,
-    //        1.0f,
-    //        world.directionalLightFar - 1.0f
-    //    );
-    //    ImGui::DragFloat(
-    //        "Far Plane",
-    //        &world.directionalLightFar,
-    //        10.0f,
-    //        world.directionalLightNear + 1.0f,
-    //        20000.0f
-    //    );
-    //    ImGui::Separator();
-    //    // Shadow Map Viewport
-    //    ImGui::Text("Shadow Map Viewport");
-    //    ImGui::DragFloat2(
-    //        "Size",
-    //        &world.directionalLightViewport.width,
-    //        1.0f,
-    //        256.0f,
-    //        16384.0f
-    //    );
-    //}
-    //ImGui::End();
 }
 
 void Editor::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)

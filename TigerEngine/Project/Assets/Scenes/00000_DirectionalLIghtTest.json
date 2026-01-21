@@ -196,7 +196,7 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\zeldaPosed001.fbx"
+              "DataPath": "..\\Assets\\Resource\\zeldaPosed001.fbx"
             },
             "type": "FBXData"
           },
@@ -243,7 +243,7 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\BoxHuman.fbx"
+              "DataPath": "..\\Assets\\Resource\\BoxHuman.fbx"
             },
             "type": "FBXData"
           },
@@ -290,7 +290,7 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\char.fbx"
+              "DataPath": "..\\Assets\\Resource\\char.fbx"
             },
             "type": "FBXData"
           },
@@ -337,7 +337,7 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\Girl.fbx"
+              "DataPath": "..\\Assets\\Resource\\Girl.fbx"
             },
             "type": "FBXData"
           },
@@ -370,6 +370,53 @@
                 1.0,
                 1.0,
                 1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "Test Path Object",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\Tree.fbx"
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Metalic": 0.0,
+              "Roughness": 0.0
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -225.6999969482422,
+                -76.69999694824219,
+                170.6999969482422
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                22.0,
+                22.0,
+                22.0
               ]
             },
             "type": "Transform"

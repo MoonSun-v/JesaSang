@@ -27,16 +27,13 @@ public:
     BOOL  useIBL = true;
     float indirectIntensity = 0.2f;
 
+    // Shadow Data
+    ShadowOrthoDesc shadowData;
+
     // PostProcess Data
-    PostProcessWorldData postProcessData;
+    PostProcessWorldData postProcessData; // TODO : IMGUI에 노출 시키기 및 로드 저장 추가
 
     // Frame Data
     FrameWorldData frameData;
 
-
-public:
-    // Camera System에서 따로 쓰고있어서 일단 주석처리
-    //int cameraIndex = 0;
-    //int GetCameraIndex();
-    //void SetCameraIndex(int index);
 };
