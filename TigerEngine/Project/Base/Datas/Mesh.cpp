@@ -24,9 +24,9 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
     // CB - Material
     sm.materialCBData.useDiffuse = material.hasDiffuse;
     sm.materialCBData.useNormal  = material.hasNormal;
-    sm.materialCBData.useEmissive = material.hasRoughness;
+    sm.materialCBData.useEmissive = material.hasEmissive;
     sm.materialCBData.useMetallic = material.hasMetallic;
-    sm.materialCBData.useRoughness = material.hasEmissive;
+    sm.materialCBData.useRoughness = material.hasRoughness;
     sm.materialCBData.roughnessFromShininess = material.roughnessFromShininess;
 
     sm.materialCBData.emissiveFactor = material.emissiveFactor;
@@ -82,6 +82,7 @@ void Mesh::setupMesh()
         else if (typeName == TEXTURE_ROUGHNESS)
         {
             material.hasRoughness= true;
+
         }
         else if (typeName == TEXTURE_SHININESS)
         {
@@ -102,6 +103,7 @@ void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int
     if (typeName == TEXTURE_DIFFUSE)
     {
         pDeviceContext->PSSetShaderResources(0, 1, textures[index].pTexture.GetAddressOf());
+        cout << "diffuse" << endl;
     }
     else if (typeName == TEXTURE_NORMAL)
     {
@@ -110,14 +112,17 @@ void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int
     else if (typeName == TEXTURE_METALNESS)
     {
         pDeviceContext->PSSetShaderResources(2, 1, textures[index].pTexture.GetAddressOf());
+        cout << "metallic" << endl;
     }
     else if (typeName == TEXTURE_ROUGHNESS)
     {
         pDeviceContext->PSSetShaderResources(3, 1, textures[index].pTexture.GetAddressOf());
+        cout << "roughness" << endl;
     }
     else if (typeName == TEXTURE_SHININESS)
     {
         pDeviceContext->PSSetShaderResources(3, 1, textures[index].pTexture.GetAddressOf());
+        cout << "roughness(shineness)" << endl;
     }
     else if (typeName == TEXTURE_EMISSIVE)
     {
