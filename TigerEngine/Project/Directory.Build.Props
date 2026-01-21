@@ -28,12 +28,19 @@
       </AdditionalLibraryDirectories>
       <!-- DX11 기준: directxtk.lib / directxtex.lib / imgui.lib + Assimp import lib -->
       <AdditionalDependencies>
-        directxtk.lib;
-        directxtex.lib;
-        imguid.lib;
-        assimp-vc143-mtd.lib;
-        rttr_core_d.lib;
-        %(AdditionalDependencies)
+          directxtk.lib;
+          directxtex.lib;
+          imguid.lib;
+          assimp-vc143-mtd.lib;
+          rttr_core_d.lib;
+          PhysX_64.lib;
+          PhysXCommon_64.lib;
+          PhysXFoundation_64.lib;
+          PhysXExtensions_static_64.lib;
+          PhysXPvdSDK_static_64.lib;
+          PhysXCharacterKinematic_static_64.lib;
+          PhysXCooking_64.lib;
+          %(AdditionalDependencies)
       </AdditionalDependencies>
     </Link>
 
@@ -55,12 +62,19 @@
         %(AdditionalLibraryDirectories)
       </AdditionalLibraryDirectories>
       <AdditionalDependencies>
-        directxtk.lib;
-        directxtex.lib;
-        imgui.lib;
-        assimp-vc143-mt.lib;
-        rttr_core.lib;
-        %(AdditionalDependencies)
+          directxtk.lib;
+          directxtex.lib;
+          imgui.lib;
+          assimp-vc143-mt.lib;
+          rttr_core.lib;
+          PhysX_64.lib;
+          PhysXCommon_64.lib;
+          PhysXFoundation_64.lib;
+          PhysXExtensions_static_64.lib;
+          PhysXPvdSDK_static_64.lib;
+          PhysXCharacterKinematic_static_64.lib;
+          PhysXCooking_64.lib;
+          %(AdditionalDependencies)
       </AdditionalDependencies>
     </Link>
 

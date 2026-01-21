@@ -106,8 +106,9 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\Externals\;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,8 +124,9 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildStartupDirectory)\Base\;$(MSBuildStartupDirectory)\External\;%(AdditionalIncludeDirectories);$(SolutionDir)ThirdParty\PhysX_5\include;$(SolutionDir)ThirdParty\PhysX_5\pxshared\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,8 +141,10 @@
     <ClCompile Include="Components\Light.cpp" />
     <ClCompile Include="Components\MeshRenderer.cpp" />
     <ClCompile Include="Components\FreeCamera.cpp" />
+    <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Components\ShadowCamera\DirectionalShadowCamera.cpp" />
     <ClCompile Include="EngineSystem\LightSystem.cpp" />
+    <ClCompile Include="EngineSystem\PhysicsSystem.cpp" />
     <ClCompile Include="EngineSystem\RenderSystem.cpp" />
     <ClCompile Include="EngineSystem\SceneSystem.cpp" />
     <ClCompile Include="EngineSystem\ScriptSystem.cpp" />
@@ -168,6 +172,8 @@
     <ClCompile Include="RenderPass\Renderable\Skybox.cpp" />
     <ClCompile Include="Util\PathHelper.cpp" />
     <ClCompile Include="Util\DebugDraw.cpp" />
+    <ClCompile Include="Util\PhysicsFilterShader.cpp" />
+    <ClCompile Include="Util\PhysicsLayerMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
@@ -177,10 +183,12 @@
     <ClInclude Include="Components\Light.h" />
     <ClInclude Include="Components\MeshRenderer.h" />
     <ClInclude Include="Components\FreeCamera.h" />
+    <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\ScriptComponent.h" />
     <ClInclude Include="Components\ShadowCamera\DirectionalShadowCamera.h" />
     <ClInclude Include="EngineSystem\LightSystem.h" />
+    <ClInclude Include="EngineSystem\PhysicsSystem.h" />
     <ClInclude Include="EngineSystem\RenderSystem.h" />
     <ClInclude Include="EngineSystem\SceneSystem.h" />
     <ClInclude Include="EngineSystem\ScriptSystem.h" />
@@ -208,9 +216,14 @@
     <ClInclude Include="RenderQueue\RenderQueue.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="RenderPass\Renderable\Skybox.h" />
+    <ClInclude Include="Util\CollisionLayer.h" />
     <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="Util\DebugDraw.h" />
     <ClInclude Include="Manager\WorldManager.h" />
+    <ClInclude Include="Util\PhysicsFilterShader.h" />
+    <ClInclude Include="Util\PhysicsLayerMatrix.h" />
+    <ClInclude Include="Util\PhysXUtils.h" />
+    <ClInclude Include="Util\RaycastHit.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.vcxproj">
