@@ -62,7 +62,7 @@ cbuffer FrameCB : register(b0)
 
 cbuffer TransformCB : register(b1)
 {
-    matrix model;
+    matrix model;       // TODO :: delete
     matrix world;
     
     int isRigid; // 1 : rigid, 0 : skinned
@@ -231,7 +231,7 @@ cbuffer EffectCB : register(b8)
 // ----------------------
 struct VS_Weight_INPUT
 {
-    float4 pos : POSITION;
+    float3 pos : POSITION;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 bitangent : BITANGENT;
@@ -248,15 +248,15 @@ struct VS_Position_INPUT
 struct VS_Particle_INPUT
 {
     // Vertex (ParticleQuadVertex)
-    float2 corner : POSITION; // slot 0
-    float2 uv : TEXCOORD0; // slot 0
+    float2 corner : POSITION;       // slot 0
+    float2 uv : TEXCOORD0;          // slot 0
     
     // Instance (ParticleInstance)
-    float3 pos : TEXCOORD1; // slot 1
-    float rotation : TEXCOORD2; // slot 1
-    float2 size : TEXCOORD3; // slot 1
-    float frame : TEXCOORD4; // slot 1
-    float4 color : COLOR0; // slot 1
+    float3 pos : TEXCOORD1;         // slot 1
+    float rotation : TEXCOORD2;     // slot 1
+    float2 size : TEXCOORD3;        // slot 1
+    float frame : TEXCOORD4;        // slot 1
+    float4 color : COLOR0;          // slot 1
 };
 
 // ----------------------

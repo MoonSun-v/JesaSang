@@ -190,6 +190,7 @@
     <ClInclude Include="Manager\FBXResourceManager.h" />
     <ClInclude Include="EngineSystem\PlayModeSystem.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
+    <ClInclude Include="Manager\WorldData\ShaderWorldData.hpp" />
     <ClInclude Include="Object\Component.h" />
     <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="Components\Transform.h" />

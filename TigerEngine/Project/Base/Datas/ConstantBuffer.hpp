@@ -57,7 +57,7 @@ struct alignas(16) LightingCB
     int     lightType;         // 0: Directional, 1: Point, 2: Spot
     Vector3 padding;
 
-    UINT    isSunLight = 0;    // Directional Light가 태양광인지 여부 (그림자 처리)
+    BOOL    isSunLight = 0;    // Directional Light가 태양광인지 여부 (그림자 처리)
     Vector3 lightColor;
 
     float   directIntensity;
@@ -69,21 +69,21 @@ struct alignas(16) LightingCB
     float innerAngle;
     float outerAngle;
 
-    float indirectIntensity;
-    UINT  useIBL = 0;
+    float indirectIntensity = 0.2f;
+    BOOL  useIBL = 0;
 };
 
 // MaterialCB -> b3
 struct alignas(16) MaterialCB
 {
     // use texture
-    UINT useDiffuse;
-    UINT useNormal;
-    UINT useEmissive;
-    UINT useMetallic;
-    UINT useRoughness;
+    BOOL useDiffuse;
+    BOOL useNormal;
+    BOOL useEmissive;
+    BOOL useMetallic;
+    BOOL useRoughness;
 
-    UINT roughnessFromShininess; // roughness가 aiTextureType_SHININESS로 들어오는 경우
+    BOOL roughnessFromShininess; // roughness가 aiTextureType_SHININESS로 들어오는 경우
     Vector2  padding1;
 
     // PBR Factor
@@ -93,12 +93,12 @@ struct alignas(16) MaterialCB
     float padding2;
 
     // PBR override
-    UINT useBaseColorOverride = 0;
-    UINT useEmissiveOverride = 0;
-    UINT useMetallicOverride = 0;
-    UINT useRoughnessOverride = 0;
+    BOOL usediffuseOverride = false;
+    BOOL useEmissiveOverride = false;
+    BOOL useMetallicOverride = false;
+    BOOL useRoughnessOverride = false;
 
-    Vector3 baseColorOverride = { 1,1,1 };
+    Vector3 diffuseOverride = { 1,1,1 };
     float metallicOverride = 1.0f;
     Vector3 emissiveOverride = { 1,1,1 };
     float roughnessOverride = 1.0f;
@@ -125,27 +125,27 @@ struct alignas(16) PoseMatrixCB
 struct alignas(16) PostProcessCB
 {
     // Base
-    UINT    isHDR = 0;               // LDR/HDR
-    UINT    useDefaultGamma = 1;     // Linear -> SRGB
+    BOOL    isHDR = true;               // LDR/HDR
+    BOOL    useDefaultGamma = true;     // Linear -> SRGB
     float   defaultGamma = 2.2f;     // Gamma (defalut)
     float   exposure = 0;            // 노출
 
     // Enable
-    UINT useColorAdjustments = 0;
-    UINT useWhiteBalance = 0;
-    UINT useLGG = 0;
-    UINT useVignette = 0;
-    UINT useFilmGrain = 0;
-    UINT useBloom = 0;
+    BOOL useColorAdjustments = false;
+    BOOL useWhiteBalance = false;
+    BOOL useLGG = false;
+    BOOL useVignette = false;
+    BOOL useFilmGrain = false;
+    BOOL useBloom = false;
     Vector2 padding0;
 
     // Color Adjustments (대비, 채도, Hue Shift, Tint)
     float   contrast = 1;
     float   saturation = 1;
-    UINT    useHueShift = 0;
+    BOOL    useHueShift = false;
     float   hueShift = 0;
 
-    UINT    useColorTint = 0;
+    BOOL    useColorTint = false;
     Vector3 colorTint = { 1,1,1 };
     float   colorTint_strength = 0.5;
     Vector3 padding2;
@@ -156,9 +156,9 @@ struct alignas(16) PostProcessCB
     Vector2 padding3;
 
     // Lift / Gamma / Gain (어두운톤, 미드톤, 밝은톤 밝기 조정)
-    UINT  useLift = 0;
-    UINT  useGamma = 0;
-    UINT  useGain = 0;
+    BOOL  useLift = false;
+    BOOL  useGamma = false;
+    BOOL  useGain = false;
     int   padding4;
 
     Vector3 lift = { 0,0,0 };

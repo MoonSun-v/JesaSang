@@ -20,7 +20,6 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
     {
         ProcessTextureByType(pDeviceContext, i);
     }
-    pDeviceContext->UpdateSubresource(sm.materialCB.Get(), 0, nullptr, &sm.materialCBData, 0, 0);
 
     // CB - Material
     sm.materialCBData.useDiffuse = material.hasDiffuse;
@@ -29,6 +28,21 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
     sm.materialCBData.useMetallic = material.hasMetallic;
     sm.materialCBData.useRoughness = material.hasEmissive;
     sm.materialCBData.roughnessFromShininess = material.roughnessFromShininess;
+
+    sm.materialCBData.emissiveFactor = material.emissiveFactor;
+    sm.materialCBData.metallicFactor = material.metallicFactor;
+    sm.materialCBData.roughnessFactor = material.roughnessFactor;
+
+    sm.materialCBData.usediffuseOverride = material.usediffuseOverride;
+    sm.materialCBData.useEmissiveOverride = material.useEmissiveOverride;
+    sm.materialCBData.useMetallicOverride = material.useMetallicOverride;
+    sm.materialCBData.useRoughnessOverride = material.useRoughnessOverride;
+
+    sm.materialCBData.diffuseOverride = material.diffuseOverride;
+    sm.materialCBData.metallicOverride = material.metallicOverride;
+    sm.materialCBData.emissiveOverride = material.emissiveOverride;
+    sm.materialCBData.roughnessOverride = material.roughnessOverride;
+    pDeviceContext->UpdateSubresource(sm.materialCB.Get(), 0, nullptr, &sm.materialCBData, 0, 0);
     
     // Draw Call
     pDeviceContext->DrawIndexed(static_cast<UINT>(indices.size()), 0, 0);
@@ -61,10 +75,6 @@ void Mesh::setupMesh()
         {
             material.hasNormal = true;
         }
-        else if (typeName == TEXTURE_SPECULAR)
-        {
-           // PBR Has None Specular
-        }
         else if (typeName == TEXTURE_METALNESS)
         {
             material.hasMetallic = true;
@@ -75,8 +85,13 @@ void Mesh::setupMesh()
         }
         else if (typeName == TEXTURE_SHININESS)
         {
+            material.hasRoughness = true;
             material.roughnessFromShininess = true;
         }
+        //else if (typeName == TEXTURE_SPECULAR)
+        //{
+        //    PBR Has None Specular
+        //}
     }
 }
 

@@ -1,5 +1,6 @@
 #include "PostProcessPass.h"
 #include "../../Manager/ShaderManager.h"
+#include "../../Manager/WorldManager.h"
 
 // [ PostProcess Pass ]
 // ToneMapping(LDR) + PostProcess
@@ -36,6 +37,64 @@ void PostProcessPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue&
     // SRV
     context->PSSetShaderResources(14, 1, sm.sceneHDRSRV.GetAddressOf());
     context->PSSetShaderResources(16, 1, sm.finalBloomSRV.GetAddressOf());
+
+    // CB
+    PostProcessWorldData& data = WorldManager::Instance().postProcessData;
+
+    sm.postProcessCBData.isHDR = data.isHDR;
+    sm.postProcessCBData.useDefaultGamma = data.useDefaultGamma;
+    sm.postProcessCBData.defaultGamma = data.defaultGamma;
+    sm.postProcessCBData.exposure = data.exposure;
+
+    sm.postProcessCBData.useColorAdjustments = data.useColorAdjustments;
+    sm.postProcessCBData.useWhiteBalance = data.useWhiteBalance;
+    sm.postProcessCBData.useLGG = data.useLGG;
+    sm.postProcessCBData.useVignette = data.useVignette;
+    sm.postProcessCBData.useFilmGrain = data.useFilmGrain;
+    sm.postProcessCBData.useBloom = data.useBloom;
+
+    sm.postProcessCBData.contrast = data.contrast;
+    sm.postProcessCBData.saturation = data.saturation;
+    sm.postProcessCBData.useHueShift = data.useHueShift;
+    sm.postProcessCBData.hueShift = data.hueShift;
+    sm.postProcessCBData.useColorTint = data.useColorTint;
+    sm.postProcessCBData.colorTint = data.colorTint;
+    sm.postProcessCBData.colorTint_strength = data.colorTint_strength;
+
+    sm.postProcessCBData.temperature = data.temperature;
+    sm.postProcessCBData.tint = data.tint;
+
+    sm.postProcessCBData.useLift = data.useLift;
+    sm.postProcessCBData.useGamma = data.useGamma;
+    sm.postProcessCBData.useGain = data.useGain;
+
+    sm.postProcessCBData.lift = data.lift;
+    sm.postProcessCBData.lift_strength = data.lift_strength;
+    sm.postProcessCBData.gamma = data.gamma;
+    sm.postProcessCBData.gamma_strength = data.gamma_strength;
+    sm.postProcessCBData.gain = data.gain;
+    sm.postProcessCBData.gain_strength = data.gain_strength;
+
+    sm.postProcessCBData.vignette_intensity = data.vignette_intensity;
+    sm.postProcessCBData.vignette_smoothness = data.vignette_smoothness;
+    sm.postProcessCBData.vignetteCenter = data.vignetteCenter;
+    sm.postProcessCBData.vignetteColor = data.vignetteColor;
+
+    sm.postProcessCBData.grain_intensity = data.grain_intensity;
+    sm.postProcessCBData.grain_response = data.grain_response;
+    sm.postProcessCBData.grain_scale = data.grain_scale;
+
+    sm.bloomCBData.bloom_threshold = data.bloom_threshold;
+    sm.bloomCBData.bloom_intensity = data.bloom_intensity;
+    sm.bloomCBData.bloom_scatter = data.bloom_scatter;
+    sm.bloomCBData.bloom_clamp = data.bloom_clamp;
+    sm.bloomCBData.bloom_tint = data.bloom_tint;
+    sm.bloomCBData.srcMip = data.srcMip;
+    sm.bloomCBData.srcTexelSize = data.srcTexelSize;
+    
+    context->UpdateSubresource(sm.postProcessCB.Get(), 0, nullptr, &sm.postProcessCBData, 0, 0);
+    context->UpdateSubresource(sm.bloomCB.Get(), 0, nullptr, &sm.bloomCBData, 0, 0);
+
 
     // Draw Call
     context.Get()->Draw(3, 0);

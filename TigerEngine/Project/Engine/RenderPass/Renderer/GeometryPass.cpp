@@ -52,13 +52,13 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
         // CB - Offset, Pose
-        auto boneOffset = m.offsets->boneOffset;
-        auto bonePose = m.poses->bonePose;
+        auto& boneOffset = m.offsets->boneOffset;
+        auto& bonePose = m.poses->bonePose;
 
         for (int i = 0; i < m.boneCount; i++)
         {
-            sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i].Transpose();
-            sm.poseMatrixCBData.bonePose[i] = bonePose[i].Transpose();
+            sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i];
+            sm.poseMatrixCBData.bonePose[i] = bonePose[i];
         }
         context->UpdateSubresource(sm.offsetMatrixCB.Get(), 0, nullptr, &sm.offsetMatrixCBData, 0, 0);
         context->UpdateSubresource(sm.poseMatrixCB.Get(), 0, nullptr, &sm.poseMatrixCBData, 0, 0);

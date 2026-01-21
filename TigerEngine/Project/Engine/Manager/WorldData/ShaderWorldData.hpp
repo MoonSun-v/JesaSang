@@ -1,36 +1,36 @@
 struct PostProcessWorldData
 {
     // Base
-    bool    isHDR = 0;               // LDR/HDR
-    bool    useDefaultGamma = 1;     // Linear -> SRGB
+    BOOL    isHDR = 1;               // LDR/HDR
+    BOOL    useDefaultGamma = 1;     // Linear -> SRGB
     float   defaultGamma = 2.2f;     // Gamma (defalut)
-    float   exposure = 0;            // ³ëÃâ
+    float   exposure = 0;            // ë…¸ì¶œ
 
     // Enable
-    bool useColorAdjustments = 0;
-    bool useWhiteBalance = 0;
-    bool useLGG = 0;
-    bool useVignette = 0;
-    bool useFilmGrain = 0;
-    bool useBloom = 0;
+    BOOL useColorAdjustments = 0;
+    BOOL useWhiteBalance = 0;
+    BOOL useLGG = 0;
+    BOOL useVignette = 0;
+    BOOL useFilmGrain = 0;
+    BOOL useBloom = 0;
 
-    // Color Adjustments (´ëºñ, Ã¤µµ, Hue Shift, Tint)
+    // Color Adjustments (ëŒ€ë¹„, ì±„ë„, Hue Shift, Tint)
     float   contrast = 1;
     float   saturation = 1;
-    bool    useHueShift = 0;
+    BOOL    useHueShift = false;
     float   hueShift = 0;
-    bool    useColorTint = 0;
+    BOOL    useColorTint = false;
     Vector3 colorTint = { 1,1,1 };
     float   colorTint_strength = 0.5;
 
-    // White Balance (¿Âµµ, »öÁ¶)
+    // White Balance (ì˜¨ë„, ìƒ‰ì¡°)
     float temperature = 0;
     float tint = 0;
 
-    // Lift / Gamma / Gain (¾îµÎ¿îÅæ, ¹ÌµåÅæ, ¹àÀºÅæ ¹à±â Á¶Á¤)
-    bool  useLift = 0;
-    bool  useGamma = 0;
-    bool  useGain = 0;
+    // Lift / Gamma / Gain (ì–´ë‘ìš´í†¤, ë¯¸ë“œí†¤, ë°ì€í†¤ ë°ê¸° ì¡°ì •)
+    BOOL  useLift = false;
+    BOOL  useGamma = false;
+    BOOL  useGain = false;
 
     Vector3 lift = { 0,0,0 };
     float   lift_strength = 0.5;
@@ -56,8 +56,8 @@ struct PostProcessWorldData
     float bloom_scatter = 0.5f;
     float bloom_clamp = 0.0f;
     Vector3 bloom_tint = { 1.0f, 1.0f, 1.0f };
-    int     srcMip = 0;                      // SampleLevel¿ë mip ÀÎµ¦½º
-    Vector2 srcTexelSize = { 0.0f, 0.0f };   // ÆĞ½º¿¡¼­ ÀĞ°í ÀÖ´Â mip ·¹º§ÀÇ ÅØ½ºÃ³ ÇØ»óµµ¸¦ ±âÁØÀ¸·Î ÇÑ texel size
+    int     srcMip = 0;                      // SampleLevelìš© mip ì¸ë±ìŠ¤
+    Vector2 srcTexelSize = { 0.0f, 0.0f };   // íŒ¨ìŠ¤ì—ì„œ ì½ê³  ìˆëŠ” mip ë ˆë²¨ì˜ í…ìŠ¤ì²˜ í•´ìƒë„ë¥¼ ê¸°ì¤€ìœ¼ë¡œ í•œ texel size
 };
 
 
@@ -68,4 +68,4 @@ struct FrameWorldData
     Vector2 screenSize;
     Vector2 shadowMapSize = { 8192,8192 };
     Vector3 cameraPos;
-}
+};

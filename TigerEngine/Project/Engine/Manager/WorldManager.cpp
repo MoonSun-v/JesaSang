@@ -1,48 +1,29 @@
 #include "WorldManager.h"
-#include "../EngineSystem/CameraSystem.h"
-
+#include "ShaderManager.h"
 #include "../Components/Camera.h"
 #include "../Object/GameObject.h"
+#include "../../Base/System/TimeSystem.h"
 
-void WorldManager::CreateDirectionalLightFrustum()
+
+void WorldManager::Update(const ComPtr<ID3D11DeviceContext>& context, Camera* camera,
+    int clientWidth, int clientHeight)
 {
-	// TODO main 캠 설정으로 바꿔야함.
+    auto& sm = ShaderManager::Instance();
 
-#if _DEBUG
-	auto camera = CameraSystem::Instance().GetFreeCamera();
-#else
-	auto camera = CameraSystem::Instance().GetCurrCamera();
-#endif
-
-	auto camTran = camera->GetOwner()->GetTransform();
-	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // 그림자 절두체
-	directionalLightLookAt = camTran->GetPosition() + camera->GetForward() * directionalLightForwardDistFromCamera;	// 바라보는 방향 = 카메라 위치 + 카메라 바라보는 방향으로부터 떨어진 태양의 위치
-	directionalLightPos = camTran->GetPosition() + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// 위치
-	directionalLightView = XMMatrixLookAtLH(directionalLightPos, directionalLightLookAt, Vector3(0.0f, 1.0f, 0.0f));
+    // Frame CB Update
+    sm.frameCBData.time = GameTimer::Instance().TotalTime();
+    sm.frameCBData.deltaTime = GameTimer::Instance().DeltaTime();
+    sm.frameCBData.screenSize = { (float)clientWidth,(float)clientHeight };
+    sm.frameCBData.cameraPos = camera->GetOwner()->GetTransform()->GetPosition();
+    context->UpdateSubresource(sm.frameCB.Get(), 0, nullptr, &sm.frameCBData, 0, 0);
 }
 
-void WorldManager::Update()
-{
-
-#if _DEBUG
-    auto camera = CameraSystem::Instance().GetFreeCamera();
-#else
-    auto camera = CameraSystem::Instance().GetCurrCamera();
-#endif
-
-	auto camTran = camera->GetOwner()->GetTransform();
-	directionalLightProj = XMMatrixPerspectiveFovLH(directionalLightFrustumAngle, directionalLightViewport.width / (FLOAT)directionalLightViewport.height, directionalLightNear, directionalLightFar); // 그림자 절두체
-	directionalLightLookAt = camTran->GetPosition() + camera->GetForward() * directionalLightForwardDistFromCamera;	// 바라보는 방향 = 카메라 위치 + 카메라 바라보는 방향으로부터 떨어진 태양의 위치
-	directionalLightPos = camTran->GetPosition() + ((Vector3)-lightDirection * directionalLightUpDistFromLookAt);	// 위치
-	directionalLightView = XMMatrixLookAtLH(directionalLightPos, directionalLightLookAt, Vector3(0.0f, 1.0f, 0.0f));
-}
-
-int WorldManager::GetCameraIndex()
-{
-    return cameraIndex;
-}
-
-void WorldManager::SetCameraIndex(int index)
-{
-    cameraIndex = CameraSystem::Instance().SetCurrCamera(index);
-}
+//int WorldManager::GetCameraIndex()
+//{
+//    return cameraIndex;
+//}
+//
+//void WorldManager::SetCameraIndex(int index)
+//{
+//    cameraIndex = CameraSystem::Instance().SetCurrCamera(index);
+//}

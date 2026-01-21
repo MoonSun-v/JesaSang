@@ -14,7 +14,10 @@ SkyboxPass::~SkyboxPass()
 
 void SkyboxPass::Init(const ComPtr<ID3D11Device>& device)
 {
-    skybox->Create(device, L"..\\Assets\\Resource\\skyboxEnvHDR.dds");
+    skybox->Create(device, L"..\\Assets\\Resource\\Skybox\\redskyEnvHDR.dds",
+        L"..\\Assets\\Resource\\Skybox\\IBL\\redskyDiffuseHDR.dds",
+        L"..\\Assets\\Resource\\Skybox\\IBL\\redskySpecularHDR.dds",
+        L"..\\Assets\\Resource\\Skybox\\IBL\\redskyBrdf.dds");
 }
 
 

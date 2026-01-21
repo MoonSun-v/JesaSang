@@ -369,10 +369,14 @@ void Editor::RenderWorldSettings()
 {
     if (isWorldSettingOpen)
     {
-        int camIndex = WorldManager::Instance().GetCameraIndex();
-        ImGui::InputInt("Main Camera index", &camIndex);
-        WorldManager::Instance().SetCameraIndex(camIndex);
+        //int camIndex = WorldManager::Instance().GetCameraIndex();
+        //ImGui::InputInt("Main Camera index", &camIndex);
+        //WorldManager::Instance().SetCameraIndex(camIndex);
     }
+
+    // TODO :: world manager data 추가
+    // - World Light Data 
+    // - PostProcess Data
 }
 
 template<typename T>
