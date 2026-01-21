@@ -62,9 +62,9 @@
         "components": {
           "Camera": {
             "properties": {
-              "angle": 1.5707963705062866,
+              "angle": -0.028999999165534973,
               "farDist": 2000.0,
-              "moveSpeed": 100.0,
+              "moveSpeed": 300.0,
               "nearDist": 0.009999999776482582,
               "rotSpeed": 0.004000000189989805
             },
@@ -78,7 +78,7 @@
                 -40.58101272583008
               ],
               "Rotation": [
-                0.07841725647449493,
+                0.07841721177101135,
                 1.1723355054855347,
                 0.0
               ],
@@ -161,11 +161,6 @@
               "intensity": 1.0,
               "isSunLight": true,
               "outerAngle": 30.0,
-              "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-              },
               "range": 15.0,
               "type": 0
             },
@@ -177,6 +172,194 @@
                 0.0,
                 0.0,
                 0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "StaticModel",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\zeldaPosed001.fbx"
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Metalic": 0.0,
+              "Roughness": 0.0
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -201.39999389648438,
+                -50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "RigidModel(Ani)",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\BoxHuman.fbx"
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Metalic": 0.0,
+              "Roughness": 0.0
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -69.69999694824219,
+                -50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                0.20000000298023224,
+                0.20000000298023224,
+                0.20000000298023224
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "SkeletalModel",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\char.fbx"
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Metalic": 0.0,
+              "Roughness": 0.0
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                60.599998474121094,
+                -50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "SkeletalModel(Ani)",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "C:\\Users\\User\\Documents\\GitHub\\JesaSang\\TigerEngine\\Project\\Assets\\Resource\\Girl.fbx"
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Metalic": 0.0,
+              "Roughness": 0.0
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                167.39999389648438,
+                -50.0,
+                400.0
               ],
               "Rotation": [
                 0.0,
