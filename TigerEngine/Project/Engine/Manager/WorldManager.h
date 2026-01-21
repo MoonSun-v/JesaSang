@@ -27,6 +27,9 @@ public:
     BOOL  useIBL = true;
     float indirectIntensity = 0.2f;
 
+    // Shadow Data
+    ShadowOrthoDesc shadowData;
+
     // PostProcess Data
     PostProcessWorldData postProcessData; // TODO : IMGUI에 노출 시키기 및 로드 저장 추가
 

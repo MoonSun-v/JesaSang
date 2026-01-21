@@ -430,6 +430,20 @@ void Editor::RenderCameraFrustum()
 
         DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
     }
+
+    {
+        auto lightCam = CameraSystem::Instance().lightCamera;
+        DirectX::BoundingFrustum frustum;
+        DirectX::BoundingFrustum::CreateFromMatrix(
+            frustum,
+            lightCam->GetProjection()
+        );
+
+        Matrix frustumWorld = lightCam->GetView().Transpose();
+        frustum.Transform(frustum, frustumWorld);
+        DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
+    }
+
     DebugDraw::g_Batch->End();
 }
 
