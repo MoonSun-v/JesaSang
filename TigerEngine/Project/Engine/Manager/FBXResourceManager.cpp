@@ -108,7 +108,28 @@ Mesh FBXResourceManager::ProcessMesh(std::shared_ptr<FBXResourceAsset>& pAsset, 
 			textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 		}
 
-		// specularMap 불러오기
+        // roughnessMap 불러오기
+        std::vector<Texture> roughneesMaps = this->loadMaterialTextures(pAsset, material, aiTextureType_DIFFUSE_ROUGHNESS, TEXTURE_ROUGHNESS, pScene);
+        if (!roughneesMaps.empty())
+        {
+            textures.insert(textures.end(), roughneesMaps.begin(), roughneesMaps.end());
+        }
+
+        // shineness 불러오기
+        std::vector<Texture> shinenessMaps = this->loadMaterialTextures(pAsset, material, aiTextureType_SHININESS, TEXTURE_SHININESS, pScene);
+        if (!shinenessMaps.empty())
+        {
+            textures.insert(textures.end(), shinenessMaps.begin(), shinenessMaps.end());
+        }
+
+        // metallicMap 불러오기
+        std::vector<Texture> metallicMaps = this->loadMaterialTextures(pAsset, material, aiTextureType_METALNESS, TEXTURE_METALNESS, pScene);
+        if (!metallicMaps.empty())
+        {
+            textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
+        }
+
+		// specularMap 불러오기 (PBR had none specular)
 		std::vector<Texture> sepcualrMaps = this->loadMaterialTextures(pAsset, material, aiTextureType_SPECULAR, TEXTURE_SPECULAR, pScene);
 		if (!sepcualrMaps.empty())
 		{
