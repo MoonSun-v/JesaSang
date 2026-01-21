@@ -17,7 +17,8 @@ void Transform::OnUpdate(float delta)
     if (dirty)
     {
         worldMatrix = Matrix::CreateScale(scale) *
-                      Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+                      // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+                      Matrix::CreateFromQuaternion(quaternion) *
                       Matrix::CreateTranslation(position);
         dirty = false;
     }
@@ -36,10 +37,14 @@ void Transform::Translate(const Vector3& delta)   // TODO 매트릭스 스스로
 
 void Transform::Rotate(const Vector3& delta)
 {
-    euler += delta;
+    //euler += delta;
+    //dirty = true;
+
+    SetEuler(euler + delta);
     dirty = true;
 }
 
+// 직렬화/역직렬화는 Euler 기준 
 nlohmann::json Transform::Serialize()
 {
 	nlohmann::json datas;

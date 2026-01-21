@@ -191,6 +191,8 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
     m_ColliderType = collider;
 }
 
+
+
 // ------------------------------
 // 좌표 변환
 // ------------------------------
@@ -198,24 +200,24 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
 // Transform → Physics  : Dynamic에는 매 프레임 쓰면 안 됨
 void PhysicsComponent::SyncToPhysics()
 {
-    //if (!m_Actor || !transform) return;
+    if (!m_Actor || !transform) return;
 
-    //PxTransform px;
-    //px.p = ToPx(transform->GetPosition());
-    //px.q = ToPxQuat(XMLoadFloat4(&transform->rotation)); // Quaternion 변환 필요함!
+    PxTransform px;
+    px.p = ToPx(transform->GetPosition());
+    px.q = ToPxQuat(transform->GetQuaternion()); 
 
-    //m_Actor->setGlobalPose(px);
+    m_Actor->setGlobalPose(px);
 }
 
 // Physics → Transform (물리 시뮬 하고나서 매 프레임 실행)
 void PhysicsComponent::SyncFromPhysics()
 {
-    //if (!transform) return;
+    if (!transform) return;
 
-    //if (m_Actor) // 일반 액터 
-    //{
-    //    PxTransform px = m_Actor->getGlobalPose();
-    //    transform->GetPosition() = ToDX(px.p);  // 위치 변환
-    //    transform->rotation = ToDXQuatF4(px.q); // Quaternion 그대로
-    //}
+    if (m_Actor) // 일반 액터 
+    {
+        PxTransform px = m_Actor->getGlobalPose();
+        transform->SetPosition(ToDX(px.p));  
+        transform->SetQuaternion(ToDXQuat(px.q)); 
+    }
 }
