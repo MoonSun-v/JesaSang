@@ -11,6 +11,8 @@
 
 using namespace physx;
 
+class PhysicsComponent;
+
 // ----------------------------------------------------
 // [ SimulationEventCallback ] 
 // 
@@ -40,25 +42,31 @@ public:
 // PhysX 기반 물리 시스템 관리
 //  - PhysX Foundation / Physics / Scene 생성 및 관리
 //  - 물리 시뮬레이션 업데이트 
-//  - PVD(PhysX Visual Debugger) 연결
-//  - RigidBody + Trigger + Raycast 전담
+//  - RigidBody + Trigger + Raycast 
 // ----------------------------------------------------
 class PhysicsSystem : public Singleton<PhysicsSystem>
 {
 public:
-    PhysicsSystem() = default;
+    PhysicsSystem(token) {}
     ~PhysicsSystem();
 
     bool Initialize();
     void Simulate(float dt); // 물리 시뮬레이션 1프레임 수행 
     void Shutdown();
 
+    void RegisterComponent(PxRigidActor* actor, PhysicsComponent* comp);
+    void UnregisterComponent(PxActor* actor);
+
     // getter 
     PxPhysics* GetPhysics() const { return m_Physics; }
     PxScene* GetScene()   const { return m_Scene; }
     PxMaterial* GetDefaultMaterial() const { return m_DefaultMaterial; }
+    PhysicsComponent* GetComponent(PxActor* actor);
 
+    // Actor <-> Component 매핑
+    std::unordered_map<PxActor*, PhysicsComponent*> m_ActorMap;
 
+    
 private:
     // ------------------------------------------------------
     // PhysX 기본 유틸 객체 

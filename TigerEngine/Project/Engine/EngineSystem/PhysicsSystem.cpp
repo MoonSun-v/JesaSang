@@ -1,6 +1,7 @@
 #include "PhysicsSystem.h"
 #include "../Util/PhysXUtils.h"
 #include "../Util/PhysicsLayerMatrix.h"
+#include "../Components/PhysicsComponent.h"
 #include <Helper.h>
 
 
@@ -106,6 +107,23 @@ void PhysicsSystem::Simulate(float dt)
     m_Scene->fetchResults(true);// 결과가 끝날 때까지 대기 후 적용
 
 }
+
+
+void PhysicsSystem::RegisterComponent(PxRigidActor* actor, PhysicsComponent* comp)
+{
+    if (actor) m_ActorMap[actor] = comp;
+}
+void PhysicsSystem::UnregisterComponent(PxActor* actor)
+{
+    if (!actor) return;
+    m_ActorMap.erase(actor);
+}
+PhysicsComponent* PhysicsSystem::GetComponent(PxActor* actor)
+{
+    auto it = m_ActorMap.find(actor);
+    return (it != m_ActorMap.end()) ? it->second : nullptr;
+}
+
 
 void PhysicsSystem::Shutdown()
 {
