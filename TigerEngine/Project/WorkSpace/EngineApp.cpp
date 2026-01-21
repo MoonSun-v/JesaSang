@@ -282,7 +282,9 @@ void EngineApp::ResizeResource()
     auto& sm = ShaderManager::Instance();
 
     sm.ReleaseBackBufferResources();
+#if _DEBUG
     editor->ReleaseBackBufferResources();
+#endif
 
     dxRenderer->OnResize(clientWidth, clientHeight);
     sm.CreateBackBufferResource(dxRenderer->GetDevice(), clientWidth, clientHeight);
@@ -294,9 +296,11 @@ void EngineApp::ResizeResource()
     sm.depthSRV = dxRenderer->GetDepthSRV();
     sm.viewport_screen = dxRenderer->GetRenderViewPort();
 
+#if _DEBUG
     // editor 참조
     editor->GetDSV(dxRenderer->GetDepthStencilView());
     editor->GetRTV(dxRenderer->GetBackBufferRTV());
+#endif
 
     // Camera
     auto cams = CameraSystem::Instance().GetAllCamera();
