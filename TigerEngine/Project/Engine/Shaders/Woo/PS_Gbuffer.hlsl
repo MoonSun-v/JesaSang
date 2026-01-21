@@ -2,12 +2,12 @@
     [ PBR Geomatry Pass Pixel Shader ] 
     * Deferred Rendering *
     
-    MTRÀ» È°¿ëÇÏ¿© ¶óÀÌÆÃ ¿¬»ê¿¡ ÇÊ¿äÇÑ Á¤º¸µéÀ» Gbuffer¿¡ ±â·Ï
+    MTRì„ í™œìš©í•˜ì—¬ ë¼ì´íŒ… ì—°ì‚°ì— í•„ìš”í•œ ì •ë³´ë“¤ì„ Gbufferì— ê¸°ë¡
      RT0 : Albedo (RGB)
      RT1 : Normal (RGB)
      RT2 : Metallic (R), Roughness (G)
      RT3 : Emissive (RGB)
-     -> PositionÀº depth buffer¸¦ º¹¿øÇÏ¿© »ç¿ëÇÕ´Ï´Ù.
+     -> Positionì€ depth bufferë¥¼ ë³µì›í•˜ì—¬ ì‚¬ìš©í•©ë‹ˆë‹¤.
 */
 
 #include <shared.fxh>

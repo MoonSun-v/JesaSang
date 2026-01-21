@@ -79,8 +79,6 @@ bool EngineApp::OnInitialize()
     // == find scene ==
     LoadSavedFirstScene();
 
-	WorldManager::Instance().CreateDirectionalLightFrustum(); // create directional light 
-
 
 	// == init renderpass ==
 	// NOTE : 랜더링하는 순서대로 추가 할 것
@@ -114,10 +112,13 @@ bool EngineApp::OnInitialize()
 
 void EngineApp::OnUpdate()
 {
+    auto freeCam = CameraSystem::Instance().GetFreeCamera();
+    auto currCam = CameraSystem::Instance().GetCurrCamera();
+
 	SceneSystem::Instance().BeforUpdate();	
 	CameraSystem::Instance().FreeCameraUpdate(GameTimer::Instance().DeltaTime());
 	CameraSystem::Instance().LightCameraUpdate(GameTimer::Instance().DeltaTime());
-	WorldManager::Instance().Update();
+	WorldManager::Instance().Update(dxRenderer->GetDeviceContext(), freeCam, clientWidth, clientHeight);
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
 
 #if _DEBUG
@@ -134,6 +135,33 @@ void EngineApp::OnRender()
 	auto freeCam = CameraSystem::Instance().GetFreeCamera();	
     auto currCam = CameraSystem::Instance().GetCurrCamera();
 
+    // Default CB Setting (TODO :: 이거 어디로 뺄까?)
+    {
+        auto& sm = ShaderManager::Instance();
+        const auto& context = dxRenderer->GetDeviceContext();
+
+        // CB Slot Binding
+        context->VSSetConstantBuffers(0, 1, sm.frameCB.GetAddressOf());
+        context->VSSetConstantBuffers(1, 1, sm.transformCB.GetAddressOf());
+        context->VSSetConstantBuffers(2, 1, sm.lightingCB.GetAddressOf());
+        context->VSSetConstantBuffers(3, 1, sm.materialCB.GetAddressOf());
+        context->VSSetConstantBuffers(4, 1, sm.offsetMatrixCB.GetAddressOf());
+        context->VSSetConstantBuffers(5, 1, sm.poseMatrixCB.GetAddressOf());
+        context->VSSetConstantBuffers(6, 1, sm.postProcessCB.GetAddressOf());
+        context->VSSetConstantBuffers(7, 1, sm.bloomCB.GetAddressOf());
+        context->VSSetConstantBuffers(8, 1, sm.effectCB.GetAddressOf());
+
+        context->PSSetConstantBuffers(0, 1, sm.frameCB.GetAddressOf());
+        context->PSSetConstantBuffers(1, 1, sm.transformCB.GetAddressOf());
+        context->PSSetConstantBuffers(2, 1, sm.lightingCB.GetAddressOf());
+        context->PSSetConstantBuffers(3, 1, sm.materialCB.GetAddressOf());
+        context->PSSetConstantBuffers(4, 1, sm.offsetMatrixCB.GetAddressOf());
+        context->PSSetConstantBuffers(5, 1, sm.poseMatrixCB.GetAddressOf());
+        context->PSSetConstantBuffers(6, 1, sm.postProcessCB.GetAddressOf());
+        context->PSSetConstantBuffers(7, 1, sm.bloomCB.GetAddressOf());
+        context->PSSetConstantBuffers(8, 1, sm.effectCB.GetAddressOf());
+    }
+
     if (PlayModeSystem::Instance().IsPlaying())
     {
         dxRenderer->ProcessScene(*renderQueue, *shadowPass, currCam);
@@ -145,12 +173,12 @@ void EngineApp::OnRender()
     }
     else
     {
-        dxRenderer->ProcessScene(*renderQueue, *shadowPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *geometryPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *lightPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *bloomPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *postProcessPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *shadowPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *geometryPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *lightPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *bloomPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *postProcessPass, freeCam);
     }
 
 #if _DEBUG

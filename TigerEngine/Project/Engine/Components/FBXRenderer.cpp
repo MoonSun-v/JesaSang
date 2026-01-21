@@ -16,7 +16,8 @@ RTTR_REGISTRATION
 		.property("Roughness", 			&FBXRenderer::GetRoughness,					&FBXRenderer::SetRoughness)
 		.property("Metalic", 			&FBXRenderer::GetMatalic,					&FBXRenderer::SetMatalic)
 		.property("Color", 				&FBXRenderer::GetColor,						&FBXRenderer::SetColor);
-
+        
+         // TODO :: material data 추가
 
 		rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
 		.constructor<>()
@@ -52,7 +53,7 @@ void FBXRenderer::OnUpdate(float delta)
 	// pose 본 갱신
 	for (auto& bone : bones)
 	{
-		// 애니메이션 업데이트
+		// animation update
 		if (bone.m_boneAnimation.m_boneName != "" && bone.m_boneAnimation.m_keys.size() >= 1)
 		{
 			Vector3 positionVec = Vector3::Zero;
@@ -60,21 +61,18 @@ void FBXRenderer::OnUpdate(float delta)
 			Quaternion rotationQuat = Quaternion::Identity;
 			bone.m_boneAnimation.Evaluate(progressAnimationTime, positionVec, rotationQuat, scaleVec);
 
-			// 애니메이션이 있으면 항상 transform 갱신 (기본값이 아닐 수도 있음)
+			// bone local update
 			Matrix mat = Matrix::CreateScale(scaleVec) * Matrix::CreateFromQuaternion(rotationQuat) * Matrix::CreateTranslation(positionVec);
-			bone.m_localTransform = mat.Transpose();
+            bone.m_localTransform = mat.Transpose();
 		}
 
-		// 위치 갱신
+		// bone world udpate
 		if (bone.m_parentIndex != -1)
-		{
 			bone.m_worldTransform = bones[bone.m_parentIndex].m_worldTransform * bone.m_localTransform;
-		}
 		else
-		{
 			bone.m_worldTransform = bone.m_localTransform;
-		}
 
+        // bone pose arr update
 		bonePoses.bonePose[bone.m_index] = bone.m_worldTransform;
 	}	
 }

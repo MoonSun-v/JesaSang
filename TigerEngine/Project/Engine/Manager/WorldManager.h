@@ -1,6 +1,9 @@
 #pragma once
-#include <pch.h>
-#include <System/Singleton.h>
+#include "../../Base/pch.h"
+#include "../../Base/System/Singleton.h"
+#include "WorldData/ShaderWorldData.hpp"
+
+class Camera;
 
 /// <summary>
 /// [ 싱글톤 ] 
@@ -9,37 +12,31 @@
 class WorldManager : public Singleton<WorldManager>
 {
 public:
-	WorldManager(token) {};
-	~WorldManager() = default;
+    WorldManager(token) {};
+    ~WorldManager() = default;
 
-	void CreateDirectionalLightFrustum();
-	void Update();
+    void Update(const ComPtr<ID3D11DeviceContext>& context, Camera* camera,
+        int clientWidth, int clientHeight);
 
-    int GetCameraIndex();
-    void SetCameraIndex(int index);
+public:
+    /*
+        아래 데이터는 각 RenderPass에서 가져가서 CB update합니다.
+        FrameCB는 따로 처리할 pass가 없기 때문에 world manager의 update에서 update 합니다.
+    */
+    // World Light Data
+    BOOL  useIBL = true;
+    float indirectIntensity = 0.2f;
 
-	// Directional Light - 햇빛
-	Matrix directionalLightView{};
-	Matrix directionalLightProj{};
+    // PostProcess Data
+    PostProcessWorldData postProcessData;
 
-	Viewport directionalLightViewport = { 0, 0, 8192, 8192, 0.0f, 1.0f }; // x, y, width, height, min, max
-	Vector4 lightDirection{ 0, -1, 0, 1 };
+    // Frame Data
+    FrameWorldData frameData;
 
-	Vector3 directionalLightLookAt{};
-	Vector3 directionalLightPos{};
-	Vector3 directionalLightUpDistFromLookAt{ 1000, 1000, 1000 };
 
-	float directionalLightFrustumAngle = XM_PIDIV4;
-	float directionalLightForwardDistFromCamera = 1.0f;
-
-	float directionalLightNear = 400.0f;
-	float directionalLightFar = 3000.0f;
-
-	const float directionalLightMinNear = 400.0f;
-	const float directionalLightMinFar = 1001.0f;
-
-	ComPtr<ID3D11ShaderResourceView> shaderResourceView{};
-
-private:
-    int cameraIndex = 0;
+public:
+    // Camera System에서 따로 쓰고있어서 일단 주석처리
+    //int cameraIndex = 0;
+    //int GetCameraIndex();
+    //void SetCameraIndex(int index);
 };

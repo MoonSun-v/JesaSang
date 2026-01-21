@@ -4,10 +4,10 @@
 struct BoneWeightVertexData
 {
     Vector3 position;
-    Vector2 texture;
+    Vector3 normal;
     Vector3 tangent;
     Vector3 bitangent;
-    Vector3 normal;
+    Vector2 texture;
 	int BlendIndeces[4] = {};	// 
 	float BlendWeights[4] = {};	// 
 

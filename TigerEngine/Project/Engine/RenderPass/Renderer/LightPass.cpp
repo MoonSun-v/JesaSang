@@ -2,6 +2,7 @@
 #include "../Renderable/LightvolumeMesh.h"
 #include "../../EngineSystem/LightSystem.h"
 #include "../../Manager/ShaderManager.h"
+#include "../../Manager/WorldManager.h"
 #include "../../Object/GameObject.h"
 
 using namespace std;
@@ -114,21 +115,23 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
     context->PSSetShaderResources(9, 1, sm.emissiveSRV.GetAddressOf());
     context->PSSetShaderResources(10, 1, sm.depthSRV.GetAddressOf());
 
-    // TODO :: IBL SRV 어디서 바인딩?
-    //context->PSSetShaderResources(11, 1, env.ibl.irradiance.GetAddressOf());
-    //context->PSSetShaderResources(12, 1, env.ibl.specularEnv.GetAddressOf());
-    //context->PSSetShaderResources(13, 1, env.ibl.brdfLut.GetAddressOf());
-
-    // CB
+    // CB - Transform
     XMMATRIX invVP = XMMatrixInverse(nullptr, camera->GetView() * camera->GetProjection());
     sm.transformCBData.invViewProjection = XMMatrixTranspose(invVP);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
+    // CB - Light
+    auto& wm = WorldManager::Instance();
+    sm.lightingCBData.useIBL = wm.useIBL;
+    sm.lightingCBData.indirectIntensity = wm.indirectIntensity;
+    context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
+
     // Render
     for (Light*& light : lights)
     {
-        auto lightPos = light->GetOwner()->GetTransform()->GetPosition();
+       auto lightPos = light->GetOwner()->GetTransform()->GetPosition();
 
+       // CB - Light
        sm.lightingCBData.lightType = static_cast<int>(light->type);
        sm.lightingCBData.isSunLight = light->isSunLight;
        sm.lightingCBData.lightColor = light->color;
@@ -138,7 +141,7 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
        sm.lightingCBData.lightRange = light->range;
        sm.lightingCBData.innerAngle = light->innerAngle;
        sm.lightingCBData.outerAngle = light->outerAngle;
-        context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
+       context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
 
         // Light Volume 렌더링
         if (light->type == LightType::Directional)

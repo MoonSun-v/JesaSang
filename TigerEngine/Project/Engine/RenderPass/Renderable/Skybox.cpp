@@ -1,10 +1,11 @@
 #include "SkyBox.h"
-#include "Helper.h"
 #include "../../../Base/Datas/Vertex.h"
 #include <Directxtk/DDSTextureLoader.h>
+
 using namespace DirectX;
 
-void SkyBox::Create(const ComPtr<ID3D11Device>& device, const std::wstring& filePath)
+void SkyBox::Create(const ComPtr<ID3D11Device>& device, const wchar_t* skyboxPath,
+    const wchar_t* irradiPath, const wchar_t* envPath, const wchar_t* lutPath)
 {
     // Vertex Buffer, Index Buffer
     Position_Vertex vertices[] =
@@ -55,7 +56,7 @@ void SkyBox::Create(const ComPtr<ID3D11Device>& device, const std::wstring& file
     DirectX::CreateDDSTextureFromFileEx(
         device.Get(),
         nullptr,
-        filePath.c_str(),
+        skyboxPath,
         0,
         D3D11_USAGE_DEFAULT,
         D3D11_BIND_SHADER_RESOURCE,
@@ -66,6 +67,11 @@ void SkyBox::Create(const ComPtr<ID3D11Device>& device, const std::wstring& file
         &skyboxSRV,
         nullptr
     );
+
+    // IBL Texture Load
+    CreateDDSTextureFromFile(device.Get(), irradiPath, nullptr, ibl_irradianceSRV.GetAddressOf());
+    CreateDDSTextureFromFile(device.Get(), envPath, nullptr, ibl_specularEnvSRV.GetAddressOf());
+    CreateDDSTextureFromFile(device.Get(), lutPath, nullptr, ibl_brdfLutSRV.GetAddressOf());
 }
 
 void SkyBox::Draw(ComPtr<ID3D11DeviceContext>& context) const
@@ -76,6 +82,9 @@ void SkyBox::Draw(ComPtr<ID3D11DeviceContext>& context) const
 
     // SRV
     context->PSSetShaderResources(15, 1, skyboxSRV.GetAddressOf());
+    context->PSSetShaderResources(11, 1, ibl_irradianceSRV.GetAddressOf());
+    context->PSSetShaderResources(12, 1, ibl_specularEnvSRV.GetAddressOf());
+    context->PSSetShaderResources(13, 1, ibl_brdfLutSRV.GetAddressOf());
 
     // Draw
     context->DrawIndexed(indexCount, 0, 0);

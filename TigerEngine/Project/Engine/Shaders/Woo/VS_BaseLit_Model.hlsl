@@ -33,10 +33,10 @@ PS_INPUT main(VS_Weight_INPUT input)
     }
     
     // clip space
-    output.pos = mul(input.pos, finalWorld); // local -> world
-    output.worldPos = output.pos.xyz; // (world pos 저장)
-    output.pos = mul(output.pos, view); // world -> view
-    output.pos = mul(output.pos, projection); // view -> clip
+    output.pos = mul(float4(input.pos, 1.0f), finalWorld); // local -> world
+    output.worldPos = output.pos.xyz;                 // (world pos 저장)
+    output.pos = mul(output.pos, view);               // world -> view
+    output.pos = mul(output.pos, projection);         // view -> clip
     
     // world TBN
     float3 tangent = normalize(mul(input.tangent, (float3x3) finalWorld));
