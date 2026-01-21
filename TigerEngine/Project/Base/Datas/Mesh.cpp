@@ -24,9 +24,9 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
     // CB - Material
     sm.materialCBData.useDiffuse = material.hasDiffuse;
     sm.materialCBData.useNormal  = material.hasNormal;
-    sm.materialCBData.useEmissive = material.hasRoughness;
+    sm.materialCBData.useEmissive = material.hasEmissive;
     sm.materialCBData.useMetallic = material.hasMetallic;
-    sm.materialCBData.useRoughness = material.hasEmissive;
+    sm.materialCBData.useRoughness = material.hasRoughness;
     sm.materialCBData.roughnessFromShininess = material.roughnessFromShininess;
 
     sm.materialCBData.emissiveFactor = material.emissiveFactor;
@@ -82,6 +82,7 @@ void Mesh::setupMesh()
         else if (typeName == TEXTURE_ROUGHNESS)
         {
             material.hasRoughness= true;
+
         }
         else if (typeName == TEXTURE_SHININESS)
         {

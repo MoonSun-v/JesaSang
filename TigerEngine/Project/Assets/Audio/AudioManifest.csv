@@ -1,0 +1,10 @@
+ID,Path,Group,Mode,DefaultVolume,Loop
+# 3D attenuation (rolloff) notes: INVERSE (realistic), LINEAR (uniform drop), LINEAR_SQUARE (faster drop), CUSTOM (user curve)
+SFX_TestLoop,..\\Assets\\Audio\\SFX\\sfx_test_loop.wav,SFX,2D,0.6,1
+SFX_OneShot,..\\Assets\\Audio\\SFX\\sfx_one_shot.wav,SFX,3D,1.0,0
+BGM_Main,..\\Assets\\Audio\\BGM\\bgm_main.mp3,BGM,2D,0.4,1
+SFX_Footstep1,..\\Assets\\Audio\\SFX\\s_Footstep1.wav,SFX,3D,0.8,0
+SFX_Footstep2,..\\Assets\\Audio\\SFX\\s_Footstep2.wav,SFX,3D,0.8,0
+UI_Button_1,..\\Assets\\Audio\\SFX\\s_Button_1.wav,UI,2D,0.8,0
+AMB_Wind,..\\Assets\\Audio\\AMB\\s_Wind.wav,AMB,2D,0.4,1
+SFX_TestLoop1,..\\Assets\\Audio\\SFX\\bonfire-crowd-mono-56293.mp3,SFX,3D_INVERSE,1.5,1

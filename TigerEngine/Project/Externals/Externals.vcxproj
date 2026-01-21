@@ -131,12 +131,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod.hpp" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_codec.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_common.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_dsp.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_dsp_effects.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_errors.h" />
+    <ClInclude Include="AudioModule_FMOD\fmod\inc\fmod_output.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioClip.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioListener.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioSource.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioSystem.h" />
+    <ClInclude Include="AudioModule_FMOD\include\AudioTransform.h" />
     <ClInclude Include="imguiFileDialog\dirent\dirent.h" />
     <ClInclude Include="imguiFileDialog\ImGuiFileDialog.h" />
     <ClInclude Include="imguiFileDialog\ImGuiFileDialogConfig.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioModule_FMOD\src\AudioClip.cpp" />
+    <ClCompile Include="AudioModule_FMOD\src\AudioListener.cpp" />
+    <ClCompile Include="AudioModule_FMOD\src\AudioSource.cpp" />
+    <ClCompile Include="AudioModule_FMOD\src\AudioSystem.cpp" />
     <ClCompile Include="imguiFileDialog\ImGuiFileDialog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AudioModule_FMOD\fmod\bin\fmod.dll" />
+    <None Include="AudioModule_FMOD\fmod\bin\fmodL.dll" />
+    <None Include="AudioModule_FMOD\fmod\inc\fmod.cs" />
+    <None Include="AudioModule_FMOD\fmod\inc\fmod_dsp.cs" />
+    <None Include="AudioModule_FMOD\fmod\inc\fmod_errors.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="AudioModule_FMOD\fmod\lib\x64\fmodL_vc.lib" />
+    <Library Include="AudioModule_FMOD\fmod\lib\x64\fmod_vc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
