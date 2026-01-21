@@ -29,6 +29,8 @@ private:
     void RenderCameraFrustum();
     void RenderWorldSettings();
 
+    void RenderWorldManager();
+
     template<typename T>
     void RenderComponentInfo(std::string name, T* comp);
 
@@ -58,9 +60,12 @@ private:
     // flags
     bool isDiretionalLightDebugOpen = false;
     bool isWorldSettingOpen = false;
-    void DirectionalLightDebug();
 
     std::string currScenePath{};
+
+    // uitl
+    template<typename T>
+    void ReadVariants(T* typePtr);
 
 public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,

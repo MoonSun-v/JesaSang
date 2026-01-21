@@ -4,6 +4,22 @@
 #include "../Object/GameObject.h"
 #include "../../Base/System/TimeSystem.h"
 
+RTTR_REGISTRATION
+{
+    using namespace rttr;
+
+    registration::class_<WorldManager>("WorldManager")
+        // Singleton(token) 때문에 ctor 등록은 생략하는 게 안전함.
+        // .constructor<>() 안 달아도 instance 기반 property 접근은 가능.
+
+        // World Light Data
+        .property("useIBL",             &WorldManager::useIBL)
+        .property("indirectIntensity",  &WorldManager::indirectIntensity)
+
+        // PostProcess / Frame
+        .property("postProcessData",    &WorldManager::postProcessData)
+        .property("frameData",          &WorldManager::frameData);
+}
 
 void WorldManager::Update(const ComPtr<ID3D11DeviceContext>& context, Camera* camera,
     int clientWidth, int clientHeight)
