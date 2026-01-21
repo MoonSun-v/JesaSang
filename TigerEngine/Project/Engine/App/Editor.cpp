@@ -452,22 +452,21 @@ void Editor::RenderWorldManager()
 
     rttr::instance inst = wm;
     rttr::type t = rttr::type::get(inst);
-    ReadVariants<rttr::instance>(&inst);
+    ReadVariants(inst);
 
     // 2) postProcessData 전체 가져오기
     rttr::variant ppVar = t.get_property("PostProcessWorldData").get_value(inst);
-    ReadVariants<rttr::variant>(&ppVar);
+    ReadVariants(ppVar);
 
 }
 
 template<typename T>
 void Editor::RenderComponentInfo(std::string compName, T* comp)
 {
+    rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
+    ImGui::Text(t.get_name().to_string().c_str());
     if(compName == "Transform")
     {
-        rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
-        ImGui::Text(t.get_name().to_string().c_str());
-
         for(auto& prop : t.get_properties())
         {
             rttr::variant value = prop.get_value(*comp);   // 프로퍼티 값
@@ -491,9 +490,6 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
     }
     else if(compName == "FBXData")
     {
-        rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
-        ImGui::Text(t.get_name().to_string().c_str());
-
         for(auto& prop : t.get_properties())
         {
             rttr::variant value = prop.get_value(*comp);   // 프로퍼티 값
@@ -537,7 +533,14 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
     }
     else
     {
-        ReadVariants<T>(comp);
+        rttr::type t = rttr::type::get(*comp);
+        for (auto& prop : t.get_properties())
+        {
+            ImGui::PushID(&prop);
+            rttr::variant value = prop.get_value(*comp);
+            ReadVariants(value);
+            ImGui::PopID();
+        }
     }
 
     if (compName != "Transform") 
@@ -548,49 +551,6 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             selectedObject->RemoveComponent(comp);
         }
         ImGui::PopID();
-    }
-}
-
-template<typename T>
-void Editor::ReadVariants(T* typePtr)
-{
-    rttr::type t = rttr::type::get(typePtr); // 역참조로 실제 인스턴스 정보 가져오기
-    ImGui::Text(t.get_name().to_string().c_str());
-    for (auto& prop : t.get_properties())
-    {
-        rttr::variant value = prop.get_value(typePtr);            // 프로퍼티 값
-        std::string name = prop.get_name().to_string();         // 프로퍼티 이름
-
-        if (value.is_type<float>())
-        {
-            float v = value.get_value<float>();
-            ImGui::DragFloat(name.c_str(), &v, 0.1f);
-            prop.set_value(typePtr, v);
-        }
-        else if (value.is_type<int>())
-        {
-            int v = value.get_value<int>();
-            ImGui::DragInt(name.c_str(), &v, 0.1f);
-            prop.set_value(typePtr, v);
-        }
-        else if (value.is_type<bool>())
-        {
-            bool v = value.get_value<bool>();
-            ImGui::Checkbox(name.c_str(), &v);
-            prop.set_value(typePtr, v);
-        }
-        else if (value.is_type<DirectX::SimpleMath::Vector3>())
-        {
-            DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
-            ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
-            prop.set_value(typePtr, vec);
-        }
-        else if (value.is_type<Color>())
-        {
-            Color color = value.get_value<Color>();
-            ImGui::ColorEdit3(name.c_str(), &color.x, 0.1f);
-            prop.set_value(typePtr, color);
-        }
     }
 }
 
@@ -705,6 +665,60 @@ void Editor::LoadScene(HWND &hwnd)
     else
     {
     	MessageBoxA(hwnd, "Failed to load scene! File not found.", "Error", MB_OK | MB_ICONERROR);
+    }
+}
+
+void Editor::ReadVariants(rttr::variant& var)
+{
+    ReadVariants(rttr::instance(var));
+}
+
+void Editor::ReadVariants(rttr::instance inst)
+{
+    if (!inst.is_valid())
+        return;
+
+    rttr::type t = inst.get_derived_type();
+
+    // Get value from type
+    for (auto& prop : t.get_properties())
+    {
+        rttr::variant value = prop.get_value(inst);
+        std::string name = prop.get_name().to_string();
+
+        if (!value.is_valid())
+            continue;
+
+        if (value.is_type<float>())
+        {
+            float v = value.get_value<float>();
+            if (ImGui::DragFloat(name.c_str(), &v, 0.1f))
+                prop.set_value(inst, v);
+        }
+        else if (value.is_type<int>())
+        {
+            int v = value.get_value<int>();
+            if (ImGui::DragInt(name.c_str(), &v, 1))
+                prop.set_value(inst, v);
+        }
+        else if (value.is_type<bool>())
+        {
+            bool v = value.get_value<bool>();
+            if (ImGui::Checkbox(name.c_str(), &v))
+                prop.set_value(inst, v);
+        }
+        else if (value.is_type<DirectX::SimpleMath::Vector3>())
+        {
+            auto vec = value.get_value<DirectX::SimpleMath::Vector3>();
+            if (ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f))
+                prop.set_value(inst, vec);
+        }
+        else if (value.is_type<Color>())
+        {
+            auto c = value.get_value<Color>();
+            if (ImGui::ColorEdit3(name.c_str(), &c.x))
+                prop.set_value(inst, c);
+        }
     }
 }
 
