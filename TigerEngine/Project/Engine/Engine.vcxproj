@@ -154,6 +154,7 @@
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Manager\ComponentFactory.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="EngineSystem\PlayModeSystem.cpp" />
     <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="Manager\ComponentFactory.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="EngineSystem\PlayModeSystem.h" />
     <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />

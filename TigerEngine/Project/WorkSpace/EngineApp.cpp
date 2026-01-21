@@ -20,6 +20,7 @@
 #include "EngineSystem/LightSystem.h"
 
 #include "Components/FreeCamera.h"
+#include "Components/FBXData.h"
 
 namespace fs = std::filesystem;
 
@@ -46,7 +47,7 @@ bool EngineApp::OnInitialize()
 
 	// == init system ==
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
-	ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
+    ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
     AudioManager::Instance().Initialize();
 
     auto& sm = ShaderManager::Instance();
@@ -305,8 +306,8 @@ void EngineApp::RegisterAllComponents()
 {
 	ComponentFactory::Instance().Register<FBXData>("FBXData");
 	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
-	ComponentFactory::Instance().Register<Transform>("Transform");
-	ComponentFactory::Instance().Register<Camera>("Camera");
+    ComponentFactory::Instance().Register<Transform>("Transform");
+    ComponentFactory::Instance().Register<Camera>("Camera");
     ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
     ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
 
