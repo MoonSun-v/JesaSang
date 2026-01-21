@@ -708,6 +708,12 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
     }
 }
 
+void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
+{
+    CreateHDRResource(dev, screenWidth, screenHeight);
+    CreateGbufferResource(dev, screenWidth, screenHeight);
+}
+
 
 // [ Util Funcs ] --------------------------------------------------------------
 void ShaderManager::CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
@@ -763,4 +769,38 @@ void ShaderManager::SetViewportForMip(const ComPtr<ID3D11DeviceContext>& ctx, UI
     UINT w, h;
     GetMipSize(baseW, baseH, mip, w, h);
     SetViewport(ctx, w, h);
+}
+
+void ShaderManager::ReleaseBackBufferResources()
+{
+    backBufferRTV.Reset();
+    depthStencilView.Reset();
+    depthStencilReadOnlyView.Reset();
+    depthSRV.Reset();
+
+    // Albedo
+    albedoTex.Reset();
+    albedoRTV.Reset();
+    albedoSRV.Reset();
+
+    // Normal
+    normalTex.Reset();
+    normalRTV.Reset();
+    normalSRV.Reset();
+
+    // Metal/Rough
+    metalRoughTex.Reset();
+    metalRoughRTV.Reset();
+    metalRoughSRV.Reset();
+
+    // Emissive
+    emissiveTex.Reset();
+    emissiveRTV.Reset();
+    emissiveSRV.Reset();
+
+    viewport_screen = {};
+
+    sceneHDRTex.Reset();
+    sceneHDRRTV.Reset();
+    sceneHDRSRV.Reset();
 }

@@ -115,14 +115,82 @@ void DirectX11Renderer::Initialize(HWND hwnd, int width, int height)
 
 void DirectX11Renderer::OnResize(int width, int height)
 {
-	// SwapChain
-	swapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_B8G8R8A8_UNORM, 0);
+    // clear
+    deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
-	// RTV 
-	//renderTargetView.Reset();
-	ComPtr<ID3D11Texture2D> pBackBufferTexture;
-	HR_T(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBufferTexture));
-	HR_T(device->CreateRenderTargetView(pBackBufferTexture.Get(), nullptr, backBufferRTV.GetAddressOf()));
+    backBufferRTV.Reset();
+    depthStencilView.Reset();
+    depthStencilReadOnlyView.Reset();
+    backbufferTex.Reset();
+    depthSRV.Reset();
+    depthStencilTexture.Reset();
+
+    deviceContext->ClearState();
+    deviceContext->Flush();
+
+    const UINT backBufferWidth = static_cast<UINT>(width);
+    const UINT backBufferHeight = static_cast<UINT>(height);
+    const DXGI_FORMAT backBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+    const DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	// SwapChain
+    if (swapChain) // check swapchain exist
+    {
+        // 스왑체인 리사이즈
+        HR_T(swapChain->ResizeBuffers(0, backBufferWidth, backBufferHeight, DXGI_FORMAT_UNKNOWN, 0));
+    }
+    else
+    {
+        return; // -> 해당 함수 사용시 스왑체인이 있다고 가정한다.
+    }
+
+    // create RTV					
+    HR_T(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backbufferTex.GetAddressOf()));			// backbuffer get
+    HR_T(device->CreateRenderTargetView(backbufferTex.Get(), NULL, backBufferRTV.GetAddressOf()));	    // RTV create														            // RTV에서 backbuffer texture 참조중 (메모리 관리)
+
+    // create depth stencil view 
+    {
+        // texture
+        D3D11_TEXTURE2D_DESC descDepth = {};
+        descDepth.Width = backBufferWidth;
+        descDepth.Height = backBufferHeight;
+        descDepth.MipLevels = 1;
+        descDepth.ArraySize = 1;
+        descDepth.Format = DXGI_FORMAT_R24G8_TYPELESS;
+        descDepth.SampleDesc.Count = 1;
+        descDepth.SampleDesc.Quality = 0;
+        descDepth.Usage = D3D11_USAGE_DEFAULT;
+        descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+        descDepth.CPUAccessFlags = 0;
+        descDepth.MiscFlags = 0;
+
+        HR_T(device->CreateTexture2D(&descDepth, nullptr, depthStencilTexture.GetAddressOf()));
+
+        // write DSV
+        D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+        descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // D24 : Depth, S8 : Stencil
+        descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        descDSV.Texture2D.MipSlice = 0;
+        descDSV.Flags = 0;
+        HR_T(device->CreateDepthStencilView(depthStencilTexture.Get(), &descDSV, depthStencilView.GetAddressOf()));
+
+        // read only DSV
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvRODesc = descDSV;
+        dsvRODesc.Flags = D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL;
+        HR_T(device->CreateDepthStencilView(depthStencilTexture.Get(), &dsvRODesc, depthStencilReadOnlyView.GetAddressOf()));
+    }
+
+    // viewport 재설정
+    {
+        renderViewport = {};
+        renderViewport.TopLeftX = 0;
+        renderViewport.TopLeftY = 0;
+        renderViewport.Width = (float)backBufferWidth;
+        renderViewport.Height = (float)backBufferHeight;
+        renderViewport.MinDepth = 0.0f;
+        renderViewport.MaxDepth = 1.0f;
+        deviceContext->RSSetViewports(1, &renderViewport);
+    }
 }
 
 void DirectX11Renderer::BeginRender()
