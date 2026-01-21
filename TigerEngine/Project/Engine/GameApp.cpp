@@ -195,7 +195,6 @@ void GameApp::OnUpdate()
 {
 
 }
-
 //
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -232,28 +231,6 @@ LRESULT CALLBACK GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
 		DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
-		break;
-	case WM_SIZE:
-	{
-		if (wParam == SIZE_MINIMIZED)
-			break; // 최소화는 무시
-	
-		UINT width = LOWORD(lParam); // 새 너비
-		UINT height = HIWORD(lParam); // 새 높이			
-		if (clientWidth != width || clientHeight != height)
-		{
-			clientWidth = width;
-			clientHeight = height;
-			isResize = true;
-		}
-		break;
-	}
-	case WM_EXITSIZEMOVE:
-		if (isResize)
-		{
-			renderer->OnResize(clientWidth, clientHeight);
-			isResize = false;
-		}
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
