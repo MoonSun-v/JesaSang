@@ -21,8 +21,6 @@
 
 #include "Components/FreeCamera.h"
 #include "Components/FBXData.h"
-#include "Components/AudioListenerComponent.h"
-#include "Components/AudioSourceComponent.h"
 
 namespace fs = std::filesystem;
 
@@ -363,16 +361,21 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "Player/Player1.h"
 #include "Player/Weapon.h"
 
+#include "Components/AudioListenerComponent.h"
+#include "Components/AudioSourceComponent.h"
+
 void EngineApp::RegisterAllComponents()
 {
 	ComponentFactory::Instance().Register<FBXData>("FBXData");
 	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
     ComponentFactory::Instance().Register<Transform>("Transform");
     ComponentFactory::Instance().Register<Camera>("Camera");
-    ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
-    ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
 
 	ComponentFactory::Instance().Register<Player1>("Player1");
 	ComponentFactory::Instance().Register<Weapon>("Weapon");
 	ComponentFactory::Instance().Register<Light>("Light");
+
+    ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
+    ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
+
 }
