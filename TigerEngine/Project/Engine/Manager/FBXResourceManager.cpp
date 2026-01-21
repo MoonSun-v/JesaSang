@@ -5,6 +5,8 @@
 #include <assimp\postprocess.h>
 #include <DirectXTex.h>
 #include <algorithm>
+#include <wincodec.h>
+#pragma comment(lib, "windowscodecs.lib")
 
 inline Matrix ToSimpleMathMatrix(const aiMatrix4x4& m)
 {
@@ -162,102 +164,156 @@ void FBXResourceManager::ProcessBoneWeight(std::shared_ptr<FBXResourceAsset>& pA
 
 std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FBXResourceAsset>& pAsset, aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene)
 {
-	std::vector<Texture> textures;
-	for (UINT i = 0; i < mat->GetTextureCount(type); i++)
-	{
-		aiString str;
-		mat->GetTexture(type, i, &str);
-		// Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-		bool skip = false;
-		auto textureloadeds = pAsset->textures;
-		for (UINT j = 0; j < textureloadeds.size(); j++)
-		{
-			if (std::strcmp(textureloadeds[j].path.c_str(), str.C_Str()) == 0) // path 확인
-			{
-				textures.push_back(textureloadeds[j]);
-				skip = true; // A texture with the same filepath has already been loaded, continue to next one. (optimization)
-				break;
-			}
-		}
+    std::vector<Texture> textures;
+    auto& textureloadeds = pAsset->textures;
 
-		if (!skip)
-		{   // If texture hasn't been loaded already, load it
-			HRESULT hr;
-			Texture texture;
+    for (UINT i = 0; i < mat->GetTextureCount(type); i++)
+    {
+        aiString str;
+        mat->GetTexture(type, i, &str);
 
-			const aiTexture* embeddedTexture = scene->GetEmbeddedTexture(str.C_Str());
-			if (embeddedTexture != nullptr)
-			{
-				loadEmbeddedTexture(embeddedTexture, texture.pTexture);
-			}
-			else
-			{
-				std::string filename = std::string(str.C_Str());
-				filename = pAsset->directory + '\\' + filename;
-				std::wstring filenamews = std::wstring(filename.begin(), filename.end());
+        bool skip = false;
+        for (UINT j = 0; j < textureloadeds.size(); j++)
+        {
+            if (std::strcmp(textureloadeds[j].path.c_str(), str.C_Str()) == 0)
+            {
+                textures.push_back(textureloadeds[j]);
+                skip = true;
+                break;
+            }
+        }
+        if (skip) continue;
 
-				std::filesystem::path p(filename);
+        // texture file name
+        Texture texture;
+        const std::string texRef = str.C_Str();
+        const std::string filenameOnly = std::filesystem::path(texRef).filename().string();
 
-				if (p.extension() == ".tga")
-				{
-					DirectX::ScratchImage image;
-					ComPtr<ID3D11Resource> tgaTexture{};
+        // 내장 텍스처 save
+        if (scene && scene->GetEmbeddedTexture(str.C_Str()))
+        {
+            SaveEmbeddedTextureIfExists(scene, pAsset->directory, filenameOnly, nullptr);
+        }
 
-					HR_T(DirectX::LoadFromTGAFile(filenamews.c_str(), DirectX::TGA_FLAGS_NONE, nullptr, image)); // Load the TGA data
-					HR_T(DirectX::CreateTexture(device.Get(), image.GetImages(), image.GetImageCount(), image.GetMetadata(), tgaTexture.GetAddressOf())); // convert image to texture
+        // texture file path
+        std::string fullpath = pAsset->directory + "\\" + filenameOnly;
+        std::wstring wfullpath(fullpath.begin(), fullpath.end());
 
-					HR_T(device.Get()->CreateShaderResourceView(tgaTexture.Get(), nullptr, texture.pTexture.GetAddressOf()));
-				}
-				else
-				{
-					HR_T(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filenamews.c_str(), nullptr, texture.pTexture.GetAddressOf())); 
-				}
-			}
+        // texture load (SRGB / Linear)
+        if (typeName == TEXTURE_DIFFUSE)
+            CreateTextureFromFile(device.Get(), wfullpath.c_str(), texture.pTexture.GetAddressOf(), TextureColorSpace::SRGB);
+        else
+            CreateTextureFromFile(device.Get(), wfullpath.c_str(), texture.pTexture.GetAddressOf(), TextureColorSpace::LINEAR);
 
-			texture.type = typeName;
-			texture.path = str.C_Str();
-			textures.push_back(texture);
-			textureloadeds.push_back(texture);  // Store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-		}
-	}
-	return textures;
+        // push
+        texture.type = typeName;
+        texture.path = str.C_Str();
+        textures.push_back(texture);
+        textureloadeds.push_back(texture);
+    }
+
+    return textures;
 }
 
-void FBXResourceManager::loadEmbeddedTexture(const aiTexture* embeddedTexture, ComPtr<ID3D11ShaderResourceView>& outTexture)
+bool FBXResourceManager::SaveEmbeddedTextureIfExists(const aiScene* scene, const std::string& directory,
+          const std::string& filename, std::string* outSavedPath)
 {
-	if (embeddedTexture->mHeight != 0)
-	{
-		// Load an uncompressed ARGB8888 embedded texture
-		D3D11_TEXTURE2D_DESC desc;
-		desc.Width = embeddedTexture->mWidth;
-		desc.Height = embeddedTexture->mHeight;
-		desc.MipLevels = 1;
-		desc.ArraySize = 1;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = 0;
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = 0;
-		desc.MiscFlags = 0;
+    if (!scene) return false;
 
-		D3D11_SUBRESOURCE_DATA subresourceData;
-		subresourceData.pSysMem = embeddedTexture->pcData;
-		subresourceData.SysMemPitch = embeddedTexture->mWidth * 4;
-		subresourceData.SysMemSlicePitch = embeddedTexture->mWidth * embeddedTexture->mHeight * 4;
+    const aiTexture* embedded = scene->GetEmbeddedTexture(filename.c_str());
+    if (!embedded) return false;
 
-		ID3D11Texture2D* texture2D = nullptr;
-		HR_T(device->CreateTexture2D(&desc, &subresourceData, &texture2D));
+    std::string dir = directory;
+    if (!dir.empty() && dir.back() != '\\' && dir.back() != '/')
+        dir += "\\";
 
-		HR_T(device->CreateShaderResourceView(texture2D, nullptr, outTexture.GetAddressOf()));
-	}
-	else
-	{
-		// mHeight is 0, so try to load a compressed texture of mWidth bytes
-		const size_t size = embeddedTexture->mWidth;
+    const std::string fullPath = dir + filename;
 
-		HR_T(CreateWICTextureFromMemory(device.Get(), deviceContext.Get(), reinterpret_cast<const unsigned char*>(embeddedTexture->pcData), size, nullptr, outTexture.GetAddressOf()));
-	}
+    {
+        std::ifstream test(fullPath, std::ios::binary);
+        if (test.good())
+        {
+            if (outSavedPath) *outSavedPath = fullPath;
+            return true;
+        }
+    }
+
+    // 1) 압축 텍스처
+    if (embedded->mHeight == 0)
+    {
+        std::ofstream file(fullPath, std::ios::binary);
+        if (!file.is_open()) return false;
+
+        file.write(reinterpret_cast<const char*>(embedded->pcData), embedded->mWidth);
+        file.close();
+
+        if (outSavedPath) *outSavedPath = fullPath;
+        return true;
+    }
+
+    // 2) 비압축 텍스처
+    return SaveBGRA8ToPNG_WIC(
+        fullPath,
+        embedded->mWidth,
+        embedded->mHeight,
+        reinterpret_cast<const uint8_t*>(embedded->pcData),
+        outSavedPath
+    );
+}
+
+bool FBXResourceManager::SaveBGRA8ToPNG_WIC(const std::string& fullPath, uint32_t width, uint32_t height,
+    const uint8_t* bgraPixels, std::string* outSavedPath)
+{
+    Microsoft::WRL::ComPtr<IWICImagingFactory> factory;
+    HRESULT hr = CoCreateInstance(
+        CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
+        IID_PPV_ARGS(factory.GetAddressOf())
+    );
+    if (FAILED(hr)) return false;
+
+    Microsoft::WRL::ComPtr<IWICStream> stream;
+    hr = factory->CreateStream(stream.GetAddressOf());
+    if (FAILED(hr)) return false;
+
+    std::wstring wpath(fullPath.begin(), fullPath.end());
+    hr = stream->InitializeFromFilename(wpath.c_str(), GENERIC_WRITE);
+    if (FAILED(hr)) return false;
+
+    Microsoft::WRL::ComPtr<IWICBitmapEncoder> encoder;
+    hr = factory->CreateEncoder(GUID_ContainerFormatPng, nullptr, encoder.GetAddressOf());
+    if (FAILED(hr)) return false;
+
+    hr = encoder->Initialize(stream.Get(), WICBitmapEncoderNoCache);
+    if (FAILED(hr)) return false;
+
+    Microsoft::WRL::ComPtr<IWICBitmapFrameEncode> frame;
+    Microsoft::WRL::ComPtr<IPropertyBag2> props;
+    hr = encoder->CreateNewFrame(frame.GetAddressOf(), props.GetAddressOf());
+    if (FAILED(hr)) return false;
+
+    hr = frame->Initialize(props.Get());
+    if (FAILED(hr)) return false;
+
+    hr = frame->SetSize(width, height);
+    if (FAILED(hr)) return false;
+
+    WICPixelFormatGUID format = GUID_WICPixelFormat32bppBGRA;
+    hr = frame->SetPixelFormat(&format);
+    if (FAILED(hr)) return false;
+
+    const UINT stride = width * 4;
+    const UINT imageSize = stride * height;
+    hr = frame->WritePixels(height, stride, imageSize, const_cast<BYTE*>(bgraPixels));
+    if (FAILED(hr)) return false;
+
+    hr = frame->Commit();
+    if (FAILED(hr)) return false;
+
+    hr = encoder->Commit();
+    if (FAILED(hr)) return false;
+
+    if (outSavedPath) *outSavedPath = fullPath;
+    return true;
 }
 
 void FBXResourceManager::GetDevice(const ComPtr<ID3D11Device> &pDevice, const ComPtr<ID3D11DeviceContext> &pDeviceContext)

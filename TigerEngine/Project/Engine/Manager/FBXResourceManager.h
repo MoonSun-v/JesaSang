@@ -25,7 +25,12 @@ class FBXResourceManager : public Singleton<FBXResourceManager>
 	Mesh ProcessMesh(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene);
 	void ProcessBoneWeight(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh);
 	std::vector<Texture> loadMaterialTextures(std::shared_ptr<FBXResourceAsset>& pAsset, aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
-	void loadEmbeddedTexture(const aiTexture* embeddedTexture, ComPtr<ID3D11ShaderResourceView>& outTexture);
+    
+    // 내장 텍스처 Save
+    bool SaveEmbeddedTextureIfExists(const aiScene* scene, const std::string& directory,
+        const std::string& filename, std::string* outSavedPath);
+    bool SaveBGRA8ToPNG_WIC(const std::string& fullPath, uint32_t width, uint32_t height,
+        const uint8_t* bgraPixels, std::string* outSavedPath);
 
 public:
     FBXResourceManager(token) {};

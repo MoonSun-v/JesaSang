@@ -103,7 +103,6 @@ void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int
     if (typeName == TEXTURE_DIFFUSE)
     {
         pDeviceContext->PSSetShaderResources(0, 1, textures[index].pTexture.GetAddressOf());
-        cout << "diffuse" << endl;
     }
     else if (typeName == TEXTURE_NORMAL)
     {
@@ -112,17 +111,14 @@ void Mesh::ProcessTextureByType(ComPtr<ID3D11DeviceContext>& pDeviceContext, int
     else if (typeName == TEXTURE_METALNESS)
     {
         pDeviceContext->PSSetShaderResources(2, 1, textures[index].pTexture.GetAddressOf());
-        cout << "metallic" << endl;
     }
     else if (typeName == TEXTURE_ROUGHNESS)
     {
         pDeviceContext->PSSetShaderResources(3, 1, textures[index].pTexture.GetAddressOf());
-        cout << "roughness" << endl;
     }
     else if (typeName == TEXTURE_SHININESS)
     {
         pDeviceContext->PSSetShaderResources(3, 1, textures[index].pTexture.GetAddressOf());
-        cout << "roughness(shineness)" << endl;
     }
     else if (typeName == TEXTURE_EMISSIVE)
     {
