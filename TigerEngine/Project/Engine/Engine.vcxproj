@@ -143,6 +143,7 @@
     <ClCompile Include="Components\FreeCamera.cpp" />
     <ClCompile Include="Components\ShadowCamera\DirectionalShadowCamera.cpp" />
     <ClCompile Include="EngineSystem\LightSystem.cpp" />
+    <ClCompile Include="EngineSystem\PhysicsSystem.cpp" />
     <ClCompile Include="EngineSystem\RenderSystem.cpp" />
     <ClCompile Include="EngineSystem\SceneSystem.cpp" />
     <ClCompile Include="EngineSystem\ScriptSystem.cpp" />
@@ -155,7 +156,6 @@
     <ClCompile Include="Manager\WorldManager.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
-    <ClCompile Include="PhysicsFilterShader.cpp" />
     <ClCompile Include="RendererPlatform\DirectX11Renderer.cpp" />
     <ClCompile Include="RenderPass\DebugDrawPass.cpp" />
     <ClCompile Include="RenderPass\Renderable\LightVolumeMesh.cpp" />
@@ -171,6 +171,8 @@
     <ClCompile Include="RenderPass\Renderable\Skybox.cpp" />
     <ClCompile Include="Util\PathHelper.cpp" />
     <ClCompile Include="Util\DebugDraw.cpp" />
+    <ClCompile Include="Util\PhysicsFilterShader.cpp" />
+    <ClCompile Include="Util\PhysicsLayerMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="Components\ScriptComponent.h" />
     <ClInclude Include="Components\ShadowCamera\DirectionalShadowCamera.h" />
     <ClInclude Include="EngineSystem\LightSystem.h" />
+    <ClInclude Include="EngineSystem\PhysicsSystem.h" />
     <ClInclude Include="EngineSystem\RenderSystem.h" />
     <ClInclude Include="EngineSystem\SceneSystem.h" />
     <ClInclude Include="EngineSystem\ScriptSystem.h" />
@@ -196,7 +199,6 @@
     <ClInclude Include="Object\Component.h" />
     <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="Components\Transform.h" />
-    <ClInclude Include="PhysicsFilterShader.h" />
     <ClInclude Include="RendererPlatform\DirectX11Renderer.h" />
     <ClInclude Include="RenderPass\DebugDrawPass.h" />
     <ClInclude Include="RenderPass\IRenderPass.h" />
@@ -215,7 +217,10 @@
     <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="Util\DebugDraw.h" />
     <ClInclude Include="Manager\WorldManager.h" />
+    <ClInclude Include="Util\PhysicsFilterShader.h" />
+    <ClInclude Include="Util\PhysicsLayerMatrix.h" />
     <ClInclude Include="Util\PhysXUtils.h" />
+    <ClInclude Include="Util\RaycastHit.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Base\Base.vcxproj">
