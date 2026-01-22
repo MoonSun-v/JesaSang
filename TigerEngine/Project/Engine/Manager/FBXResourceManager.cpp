@@ -18,7 +18,7 @@ inline Matrix ToSimpleMathMatrix(const aiMatrix4x4& m)
 	);
 }
 
-void FBXResourceManager::ProcessNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene)
+void FBXResourceManager::ProcessSkeletalNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene)
 {
 	string boneName = pNode->mName.C_Str();
 	BoneInfo boneInfo = pAsset->skeletalInfo.GetBoneInfoByName(boneName);
@@ -28,22 +28,51 @@ void FBXResourceManager::ProcessNode(std::shared_ptr<FBXResourceAsset>& pAsset, 
 	for (UINT i = 0; i < pNode->mNumMeshes; i++)
 	{
 		aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
-		pAsset->meshes.push_back(this->ProcessMesh(pAsset, mesh, pScene));
+		pAsset->meshes.push_back(this->ProcessMeshTexture(pAsset, mesh, pScene));
 		pAsset->meshes.back().refBoneIndex = boneIndex;
 
 		pAsset->meshes.back().SetMaterial(pScene->mMaterials[mesh->mMaterialIndex]);
-
+        
 		// weight 저장
 		ProcessBoneWeight(pAsset, mesh);
 	}
 
 	for (UINT i = 0; i < pNode->mNumChildren; i++)
 	{
-		this->ProcessNode(pAsset, pNode->mChildren[i], pScene);
+		this->ProcessSkeletalNode(pAsset, pNode->mChildren[i], pScene);
 	}
 }
 
-Mesh FBXResourceManager::ProcessMesh(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene)
+void FBXResourceManager::ProcessRigidNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene, int parentIndex)
+{
+    if (!pAsset || !pNode || !pScene) return;
+
+    // bind
+    auto& bindMats = pAsset->meshes_bindMat;
+
+    // sub mesh (+ texture)
+    for (UINT i = 0; i < pNode->mNumMeshes; ++i)
+    {
+        aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
+        pAsset->meshes.push_back(this->ProcessMeshTexture(pAsset, mesh, pScene));
+       
+        Mesh& outMesh = pAsset->meshes.back();
+        outMesh.parentIndex = parentIndex - 1;
+        outMesh.refBoneIndex = -1;
+        outMesh.nodeName = pNode->mName.C_Str();
+        bindMats.push_back(XMMatrixTranspose(XMLoadFloat4x4((XMFLOAT4X4*)&pNode->mTransformation)));
+    }
+
+    // cur node index
+    const int myIndex = static_cast<int>(pAsset->meshes.size());
+    // child node
+    for (UINT c = 0; c < pNode->mNumChildren; ++c)
+    {
+        this->ProcessRigidNode(pAsset, pNode->mChildren[c], pScene, myIndex);
+    }
+}
+
+Mesh FBXResourceManager::ProcessMeshTexture(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene)
 {
 	// Data to fill
 	std::vector<BoneWeightVertexData> vertices;
@@ -365,6 +394,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 	sharedAsset ->directory = path.substr(0, path.find_last_of("/\\"));
 
 	// skeletonInfo 저장
+    // ...
 	sharedAsset ->skeletalInfo = SkeletonInfo();
 	sharedAsset ->skeletalInfo.CreateFromAiScene(pScene);
 
@@ -373,61 +403,73 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 	for (int i = 0; i < animationsNum; i++)
 	{
 		Animation anim;
-		anim.CreateBoneAnimation(pScene->mAnimations[i]);
+		anim.CreateNodeAnimation(pScene->mAnimations[i]);
 		sharedAsset->animations.push_back(anim);
 	}
 
-	// mesh 저장, texture 저장 
-	ProcessNode(sharedAsset , pScene->mRootNode, pScene); // 내부에서 mesh의 텍스처 저장함
-
-	// save aabb
-	if (pScene->HasAnimations())
-	{
-		// auto firstAnimKey = sharedAsset->animations[0].m_boneAnimations[0].m_keys[0];
-		// Matrix mat = Matrix::CreateScale(firstAnimKey.m_scale) * 
-		// 			Matrix::CreateFromQuaternion(firstAnimKey.m_rotation) * 
-		// 			Matrix::CreateTranslation(firstAnimKey.m_position);
-		// sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, mat);
-		// sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, mat);
-
-		// NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
-		sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-		sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-		sharedAsset->boxCenter = { 0.0f, (sharedAsset->boxMax - sharedAsset->boxMin).y / 2.0f, 0.0f };
-	}
-	else
-	{
-		sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-		sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-		sharedAsset->boxCenter = Vector3::Zero;
-	}
-
-	// mesh의 정점 버퍼, 인덱스 버퍼 생성
-	for (auto& mesh : sharedAsset->meshes)
-	{
-		mesh.CreateVertexBuffer(device);
-		mesh.CreateIndexBuffer(device);
-	}
-
 	// bone offest 버퍼 채우기
-	for (auto& bone : sharedAsset->skeletalInfo.m_bones)
-	{
-		Matrix offsetMat = Matrix::Identity;
-		std::string currBoneName = bone.name;
-		int boneIndex = sharedAsset->skeletalInfo.GetBoneIndexByName(currBoneName);
+    if (sharedAsset->skeletalInfo.IsSkeletal())
+    {
+        // mesh 저장, texture 저장 
+        ProcessSkeletalNode(sharedAsset, pScene->mRootNode, pScene); // 내부에서 mesh의 텍스처 저장함
 
-		if (boneIndex > 0)
-		{
-			offsetMat = sharedAsset->skeletalInfo.GetBoneOffsetByName(currBoneName);
-		}
+        for (auto& bone : sharedAsset->skeletalInfo.m_bones)
+        {
+            Matrix offsetMat = Matrix::Identity;
+            std::string currBoneName = bone.name;
+            int boneIndex = sharedAsset->skeletalInfo.GetBoneIndexByName(currBoneName);
 
-		sharedAsset->m_BoneOffsets.boneOffset[boneIndex] = offsetMat;
-	}
+            if (boneIndex > 0)
+            {
+                offsetMat = sharedAsset->skeletalInfo.GetBoneOffsetByName(currBoneName);
+            }
+
+            sharedAsset->m_BoneOffsets.boneOffset[boneIndex] = offsetMat;
+        }
+    }
+    else
+    {
+        ProcessRigidNode(sharedAsset, pScene->mRootNode, pScene, -1);
+        sharedAsset->meshes_modelMat.resize(sharedAsset->meshes.size());
+        sharedAsset->meshes_localMat.resize(sharedAsset->meshes.size());
+        // rigid, static
+        //      FBXResourceAsset
+        //     vector<Matrix> local;
+        //     vector<Matrix> model;
+    }
+
+    // mesh의 정점 버퍼, 인덱스 버퍼 생성
+    for (auto& mesh : sharedAsset->meshes)
+    {
+        mesh.CreateVertexBuffer(device);
+        mesh.CreateIndexBuffer(device);
+    }
+
+    // 피킹 aabb
+    if (pScene->HasAnimations())
+    {
+        // auto firstAnimKey = sharedAsset->animations[0].m_boneAnimations[0].m_keys[0];
+        // Matrix mat = Matrix::CreateScale(firstAnimKey.m_scale) * 
+        // 			Matrix::CreateFromQuaternion(firstAnimKey.m_rotation) * 
+        // 			Matrix::CreateTranslation(firstAnimKey.m_position);
+        // sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, mat);
+        // sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, mat);
+
+        // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
+        sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+        sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+        sharedAsset->boxCenter = { 0.0f, (sharedAsset->boxMax - sharedAsset->boxMin).y / 2.0f, 0.0f };
+    }
+    else
+    {
+        sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+        sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+        sharedAsset->boxCenter = Vector3::Zero;
+    }
 
 	// map에 저장하기
 	weak_ptr<FBXResourceAsset> weakAsset = sharedAsset;
 	assets.insert({ path, weakAsset });
-
 
 	return sharedAsset;
 }

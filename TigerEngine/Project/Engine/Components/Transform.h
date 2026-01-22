@@ -20,6 +20,7 @@ public:
 
     const Vector3& GetPosition() const { return position; }
     const Vector3& GetEuler() const { return euler; }
+    const Quaternion& GetQuaternion() const { return quaternion; }
     const Vector3& GetScale() const { return scale; }
     const Matrix& GetMatrix() const { return worldMatrix; }
 
@@ -29,9 +30,20 @@ public:
         dirty = true;
     }
 
+    // 에디터/직렬화용
     void SetEuler(const Vector3& r)
     {
         euler = r;
+        quaternion = Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z);
+        dirty = true;
+    }
+
+    // Physics/엔진 내부용
+    void SetQuaternion(const Quaternion& q)
+    {
+        quaternion = q;
+        quaternion.Normalize();
+        euler = q.ToEuler();   
         dirty = true;
     }
 
@@ -41,11 +53,28 @@ public:
         dirty = true;
     }
 
+    // Y축 회전값 (Yaw) getter (rad)
+    float GetYaw() const
+    {
+        return euler.y;
+    }
+
+    // Y축 회전만 설정 (rad)
+    void SetRotationY(float yaw)
+    {
+        euler.y = yaw;
+        quaternion = Quaternion::CreateFromYawPitchRoll(
+            euler.y, euler.x, euler.z
+        );
+        dirty = true;
+    }
+
 	//std::shared_ptr<Transform> parent{};
 
 private:
     Vector3 position{ Vector3::Zero };
     Vector3 euler{ Vector3::Zero };     // 오일러 각으로 표현한 라디안 값
+    Quaternion quaternion{ Quaternion::Identity }; // 쿼터니언 
     Vector3 scale{ Vector3::One };
 
     Matrix worldMatrix{};

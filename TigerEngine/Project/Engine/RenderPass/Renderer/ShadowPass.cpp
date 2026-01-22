@@ -14,10 +14,10 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
 
     // IA
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    context->IASetInputLayout(sm.inputLayout_Vertex.Get());
+    context->IASetInputLayout(sm.inputLayout_BoneWeightVertex.Get());
 
     // Shader
-    context->VSSetShader(sm.VS_ShadowDepth_Model.Get(), NULL, 0);
+    context->VSSetShader(sm.VS_ShadowDepth_Skeletal.Get(), NULL, 0);
     context->PSSetShader(sm.PS_ShadowDepth.Get(), NULL, 0);    // alpha discard
 
     // Sampler
@@ -35,8 +35,8 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     {
         // CB - Transform
         sm.transformCBData.world = m.world.Transpose();
-        sm.transformCBData.isRigid = m.isRigid;
-        sm.transformCBData.refBoneIndex = m.refBoneIndex;
+        //sm.transformCBData.isSkeletal = m.isSkeletal;
+        //sm.transformCBData.refBoneIndex = m.refBoneIndex;
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
         // CB - Offset, Pose

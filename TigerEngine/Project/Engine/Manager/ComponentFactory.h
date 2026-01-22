@@ -9,7 +9,6 @@ using createCompFunc = std::function<Component*(GameObject*)>;
 /// 엔진에 사용하는 모든 컴포넌트들은 해당 클래스에 등록된다.
 class ComponentFactory : public Singleton<ComponentFactory>
 {
-
 public:
     ComponentFactory(token) {};
     ~ComponentFactory() = default;       

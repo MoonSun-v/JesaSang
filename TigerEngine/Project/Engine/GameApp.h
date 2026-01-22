@@ -34,6 +34,10 @@ public:
 	UINT internalWidth = 1920;
 	UINT internalHeight = 1080;
 	bool isResize = false;
+
+private:
+    float m_PhysicsAccumulator = 0.0f;
+
 public:
 	bool Initialize(UINT Width, UINT Height);
     void Uninialize();
@@ -45,6 +49,7 @@ public:
 	void Update();
 	void Render();
 	virtual void OnUpdate();		// Update
+    virtual void OnFixedUpdate(float dt);
 	virtual void OnRender() = 0;	// Render
 
     void ConsoleInitialize();

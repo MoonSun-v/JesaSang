@@ -89,7 +89,7 @@ inline T* GameObject::AddComponent()
 	handles.push_back(handle);
 	comp->OnInitialize(); // 컴포넌트 초기화 실행
 
-	if (auto renderComp = dynamic_cast<RenderComponent*>(comp))
+ 	if (auto renderComp = dynamic_cast<RenderComponent*>(comp))
 	{
         // 렌더 컴포넌트
         RenderSystem::Instance().Register(renderComp);

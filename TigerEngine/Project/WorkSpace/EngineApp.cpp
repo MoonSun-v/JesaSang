@@ -195,6 +195,11 @@ void EngineApp::OnRender()
 	EndRender(); 					// 업데이트 마무리
 }
 
+void EngineApp::OnFixedUpdate(float dt)
+{
+    SceneSystem::Instance().FixedUpdateScene(dt);
+}
+
 void GameApp::ConsoleInitialize()
 {
 #if _DEBUG
@@ -282,7 +287,9 @@ void EngineApp::ResizeResource()
     auto& sm = ShaderManager::Instance();
 
     sm.ReleaseBackBufferResources();
+#if _DEBUG
     editor->ReleaseBackBufferResources();
+#endif
 
     dxRenderer->OnResize(clientWidth, clientHeight);
     sm.CreateBackBufferResource(dxRenderer->GetDevice(), clientWidth, clientHeight);
@@ -294,9 +301,11 @@ void EngineApp::ResizeResource()
     sm.depthSRV = dxRenderer->GetDepthSRV();
     sm.viewport_screen = dxRenderer->GetRenderViewPort();
 
+#if _DEBUG
     // editor 참조
     editor->GetDSV(dxRenderer->GetDepthStencilView());
     editor->GetRTV(dxRenderer->GetBackBufferRTV());
+#endif
 
     // Camera
     auto cams = CameraSystem::Instance().GetAllCamera();
@@ -356,26 +365,34 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "Components/Camera.h"
 #include "Components/AudioListenerComponent.h"
 #include "Components/AudioSourceComponent.h"
+#include "Components/PhysicsComponent.h"
+#include "Components/CharacterControllerComponent.h"
 #include "Manager/ComponentFactory.h"
 
 #include "Player/Player1.h"
 #include "Player/Weapon.h"
 
-#include "Components/AudioListenerComponent.h"
-#include "Components/AudioSourceComponent.h"
+ #include "PhysicsTest/PhysicsTestScript.h"
+  #include "PhysicsTest/GroundTestScript.h"
+  #include "PhysicsTest/CCTTest.h"
 
-void EngineApp::RegisterAllComponents()
-{
-	ComponentFactory::Instance().Register<FBXData>("FBXData");
-	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
-    ComponentFactory::Instance().Register<Transform>("Transform");
-    ComponentFactory::Instance().Register<Camera>("Camera");
+  void EngineApp::RegisterAllComponents()
+  {
+      ComponentFactory::Instance().Register<FBXData>("FBXData");
+      ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
+      ComponentFactory::Instance().Register<Transform>("Transform");
+      ComponentFactory::Instance().Register<Camera>("Camera");
 
-	ComponentFactory::Instance().Register<Player1>("Player1");
-	ComponentFactory::Instance().Register<Weapon>("Weapon");
-	ComponentFactory::Instance().Register<Light>("Light");
+      ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
+      ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
+      ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
+      ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
 
-    ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
-    ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
+      ComponentFactory::Instance().Register<Player1>("Player1");
+      ComponentFactory::Instance().Register<Weapon>("Weapon");
+      ComponentFactory::Instance().Register<Light>("Light");
 
-}
+      ComponentFactory::Instance().Register<PhysicsTestScript>("PhysicsTestScript");
+      ComponentFactory::Instance().Register<GroundTestScript>("GroundTestScript");
+      ComponentFactory::Instance().Register<CCTTest>("CCTTestScript");
+  }

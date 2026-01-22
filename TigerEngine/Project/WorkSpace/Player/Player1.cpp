@@ -21,6 +21,7 @@ void Player1::OnInitialize()
 
 void Player1::OnStart()
 {
+
 }
 
 void Player1::OnUpdate(float delta)

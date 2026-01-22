@@ -21,7 +21,7 @@ class SkeletonInfo
 private:
 	map<string, int> m_boneMappingTable;
 	map<string, Matrix> m_bonesOffset;
-	bool isRigid = true;
+	bool isSkeletal = false;
 
 	void CreateBoneInfoFromNode(const aiNode* pAiNode);
 
@@ -34,5 +34,5 @@ public:
 	Matrix GetBoneOffsetByName(const string& boneName);
 	bool CreateFromAiScene(const aiScene* pAiScene);
 
-	bool IsRigid() { return isRigid; };
+	bool IsSkeletal() { return isSkeletal; };
 };

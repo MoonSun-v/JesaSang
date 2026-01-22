@@ -1,12 +1,12 @@
 #pragma once
 #include <PxPhysicsAPI.h>
 #include <string>
-// #include "PhysicsComponent.h" // TODO : PhysicsComponent 혹은 CCT(CharacterController)Component 
+#include "../Components/PhysicsComponent.h" 
 
 class RaycastHit
 {
 public:
-    // PhysicsComponent* component = nullptr; // 맞은 대상
+    PhysicsComponent* component = nullptr; // 맞은 대상
     physx::PxVec3 point = physx::PxVec3(0);
     physx::PxVec3 normal = physx::PxVec3(0);
     float distance = 0.0f;

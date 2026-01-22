@@ -104,13 +104,16 @@ public:
     std::vector<ComPtr<ID3D11RenderTargetView>> accumBRTVs;
 
     // IA
-    ComPtr<ID3D11InputLayout> inputLayout_Vertex;
+    ComPtr<ID3D11InputLayout> inputLayout_RigidVertex;
+    ComPtr<ID3D11InputLayout> inputLayout_BoneWeightVertex;
     ComPtr<ID3D11InputLayout> inputLayout_Position;
     ComPtr<ID3D11InputLayout> inputLayout_Particle;
 
     // Vertex Shader
-    ComPtr<ID3D11VertexShader> VS_ShadowDepth_Model;
-    ComPtr<ID3D11VertexShader> VS_BaseLit_Model;
+    ComPtr<ID3D11VertexShader> VS_ShadowDepth_Rigid;
+    ComPtr<ID3D11VertexShader> VS_ShadowDepth_Skeletal;
+    ComPtr<ID3D11VertexShader> VS_BaseLit_Rigid;
+    ComPtr<ID3D11VertexShader> VS_BaseLit_Skeletal;
     ComPtr<ID3D11VertexShader> VS_Skybox;
     ComPtr<ID3D11VertexShader> VS_FullScreen;
     ComPtr<ID3D11VertexShader> VS_LightVolume;

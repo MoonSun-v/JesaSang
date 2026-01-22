@@ -52,3 +52,15 @@ void ScriptSystem::Update(float delta)
         }
     }
 }
+
+void ScriptSystem::FixedUpdate(float dt)
+{
+    if (PlayModeSystem::Instance().IsPlaying())
+    {
+        // 사용자 정의 component update
+        for (auto& e : scriptComps)
+        {
+            e->OnFixedUpdate(dt);
+        }
+    }
+}

@@ -138,6 +138,7 @@
     <ClCompile Include="Components\AudioListenerComponent.cpp" />
     <ClCompile Include="Components\AudioSourceComponent.cpp" />
     <ClCompile Include="Components\Camera.cpp" />
+    <ClCompile Include="Components\CharacterControllerComponent.cpp" />
     <ClCompile Include="Components\FBXData.cpp" />
     <ClCompile Include="Components\FBXRenderer.cpp" />
     <ClCompile Include="Components\Light.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Components\FreeCamera.cpp" />
     <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Components\ShadowCamera\DirectionalShadowCamera.cpp" />
+    <ClCompile Include="EngineSystem\CharacterControllerSystem.cpp" />
     <ClCompile Include="EngineSystem\LightSystem.cpp" />
     <ClCompile Include="EngineSystem\PhysicsSystem.cpp" />
     <ClCompile Include="EngineSystem\RenderSystem.cpp" />
@@ -183,6 +185,7 @@
     <ClInclude Include="Components\AudioListenerComponent.h" />
     <ClInclude Include="Components\AudioSourceComponent.h" />
     <ClInclude Include="Components\Camera.h" />
+    <ClInclude Include="Components\CharacterControllerComponent.h" />
     <ClInclude Include="Components\FBXData.h" />
     <ClInclude Include="Components\FBXRenderer.h" />
     <ClInclude Include="Components\Light.h" />
@@ -192,6 +195,7 @@
     <ClInclude Include="Components\RenderComponent.h" />
     <ClInclude Include="Components\ScriptComponent.h" />
     <ClInclude Include="Components\ShadowCamera\DirectionalShadowCamera.h" />
+    <ClInclude Include="EngineSystem\CharacterControllerSystem.h" />
     <ClInclude Include="EngineSystem\LightSystem.h" />
     <ClInclude Include="EngineSystem\PhysicsSystem.h" />
     <ClInclude Include="EngineSystem\RenderSystem.h" />
@@ -301,7 +305,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Shaders\VS_BaseLit_Model.hlsl">
+    <FxCompile Include="Shaders\VS_BaseLit_Rigid.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\VS_BaseLit_Skeletal.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
@@ -325,7 +335,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Shaders\VS_ShadowDepth_Model.hlsl">
+    <FxCompile Include="Shaders\VS_ShadowDepth_Rigid.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\VS_ShadowDepth_Skeletal.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
