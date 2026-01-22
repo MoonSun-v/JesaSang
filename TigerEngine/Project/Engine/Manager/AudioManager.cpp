@@ -6,6 +6,7 @@
 #include <cctype>
 #include <fstream>
 #include <sstream>
+#include <cmath>
 
 namespace
 {
@@ -26,6 +27,26 @@ namespace
         std::string upper = value;
         upper = ToUpper(upper);
         return upper == "1" || upper == "TRUE" || upper == "YES";
+    }
+
+    bool IsKnownMode(const std::string& value)
+    {
+        if (value.empty())
+        {
+            return false;
+        }
+
+        std::string upper = ToUpper(value);
+        return upper == "3D" ||
+            upper == "3D_INVERSE" ||
+            upper == "INVERSE" ||
+            upper == "3D_LINEAR" ||
+            upper == "LINEAR" ||
+            upper == "3D_LINEAR_SQUARE" ||
+            upper == "LINEAR_SQUARE" ||
+            upper == "3D_CUSTOM" ||
+            upper == "CUSTOM" ||
+            upper == "2D";
     }
 
     std::filesystem::path ResolveAudioPath(const std::string& rawPath)
@@ -184,8 +205,27 @@ bool AudioManager::LoadManifest(const std::string& manifestPath)
         entry.id = Trim(cols[0]);
         entry.path = Trim(cols[1]);
         entry.group = Trim(cols[2]);
-        entry.mode = ParseMode(cols[3]);
-        entry.defaultVolume = std::stof(Trim(cols[4]));
+        std::string modeText = Trim(cols[3]);
+        if (!modeText.empty() && !IsKnownMode(modeText))
+        {
+            OutputDebugStringA("[AudioManager] Unknown Mode in manifest; using default.\n");
+        }
+        entry.mode = ParseMode(modeText);
+        try
+        {
+            entry.defaultVolume = std::stof(Trim(cols[4]));
+        }
+        catch (const std::exception&)
+        {
+            OutputDebugStringA("[AudioManager] Invalid DefaultVolume in manifest; skipping entry.\n");
+            continue;
+        }
+        if (!std::isfinite(entry.defaultVolume) || entry.defaultVolume < 0.0f)
+        {
+            OutputDebugStringA("[AudioManager] Invalid DefaultVolume in manifest; clamping to 0.\n");
+            entry.defaultVolume = 0.0f;
+        }
+
         entry.loop = IsTruthy(Trim(cols[5]));
 
         if (!entry.id.empty())
@@ -279,12 +319,34 @@ std::string AudioManager::Trim(std::string value)
 std::vector<std::string> AudioManager::SplitCsvLine(const std::string& line)
 {
     std::vector<std::string> cols;
-    std::stringstream ss(line);
     std::string item;
-    while (std::getline(ss, item, ','))
+    bool inQuotes = false;
+    for (size_t i = 0; i < line.size(); ++i)
     {
-        cols.push_back(item);
+        char c = line[i];
+        if (c == '"')
+        {
+            if (inQuotes && i + 1 < line.size() && line[i + 1] == '"')
+            {
+                item.push_back('"');
+                ++i;
+            }
+            else
+            {
+                inQuotes = !inQuotes;
+            }
+        }
+        else if (c == ',' && !inQuotes)
+        {
+            cols.push_back(item);
+            item.clear();
+        }
+        else
+        {
+            item.push_back(c);
+        }
     }
+    cols.push_back(item);
     return cols;
 }
 

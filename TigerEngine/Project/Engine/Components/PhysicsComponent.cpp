@@ -248,7 +248,7 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
             d.density
         );
     }
-    -
+    
     phys.GetScene()->addActor(*m_Actor); // 물리 씬에 추가 
     phys.RegisterComponent(m_Actor, this);
 

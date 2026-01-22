@@ -60,4 +60,6 @@ private:
     bool m_Loop = false;
     float m_MinDistance = 1.0f;
     float m_MaxDistance = 100.0f;
+    bool m_HasUserVolume = false;
+    bool m_HasUserLoop = false;
 };

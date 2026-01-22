@@ -78,10 +78,12 @@ void AudioSourceComponent::Deserialize(nlohmann::json data)
     if (propData.contains("Volume"))
     {
         m_Volume = propData["Volume"].get<float>();
+        m_HasUserVolume = true;
     }
     if (propData.contains("Loop"))
     {
         m_Loop = propData["Loop"].get<bool>();
+        m_HasUserLoop = true;
     }
     if (propData.contains("Pitch"))
     {
@@ -98,6 +100,19 @@ void AudioSourceComponent::Deserialize(nlohmann::json data)
 
     if (!m_ClipId.empty())
     {
+        const auto* entry = AudioManager::Instance().GetEntry(m_ClipId);
+        if (entry)
+        {
+            if (!m_HasUserVolume)
+            {
+                m_Volume = entry->defaultVolume;
+            }
+            if (!m_HasUserLoop)
+            {
+                m_Loop = entry->loop;
+            }
+        }
+
         auto clip = AudioManager::Instance().GetOrCreateClip(m_ClipId);
         if (clip)
         {
@@ -143,6 +158,21 @@ void AudioSourceComponent::SetClipId(const std::string& id)
         return;
     }
 
+    const auto* entry = AudioManager::Instance().GetEntry(m_ClipId);
+    if (entry)
+    {
+        if (!m_HasUserVolume)
+        {
+            m_Volume = entry->defaultVolume;
+            m_Source.SetVolume(m_Volume);
+        }
+        if (!m_HasUserLoop)
+        {
+            m_Loop = entry->loop;
+            m_Source.SetLoop(m_Loop);
+        }
+    }
+
     auto clip = AudioManager::Instance().GetOrCreateClip(m_ClipId);
     if (clip)
     {
@@ -163,6 +193,7 @@ void AudioSourceComponent::SetClip(std::shared_ptr<AudioClip> clip)
 void AudioSourceComponent::SetLoop(bool loop)
 {
     m_Loop = loop;
+    m_HasUserLoop = true;
     m_Source.SetLoop(loop);
 }
 
@@ -174,6 +205,7 @@ float AudioSourceComponent::GetVolume() const
 void AudioSourceComponent::SetVolume(float volume)
 {
     m_Volume = volume;
+    m_HasUserVolume = true;
     m_Source.SetVolume(volume);
 }
 
