@@ -446,23 +446,10 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
     //---------------------------
     // 2 - 1 . Static/Rigid Mesh
     {
-        // Input Layout
-        D3D11_INPUT_ELEMENT_DESC layout[] =
-        {   // SemanticName , SemanticIndex , Format , InputSlot , AlignedByteOffset , InputSlotClass , InstanceDataStepRate	
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 24,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 36,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 48,  D3D11_INPUT_PER_VERTEX_DATA, 0 }
-        };
-
+        // VS
         ID3D10Blob* vertexShaderBuffer = nullptr;
         std::wstring path1 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_BaseLit_Rigid.hlsl";
         HR_T(CompileShaderFromFile(path1.c_str(), "main", "vs_5_0", &vertexShaderBuffer));
-        HR_T(dev->CreateInputLayout(layout, ARRAYSIZE(layout),
-            vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &inputLayout_RigidVertex));
-
-        // VS
         HR_T(dev->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(),
             vertexShaderBuffer->GetBufferSize(), NULL, &VS_BaseLit_Rigid));
         SAFE_RELEASE(vertexShaderBuffer);
@@ -475,7 +462,6 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
             vertexShaderBuffer3->GetBufferSize(), NULL, &VS_ShadowDepth_Rigid));
         SAFE_RELEASE(vertexShaderBuffer3);
     }
-
     // 2 - 2 . Skeletal Mesh
     {
         // Input Layout

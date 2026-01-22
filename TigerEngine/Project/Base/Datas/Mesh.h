@@ -37,6 +37,8 @@ public:
 	vector<Texture> textures;
 
 	ComPtr<ID3D11Device> m_pDevice;
+    int parentIndex = -1;
+    string nodeName = "NULL";
 	int refBoneIndex = -1;
 
 	Mesh(ComPtr<ID3D11Device>& dev, const std::vector<BoneWeightVertexData>& vertices, const std::vector<UINT>& indices, const std::vector<Texture>& textures) :

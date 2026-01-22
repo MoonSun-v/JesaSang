@@ -20,15 +20,22 @@
 
 struct FBXResourceAsset
 {
-	SkeletonInfo skeletalInfo;
-	std::vector<Animation> animations;
-	std::vector<Mesh> meshes;
-	std::vector<Texture> textures;
-	
+    std::string directory = "";
+
+    std::vector<Mesh> meshes;
+	std::vector<Texture> textures;	
+    std::vector<Animation> animations;
+
+    SkeletonInfo skeletalInfo;
+    OffsetMatrixCB m_BoneOffsets{};
+
+    // sub mesh matrixs
+    vector<Matrix> meshes_bindMat;
+    vector<Matrix> meshes_localMat;
+    vector<Matrix> meshes_modelMat;
+
+    // AABB Debug Draw
 	Vector3 boxMin { FLT_MAX, FLT_MAX, FLT_MAX };
 	Vector3 boxMax{};
 	Vector3 boxCenter{};
-
-	std::string directory = "";
-    OffsetMatrixCB m_BoneOffsets{};
 };

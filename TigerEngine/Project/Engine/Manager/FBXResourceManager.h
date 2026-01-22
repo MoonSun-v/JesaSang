@@ -20,13 +20,20 @@ class FBXResourceManager : public Singleton<FBXResourceManager>
 	ComPtr<ID3D11Device> device = nullptr;
 	ComPtr<ID3D11DeviceContext> deviceContext = nullptr;
 
-	// 에셋 내용 로드 함수들
-	void ProcessNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene);
-	Mesh ProcessMesh(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene);
+    // -------------------------------------------
+	// Node Process
+    void ProcessRigidNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene, int parentIndex);
+	void ProcessSkeletalNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene);
+	
+    // Mesh & Texture Save
+    Mesh ProcessMeshTexture(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene);
+
+    // Bone Save
 	void ProcessBoneWeight(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh);
-	std::vector<Texture> loadMaterialTextures(std::shared_ptr<FBXResourceAsset>& pAsset, aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
-    
-    // 내장 텍스처 Save
+	
+    // --------------------------------------------
+    // Texture Process
+    std::vector<Texture> loadMaterialTextures(std::shared_ptr<FBXResourceAsset>& pAsset, aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
     bool SaveEmbeddedTextureIfExists(const aiScene* scene, const std::string& directory,
         const std::string& filename, std::string* outSavedPath);
     bool SaveBGRA8ToPNG_WIC(const std::string& fullPath, uint32_t width, uint32_t height,

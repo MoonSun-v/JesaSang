@@ -10,7 +10,7 @@ class Bone
 public:
 	void CreateBone(string objName, int parentIndex, int boneIndex, Matrix worldMat, Matrix localMat);
 
-	BoneAnimation m_boneAnimation;	// 
+	NodeAnimation m_nodeAnimation;	// 
 
 	Matrix m_worldTransform;
 	Matrix m_localTransform;

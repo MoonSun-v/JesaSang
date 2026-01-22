@@ -30,7 +30,7 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     context->IASetInputLayout(sm.inputLayout_BoneWeightVertex.Get());
 
     // Shader
-    context->VSSetShader(sm.VS_BaseLit_Skeletal.Get(), NULL, 0);
+    context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
     context->PSSetShader(sm.PS_Gbuffer.Get(), NULL, 0);
 
     // Sampler
@@ -45,10 +45,15 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     auto& models = queue.GetSkeletaItems();
     for (auto& m : models)
     {
+        if(m.isSkeletal)
+            context->VSSetShader(sm.VS_BaseLit_Skeletal.Get(), NULL, 0);
+        else
+            context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
+
         // CB - Transform
         sm.transformCBData.world = m.world.Transpose();
-        //sm.transformCBData.isSkeletal = m.isSkeletal;
-        //sm.transformCBData.refBoneIndex = m.refBoneIndex;
+        if (!m.isSkeletal)
+            sm.transformCBData.model = m.model.Transpose();   
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
         // CB - Offset, Pose

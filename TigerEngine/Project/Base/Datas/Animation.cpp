@@ -1,36 +1,36 @@
 #include "Animation.h"
 #include <stdexcept>
 
-void Animation::CreateBoneAnimation(aiAnimation* pAiAnimation)
+void Animation::CreateNodeAnimation(aiAnimation* pAiAnimation)
 {
 	m_name = pAiAnimation->mName.C_Str();
 	m_tick = pAiAnimation->mTicksPerSecond;
 	m_duration = pAiAnimation->mDuration / m_tick;
 
-	// º»¿¡ ´ëÇÑ Å° ¾Ö´Ï¸ŞÀÌ¼Ç ÀúÀå
+	// ë³¸ì— ëŒ€í•œ í‚¤ ì• ë‹ˆë©”ì´ì…˜ ì €ì¥
 	for (int i = 0; i < pAiAnimation->mNumChannels; i++)
 	{
 		aiNodeAnim* pAiNodeAnim = pAiAnimation->mChannels[i];
 
-		BoneAnimation boneAnim;
-		boneAnim.m_boneName = pAiNodeAnim->mNodeName.C_Str();
-		boneAnim.CreateKeys(pAiNodeAnim, m_tick);
-		m_boneAnimations.push_back(boneAnim);
-		m_mappingBoneAnimations.insert({ boneAnim.m_boneName, i });
+		NodeAnimation nodeAnim;
+		nodeAnim.m_nodeName = pAiNodeAnim->mNodeName.C_Str();
+		nodeAnim.CreateKeys(pAiNodeAnim, m_tick);
+		m_nodeAnimations.push_back(nodeAnim);
+		m_mappingNodeAnimations.insert({ nodeAnim.m_nodeName, i });
 	}
 
 }
 
-bool Animation::GetBoneAnimationByName(string boneName, BoneAnimation& out)
+bool Animation::GetNodeAnimationByName(string boneName, NodeAnimation& out)
 {
-	auto anim = m_mappingBoneAnimations.find(boneName);
-	if (anim == m_mappingBoneAnimations.end())
+	auto anim = m_mappingNodeAnimations.find(boneName);
+	if (anim == m_mappingNodeAnimations.end())
 	{
 		return false;
 	}
 
 	int index = anim->second;
-	out = m_boneAnimations[index];
+	out = m_nodeAnimations[index];
 
 	return true;
 }

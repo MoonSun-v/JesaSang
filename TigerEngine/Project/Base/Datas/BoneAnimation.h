@@ -7,10 +7,10 @@
 
 using namespace std;
 
-class BoneAnimation
+class NodeAnimation
 {
 public:
-	string m_boneName;				// 사용하는 본 이름
+	string m_nodeName;				// 사용하는 본 이름
 	vector<AnimationKey> m_keys;	// 채널(mChaneels)에 저장되어 있는 키 값들
 	// string interpolationType		
 
