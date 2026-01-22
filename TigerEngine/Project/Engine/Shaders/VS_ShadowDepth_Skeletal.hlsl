@@ -12,7 +12,7 @@ PS_INPUT main(VS_Weight_INPUT input)
     // Old  // TODO :: Delete
     /*
     // skeletal
-    if (isRigid == 0)
+    if (isSkeletal == 0)
     {
         float4x4 offsetPos[4];
         offsetPos[0] = mul(boneOffset[input.boneIndices.x], bonePose[input.boneIndices.x]);
