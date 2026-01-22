@@ -77,7 +77,7 @@ public:
     ~CharacterControllerComponent();
 
     void CreateCharacterCollider(float radius, float height, const Vector3& offset);
-    void Move(const Vector3& wishDir, float fixedDt);
+    void MoveCharacter(const Vector3& wishDir, float fixedDt);
     void Jump();
 
     void SyncFromController();

@@ -75,7 +75,7 @@ class CharacterControllerSystem : public Singleton<CharacterControllerSystem>
 {
 public:
     CharacterControllerSystem(token) {}
-    ~CharacterControllerSystem();
+    ~CharacterControllerSystem() = default;
 
     void Initialize(PxScene* scene);
     void Simulate(float dt);

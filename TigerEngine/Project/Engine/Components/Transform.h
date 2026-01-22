@@ -34,7 +34,7 @@ public:
     void SetEuler(const Vector3& r)
     {
         euler = r;
-        quaternion = Quaternion::CreateFromYawPitchRoll( r.y, r.x, r.z);
+        quaternion = Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z);
         dirty = true;
     }
 

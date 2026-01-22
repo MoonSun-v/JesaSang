@@ -147,12 +147,6 @@ PxQueryHitType::Enum CCTQueryFilter::postFilter(
 
 // -------------------------------------------------------------------------
 
-
-CharacterControllerSystem::~CharacterControllerSystem()
-{
-    Shutdown();
-}
-
 void CharacterControllerSystem::Initialize(PxScene* scene)
 {
     if (!scene) return;
@@ -161,6 +155,15 @@ void CharacterControllerSystem::Initialize(PxScene* scene)
 
 void CharacterControllerSystem::Shutdown()
 {
+    for (auto& it : m_CCTMap)
+    {
+        if (it.first)
+        {
+            it.first->release();
+        }
+    }
+    m_CCTMap.clear();
+
     if (m_ControllerManager)
     {
         PX_RELEASE(m_ControllerManager);

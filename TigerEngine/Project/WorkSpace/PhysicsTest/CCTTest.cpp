@@ -37,5 +37,5 @@ void CCTTest::OnUpdate(float delta)
 
 void CCTTest::OnFixedUpdate(float dt)
 {
-    OutputDebugString((L"[CCTTest] : OnFixedUpdate 실행 \n\n"));
+    // OutputDebugString((L"[CCTTest] : OnFixedUpdate 실행 \n\n"));
 }
