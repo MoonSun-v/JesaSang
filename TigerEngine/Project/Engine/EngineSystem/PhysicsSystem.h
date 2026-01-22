@@ -99,7 +99,7 @@ class PhysicsSystem : public Singleton<PhysicsSystem>
 {
 public:
     PhysicsSystem(token) {}
-    ~PhysicsSystem();
+    ~PhysicsSystem() = default;
 
     bool Initialize();
     void Simulate(float dt); // 물리 시뮬레이션 1프레임 수행 

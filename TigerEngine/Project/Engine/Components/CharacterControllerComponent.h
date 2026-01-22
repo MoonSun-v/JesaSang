@@ -14,6 +14,15 @@ class PhysicsComponent;
 
 class CharacterControllerComponent : public Component
 {
+    RTTR_ENABLE(CharacterControllerComponent)
+//public: // TODO : 직렬화 역직렬화 
+//
+//    nlohmann::json Serialize() override;
+//    void Deserialize(nlohmann::json data) override;
+
+public:
+    void OnInitialize() override;
+
 public:
     Transform* transform = nullptr;
 
@@ -67,8 +76,8 @@ public:
     CharacterControllerComponent() = default;
     ~CharacterControllerComponent();
 
-    void CreateCharacterCapsule(float radius, float height, const Vector3& offset);
-    void Move(const Vector3& wishDir, float fixedDt);
+    void CreateCharacterCollider(float radius, float height, const Vector3& offset);
+    void MoveCharacter(const Vector3& wishDir, float fixedDt);
     void Jump();
 
     void SyncFromController();

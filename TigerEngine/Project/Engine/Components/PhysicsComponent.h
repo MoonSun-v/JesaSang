@@ -57,14 +57,14 @@ struct ColliderDesc
 // ----------------------------------------------------
 class PhysicsComponent : public Component
 {
-//    RTTR_ENABLE(PhysicsComponent)
-//public:
+    RTTR_ENABLE(PhysicsComponent)
+//public: // TODO : 직렬화 역직렬화 
 //
 //    nlohmann::json Serialize() override;
 //    void Deserialize(nlohmann::json data) override;
+
 public:
-    // void OnInitialize() override;
-    // void OnDestory() override;
+    void OnInitialize() override;
 
 public:
     Transform* transform = nullptr;

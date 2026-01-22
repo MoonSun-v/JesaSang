@@ -75,20 +75,20 @@ class CharacterControllerSystem : public Singleton<CharacterControllerSystem>
 {
 public:
     CharacterControllerSystem(token) {}
-    ~CharacterControllerSystem();
+    ~CharacterControllerSystem() = default;
 
     void Initialize(PxScene* scene);
     void Simulate(float dt);
     void Shutdown();
+
+    void RegisterComponent(PxController* cct, CharacterControllerComponent* comp);
+    void UnregisterComponent(PxController* cct);
 
     PxControllerManager* GetControllerManager() const { return m_ControllerManager; }
     CharacterControllerComponent* GetComponent(PxController* cct);
 
     // CCT <-> Component 매핑
     std::unordered_map<PxController*, CharacterControllerComponent*> m_CCTMap;
-
-    void RegisterComponent(PxController* cct, CharacterControllerComponent* comp);
-    void UnregisterComponent(PxController* cct);
 
 
 private:
@@ -99,7 +99,7 @@ private:
 
 
 public:
-    PxController* CreateCapsuleController(
+    PxController* CreateCapsuleCollider(
         const PxExtendedVec3& position,
         float radius,
         float height,

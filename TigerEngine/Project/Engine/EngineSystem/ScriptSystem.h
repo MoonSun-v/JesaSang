@@ -40,6 +40,12 @@ public:
     /// </summary>
     void Update(float delta);
 
+
+    /// <summary>
+    /// 등록된 컴포넌트 호출
+    /// </summary>
+    void FixedUpdate(float dt);
+
 private:
     /// <summary>
     /// 등록된 컴포넌드 목록

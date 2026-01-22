@@ -29,6 +29,7 @@ public:
 	bool OnInitialize() override;
 	void OnUpdate() override;
 	void OnRender() override;
+    void OnFixedUpdate(float dt) override;
 
 #if _DEBUG
 	std::unique_ptr<ImguiRenderer> imguiRenderer{};

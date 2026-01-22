@@ -1,4 +1,5 @@
 #include "PhysicsSystem.h"
+#include "CharacterControllerSystem.h"
 #include "../Util/PhysXUtils.h"
 #include "../Util/PhysicsLayerMatrix.h"
 #include "../Components/PhysicsComponent.h"
@@ -8,11 +9,6 @@
 // ------------------------------------------------------------
 // PhysicsSystem
 // ------------------------------------------------------------
-
-PhysicsSystem::~PhysicsSystem()
-{
-    Shutdown();
-}
 
 bool PhysicsSystem::Initialize()
 {
@@ -87,6 +83,16 @@ bool PhysicsSystem::Initialize()
         0.6f  // 반발력 (restitution)
     );
 
+
+    // ------------------------------------------------------
+    // 7. Character Controller Manager
+    // ------------------------------------------------------
+    CharacterControllerSystem::Instance().Initialize(m_Scene);
+
+
+    // ------------------------------------------------------
+    // 8. 피직스 레이어 
+    // ------------------------------------------------------
     PhysicsLayerMatrix::Initialize();
 
     return true;
@@ -100,6 +106,17 @@ void PhysicsSystem::Simulate(float dt)
 
     m_Scene->simulate(dt);      // 물리 연산 요청 (비동기)
     m_Scene->fetchResults(true);// 결과가 끝날 때까지 대기 후 적용
+
+    for (auto& it : m_ActorMap)
+    {
+        if (it.second)
+            it.second->SyncFromPhysics();
+    }
+
+    // CCT 후처리 (Trigger / Collision 이벤트)
+    CharacterControllerSystem::Instance().Simulate(dt);
+
+    ResolveTriggerEvents();
 }
 
 
@@ -179,6 +196,7 @@ PhysicsComponent* PhysicsSystem::GetComponent(PxActor* actor)
 void PhysicsSystem::Shutdown()
 {
     // PX_RELEASE(m_ControllerManager);
+    CharacterControllerSystem::Instance().Shutdown();
     PX_RELEASE(m_Scene);
     PX_RELEASE(m_Dispatcher);
     PX_RELEASE(m_DefaultMaterial);

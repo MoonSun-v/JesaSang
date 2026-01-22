@@ -34,7 +34,7 @@ public:
     void SetEuler(const Vector3& r)
     {
         euler = r;
-        quaternion = Quaternion::CreateFromYawPitchRoll( r.y, r.x, r.z);
+        quaternion = Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z);
         dirty = true;
     }
 
@@ -50,6 +50,22 @@ public:
     void SetScale(const Vector3& s)
     {
         scale = s;
+        dirty = true;
+    }
+
+    // Y축 회전값 (Yaw) getter (rad)
+    float GetYaw() const
+    {
+        return euler.y;
+    }
+
+    // Y축 회전만 설정 (rad)
+    void SetRotationY(float yaw)
+    {
+        euler.y = yaw;
+        quaternion = Quaternion::CreateFromYawPitchRoll(
+            euler.y, euler.x, euler.z
+        );
         dirty = true;
     }
 

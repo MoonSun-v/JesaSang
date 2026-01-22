@@ -31,6 +31,11 @@ public:
 	virtual void OnUpdate(float delta) {};
 
     /// <summary>
+    /// 
+    /// </summary>
+    virtual void OnFixedUpdate(float delta) {};
+
+    /// <summary>
     /// 객체가 파괴 될 때 호출됩니다.
     /// </summary>
     virtual void OnDestory() {};

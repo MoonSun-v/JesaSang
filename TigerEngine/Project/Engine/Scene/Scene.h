@@ -19,6 +19,8 @@ class Scene
 public:
 	void OnUpdate(float deltaTime);	
 
+    void OnFixedUpdate(float dt);
+
 	/// <summary>
 	/// IsDestroy 플래그 확인 함수 ( 활성화 되었으면 해당 오브젝트는 다음 프레임에 파괴됨 )
 	/// </summary>

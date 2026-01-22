@@ -47,9 +47,9 @@ public:
 	virtual bool Run();
 
 	void Update();
-    void FixedUpdate(float dt);
 	void Render();
 	virtual void OnUpdate();		// Update
+    virtual void OnFixedUpdate(float dt);
 	virtual void OnRender() = 0;	// Render
 
     void ConsoleInitialize();

@@ -8,6 +8,11 @@ void Scene::OnUpdate(float deltaTime)
     ScriptSystem::Instance().Update(deltaTime);
 }
 
+void Scene::OnFixedUpdate(float dt)
+{
+    ScriptSystem::Instance().FixedUpdate(dt);
+}
+
 void Scene::CheckDestroy()
 {
 	for(auto it = gameObjects.begin(); it != gameObjects.end();)

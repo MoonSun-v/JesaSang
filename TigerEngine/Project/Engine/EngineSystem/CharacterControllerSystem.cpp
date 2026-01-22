@@ -147,12 +147,6 @@ PxQueryHitType::Enum CCTQueryFilter::postFilter(
 
 // -------------------------------------------------------------------------
 
-
-CharacterControllerSystem::~CharacterControllerSystem()
-{
-    Shutdown();
-}
-
 void CharacterControllerSystem::Initialize(PxScene* scene)
 {
     if (!scene) return;
@@ -161,6 +155,15 @@ void CharacterControllerSystem::Initialize(PxScene* scene)
 
 void CharacterControllerSystem::Shutdown()
 {
+    for (auto& it : m_CCTMap)
+    {
+        if (it.first)
+        {
+            it.first->release();
+        }
+    }
+    m_CCTMap.clear();
+
     if (m_ControllerManager)
     {
         PX_RELEASE(m_ControllerManager);
@@ -177,6 +180,7 @@ void CharacterControllerSystem::Simulate(float dt)
         CharacterControllerComponent* comp = it.second;
         if (comp)
         {
+            comp->SyncFromController();
             comp->ResolveCollisions();
             comp->CheckTriggers();      // CCT 위치 기반 Overlap Query
             comp->ResolveTriggers();    // 수집만 진행 
@@ -202,7 +206,7 @@ void CharacterControllerSystem::UnregisterComponent(PxController* cct)
 
 
 // 플레이어 전용 콜라이더 생성 
-PxController* CharacterControllerSystem::CreateCapsuleController(
+PxController* CharacterControllerSystem::CreateCapsuleCollider(
     const PxExtendedVec3& position,
     float radius,
     float height,

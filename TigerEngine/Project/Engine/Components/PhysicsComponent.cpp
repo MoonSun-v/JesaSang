@@ -5,8 +5,13 @@
 #include "../Util/PhysicsLayerMatrix.h"
 #include "Transform.h"
 #include <DirectXColors.h>
+#include "../Object/GameObject.h"
 
 
+void PhysicsComponent::OnInitialize()
+{
+    transform = GetOwner()->GetTransform();
+}
 
 PhysicsComponent::~PhysicsComponent()
 {
@@ -34,7 +39,7 @@ void PhysicsComponent::SyncToPhysics()
     m_Actor->setGlobalPose(px);
 }
 
-// Physics → Transform (물리 시뮬 하고나서 매 프레임 실행)
+// Physics → Transform : 물리 시뮬 하고나서 매 프레임 실행
 void PhysicsComponent::SyncFromPhysics()
 {
     if (!transform) return;
@@ -63,6 +68,12 @@ void PhysicsComponent::ApplyFilter()
         m_Shape->setSimulationFilterData(data);
         m_Shape->setQueryFilterData(data);
     }
+}
+
+void PhysicsComponent::SetLayer(CollisionLayer layer)
+{
+    m_Layer = layer;
+    ApplyFilter();
 }
 
 
@@ -237,7 +248,7 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
             d.density
         );
     }
-
+    -
     phys.GetScene()->addActor(*m_Actor); // 물리 씬에 추가 
     phys.RegisterComponent(m_Actor, this);
 
@@ -376,7 +387,6 @@ void PhysicsComponent::DrawPhysXShape(PxShape* shape, const PxTransform& actorPo
         );
         break;
     }
-
     default:
         break;
     }
@@ -639,5 +649,3 @@ void PhysicsComponent::CollectCCTActors()
 //    phys.GetScene()->addActor(*m_Actor);
 //    phys.RegisterComponent(m_Actor, this);
 //}
-
-

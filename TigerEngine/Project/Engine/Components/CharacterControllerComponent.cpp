@@ -3,10 +3,16 @@
 #include "../EngineSystem/PhysicsSystem.h"
 #include "../Util/PhysicsLayerMatrix.h"
 #include "../Util/PhysXUtils.h"
+#include "../Object/GameObject.h"
 
 #include "Transform.h"
 #include "PhysicsComponent.h"
 
+
+void CharacterControllerComponent::OnInitialize()
+{
+    transform = GetOwner()->GetTransform();
+}
 
 CharacterControllerComponent::~CharacterControllerComponent()
 {
@@ -17,7 +23,7 @@ CharacterControllerComponent::~CharacterControllerComponent()
     }
 }
 
-void CharacterControllerComponent::CreateCharacterCapsule(float radius, float height, const Vector3& offset)
+void CharacterControllerComponent::CreateCharacterCollider(float radius, float height, const Vector3& offset)
 {
     if (!transform) return;
 
@@ -30,7 +36,7 @@ void CharacterControllerComponent::CreateCharacterCapsule(float radius, float he
         (transform->GetPosition().z + offset.z) * WORLD_TO_PHYSX
     );
 
-    m_Controller = phys.CreateCapsuleController(
+    m_Controller = phys.CreateCapsuleCollider(
         pos,
         radius * WORLD_TO_PHYSX,
         height * WORLD_TO_PHYSX,
@@ -42,10 +48,17 @@ void CharacterControllerComponent::CreateCharacterCapsule(float radius, float he
     SetLayer(CollisionLayer::Default); // 초기 레이어 적용
 }
 
-void CharacterControllerComponent::Move(const Vector3& wishDir, float fixedDt)
+void CharacterControllerComponent::MoveCharacter(const Vector3& wishDir, float fixedDt)
 {
-    if (!m_Controller) return;
+    if (!m_Controller)
+    {
+        OutputDebugStringW(L"[CharacterControllerComponent] MoveCharacter의 m_Controller가 null입니다. \n");
+        return;
+    }
 
+    // --------------------
+    // 1. 수평 이동속도 (m/s) + 입력 방향 (정규화, PhysX 기준)
+    // --------------------
     PxVec3 velocity(0, 0, 0);
     if (wishDir.LengthSquared() > 0.0f)
     {
@@ -55,10 +68,18 @@ void CharacterControllerComponent::Move(const Vector3& wishDir, float fixedDt)
         velocity.z = dir.z * m_MoveSpeed;
     }
 
+
+    // --------------------
+    // 2. 지면 체크 
+    // --------------------
     PxControllerState state;
     m_Controller->getState(state);
     bool isGrounded = state.collisionFlags & PxControllerCollisionFlag::eCOLLISION_DOWN;
 
+
+    // --------------------
+    // 3. 점프 처리
+    // --------------------
     if (isGrounded)
     {
         if (m_RequestJump)
@@ -77,12 +98,24 @@ void CharacterControllerComponent::Move(const Vector3& wishDir, float fixedDt)
     }
 
     velocity.y = m_VerticalVelocity;
+
+
+    // --------------------
+    // 4. 이동 거리
+    // --------------------
     PxVec3 move = velocity * fixedDt;
 
-    // 필터
+
+    // --------------------
+    // 5. 필터
+    // --------------------
     CCTQueryFilter queryFilter(nullptr); // 필요 시 자신 필터 설정
     PxControllerFilters filters(&m_FilterData, &queryFilter, nullptr);
 
+
+    // --------------------
+    // 6. 이동
+    // --------------------
     m_Controller->move(move, 0.01f, fixedDt, filters);
 }
 
@@ -108,12 +141,16 @@ void CharacterControllerComponent::SyncFromController()
 
 void CharacterControllerComponent::SetLayer(CollisionLayer layer)
 {
-    uint32_t mask = PhysicsLayerMatrix::GetMask(layer);
     m_FilterData.word0 = (uint32_t)layer;
-    m_FilterData.word1 = mask;
+    m_FilterData.word1 = PhysicsLayerMatrix::GetMask(layer);
     m_FilterData.word2 = 0;
     m_FilterData.word3 = 0;
 }
+
+
+// ----------------------------------
+// 충돌 관리
+// ----------------------------------
 
 void CharacterControllerComponent::ResolveCollisions()
 {

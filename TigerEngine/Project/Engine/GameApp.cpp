@@ -191,6 +191,7 @@ void GameApp::Update()
 	GameTimer::Instance().Tick();
 	InputSystem::Instance().Update(Singleton<GameTimer>::Instance().DeltaTime());
 
+    // [ Physics Update : 프레임 드랍 방지 ] 
     constexpr float fixedDt = 1.0f / 60.0f;
     if (GameTimer::Instance().DeltaTime() > 0.1f)
         m_PhysicsAccumulator += 0.1f;
@@ -199,7 +200,7 @@ void GameApp::Update()
 
     while (m_PhysicsAccumulator >= fixedDt)
     {
-        FixedUpdate(fixedDt);
+        OnFixedUpdate(fixedDt);
 
         PhysicsSystem::Instance().Simulate(fixedDt);
         m_PhysicsAccumulator -= fixedDt;
@@ -208,8 +209,7 @@ void GameApp::Update()
 	OnUpdate();
 }
 
-// TODO 
-void GameApp::FixedUpdate(float dt)
+void GameApp::OnFixedUpdate(float dt)
 {
 
 }
