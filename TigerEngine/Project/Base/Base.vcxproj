@@ -150,6 +150,7 @@
     <ClInclude Include="Datas\ConstantBuffer.hpp" />
     <ClInclude Include="Datas\FBXResourceData.h" />
     <ClInclude Include="Datas\Mesh.h" />
+    <ClInclude Include="Datas\ReflectionMedtaDatas.hpp" />
     <ClInclude Include="Datas\SkeletonInfo.h" />
     <ClInclude Include="Datas\Vertex.h" />
     <ClInclude Include="framework.h" />

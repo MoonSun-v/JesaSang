@@ -31,10 +31,18 @@ void CameraSystem::RemoveCamera(Camera *cam)
     {
         if(*it == cam)
         {
-            auto vback = registered.back();
-            registered.back() = *it;
-            *it = vback;
-            registered.pop_back();
+            if (registered.size() == 1)
+            {
+                registered.pop_back();
+            }
+            else
+            {
+                auto vback = registered.back();
+                registered.back() = *it;
+                *it = vback;
+                registered.pop_back();
+            }
+            break;
         }
         it++;
     }

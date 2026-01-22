@@ -65,9 +65,9 @@ private:
 
     std::string currScenePath{};
 
-    // uitl
-    template<typename T>
-    void ReadVariants(T* typePtr);
+    // rttr read
+    void ReadVariants(rttr::variant& var);
+    void ReadVariants(rttr::instance inst);
 
 public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,
