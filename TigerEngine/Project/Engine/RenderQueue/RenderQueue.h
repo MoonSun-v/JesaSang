@@ -9,10 +9,11 @@ struct SkeletalRenderItem
 {
     const Mesh* mesh;
     Matrix world;
+    Matrix model;
     Material material;
 
     int refBoneIndex;
-    int isRigid;
+    int isSkeletal;
     int boneCount;  // skeletal bone 개수
 
     const PoseMatrixCB* poses;

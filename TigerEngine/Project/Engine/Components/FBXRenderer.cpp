@@ -50,31 +50,87 @@ void FBXRenderer::OnUpdate(float delta)
 		progressAnimationTime = fmod(progressAnimationTime, modelAsset->animations[animationIndex].m_duration);
 	}
 
-	// pose 본 갱신
-	for (auto& bone : bones)
-	{
-		// animation update
-		if (bone.m_boneAnimation.m_boneName != "" && bone.m_boneAnimation.m_keys.size() >= 1)
-		{
-			Vector3 positionVec = Vector3::Zero;
-			Vector3 scaleVec = Vector3::One;
-			Quaternion rotationQuat = Quaternion::Identity;
-			bone.m_boneAnimation.Evaluate(progressAnimationTime, positionVec, rotationQuat, scaleVec);
+    // TODO :: isSkeletal
+    // Rigid -> model matrix udpate
+    // Skeletal -> pose matrix udpate
+    
+    if (modelAsset->skeletalInfo.IsSkeletal())
+    {
+        // pose 본 갱신
+        for (auto& bone : bones)
+        {
+            // animation update
+            if (bone.m_nodeAnimation.m_nodeName != "" && bone.m_nodeAnimation.m_keys.size() >= 1)
+            {
+                Vector3 positionVec = Vector3::Zero;
+                Vector3 scaleVec = Vector3::One;
+                Quaternion rotationQuat = Quaternion::Identity;
+                bone.m_nodeAnimation.Evaluate(progressAnimationTime, positionVec, rotationQuat, scaleVec);
 
-			// bone local update
-			Matrix mat = Matrix::CreateScale(scaleVec) * Matrix::CreateFromQuaternion(rotationQuat) * Matrix::CreateTranslation(positionVec);
-            bone.m_localTransform = mat.Transpose();
-		}
+                // bone local update
+                Matrix mat = Matrix::CreateScale(scaleVec) * Matrix::CreateFromQuaternion(rotationQuat) * Matrix::CreateTranslation(positionVec);
+                bone.m_localTransform = mat.Transpose();
+            }
 
-		// bone world udpate
-		if (bone.m_parentIndex != -1)
-			bone.m_worldTransform = bones[bone.m_parentIndex].m_worldTransform * bone.m_localTransform;
-		else
-			bone.m_worldTransform = bone.m_localTransform;
+            // bone world udpate
+            if (bone.m_parentIndex != -1)
+                bone.m_worldTransform = bones[bone.m_parentIndex].m_worldTransform * bone.m_localTransform;
+            else
+                bone.m_worldTransform = bone.m_localTransform;
 
-        // bone pose arr update
-		bonePoses.bonePose[bone.m_index] = bone.m_worldTransform;
-	}	
+            // bone pose arr update
+            bonePoses.bonePose[bone.m_index] = bone.m_worldTransform;
+        }
+    }
+    else // rigid
+    {
+        // local udpate
+        if (modelAsset->animations.empty())
+        {
+            for (int i = 0; i < modelAsset->meshes_modelMat.size(); i++)
+            {
+                modelAsset->meshes_localMat[i] = modelAsset->meshes_bindMat[i];
+            }
+        }
+        else
+        {
+            // animation udpate
+            int nodeCount = modelAsset->meshes.size();
+            for (int i = 0; i < nodeCount; i++)
+            {
+                // get nodeAnimation
+                auto& node = modelAsset->meshes[i];
+                NodeAnimation aniClip;
+                bool hasAnimation = modelAsset->animations[animationIndex].GetNodeAnimationByName(node.nodeName, aniClip);
+                cout << node.nodeName << endl;
+                if (hasAnimation)
+                {
+                    // get keyframe
+                    Vector3 pos;  Quaternion rot;	Vector3 scl;
+                    aniClip.Evaluate(progressAnimationTime, pos, rot, scl);
+
+                    modelAsset->meshes_localMat[i] = Matrix::CreateScale(scl) *
+                        Matrix::CreateFromQuaternion(rot) *
+                        Matrix::CreateTranslation(pos);
+                }
+                else
+                {
+                    modelAsset->meshes_localMat[i] = modelAsset->meshes_bindMat[i];
+                }
+            }
+        }
+
+        // model matrix udpate
+        for (int i = 0; i < modelAsset->meshes_modelMat.size(); i++)
+        {
+            auto& sub = modelAsset->meshes[i];
+
+            if (sub.parentIndex != -1)
+                modelAsset->meshes_modelMat[i] = modelAsset->meshes_localMat[i] * modelAsset->meshes_modelMat[sub.parentIndex];
+            else
+                modelAsset->meshes_modelMat[i] = modelAsset->meshes_localMat[i];
+        }
+    }
 }
 
 void FBXRenderer::OnDestory()
@@ -88,15 +144,18 @@ void FBXRenderer::OnRender(RenderQueue& queue)
     auto& meshData = fbxData->GetMesh();
     auto world = owner->GetTransform()->GetWorldTransform();
 
-    for (auto& mesh : meshData)
+    for (int i = 0; i < meshData.size(); i++)
     {
+        auto& mesh = meshData[i];
+
         SkeletalRenderItem item{};
         item.mesh = &mesh;
         item.world = world;
+        if (!fbxData->GetFBXInfo()->skeletalInfo.IsSkeletal()) item.model = fbxData->GetFBXInfo()->meshes_modelMat[i];
         item.poses = &bonePoses;
         item.offsets = &fbxData->GetFBXInfo()->m_BoneOffsets;
         item.refBoneIndex = mesh.refBoneIndex;
-        item.isRigid = fbxData->GetFBXInfo()->skeletalInfo.IsRigid();
+        item.isSkeletal = fbxData->GetFBXInfo()->skeletalInfo.IsSkeletal();
         item.boneCount = fbxData->GetFBXInfo()->skeletalInfo.m_bones.size();
 
         // Mesh 기본 Material 복사
@@ -109,6 +168,7 @@ void FBXRenderer::OnRender(RenderQueue& queue)
 
         queue.AddSkeletal(item);
     }
+
 }
 
 nlohmann::json FBXRenderer::Serialize()
@@ -198,13 +258,13 @@ void FBXRenderer::CreateBoneInfo()
 		Bone bone;
 		bone.CreateBone(boneName, parentBoneIndex, boneIndex, worldMat, localMat);	//...
 
-		BoneAnimation boneAnim;
+		NodeAnimation boneAnim;
 		bool hasAnim = !modelAsset->animations.empty();
 		if (hasAnim)
 		{
-			if (modelAsset->animations[animationIndex].GetBoneAnimationByName(boneName, boneAnim))
+			if (modelAsset->animations[animationIndex].GetNodeAnimationByName(boneName, boneAnim))
 			{
-				bone.m_boneAnimation = boneAnim;
+				bone.m_nodeAnimation = boneAnim;
 			}
 		}
 

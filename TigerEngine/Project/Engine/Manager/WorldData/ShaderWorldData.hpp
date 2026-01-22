@@ -20,12 +20,12 @@ struct PostProcessWorldData
     float   exposure = 0;            // 노출
 
     // Enable
-    BOOL useColorAdjustments = 0;
-    BOOL useWhiteBalance = 0;
-    BOOL useLGG = 0;
-    BOOL useVignette = 0;
-    BOOL useFilmGrain = 0;
-    BOOL useBloom = 0;
+    BOOL useColorAdjustments = false;
+    BOOL useWhiteBalance = false;
+    BOOL useLGG = false;
+    BOOL useVignette = false;
+    BOOL useFilmGrain = false;
+    BOOL useBloom = false;
 
     // Color Adjustments (대비, 채도, Hue Shift, Tint)
     float   contrast = 1;

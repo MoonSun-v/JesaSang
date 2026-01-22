@@ -62,12 +62,12 @@ cbuffer FrameCB : register(b0)
 
 cbuffer TransformCB : register(b1)
 {
-    matrix model;       // TODO :: delete
+    matrix model; 
     matrix world;
     
-    int isRigid; // 1 : rigid, 0 : skinned
-    int refBoneIndex;  // 리지드일 때 참조하는 본 인덱스
-    float2 pad;
+    //int isSkeletal;   // 1 : rigid, 0 : skinned          // TODO :: delete
+    //int refBoneIndex; // 리지드일 때 참조하는 본 인덱스    // TODO :: delete
+    //float2 pad;
     
     matrix view;
     matrix projection;
@@ -229,6 +229,15 @@ cbuffer EffectCB : register(b8)
 // ----------------------
 //  Vertex Input Layout
 // ----------------------
+struct VS_Rigid_INPUT
+{
+    float3 pos : POSITION;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float3 bitangent : BITANGENT;
+    float2 texcoord : TEXCOORD;
+};
+
 struct VS_Weight_INPUT
 {
     float3 pos : POSITION;
