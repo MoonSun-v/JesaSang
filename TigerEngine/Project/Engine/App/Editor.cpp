@@ -13,6 +13,8 @@
 #include "../EngineSystem/PlayModeSystem.h"
 #include "../Components/Camera.h"
 
+#include "Datas/ReflectionMedtaDatas.hpp"
+
 // 사용자 정의 미리 등록 (SimpleMath 등)
 RTTR_REGISTRATION
 {
@@ -65,67 +67,6 @@ RTTR_REGISTRATION
         .property("_42", &Matrix::_42)
         .property("_43", &Matrix::_43)
         .property("_44", &Matrix::_44);
-
-    // Manager/WorldData/PostProcessWorldData.hpp
-    registration::class_<PostProcessWorldData>("PostProcessWorldData")
-        .constructor<>()
-
-        // Base
-        .property("isHDR", &PostProcessWorldData::isHDR)
-        .property("useDefaultGamma", &PostProcessWorldData::useDefaultGamma)
-        .property("defaultGamma", &PostProcessWorldData::defaultGamma)
-        .property("exposure", &PostProcessWorldData::exposure)
-
-        // Enable
-        .property("useColorAdjustments", &PostProcessWorldData::useColorAdjustments)
-        .property("useWhiteBalance", &PostProcessWorldData::useWhiteBalance)
-        .property("useLGG", &PostProcessWorldData::useLGG)
-        .property("useVignette", &PostProcessWorldData::useVignette)
-        .property("useFilmGrain", &PostProcessWorldData::useFilmGrain)
-        .property("useBloom", &PostProcessWorldData::useBloom)
-
-        // Color Adjustments
-        .property("contrast", &PostProcessWorldData::contrast)
-        .property("saturation", &PostProcessWorldData::saturation)
-        .property("useHueShift", &PostProcessWorldData::useHueShift)
-        .property("hueShift", &PostProcessWorldData::hueShift)
-        .property("useColorTint", &PostProcessWorldData::useColorTint)
-        .property("colorTint", &PostProcessWorldData::colorTint)
-        .property("colorTint_strength", &PostProcessWorldData::colorTint_strength)
-
-        // White Balance
-        .property("temperature", &PostProcessWorldData::temperature)
-        .property("tint", &PostProcessWorldData::tint)
-
-        // Lift / Gamma / Gain
-        .property("useLift", &PostProcessWorldData::useLift)
-        .property("useGamma", &PostProcessWorldData::useGamma)
-        .property("useGain", &PostProcessWorldData::useGain)
-
-        .property("lift", &PostProcessWorldData::lift)
-        .property("lift_strength", &PostProcessWorldData::lift_strength)
-        .property("gamma", &PostProcessWorldData::gamma)
-        .property("gamma_strength", &PostProcessWorldData::gamma_strength)
-        .property("gain", &PostProcessWorldData::gain)
-        .property("gain_strength", &PostProcessWorldData::gain_strength)
-
-        // Vignette
-        .property("vignette_intensity", &PostProcessWorldData::vignette_intensity)
-        .property("vignette_smoothness", &PostProcessWorldData::vignette_smoothness)
-        .property("vignetteCenter", &PostProcessWorldData::vignetteCenter)
-        .property("vignetteColor", &PostProcessWorldData::vignetteColor)
-
-        // FilmGrain
-        .property("grain_intensity", &PostProcessWorldData::grain_intensity)
-        .property("grain_response", &PostProcessWorldData::grain_response)
-        .property("grain_scale", &PostProcessWorldData::grain_scale)
-
-        // Bloom
-        .property("bloom_threshold", &PostProcessWorldData::bloom_threshold)
-        .property("bloom_intensity", &PostProcessWorldData::bloom_intensity)
-        .property("bloom_scatter", &PostProcessWorldData::bloom_scatter)
-        .property("bloom_clamp", &PostProcessWorldData::bloom_clamp)
-        .property("bloom_tint", &PostProcessWorldData::bloom_tint);
 }
 
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
@@ -321,6 +262,7 @@ void Editor::RenderInspector()
                     {
                         RenderComponentInfo(it->first, comp);
                         ImGui::NewLine();
+                        ImGui::Separator();
                     }
                 }
             }
@@ -453,10 +395,6 @@ void Editor::RenderWorldSettings()
     {
         RenderWorldManager();
     }
-
-    // TODO :: world manager data 추가
-    // - World Light Data 
-    // - PostProcess Data
 }
 
 void Editor::RenderWorldManager()
@@ -466,12 +404,21 @@ void Editor::RenderWorldManager()
 
     rttr::instance inst = wm;
     rttr::type t = rttr::type::get(inst);
-    ReadVariants(inst);
 
-    // 2) postProcessData 전체 가져오기
-    rttr::variant ppVar = t.get_property("PostProcessWorldData").get_value(inst);
-    ReadVariants(ppVar);
+    // 1. worldManager의 인스턴스를 렌더링한다. ( 구조체, 클래스 내용 제외 )
+    ReadVariants(inst); 
 
+    ImGui::Separator();
+    // 2. shadow data
+    ReadVariants(wm.shadowData);
+
+    ImGui::Separator();
+    // 3. postProcess data
+    ReadVariants(wm.postProcessData);
+
+    ImGui::Separator();
+    // 4. FrameWorld data
+    ReadVariants(wm.frameData);
 }
 
 template<typename T>
@@ -556,7 +503,7 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             ImGui::PopID();
         }
     }
-
+    
     if (compName != "Transform") 
     {
         ImGui::PushID(comp);
@@ -694,6 +641,7 @@ void Editor::ReadVariants(rttr::instance inst)
 
     rttr::type t = inst.get_derived_type();
 
+
     // Get value from type
     for (auto& prop : t.get_properties())
     {
@@ -703,7 +651,22 @@ void Editor::ReadVariants(rttr::instance inst)
         if (!value.is_valid())
             continue;
 
-        if (value.is_type<float>())
+        // check metaData
+        auto metaBool = prop.get_metadata(META_BOOL);
+
+        // Render elements
+        // ImGui::Text("%s : %s", name.c_str(), value.get_type().get_name().to_string().c_str());
+
+        if (metaBool.is_valid() && metaBool.to_bool())
+        {
+            int iv = value.to_int();     // BOOL이든 int든 흡수
+            bool b = (iv != 0);
+            if (ImGui::Checkbox(name.c_str(), &b))
+            {
+                prop.set_value(inst, b ? 1 : 0);
+            }
+        }
+        else if (value.is_type<float>())
         {
             float v = value.get_value<float>();
             if (ImGui::DragFloat(name.c_str(), &v, 0.1f))
