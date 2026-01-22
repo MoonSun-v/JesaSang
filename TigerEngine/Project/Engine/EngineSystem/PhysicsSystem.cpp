@@ -114,7 +114,7 @@ void PhysicsSystem::Simulate(float dt)
     }
 
     // CCT 후처리 (Trigger / Collision 이벤트)
-    // CharacterControllerSystem::Instance().Simulate(dt);
+    CharacterControllerSystem::Instance().Simulate(dt);
 
     ResolveTriggerEvents();
 }

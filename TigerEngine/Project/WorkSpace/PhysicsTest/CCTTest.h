@@ -1,5 +1,6 @@
 #pragma once
 #include "Components/ScriptComponent.h"
+#include "Components/CharacterControllerComponent.h"
 
 /// <summary>
 /// 캐릭터 컨트롤러 컴포넌트 테스트용 클래스.
@@ -11,6 +12,9 @@ class CCTTest : public ScriptComponent
 
 private:
     bool isApply = false;
+    bool m_SpacePrev = false;
+
+    CharacterControllerComponent* cctComp = nullptr;
 
 public:
     void OnInitialize() override;

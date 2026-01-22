@@ -180,6 +180,7 @@ void CharacterControllerSystem::Simulate(float dt)
         CharacterControllerComponent* comp = it.second;
         if (comp)
         {
+            comp->SyncFromController();
             comp->ResolveCollisions();
             comp->CheckTriggers();      // CCT 위치 기반 Overlap Query
             comp->ResolveTriggers();    // 수집만 진행 

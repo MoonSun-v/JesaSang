@@ -382,7 +382,7 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
     ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
     ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
-    ComponentFactory::Instance().Register<PhysicsComponent>("CharacterControllerComponent");
+    ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
 
 	ComponentFactory::Instance().Register<Player1>("Player1");
 	ComponentFactory::Instance().Register<Weapon>("Weapon");
