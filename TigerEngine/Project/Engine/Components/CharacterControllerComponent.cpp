@@ -285,12 +285,12 @@ void CharacterControllerComponent::ResolveCollisions()
         if (m_CCTPrevContacts.find(other) == m_CCTPrevContacts.end())
         {
             OnCollisionEnter(other);
-            other->OnCCTEnter(this);   // Physics에게 알림
+            other->OnCCTCollisionEnter(this);   // Physics에게 알림
         }
         else
         {
             OnCollisionStay(other);
-            other->OnCCTStay(this);
+            other->OnCCTCollisionStay(this);
         }
     }
 
@@ -300,7 +300,7 @@ void CharacterControllerComponent::ResolveCollisions()
         if (m_CCTCurrContacts.find(other) == m_CCTCurrContacts.end())
         {
             OnCollisionExit(other);
-            other->OnCCTExit(this);
+            other->OnCCTCollisionExit(this);
         }
     }
 
@@ -317,12 +317,12 @@ void CharacterControllerComponent::ResolveTriggers()
         if (m_CCTPrevTriggers.find(other) == m_CCTPrevTriggers.end())
         {
             OnTriggerEnter(other);
-            other->OnCCTEnter(this);
+            other->OnCCTTriggerEnter(this);
         }
         else
         {
             OnTriggerStay(other);
-            other->OnCCTStay(this);
+            other->OnCCTTriggerStay(this);
         }
     }
 
@@ -332,7 +332,7 @@ void CharacterControllerComponent::ResolveTriggers()
         if (m_CCTCurrTriggers.find(other) == m_CCTCurrTriggers.end())
         {
             OnTriggerExit(other);
-            other->OnCCTExit(this);
+            other->OnCCTTriggerExit(this);
         }
     }
 

@@ -103,7 +103,7 @@ public:
     ~PhysicsComponent();
 
     // -----------------------------
-    // Collision / Trigger 이벤트 콜백 
+    // [ Rigid ]  Collision / Trigger 이벤트 콜백 
     // -----------------------------
     virtual void OnCollisionEnter(PhysicsComponent* other) { OutputDebugStringW(L"[PhysicsComponent] Collision Enter! \n"); }
     virtual void OnCollisionStay(PhysicsComponent* other) { /*OutputDebugStringW(L"[PhysicsComponent] Collision Stay! \n");*/ }
@@ -113,10 +113,16 @@ public:
     virtual void OnTriggerStay(PhysicsComponent* other) { /*OutputDebugStringW(L"[PhysicsComponent] Trigger Stay \n");*/ }
     virtual void OnTriggerExit(PhysicsComponent* other) { OutputDebugStringW(L"[PhysicsComponent] Trigger Exit! \n"); }
 
-    // CCT 이벤트
-    virtual void OnCCTEnter(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Enter \n"); }
-    virtual void OnCCTStay(CharacterControllerComponent* cct) { /*OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Stay \n");*/ }
-    virtual void OnCCTExit(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Exit \n"); }
+    // -----------------------------
+    // [ CCT ]  Collision / Trigger 이벤트 콜백 
+    // -----------------------------
+    virtual void OnCCTTriggerEnter(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Enter \n"); }
+    virtual void OnCCTTriggerStay(CharacterControllerComponent* cct) { /*OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Stay \n");*/ }
+    virtual void OnCCTTriggerExit(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Exit \n"); }
+
+    virtual void OnCCTCollisionEnter(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Collision Enter \n"); }
+    virtual void OnCCTCollisionStay(CharacterControllerComponent* cct) { /*OutputDebugStringW(L"[PhysicsComponent] CCT Collision Stay \n");*/ }
+    virtual void OnCCTCollisionExit(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Collision Exit \n"); }
 
 
     // --------------------------
