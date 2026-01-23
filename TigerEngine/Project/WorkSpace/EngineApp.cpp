@@ -92,6 +92,7 @@ bool EngineApp::OnInitialize()
     skyboxPass = std::make_unique<SkyboxPass>();
     bloomPass = std::make_unique<BloomPass>();
     postProcessPass = std::make_unique<PostProcessPass>();
+    frustumPass = std::make_unique<FrustumPass>();
 
     shadowPass->Init();
     geometryPass->Init();
@@ -99,6 +100,7 @@ bool EngineApp::OnInitialize()
     skyboxPass->Init(dxRenderer->GetDevice());
     bloomPass->Init();
     postProcessPass->Init();
+    frustumPass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 
 
     // == init world data ==
@@ -184,6 +186,7 @@ void EngineApp::OnRender()
         dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *bloomPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *postProcessPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *frustumPass, freeCam);      // light cam frustum용으로 잠깐 추가
     }
 
 #if _DEBUG
@@ -379,22 +382,20 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 
 void EngineApp::RegisterAllComponents()
 {
-	ComponentFactory::Instance().Register<FBXData>("FBXData");
-	ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
-  ComponentFactory::Instance().Register<Transform>("Transform");
-  ComponentFactory::Instance().Register<Camera>("Camera");
+    ComponentFactory::Instance().Register<FBXData>("FBXData");
+    ComponentFactory::Instance().Register<FBXRenderer>("FBXRenderer");
+    ComponentFactory::Instance().Register<Transform>("Transform");
+    ComponentFactory::Instance().Register<Camera>("Camera");
+    
+    ComponentFactory::Instance().Register<Player1>("Player1");
+    ComponentFactory::Instance().Register<Weapon>("Weapon");
+    ComponentFactory::Instance().Register<Light>("Light");
 
-	ComponentFactory::Instance().Register<Player1>("Player1");
-	ComponentFactory::Instance().Register<Weapon>("Weapon");
-	ComponentFactory::Instance().Register<Light>("Light");
-
-
-  ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
-  ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
-  ComponentFactory::Instance().Register<PhysicsTestScript>("PhysicsTestScript");
-  ComponentFactory::Instance().Register<GroundTestScript>("GroundTestScript");
-  ComponentFactory::Instance().Register<CCTTest>("CCTTest");
-  ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
-  ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
+    ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
+    ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
+    ComponentFactory::Instance().Register<PhysicsTestScript>("PhysicsTestScript");
+    ComponentFactory::Instance().Register<GroundTestScript>("GroundTestScript");
+    ComponentFactory::Instance().Register<CCTTest>("CCTTestScript");
+    ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
 }
 

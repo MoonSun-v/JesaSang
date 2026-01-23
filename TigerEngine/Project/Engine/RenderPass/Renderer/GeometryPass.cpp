@@ -45,29 +45,32 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     auto& models = queue.GetSkeletaItems();
     for (auto& m : models)
     {
-        if(m.isSkeletal)
-            context->VSSetShader(sm.VS_BaseLit_Skeletal.Get(), NULL, 0);
-        else
-            context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
-
         // CB - Transform
         sm.transformCBData.world = m.world.Transpose();
         if (!m.isSkeletal)
             sm.transformCBData.model = m.model.Transpose();   
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
-        // CB - Offset, Pose
-        auto& boneOffset = m.offsets->boneOffset;
-        auto& bonePose = m.poses->bonePose;
-
-        for (int i = 0; i < m.boneCount; i++)
+        // VS
+        if (m.isSkeletal)
         {
-            sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i];
-            sm.poseMatrixCBData.bonePose[i] = bonePose[i];
-        }
-        context->UpdateSubresource(sm.offsetMatrixCB.Get(), 0, nullptr, &sm.offsetMatrixCBData, 0, 0);
-        context->UpdateSubresource(sm.poseMatrixCB.Get(), 0, nullptr, &sm.poseMatrixCBData, 0, 0);
+            context->VSSetShader(sm.VS_BaseLit_Skeletal.Get(), NULL, 0);
 
+            // CB - Offset, Pose
+            auto& boneOffset = m.offsets->boneOffset;
+            auto& bonePose = m.poses->bonePose;
+
+            for (int i = 0; i < m.boneCount; i++)
+            {
+                sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i];
+                sm.poseMatrixCBData.bonePose[i] = bonePose[i];
+            }
+            context->UpdateSubresource(sm.offsetMatrixCB.Get(), 0, nullptr, &sm.offsetMatrixCBData, 0, 0);
+            context->UpdateSubresource(sm.poseMatrixCB.Get(), 0, nullptr, &sm.poseMatrixCBData, 0, 0);
+        }
+        else
+            context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
+        
         // IB, VB, SRV, CB -> DrawCall
         m.mesh->Draw(context);
     }

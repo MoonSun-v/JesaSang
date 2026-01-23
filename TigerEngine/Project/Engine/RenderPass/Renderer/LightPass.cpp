@@ -1,6 +1,7 @@
 #include "LightPass.h"
 #include "../Renderable/LightvolumeMesh.h"
 #include "../../EngineSystem/LightSystem.h"
+#include "../../EngineSystem/CameraSystem.h"
 #include "../../Manager/ShaderManager.h"
 #include "../../Manager/WorldManager.h"
 #include "../../Object/GameObject.h"
@@ -116,6 +117,9 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
     context->PSSetShaderResources(10, 1, sm.depthSRV.GetAddressOf());
 
     // CB - Transform
+    auto lightCamera = CameraSystem::Instance().lightCamera;
+    sm.transformCBData.shadowView = XMMatrixTranspose(lightCamera->GetView());
+    sm.transformCBData.shadowProjection = XMMatrixTranspose(lightCamera->GetProjection());
     XMMATRIX invVP = XMMatrixInverse(nullptr, camera->GetView() * camera->GetProjection());
     sm.transformCBData.invViewProjection = XMMatrixTranspose(invVP);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);

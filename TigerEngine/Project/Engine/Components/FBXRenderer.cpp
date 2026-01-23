@@ -50,13 +50,10 @@ void FBXRenderer::OnUpdate(float delta)
 		progressAnimationTime = fmod(progressAnimationTime, modelAsset->animations[animationIndex].m_duration);
 	}
 
-    // TODO :: isSkeletal
-    // Rigid -> model matrix udpate
-    // Skeletal -> pose matrix udpate
-    
+    // local matrix udpate
+    // skeletal mesh
     if (modelAsset->skeletalInfo.IsSkeletal())
     {
-        // pose 본 갱신
         for (auto& bone : bones)
         {
             // animation update
@@ -82,15 +79,13 @@ void FBXRenderer::OnUpdate(float delta)
             bonePoses.bonePose[bone.m_index] = bone.m_worldTransform;
         }
     }
-    else // rigid
-    {
+    // rigid mesh
+    else {
         // local udpate
         if (modelAsset->animations.empty())
         {
             for (int i = 0; i < modelAsset->meshes_modelMat.size(); i++)
-            {
                 modelAsset->meshes_localMat[i] = modelAsset->meshes_bindMat[i];
-            }
         }
         else
         {
@@ -113,9 +108,7 @@ void FBXRenderer::OnUpdate(float delta)
                         Matrix::CreateTranslation(pos);
                 }
                 else
-                {
                     modelAsset->meshes_localMat[i] = modelAsset->meshes_bindMat[i];
-                }
             }
         }
 

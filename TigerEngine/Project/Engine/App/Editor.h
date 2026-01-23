@@ -30,6 +30,7 @@ private:
     void RenderPlayModeControls();
     void RenderCameraFrustum();
     void RenderWorldSettings();
+    void RenderShadowMap();
 
     void RenderWorldManager();
 

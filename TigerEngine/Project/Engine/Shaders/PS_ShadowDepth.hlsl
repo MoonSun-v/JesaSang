@@ -1,6 +1,6 @@
 // [ PS_ShadowDepth ]
-// ¾ËÆÄ ÇÈ¼¿À» ShadowMap¿¡ ±â·ÏÇÏÁö ¾Ê±â À§ÇÑ Pixel Shader
-// ÇÊ¿ä ¾ø´Ù¸é Depth Only Pass´Â pixel shader ½ÇÇà x
+// ì•ŒíŒŒ í”½ì…€ì„ ShadowMapì— ê¸°ë¡í•˜ì§€ ì•Šê¸° ìœ„í•œ Pixel Shader
+// í•„ìš” ì—†ë‹¤ë©´ Depth Only PassëŠ” pixel shader ì‹¤í–‰ x
 
 #include <shared.fxh>
 
@@ -17,5 +17,5 @@ void main(PS_INPUT input)
     if (useDiffuse)
         alpha = diffuseMap.Sample(samLinear, input.texCoord).a;
     
-    clip(alpha - 0.5f); // discard³ª clipÀÌ ÀÖ´Ù¸é Early z test ÁøÇà x
+    clip(alpha - 0.5f); // discardë‚˜ clipì´ ìˆë‹¤ë©´ Early z test ì§„í–‰ x
 }

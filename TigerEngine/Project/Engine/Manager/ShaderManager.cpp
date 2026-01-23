@@ -456,7 +456,7 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
 
         // ShadowDepth_VS
         ID3D10Blob* vertexShaderBuffer3 = nullptr;
-        std::wstring path2 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_BaseLit_Rigid.hlsl";
+        std::wstring path2 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_ShadowDepth_Rigid.hlsl";
         HR_T(CompileShaderFromFile(path2.c_str(), "main", "vs_5_0", &vertexShaderBuffer3));
         HR_T(dev->CreateVertexShader(vertexShaderBuffer3->GetBufferPointer(),
             vertexShaderBuffer3->GetBufferSize(), NULL, &VS_ShadowDepth_Rigid));
@@ -489,7 +489,7 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
 
         // ShadowDepth_VS
         ID3D10Blob* vertexShaderBuffer3 = nullptr;
-        std::wstring path2 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_BaseLit_Skeletal.hlsl";
+        std::wstring path2 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_ShadowDepth_Skeletal.hlsl";
         HR_T(CompileShaderFromFile(path2.c_str(), "main", "vs_5_0", &vertexShaderBuffer3));
         HR_T(dev->CreateVertexShader(vertexShaderBuffer3->GetBufferPointer(),
             vertexShaderBuffer3->GetBufferSize(), NULL, &VS_ShadowDepth_Skeletal));

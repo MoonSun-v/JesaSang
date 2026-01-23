@@ -64,11 +64,7 @@ cbuffer TransformCB : register(b1)
 {
     matrix model; 
     matrix world;
-    
-    //int isSkeletal;   // 1 : rigid, 0 : skinned          // TODO :: delete
-    //int refBoneIndex; // 리지드일 때 참조하는 본 인덱스    // TODO :: delete
-    //float2 pad;
-    
+
     matrix view;
     matrix projection;
     matrix invViewProjection;

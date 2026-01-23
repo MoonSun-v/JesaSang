@@ -5,10 +5,10 @@ struct ShadowOrthoDesc
 {
     float lookPointDist = 500.f;
     float shadowLightDist = 1000.f;
-    float shadowWidth = 3000.0f;
-    float shadowHeight = 3000.0f;
-    float shadowNear = 0.01f;
-    float shadowFar = 5000.0f;
+    float shadowWidth = 10000.0f;
+    float shadowHeight = 10000.0f;
+    float shadowNear = 1.0f;
+    float shadowFar = 20000.0f;
 };
 
 struct PostProcessWorldData

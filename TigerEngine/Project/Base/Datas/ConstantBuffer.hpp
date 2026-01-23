@@ -39,10 +39,6 @@ struct alignas(16) TransformCB
     Matrix model;
     Matrix world;
 
-    //int isSkeletal;       // 1 : rigid, 0 : skinned         // TODO :: delete
-    //int refBoneIndex;     // 리지드일 때 참조하는 본 인덱스   // TODO :: delete
-    //Vector2 pad;
-
     Matrix view;
     Matrix projection;
     Matrix invViewProjection;  // Deferred 화면 좌표 -> view 좌표 변환용

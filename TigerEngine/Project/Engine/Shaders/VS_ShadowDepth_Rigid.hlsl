@@ -13,9 +13,10 @@ PS_INPUT main(VS_Weight_INPUT input)
     
     // view clip space (shadowView, shadowProjection)
     output.pos = mul(float4(input.pos, 1.0f), finalWorld);
-    output.worldPos = output.pos;
+    output.worldPos = output.pos.xyz;
     output.pos = mul(output.pos, shadowView);
     output.pos = mul(output.pos, shadowProjection);
+    output.texCoord = input.texCoord;
 
     return output;
 }

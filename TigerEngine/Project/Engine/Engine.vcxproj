@@ -153,6 +153,7 @@
     <ClCompile Include="EngineSystem\SceneSystem.cpp" />
     <ClCompile Include="EngineSystem\ScriptSystem.cpp" />
     <ClCompile Include="EngineSystem\CameraSystem.cpp" />
+    <ClCompile Include="RenderPass\Renderer\FrustumPass.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Manager\ComponentFactory.cpp" />
     <ClCompile Include="Manager\FBXResourceManager.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="EngineSystem\SceneSystem.h" />
     <ClInclude Include="EngineSystem\ScriptSystem.h" />
     <ClInclude Include="EngineSystem\CameraSystem.h" />
+    <ClInclude Include="RenderPass\Renderer\FrustumPass.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="Manager\ComponentFactory.h" />
     <ClInclude Include="Manager\FBXResourceManager.h" />

@@ -10,6 +10,7 @@
 #include "../Object/GameObject.h"
 #include "../Util/DebugDraw.h"
 #include "../Manager/WorldManager.h"
+#include "../Manager/Shadermanager.h"
 #include "../EngineSystem/PlayModeSystem.h"
 #include "../Components/Camera.h"
 
@@ -95,6 +96,7 @@ void Editor::Render(HWND &hwnd)
     RenderDebugAABBDraw();
     RenderCameraFrustum();
     RenderWorldSettings();
+    RenderShadowMap();
 }
 
 void Editor::RenderEnd(const ComPtr<ID3D11DeviceContext>& context)
@@ -373,19 +375,6 @@ void Editor::RenderCameraFrustum()
         DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
     }
 
-    {
-        auto lightCam = CameraSystem::Instance().lightCamera;
-        DirectX::BoundingFrustum frustum;
-        DirectX::BoundingFrustum::CreateFromMatrix(
-            frustum,
-            lightCam->GetProjection()
-        );
-
-        Matrix frustumWorld = lightCam->GetView().Transpose();
-        frustum.Transform(frustum, frustumWorld);
-        DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
-    }
-
     DebugDraw::g_Batch->End();
 }
 
@@ -394,6 +383,26 @@ void Editor::RenderWorldSettings()
     if (isWorldSettingOpen)
     {
         RenderWorldManager();
+    }
+}
+
+void Editor::RenderShadowMap()
+{
+    if (isDiretionalLightDebugOpen)
+    {
+        ImGui::Begin("Shadow Map");
+
+        ID3D11ShaderResourceView* shadowSRV = ShaderManager::Instance().shadowSRV.Get();
+        ImVec2 size(256, 256);
+
+        ImGui::Image(
+            (ImTextureID)shadowSRV,
+            size,
+            ImVec2(0, 1),   
+            ImVec2(1, 0)    
+        );
+
+        ImGui::End();
     }
 }
 

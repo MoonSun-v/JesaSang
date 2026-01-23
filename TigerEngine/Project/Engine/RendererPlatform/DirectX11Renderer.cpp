@@ -180,6 +180,17 @@ void DirectX11Renderer::OnResize(int width, int height)
         HR_T(device->CreateDepthStencilView(depthStencilTexture.Get(), &dsvRODesc, depthStencilReadOnlyView.GetAddressOf()));
     }
 
+    // depth stencil SRV
+    {
+        D3D11_SHADER_RESOURCE_VIEW_DESC descSRV = {};
+        descSRV.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+        descSRV.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        descSRV.Texture2D.MostDetailedMip = 0;
+        descSRV.Texture2D.MipLevels = 1;
+
+        HR_T(device->CreateShaderResourceView(depthStencilTexture.Get(), &descSRV, depthSRV.GetAddressOf()));
+    }
+
     // viewport 재설정
     {
         renderViewport = {};
