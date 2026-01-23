@@ -17,15 +17,18 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     context->IASetInputLayout(sm.inputLayout_BoneWeightVertex.Get());
 
     // Shader
-    context->PSSetShader(nullptr, NULL, 0);    // alpha discard
+    context->PSSetShader(sm.PS_ShadowDepth.Get(), NULL, 0);    // alpha discard
 
     // Sampler
     context->PSSetSamplers(0, 1, sm.linearSamplerState.GetAddressOf());
 
     // CB
     auto lightCamera = CameraSystem::Instance().lightCamera;
-    sm.transformCBData.shadowView = XMMatrixTranspose(lightCamera->GetView());
-    sm.transformCBData.shadowProjection = XMMatrixTranspose(lightCamera->GetProjection());
+    auto view = lightCamera->GetView();
+    auto projection = lightCamera->GetProjection();
+
+    sm.transformCBData.shadowView = XMMatrixTranspose(view);
+    sm.transformCBData.shadowProjection = XMMatrixTranspose(projection);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
     // Render
