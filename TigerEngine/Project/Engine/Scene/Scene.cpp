@@ -119,6 +119,7 @@ bool Scene::SaveToJson(const std::string &filename) const
 {
 	nlohmann::json root;
 
+    // 씬에 있는 게임 오브젝트 내용 저장
 	root["objects"] = nlohmann::json::array();
 	for(auto& entity : gameObjects)
 	{
@@ -128,10 +129,12 @@ bool Scene::SaveToJson(const std::string &filename) const
 		root["objects"].push_back(entityData);
 	}
 
+    // 해당 씬의 월드 세팅 내용 저장
+
 	std::ofstream file(filename);
 	if(!file.is_open()) return false;
 
-	file << root.dump(2); // ??
+	file << root.dump(2); // 보기 좋게 2칸 들여쓰기
 	file.close();
 
 	return true;

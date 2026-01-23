@@ -85,12 +85,15 @@ void Player1::Deserialize(nlohmann::json data)
         if (value.is_type<float>() && propName == "r")
         {
             float data = propData["r"];
-            prop.set_value(*this, data);
+            // Test : prop.set_value 없이 값이 적용되는지 확인하기 위한 코드
+            // prop.set_value(*this, data); 
+            r = data;
         }
         else if (value.is_type<float>() && propName == "g")
         {
             float data = propData["g"];
             prop.set_value(*this, data);
+            g = data;
         }
         else if (value.is_type<Color>() && propName == "b")
         {
