@@ -411,6 +411,53 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
     ApplyFilter(); // 레이어 필터 
 }
 
+void PhysicsComponent::CheckTriggers()
+{
+    if (!m_Actor) return; // PxActor* m_Actor; (PhysicsSystem에서 매핑됨)
+
+    PxScene* scene = PhysicsSystem::Instance().GetScene();
+
+    // Actor에 연결된 모든 Shape 가져오기
+    PxU32 shapeCount = m_Actor->getNbShapes();
+    if (shapeCount == 0) return;
+
+    std::vector<PxShape*> shapes(shapeCount);
+    m_Actor->getShapes(shapes.data(), shapeCount);
+
+    for (PxShape* shape : shapes)
+    {
+        // Trigger Shape만 처리
+        if (!(shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE))
+            continue;
+
+        PxGeometryHolder geom = shape->getGeometry();
+        PxTransform pose = m_Actor->getGlobalPose() * shape->getLocalPose();
+
+        // Overlap Query 수행
+        PxOverlapBufferN<64> hitBuffer;
+        PxFilterData shapeFilter = shape->getQueryFilterData();
+        PxQueryFilterData filterData;
+        filterData.data = shapeFilter; 
+
+        if (scene->overlap(geom.any(), pose, hitBuffer, filterData))
+        {
+            for (PxU32 i = 0; i < hitBuffer.getNbAnyHits(); ++i)
+            {
+                PxRigidActor* otherActor = hitBuffer.getAnyHit(i).actor;
+                if (!otherActor) continue;
+
+                PhysicsComponent* other = PhysicsSystem::Instance().GetComponent(otherActor);
+                if (other && other != this)
+                {
+                    m_PendingTriggers.insert(other);
+                }
+            }
+        }
+    }
+}
+
+
+
 
 DirectX::XMVECTOR GetActorDebugColor(PxRigidActor* actor)
 {

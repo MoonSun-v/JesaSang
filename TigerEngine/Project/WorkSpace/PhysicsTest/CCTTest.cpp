@@ -59,7 +59,7 @@ void CCTTest::OnFixedUpdate(float dt)
     }
 
     CCTMoveExample(dt);
-    RaycastExample();
+    // RaycastExample();
 }
 
 void CCTTest::CCTMoveExample(float dt)

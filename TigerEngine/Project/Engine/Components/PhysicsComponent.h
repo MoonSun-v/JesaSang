@@ -114,9 +114,9 @@ public:
     virtual void OnTriggerExit(PhysicsComponent* other) { OutputDebugStringW(L"[PhysicsComponent] Trigger Exit! \n"); }
 
     // CCT 이벤트
-    virtual void OnCCTEnter(CharacterControllerComponent* cct) {}
-    virtual void OnCCTStay(CharacterControllerComponent* cct) {}
-    virtual void OnCCTExit(CharacterControllerComponent* cct) {}
+    virtual void OnCCTEnter(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Enter \n"); }
+    virtual void OnCCTStay(CharacterControllerComponent* cct) { /*OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Stay \n");*/ }
+    virtual void OnCCTExit(CharacterControllerComponent* cct) { OutputDebugStringW(L"[PhysicsComponent] CCT Trigger Exit \n"); }
 
 
     // --------------------------
@@ -134,6 +134,9 @@ public:
     void CreateDynamicCapsule(float radius, float height, float density = 1.0f, const Vector3& localOffset = { 0,0,0 });
 
 
+    // 트리거 체크 
+    void CheckTriggers();
+    
     // --------------------------
     // Transform 연동
     // --------------------------
@@ -146,9 +149,10 @@ public:
     void SetLayer(CollisionLayer layer);
     CollisionLayer GetLayer() const { return m_Layer; }
 
+    
+
 private:
     void ApplyFilter();
-    // void RebuildPhysics();
 
     // 유틸 
     void DrawPhysXActors();

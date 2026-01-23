@@ -104,18 +104,30 @@ void PhysicsSystem::Simulate(float dt)
     if (!m_Scene)
         return;
 
+    // 1. PhysX 시뮬레이션
     m_Scene->simulate(dt);      // 물리 연산 요청 (비동기)
     m_Scene->fetchResults(true);// 결과가 끝날 때까지 대기 후 적용
 
+    // 2. Actor 위치 동기화
     for (auto& it : m_ActorMap)
     {
         if (it.second)
             it.second->SyncFromPhysics();
     }
 
-    // CCT 후처리 (Trigger / Collision 이벤트)
+    // 3. Trigger 체크
+    for (auto& it : m_ActorMap)
+    {
+        if (it.second)
+        {
+            it.second->CheckTriggers();   
+        }
+    }
+
+    // 4. CCT 후처리 (Trigger / Collision 이벤트)
     CharacterControllerSystem::Instance().Simulate(dt);
 
+    // 4. Trigger 이벤트 해석
     ResolveTriggerEvents();
 }
 
@@ -161,8 +173,6 @@ void PhysicsSystem::ResolveTriggerEvents()
             pair.first->OnTriggerStay(pair.second);
             pair.second->OnTriggerStay(pair.first);
         }
-
-        OutputDebugStringW(L"[PhysicsSystem] Trigger Enter / Stay \n");
     }
 
     // --------------------------------------------------
@@ -309,7 +319,6 @@ void SimulationEventCallback::onContact(
         }
     }
 }
-
 
 
 // ----------------------------------------------------
