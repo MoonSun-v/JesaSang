@@ -494,14 +494,9 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
     }
     else
     {
-        rttr::type t = rttr::type::get(*comp);
-        for (auto& prop : t.get_properties())
-        {
-            ImGui::PushID(&prop);
-            rttr::variant value = prop.get_value(*comp);
-            ReadVariants(value);
-            ImGui::PopID();
-        }
+        ImGui::PushID(comp);
+        ReadVariants(*comp);
+        ImGui::PopID();
     }
     
     if (compName != "Transform") 
