@@ -70,32 +70,44 @@ void AudioSourceComponent::Deserialize(nlohmann::json data)
     }
 
     const auto& propData = data["properties"];
+    m_HasUserVolume = false;
+    m_HasUserLoop = false;
 
-    if (propData.contains("ClipId"))
+    rttr::type t = rttr::type::get(*this);
+    for (auto& prop : t.get_properties())
     {
-        m_ClipId = propData["ClipId"].get<std::string>();
-    }
-    if (propData.contains("Volume"))
-    {
-        m_Volume = propData["Volume"].get<float>();
-        m_HasUserVolume = true;
-    }
-    if (propData.contains("Loop"))
-    {
-        m_Loop = propData["Loop"].get<bool>();
-        m_HasUserLoop = true;
-    }
-    if (propData.contains("Pitch"))
-    {
-        m_Pitch = propData["Pitch"].get<float>();
-    }
-    if (propData.contains("MinDistance"))
-    {
-        m_MinDistance = propData["MinDistance"].get<float>();
-    }
-    if (propData.contains("MaxDistance"))
-    {
-        m_MaxDistance = propData["MaxDistance"].get<float>();
+        std::string propName = prop.get_name().to_string();
+        if (!propData.contains(propName))
+        {
+            continue;
+        }
+
+        if (propName == "ClipId")
+        {
+            m_ClipId = propData[propName].get<std::string>();
+        }
+        else if (propName == "Volume")
+        {
+            m_Volume = propData[propName].get<float>();
+            m_HasUserVolume = true;
+        }
+        else if (propName == "Loop")
+        {
+            m_Loop = propData[propName].get<bool>();
+            m_HasUserLoop = true;
+        }
+        else if (propName == "Pitch")
+        {
+            m_Pitch = propData[propName].get<float>();
+        }
+        else if (propName == "MinDistance")
+        {
+            m_MinDistance = propData[propName].get<float>();
+        }
+        else if (propName == "MaxDistance")
+        {
+            m_MaxDistance = propData[propName].get<float>();
+        }
     }
 
     if (!m_ClipId.empty())
