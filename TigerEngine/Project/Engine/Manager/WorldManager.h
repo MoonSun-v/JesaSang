@@ -36,4 +36,25 @@ public:
     // Frame Data
     FrameWorldData frameData;
 
+    // TODO : 저장하는 객체에 대한 인터페이스 추가하기
+    // 컴포넌트에도 있고 세팅에도 있으면 여기저기 흩어진 내용이 중복됨
+
+    /// <summary>
+    /// 월드 세팅 직렬화 함수
+    /// </summary>
+    nlohmann::json Serialize();
+
+    /// <summary>
+    /// 월드 세팅 역직렬화 함수
+    /// </summary>
+    /// <param name="data">불러온 worldData json부분</param>
+    void Deserialize(nlohmann::json data);
+
+    // === Shadow Data, PostProcess Data, Frame Data 등등 데이터 관련 함수들 ===
+
+    nlohmann::json SerializeShadowData();
+    void DeserializeShadowData(nlohmann::json data);
+
+    nlohmann::json SerializePostProcessData();
+    void DeserializePostProcessData(nlohmann::json data);
 };

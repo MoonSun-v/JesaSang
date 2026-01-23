@@ -122,12 +122,198 @@ void WorldManager::Update(const ComPtr<ID3D11DeviceContext>& context, Camera* ca
     context->UpdateSubresource(sm.frameCB.Get(), 0, nullptr, &sm.frameCBData, 0, 0);
 }
 
-//int WorldManager::GetCameraIndex()
-//{
-//    return cameraIndex;
-//}
-//
-//void WorldManager::SetCameraIndex(int index)
-//{
-//    cameraIndex = CameraSystem::Instance().SetCurrCamera(index);
-//}
+nlohmann::json WorldManager::Serialize()
+{
+    nlohmann::json datas;
+    rttr::type t = rttr::type::get(*this);
+    datas["type"] = t.get_name().to_string();
+    datas["properties"] = nlohmann::json::object(); 
+
+    // World에 있는 구조체 말고 일반 자료형들 저장
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(*this);
+
+        if (propName == "ShadowOrthoDesc" ||
+            propName == "PostProcessWorldData" ||
+            propName == "FrameWorldData") continue;
+
+        if (value.is_type<int>())
+        {
+            datas["properties"][propName] = value.get_value<int>();
+        }
+        else if (value.is_type<float>())
+        {
+            datas["properties"][propName] = value.get_value<float>();
+        }
+        else if (value.is_type<BOOL>() && prop.get_metadata(META_BOOL))
+        {
+            datas["properties"][propName] = value.get_value<int>(); // BOOL는 0 : false, 1: true?
+        }
+    }
+
+    // 나머지 클래스, 구조체 내용 저장
+    datas["properties"]["ShadowOrthoDesc"] = SerializeShadowData();
+    datas["properties"]["PostProcessWorldData"] = SerializePostProcessData();
+
+    return datas;
+}
+
+void WorldManager::Deserialize(nlohmann::json data)
+{
+    // World에 있는 일반 자료형들
+    auto propData = data["properties"];
+    rttr::type t = rttr::type::get(*this);
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(*this);
+
+        auto v = propData[propName];
+        if (value.is_type<int>())
+        {
+            // NOTE : BOOL은 어차피 int 이기 때문에 int로 변환
+            prop.set_value(*this, propData[propName].get<int>());
+        }
+        else if (value.is_type<float>())
+        {
+            prop.set_value(*this, propData[propName].get<float>());
+        }
+    }
+
+    // 그 외 나머지 구조체
+    DeserializeShadowData(propData["ShadowOrthoDesc"]);
+    DeserializePostProcessData(propData["PostProcessWorldData"]);
+}
+
+nlohmann::json WorldManager::SerializeShadowData()
+{
+    nlohmann::json datas;
+    rttr::type t = rttr::type::get(this->shadowData);
+    datas["type"] = t.get_name().to_string();
+    datas["properties"] = nlohmann::json::object();
+
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(this->shadowData);
+
+        if (value.is_type<int>())
+        {
+            datas["properties"][propName] = value.get_value<int>();
+        }
+        else if (value.is_type<float>())
+        {
+            datas["properties"][propName] = value.get_value<float>();
+        }
+        else if (value.is_type<Vector2>())
+        {
+            auto v = value.get_value<Vector2>();
+            datas["properties"][propName] = { v.x, v.y };
+        }
+        else if (value.is_type<Vector3>())
+        {
+            auto v = value.get_value<Vector3>();
+            datas["properties"][propName] = { v.x, v.y, v.z };
+        }
+    }
+
+    return datas;
+}
+
+void WorldManager::DeserializeShadowData(nlohmann::json data)
+{
+    // data : data["objects"]["properties"]["구조체 이름"]["구조체 요소 이름1..2.."]
+    auto propData = data["properties"];
+
+    rttr::type t = rttr::type::get(this->shadowData);
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(this->shadowData);
+        if (value.is_type<Vector2>())
+        {
+            Vector2 value = { propData[propName][0], propData[propName][1] };
+            prop.set_value((this->shadowData), value);
+        }
+        else if (value.is_type<Vector3>())
+        {
+            Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
+            prop.set_value((this->shadowData), value);
+        }
+        else if (value.is_type<int>())
+        {
+            prop.set_value((this->shadowData), propData[propName].get<int>());
+        }
+        else if (value.is_type<float>())
+        {
+            prop.set_value((this->shadowData), propData[propName].get<float>());
+        }
+    }
+}
+
+nlohmann::json WorldManager::SerializePostProcessData()
+{
+    nlohmann::json datas;
+    rttr::type t = rttr::type::get(this->postProcessData);
+    datas["type"] = t.get_name().to_string();
+    datas["properties"] = nlohmann::json::object();
+
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(this->postProcessData);
+
+        if (value.is_type<int>())
+        {
+            datas["properties"][propName] = value.get_value<int>();
+        }
+        else if (value.is_type<float>())
+        {
+            datas["properties"][propName] = value.get_value<float>();
+        }
+        else if (value.is_type<Vector2>())
+        {
+            auto v = value.get_value<Vector2>();
+            datas["properties"][propName] = { v.x, v.y };
+        }
+        else if (value.is_type<Vector3>())
+        {
+            auto v = value.get_value<Vector3>();
+            datas["properties"][propName] = { v.x, v.y, v.z };
+        }
+    }
+
+    return datas;
+}
+
+void WorldManager::DeserializePostProcessData(nlohmann::json data)
+{
+    auto propData = data["properties"];
+
+    rttr::type t = rttr::type::get(this->postProcessData);
+    for (auto& prop : t.get_properties())
+    {
+        std::string propName = prop.get_name().to_string();
+        rttr::variant value = prop.get_value(this->postProcessData);
+        if (value.is_type<Vector2>())
+        {
+            Vector2 value = { propData[propName][0], propData[propName][1] };
+            prop.set_value((this->postProcessData), value);
+        }
+        else if (value.is_type<Vector3>())
+        {
+            Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
+            prop.set_value((this->postProcessData), value);
+        }
+        else if (value.is_type<int>())
+        {
+            prop.set_value((this->postProcessData), propData[propName].get<int>());
+        }
+        else if (value.is_type<float>())
+        {
+            prop.set_value((this->postProcessData), propData[propName].get<float>());
+        }
+    }
+}
