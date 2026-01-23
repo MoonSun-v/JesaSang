@@ -117,7 +117,7 @@ void FBXRenderer::OnUpdate(float delta)
         {
             auto& sub = modelAsset->meshes[i];
 
-            if (sub.parentIndex != -1)
+            if (sub.parentIndex > -1)
                 modelAsset->meshes_modelMat[i] = modelAsset->meshes_localMat[i] * modelAsset->meshes_modelMat[sub.parentIndex];
             else
                 modelAsset->meshes_modelMat[i] = modelAsset->meshes_localMat[i];

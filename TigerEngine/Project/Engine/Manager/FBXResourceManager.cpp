@@ -218,14 +218,16 @@ std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FB
         const std::string texRef = str.C_Str();
         const std::string filenameOnly = std::filesystem::path(texRef).filename().string();
 
-        // 내장 텍스처 save
-        if (scene && scene->GetEmbeddedTexture(str.C_Str()))
-        {
-            SaveEmbeddedTextureIfExists(scene, pAsset->directory, filenameOnly, nullptr);
-        }
 
         // texture file path
         std::string fullpath = pAsset->directory + "\\" + filenameOnly;
+
+        // 내장 텍스처 save
+        if (scene && scene->GetEmbeddedTexture(str.C_Str()))
+        {
+            SaveEmbeddedTextureIfExists(scene, pAsset->directory, filenameOnly, &fullpath);
+        }
+
         std::wstring wfullpath(fullpath.begin(), fullpath.end());
 
         // texture load (SRGB / Linear)
@@ -244,6 +246,21 @@ std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FB
     return textures;
 }
 
+// 임베디드 텍스처 참조하는지 확인
+static bool IsEmbeddedRef(const std::string& s) { return !s.empty() && s[0] == '*'; }
+
+// 임베디드 텍스처 인덱스 반환 함수
+static bool TryParseEmbeddedIndex(const std::string& s, int& outIdx) {
+    if (!IsEmbeddedRef(s)) return false;
+    try {
+        outIdx = std::stoi(s.substr(1)); // *0 -> 숫자부분
+        return true;
+    }
+    catch (...) {
+        return false;
+    }
+}
+
 bool FBXResourceManager::SaveEmbeddedTextureIfExists(const aiScene* scene, const std::string& directory,
           const std::string& filename, std::string* outSavedPath)
 {
@@ -256,20 +273,37 @@ bool FBXResourceManager::SaveEmbeddedTextureIfExists(const aiScene* scene, const
     if (!dir.empty() && dir.back() != '\\' && dir.back() != '/')
         dir += "\\";
 
-    const std::string fullPath = dir + filename;
-
+    // *0 내용이 있으면 파싱
+    std::string saveName = filename;
+    int idx = -1;
+    if (TryParseEmbeddedIndex(filename, idx)) 
     {
-        std::ifstream test(fullPath, std::ios::binary);
-        if (test.good())
+        // 압축이면 포맷 힌트로 확장자 결정 가능
+        std::string ext = "png";
+        if (embedded->mHeight == 0 && embedded->achFormatHint[0] != '\0')
+            ext = embedded->achFormatHint;   // "png" / "jpg" 등
+
+        std::string name = embedded->mFilename.C_Str();
+        saveName = name + "." + ext; // ??
+        *outSavedPath = dir + saveName;
+        return true;
+    }
+
+    const std::string fullPath = dir + saveName; // fullPath 갱신
+
+    // 이미 있으면 리턴
+    std::ifstream test(fullPath, std::ios::binary);
+    if (test.good()) // 해당 파일이 존재하면
+    {
+        if (outSavedPath)
         {
-            if (outSavedPath) *outSavedPath = fullPath;
-            return true;
+            *outSavedPath = fullPath;
         }
+        return true;
     }
 
     // 1) 압축 텍스처
-    if (embedded->mHeight == 0)
-    {
+    if (embedded->mHeight == 0) {
         std::ofstream file(fullPath, std::ios::binary);
         if (!file.is_open()) return false;
 
@@ -280,7 +314,7 @@ bool FBXResourceManager::SaveEmbeddedTextureIfExists(const aiScene* scene, const
         return true;
     }
 
-    // 2) 비압축 텍스처
+    // 2) 비압축 텍스처 (주의: embedded->pcData는 aiTexel(RGBA)일 가능성 큼)
     return SaveBGRA8ToPNG_WIC(
         fullPath,
         embedded->mWidth,
@@ -446,26 +480,30 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
     }
 
     // 피킹 aabb
-    if (pScene->HasAnimations())
+    if (pScene->mRootNode->mNumChildren > 0) 
     {
-        // auto firstAnimKey = sharedAsset->animations[0].m_boneAnimations[0].m_keys[0];
-        // Matrix mat = Matrix::CreateScale(firstAnimKey.m_scale) * 
-        // 			Matrix::CreateFromQuaternion(firstAnimKey.m_rotation) * 
-        // 			Matrix::CreateTranslation(firstAnimKey.m_position);
-        // sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, mat);
-        // sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, mat);
+        if (pScene->HasAnimations()) // gltf 파일이 RootNode->mChildren[0] 이 nullptr
+        {
+            // auto firstAnimKey = sharedAsset->animations[0].m_boneAnimations[0].m_keys[0];
+            // Matrix mat = Matrix::CreateScale(firstAnimKey.m_scale) * 
+            // 			Matrix::CreateFromQuaternion(firstAnimKey.m_rotation) * 
+            // 			Matrix::CreateTranslation(firstAnimKey.m_position);
+            // sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, mat);
+            // sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, mat);
 
-        // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
-        sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-        sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-        sharedAsset->boxCenter = { 0.0f, (sharedAsset->boxMax - sharedAsset->boxMin).y / 2.0f, 0.0f };
+            // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
+            sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+            sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+            sharedAsset->boxCenter = { 0.0f, (sharedAsset->boxMax - sharedAsset->boxMin).y / 2.0f, 0.0f };
+        }
+        else
+        {
+            sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+            sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
+            sharedAsset->boxCenter = Vector3::Zero;
+        }
     }
-    else
-    {
-        sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-        sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
-        sharedAsset->boxCenter = Vector3::Zero;
-    }
+
 
 	// map에 저장하기
 	weak_ptr<FBXResourceAsset> weakAsset = sharedAsset;
