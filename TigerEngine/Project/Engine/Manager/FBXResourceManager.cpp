@@ -422,9 +422,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
             int boneIndex = sharedAsset->skeletalInfo.GetBoneIndexByName(currBoneName);
 
             if (boneIndex > 0)
-            {
                 offsetMat = sharedAsset->skeletalInfo.GetBoneOffsetByName(currBoneName);
-            }
 
             sharedAsset->m_BoneOffsets.boneOffset[boneIndex] = offsetMat;
         }
@@ -432,7 +430,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
     // 2) Static / Rigid Mesh
     else {
         // mesh type
-        sharedAsset->type = ModelType::Rigid;
+        sharedAsset->type = ModelType::Rigid;       // TODO :: Static / Rigid 구분 필요
 
         // mesh, material(texture)
         ProcessRigidNode(sharedAsset, pScene->mRootNode, pScene, -1);

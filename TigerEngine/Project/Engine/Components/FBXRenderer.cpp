@@ -125,6 +125,8 @@ void FBXRenderer::OnUpdate(float delta)
         break;
 
     default:
+        // static has none model matrix
+        // static has none animation
         break;
     }
 }
@@ -142,6 +144,7 @@ void FBXRenderer::OnRender(RenderQueue& queue)
     auto& meshData = fbxData->GetMesh();
     auto world = owner->GetTransform()->GetWorldTransform();
 
+    // Render Item Push
     for (int i = 0; i < meshData.size(); i++)
     {
         auto& mesh = meshData[i];
@@ -162,8 +165,6 @@ void FBXRenderer::OnRender(RenderQueue& queue)
             break;
         case ModelType::Rigid:
             item.model = fbxData->GetFBXInfo()->meshes_modelMat[i];
-            break;
-        default:
             break;
         }
 

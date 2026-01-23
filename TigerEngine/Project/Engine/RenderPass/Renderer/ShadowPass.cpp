@@ -36,6 +36,7 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     {
         // CB - Transform
         if (m.modelType == ModelType::Rigid) sm.transformCBData.model = m.model.Transpose();
+        else if (m.modelType == ModelType::Static) sm.transformCBData.model = Matrix::Identity.Transpose();
         sm.transformCBData.world = m.world.Transpose();
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
@@ -59,6 +60,7 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
                 break;
             }
             case ModelType::Rigid:
+            case ModelType::Static:
             {
                 context->VSSetShader(sm.VS_ShadowDepth_Rigid.Get(), NULL, 0);
                 break;
