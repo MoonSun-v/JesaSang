@@ -35,7 +35,7 @@ public:
 	UINT internalHeight = 1080;
 	bool isResize = false;
 
-private:
+protected:
     float m_PhysicsAccumulator = 0.0f;
 
 public:
@@ -48,8 +48,9 @@ public:
 
 	void Update();
 	void Render();
+    void FixedUpdate();
 	virtual void OnUpdate();		// Update
-    virtual void OnFixedUpdate(float dt);
+    virtual void OnFixedUpdate();
 	virtual void OnRender() = 0;	// Render
 
     void ConsoleInitialize();

@@ -155,7 +155,7 @@ void PhysicsComponent::Deserialize(nlohmann::json data)
     d.localOffset = m_LocalOffset;
     d.isTrigger = m_IsTrigger;
 
-    CreateCollider(m_ColliderType, m_BodyType, d);
+    CreateCollider(m_ColliderType, m_BodyType, d); // Note : 반드시 PysicsSystem.Initialize()가 호출된 뒤에 호출되야함.
     SetLayer(m_Layer);
 }
 

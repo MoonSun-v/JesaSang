@@ -3,7 +3,6 @@
 #include "Helper.h"
 #include "System/InputSystem.h"
 #include "System/TimeSystem.h"
-#include "EngineSystem/PhysicsSystem.h"
 #include "RendererPlatform/DirectX11Renderer.h"
 
 // Debug 모듈관련 헤더 파일 및 라이브러리
@@ -137,17 +136,11 @@ bool GameApp::Initialize(UINT Width, UINT Height)
 
     ConsoleInitialize();
 
-    if (!PhysicsSystem::Instance().Initialize())
-    {
-        return false;
-    }
-
 	return true;
 }
 
 void GameApp::Uninialize()
 {
-    PhysicsSystem::Instance().Shutdown();
     ConsoleUninitalize();
 }
 
@@ -191,25 +184,11 @@ void GameApp::Update()
 	GameTimer::Instance().Tick();
 	InputSystem::Instance().Update(Singleton<GameTimer>::Instance().DeltaTime());
 
-    // [ Physics Update : 프레임 드랍 방지 ] 
-    constexpr float fixedDt = 1.0f / 60.0f;
-    if (GameTimer::Instance().DeltaTime() > 0.1f)
-        m_PhysicsAccumulator += 0.1f;
-    else
-        m_PhysicsAccumulator += GameTimer::Instance().DeltaTime();
-
-    while (m_PhysicsAccumulator >= fixedDt)
-    {
-        OnFixedUpdate(fixedDt);
-
-        PhysicsSystem::Instance().Simulate(fixedDt);
-        m_PhysicsAccumulator -= fixedDt;
-    }
-
+    FixedUpdate(); // 물리 업데이트
 	OnUpdate();
 }
 
-void GameApp::OnFixedUpdate(float dt)
+void GameApp::OnFixedUpdate()
 {
 
 }
@@ -217,6 +196,11 @@ void GameApp::OnFixedUpdate(float dt)
 void GameApp::Render()
 {
 	OnRender();
+}
+
+void GameApp::FixedUpdate()
+{
+    OnFixedUpdate();
 }
 
 void GameApp::OnUpdate()

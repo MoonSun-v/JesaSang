@@ -18,6 +18,7 @@
 #include "EngineSystem/CameraSystem.h"
 #include "EngineSystem/PlayModeSystem.h"
 #include "EngineSystem/LightSystem.h"
+#include "EngineSystem/PhysicsSystem.h"
 
 #include "Components/FreeCamera.h"
 #include "Components/FBXData.h"
@@ -31,6 +32,7 @@ EngineApp::EngineApp(HINSTANCE hInstance)
 
 EngineApp::~EngineApp()
 {
+    PhysicsSystem::Instance().Shutdown();
     AudioManager::Instance().Shutdown();
 }
 
@@ -49,6 +51,7 @@ bool EngineApp::OnInitialize()
 	FBXResourceManager::Instance().GetDevice(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
     ShaderManager::Instance().Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext(), clientWidth, clientHeight);
     AudioManager::Instance().Initialize();
+    if (!PhysicsSystem::Instance().Initialize()) { return false; }
 
     auto& sm = ShaderManager::Instance();
     sm.viewport_screen = dxRenderer->GetRenderViewPort();
@@ -198,9 +201,22 @@ void EngineApp::OnRender()
 	EndRender(); 					// 업데이트 마무리
 }
 
-void EngineApp::OnFixedUpdate(float dt)
+void EngineApp::OnFixedUpdate()
 {
-    SceneSystem::Instance().FixedUpdateScene(dt);
+    // [ Physics Update : 프레임 드랍 방지 ] 
+    constexpr float fixedDt = 1.0f / 60.0f;
+    if (GameTimer::Instance().DeltaTime() > 0.1f)
+        m_PhysicsAccumulator += 0.1f;
+    else
+        m_PhysicsAccumulator += GameTimer::Instance().DeltaTime();
+
+    while (m_PhysicsAccumulator >= fixedDt)
+    {
+        SceneSystem::Instance().FixedUpdateScene(fixedDt);
+        PhysicsSystem::Instance().Simulate(fixedDt);
+
+        m_PhysicsAccumulator -= fixedDt;
+    }
 }
 
 void GameApp::ConsoleInitialize()
@@ -397,5 +413,6 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<GroundTestScript>("GroundTestScript");
     ComponentFactory::Instance().Register<CCTTest>("CCTTestScript");
     ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
+    ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
 }
 
