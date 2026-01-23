@@ -1,8 +1,10 @@
 #include "Scene.h"	
 #include "../Object/GameObject.h"
 #include "../EngineSystem/ScriptSystem.h"
-#include "System/ObjectSystem.h"
 #include "../Manager/WorldManager.h"
+#include "System/ObjectSystem.h"
+#include "../EngineSystem/LightSystem.h"
+#include "../EngineSystem/CameraSystem.h"
 
 void Scene::OnUpdate(float deltaTime)
 {
@@ -114,6 +116,8 @@ void Scene::ClearScene()
 	
 	gameObjects.clear();
     mappedGameObjects.clear();
+    LightSystem::Instance().Clear();
+    CameraSystem::Instance().Clear();
 }
 
 bool Scene::SaveToJson(const std::string &filename) const

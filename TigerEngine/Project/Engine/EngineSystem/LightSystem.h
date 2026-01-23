@@ -27,5 +27,10 @@ public:
     Vector3 GetSunDirection();
 
     // Lights Getter
-    std::vector<Light*> GetComponents();
+    std::vector<Light*> GetComponents(); 
+
+    /// <summary>
+    /// 등록된 Light 컴포넌트들 .clear()로 제거하는 함수
+    /// </summary>
+    void Clear();
 };

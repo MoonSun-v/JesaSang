@@ -36,3 +36,8 @@ std::vector<Light*> LightSystem::GetComponents()
 {
     return comps;
 }
+
+void LightSystem::Clear()
+{
+    comps.clear();
+}
