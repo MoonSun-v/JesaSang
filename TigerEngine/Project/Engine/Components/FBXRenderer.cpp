@@ -194,9 +194,14 @@ nlohmann::json FBXRenderer::Serialize()
 			auto v = value.get_value<float>();
 			datas["properties"][propName] = v;
 		}
-		else if (value.is_type<float>())
+		else if (value.is_type<int>())
 		{
-			auto v = value.get_value<float>();
+			auto v = value.get_value<int>();
+			datas["properties"][propName] = v;
+		}
+		else if (value.is_type<bool>())
+		{
+			auto v = value.get_value<bool>();
 			datas["properties"][propName] = v;
 		}
 		else if (value.is_type<Color>())
@@ -225,9 +230,14 @@ void FBXRenderer::Deserialize(nlohmann::json data)
 			float data = propData[propName];
 			prop.set_value(*this, data);
 		}
-		else if (value.is_type<float>())
+		else if (value.is_type<int>())
 		{
-			float data = propData[propName];
+			int data = propData[propName];
+			prop.set_value(*this, data);
+		}
+        else if (value.is_type<bool>())
+		{
+			bool data = propData[propName];
 			prop.set_value(*this, data);
 		}
 		else if (value.is_type<Color>() && propName == "Color")
