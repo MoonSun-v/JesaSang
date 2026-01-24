@@ -15,6 +15,7 @@ RTTR_REGISTRATION
 void FBXData::OnInitialize()
 {
     // 임시
+    isStatic = false;
     path = "..\\Assets\\Resource\\sphere.fbx";
     fbxAsset = FBXResourceManager::Instance().LoadStaticFBXByPath("..\\Assets\\Resource\\sphere.fbx");
     meshes = fbxAsset->meshes; 
@@ -39,7 +40,8 @@ void FBXData::ChangeData(std::string path)
 {
     isStatic = false;
     auto getData = FBXResourceManager::Instance().LoadFBXByPath(path);
-    fbxAsset.swap(getData);
+    fbxAsset.reset();
+    fbxAsset = getData;
     meshes = fbxAsset->meshes; 
     this->path = path;
     owner->SetAABB(fbxAsset->boxMin, fbxAsset->boxMax, fbxAsset->boxCenter);
@@ -52,7 +54,8 @@ void FBXData::ChangeStaticData(std::string path)
 {
     isStatic = true;
     auto getData = FBXResourceManager::Instance().LoadStaticFBXByPath(path);
-    fbxAsset.swap(getData);
+    fbxAsset.reset();
+    fbxAsset = getData;
     meshes = fbxAsset->meshes;
     this->path = path;
     owner->SetAABB(fbxAsset->boxMin, fbxAsset->boxMax, fbxAsset->boxCenter);

@@ -189,17 +189,17 @@ nlohmann::json FBXRenderer::Serialize()
     {
 		std::string propName = prop.get_name().to_string();
 		rttr::variant value = prop.get_value(*this);
-		if (value.is_type<float>() && propName == "Roughness")
+		if (value.is_type<float>())
 		{
 			auto v = value.get_value<float>();
 			datas["properties"][propName] = v;
 		}
-		else if (value.is_type<float>() && propName == "Metalic")
+		else if (value.is_type<float>())
 		{
 			auto v = value.get_value<float>();
 			datas["properties"][propName] = v;
 		}
-		else if (value.is_type<Color>() && propName == "Color")
+		else if (value.is_type<Color>())
 		{
 			auto v = value.get_value<Color>();
 			datas["properties"][propName] = { v.x, v.y, v.z, v.w };
@@ -220,14 +220,14 @@ void FBXRenderer::Deserialize(nlohmann::json data)
     {
 		std::string propName = prop.get_name().to_string();
 		rttr::variant value = prop.get_value(*this);
-		if (value.is_type<float>() && propName == "Roughness")
+		if (value.is_type<float>())
 		{
-			float data = propData["Roughness"];
+			float data = propData[propName];
 			prop.set_value(*this, data);
 		}
-		else if (value.is_type<float>() && propName == "Metalic")
+		else if (value.is_type<float>())
 		{
-			float data = propData["Metalic"];
+			float data = propData[propName];
 			prop.set_value(*this, data);
 		}
 		else if (value.is_type<Color>() && propName == "Color")
@@ -236,6 +236,38 @@ void FBXRenderer::Deserialize(nlohmann::json data)
 			prop.set_value(*this, color);
 		}
 	}
+}
+
+void FBXRenderer::SetRoughness(float value)
+{
+    float factor = std::clamp(value, 0.0f, 1.0f);
+    roughness = factor;
+
+    for (auto& material : fbxData->GetMesh())
+    {
+        material.GetMaterial().roughnessFactor = factor;
+    }
+}
+
+void FBXRenderer::SetMatalic(float value)
+{
+    float factor = std::clamp(value, 0.0f, 1.0f);
+    metalic = factor;
+
+    for (auto& material : fbxData->GetMesh())
+    {
+        material.GetMaterial().metallicFactor = factor;
+    }
+}
+
+void FBXRenderer::SetColor(Color value)
+{
+    for (auto& material : fbxData->GetMesh())
+    {
+        // material.GetMaterial().diffuseOverride = color;
+    }
+
+    color = value;
 }
 
 void FBXRenderer::CreateBoneInfo()
