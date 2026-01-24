@@ -58,7 +58,7 @@ PS_Output main(PS_INPUT input) : SV_TARGET
     }
     else
     {
-        normal = normalize(mul(input.normal, (float3x3) input.finalWorld));
+        normal = normalize(input.normal);
     }
     
     // emission

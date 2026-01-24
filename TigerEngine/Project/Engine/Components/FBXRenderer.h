@@ -29,13 +29,13 @@ public:
 	void SetIsAnimationPlay(bool value) { isAnimPlay = value; }
 
 	float GetRoughness() { return roughness; }
-	void SetRoughness(float value) { roughness = value > 1.0f ? 1.0f : value; }
+    void SetRoughness(float value);
 
 	float GetMatalic() { return metalic; }
-	void SetMatalic(float value) { metalic = value > 1.0f ? 1.0f : value; }
+    void SetMatalic(float value);
 
 	Color GetColor() { return color; }
-	void SetColor(Color value) { color = value; }
+    void SetColor(Color value);
 
     void CreateBoneInfo();
 

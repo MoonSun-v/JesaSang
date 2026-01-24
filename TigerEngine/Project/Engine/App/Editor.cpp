@@ -471,8 +471,8 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                 // 현재 경로 표시   
                 ImGui::Text("Current Path: %s", path.c_str());
                 
-                // 탐색기 열기 버튼
-                if (ImGui::Button("Browse..."))
+                // 탐색기 열기 버튼 -> rigid, skeletal asset path
+                if (ImGui::Button("Browse nonStatic"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = "../";
@@ -495,9 +495,33 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                         FBXData* fbxDataComp = dynamic_cast<FBXData*>(comp);
                         fbxDataComp->ChangeData(relativePathStr);
                     }
-                    // close
+
                     ImGuiFileDialog::Instance()->Close();
+                } // imguiFileDialog end - non static  
+
+                // 탐색기 열기 버튼 -> static mesh asset path 찾기
+                if (ImGui::Button("Browse static"))
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = "../";
+                    ImGuiFileDialog::Instance()->OpenDialog("ChooseStaticFileDlgKey", "Choose File", ".fbx,.glb", config);
                 }
+
+                if (ImGuiFileDialog::Instance()->Display("ChooseStaticFileDlgKey"))
+                {
+                    if (ImGuiFileDialog::Instance()->IsOk())
+                    { // action if OK
+                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();     // 절대 경로 + 파일 이름
+
+                        std::filesystem::path relativePath = std::filesystem::relative(filePathName);
+                        std::string relativePathStr = relativePath.string();
+                        // action
+
+                        FBXData* fbxDataComp = dynamic_cast<FBXData*>(comp);
+                        fbxDataComp->ChangeStaticData(relativePathStr);
+                    }
+                    ImGuiFileDialog::Instance()->Close();
+                } // imguiFileDialog end - static
             }
         }        
     }
