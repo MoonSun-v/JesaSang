@@ -41,7 +41,8 @@ void FBXRenderer::OnStart()
 
 void FBXRenderer::OnUpdate(float delta)
 {
-	if(fbxData == nullptr) return;
+	if (fbxData == nullptr) return;
+    if (fbxData->GetFBXInfo()->type == ModelType::Static) return;
 
     auto modelAsset = fbxData->GetFBXInfo();
     if (!modelAsset->animations.empty() && isAnimPlay)
@@ -165,6 +166,9 @@ void FBXRenderer::OnRender(RenderQueue& queue)
             break;
         case ModelType::Rigid:
             item.model = fbxData->GetFBXInfo()->meshes_modelMat[i];
+            break;
+        case ModelType::Static:
+            item.world = world;
             break;
         }
 

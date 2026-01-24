@@ -72,6 +72,29 @@ void FBXResourceManager::ProcessRigidNode(std::shared_ptr<FBXResourceAsset>& pAs
     }
 }
 
+void FBXResourceManager::ProcessStaticNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene)
+{
+    vector<Mesh> meshes;
+    for (unsigned int i = 0; i < pNode->mNumMeshes; i++)
+    {
+        // submesh
+        unsigned int meshIndex = pNode->mMeshes[i];
+        aiMesh* aiMesh = pScene->mMeshes[meshIndex];
+
+        pAsset->meshes.push_back(this->ProcessMeshTexture(pAsset, aiMesh, pScene));
+
+        Mesh& outMesh = pAsset->meshes.back();
+        outMesh.parentIndex = -1;
+        outMesh.refBoneIndex = -1;
+    }
+
+    // child node
+    for (unsigned int i = 0; i < pNode->mNumChildren; i++)
+    {
+        ProcessStaticNode(pAsset, pNode->mChildren[i], pScene);
+    }
+}
+
 Mesh FBXResourceManager::ProcessMeshTexture(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene)
 {
 	// Data to fill
@@ -87,7 +110,7 @@ Mesh FBXResourceManager::ProcessMeshTexture(std::shared_ptr<FBXResourceAsset>& p
 		vertex.position = { pMesh->mVertices[i].x, pMesh->mVertices[i].y,  pMesh->mVertices[i].z };
 		vertex.normal = { pMesh->mNormals[i].x, pMesh->mNormals[i].y, pMesh->mNormals[i].z };
 		vertex.tangent = { pMesh->mTangents[i].x, pMesh->mTangents[i].y, pMesh->mTangents[i].z };
-		vertex.bitangent = { pMesh->mBitangents[i].x, pMesh->mBitangents[i].y, pMesh->mBitangents[i].z };
+        vertex.bitangent = { pMesh->mBitangents[i].x, pMesh->mBitangents[i].y, pMesh->mBitangents[i].z };
 
 		if (pMesh->mTextureCoords[0]) {
 			vertex.texture.x = (float)pMesh->mTextureCoords[0][i].x;
@@ -403,6 +426,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 		}
 	}
 
+    // Assimp Importer 설정
 	Assimp::Importer importer;
 
 	unsigned int importFlag = aiProcess_Triangulate |	// 삼각형 변환
@@ -484,13 +508,6 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
     {
         if (pScene->HasAnimations()) // gltf 파일이 RootNode->mChildren[0] 이 nullptr
         {
-            // auto firstAnimKey = sharedAsset->animations[0].m_boneAnimations[0].m_keys[0];
-            // Matrix mat = Matrix::CreateScale(firstAnimKey.m_scale) * 
-            // 			Matrix::CreateFromQuaternion(firstAnimKey.m_rotation) * 
-            // 			Matrix::CreateTranslation(firstAnimKey.m_position);
-            // sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, mat);
-            // sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, mat);
-
             // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
             sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
             sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
@@ -510,4 +527,61 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 	assets.insert({ path, weakAsset });
 
 	return sharedAsset;
+}
+
+std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadStaticFBXByPath(std::string path)
+{
+    // map에 먼저 있는지 확인
+    auto it = assets.find(path);
+
+    if (it != assets.end()) // 존재함
+    {
+        if (!it->second.expired())
+        {
+            shared_ptr<FBXResourceAsset> assetPtr = it->second.lock();
+            return assetPtr;
+        }
+        else
+        {
+            assets.erase(it); // 지우고 새로 만들기
+        }
+    }
+
+    // static mesh 불러오기
+    Assimp::Importer importer;
+    unsigned int importFlag =
+        aiProcess_Triangulate |                             // vertex 삼각형 으로 출력
+        aiProcess_GenNormals |                              // normal 
+        aiProcess_GenUVCoords |                             // uv
+        aiProcess_CalcTangentSpace |                        // tangent vector
+        aiProcess_ConvertToLeftHanded |                     // DX용 왼손좌표계 변환
+        aiProcess_PreTransformVertices;                     // 노드의 변환행렬을 적용한 버텍스 생성한다.  *StaticMesh로 처리할때만
+
+    importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0);
+
+    const aiScene* pScene = importer.ReadFile(path, importFlag);
+
+    if (pScene == nullptr) return std::shared_ptr<FBXResourceAsset>();
+
+    // 없으면 load후 map에 추가 
+    auto sharedAsset = make_shared<FBXResourceAsset>();
+
+    sharedAsset->directory = path.substr(0, path.find_last_of("/\\"));
+    sharedAsset->type = ModelType::Static;
+
+    ProcessStaticNode(sharedAsset, pScene->mRootNode, pScene);
+
+    // create vertex/index buffer
+    for (auto& mesh : sharedAsset->meshes)
+    {
+        mesh.CreateVertexBuffer(device);
+        mesh.CreateIndexBuffer(device);
+    }
+
+    // aabb bound -> 마우스 피킹용
+    sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mTransformation));
+    sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mTransformation));
+    sharedAsset->boxCenter = Vector3::Zero;
+
+    return sharedAsset;
 }

@@ -24,6 +24,7 @@ class FBXResourceManager : public Singleton<FBXResourceManager>
 	// Node Process
     void ProcessRigidNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene, int parentIndex);
 	void ProcessSkeletalNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene);
+    void ProcessStaticNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene);
 	
     // Mesh & Texture Save
     Mesh ProcessMeshTexture(std::shared_ptr<FBXResourceAsset>& pAsset, aiMesh* pMesh, const aiScene* pScene);
@@ -44,5 +45,16 @@ public:
     ~FBXResourceManager() = default;
 
 	void GetDevice(const ComPtr<ID3D11Device>& pDevice, const ComPtr<ID3D11DeviceContext>& pDeviceContext);
+
+	/// <summary>
+	/// Rigid, Skeletal FBX 모델 가져오는 함수
+	/// </summary>
+	/// <param name="path">상대 경로</param>
 	std::shared_ptr<FBXResourceAsset> LoadFBXByPath(std::string path);
+
+    /// <summary>
+    /// Static FBX 모델 가져오는 함수
+    /// </summary>
+    /// <param name="path">상대 경로</param>
+    std::shared_ptr<FBXResourceAsset> LoadStaticFBXByPath(std::string path);
 };
