@@ -14,19 +14,20 @@ RTTR_REGISTRATION
         .property("AnimationPlayTime", 	&FBXRenderer::GetProgressAnimationTime,		&FBXRenderer::SetProgressAnimationTime)
         .property("IsAnimationPlay", 	&FBXRenderer::GetIsAnimationPlay,			&FBXRenderer::SetIsAnimationPlay)
 
-        .property("EmissiveFactor", 	&FBXRenderer::GetEmissiveFactor,			&FBXRenderer::SetEmissiveFactor)
-        .property("RoughnessFactor", 	&FBXRenderer::GetRoughnessFactor,			&FBXRenderer::SetRoughnessFactor)
-        .property("MetalicFactor", 		&FBXRenderer::GetMatalicFactor,				&FBXRenderer::SetMatalicFactor)
+        .property("Alpha", 	        &FBXRenderer::GetAlpha,         &FBXRenderer::SetAlpha)
+        .property("Emissive", 	    &FBXRenderer::GetEmissive,		&FBXRenderer::SetEmissive)
+        .property("Roughness", 	    &FBXRenderer::GetRoughness,		&FBXRenderer::SetRoughness)
+        .property("Metalic", 		&FBXRenderer::GetMatalic,		&FBXRenderer::SetMatalic)
 
         .property("UseDiffuseOverride", 	&FBXRenderer::GetUseDiffuseOverride,	&FBXRenderer::SetUseDiffuseOverride)
         .property("UseEmissiveOverride", 	&FBXRenderer::GetUseEmissiveOverride,	&FBXRenderer::SetUseEmissiveOverride)
         .property("UseMetallicOverride", 	&FBXRenderer::GetUseRoughnessOverride,	&FBXRenderer::SetUseRoughnessOverride)
         .property("UseRoughnessOverride", 	&FBXRenderer::GetUseMatalicOverride,	&FBXRenderer::SetUseMatalicOverride)
 
-        .property("Diffuse", 	    &FBXRenderer::GetDiffuse,			&FBXRenderer::SetDiffuse)
-        .property("Emissive", 	    &FBXRenderer::GetEmissive,			&FBXRenderer::SetEmissive)
-        .property("Metallic", 		&FBXRenderer::GetMetallic,			&FBXRenderer::SetMetallic)
-        .property("Roughness",  	&FBXRenderer::GetRoughness,			&FBXRenderer::SetRoughness);
+        .property("DiffuseOverride", 	    &FBXRenderer::GetDiffuseOverride,		&FBXRenderer::SetDiffuseOverride)
+        .property("EmissiveOverride", 	    &FBXRenderer::GetEmissiveOverride,		&FBXRenderer::SetEmissiveOverride)
+        .property("MetallicOverride", 		&FBXRenderer::GetMetallicOverride,		&FBXRenderer::SetMetallicOverride)
+        .property("RoughnessOverride",  	&FBXRenderer::GetRoughnessOverride,		&FBXRenderer::SetRoughnessOverride);
 
 
 		rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
@@ -266,7 +267,14 @@ void FBXRenderer::Deserialize(nlohmann::json data)
 	}
 }
 
-void FBXRenderer::SetEmissiveFactor(float value)
+void FBXRenderer::SetAlpha(float value)
+{
+    alphaFactor = value;
+    for (auto& material : fbxData->GetMesh())
+        material.GetMaterial().alphaFactor = alphaFactor;
+}
+
+void FBXRenderer::SetEmissive(float value)
 {
     float factor = std::clamp(value, 0.0f, 1.0f);
     emissiveFactor = factor;
@@ -275,7 +283,7 @@ void FBXRenderer::SetEmissiveFactor(float value)
         material.GetMaterial().emissiveFactor = factor;
 }
 
-void FBXRenderer::SetRoughnessFactor(float value)
+void FBXRenderer::SetRoughness(float value)
 {
     float factor = std::clamp(value, 0.0f, 1.0f);
     roughnessFactor = factor;
@@ -284,7 +292,7 @@ void FBXRenderer::SetRoughnessFactor(float value)
         material.GetMaterial().roughnessFactor = factor;
 }
 
-void FBXRenderer::SetMatalicFactor(float value)
+void FBXRenderer::SetMatalic(float value)
 {
     float factor = std::clamp(value, 0.0f, 1.0f);
     metalicFactor = factor;
@@ -321,28 +329,28 @@ void FBXRenderer::SetUseMatalicOverride(bool flag)
         material.GetMaterial().useMetallicOverride = useMetallicOverride;
 }
 
-void FBXRenderer::SetDiffuse(Color color)
+void FBXRenderer::SetDiffuseOverride(Color color)
 {
     diffuseOverride = { color.R(), color.G(), color.B() };
     for (auto& material : fbxData->GetMesh())
         material.GetMaterial().diffuseOverride = diffuseOverride;
 }
 
-void FBXRenderer::SetEmissive(Color color)
-{
+void FBXRenderer::SetEmissiveOverride(Color color)
+{                            	
     emissiveOverride = { color.R(), color.G(), color.B() };
     for (auto& material : fbxData->GetMesh())
         material.GetMaterial().emissiveOverride = emissiveOverride;
 }
 
-void FBXRenderer::SetMetallic(float value)
+void FBXRenderer::SetMetallicOverride(float value)
 {
     metallicOverride = value;
     for (auto& material : fbxData->GetMesh())
         material.GetMaterial().metallicOverride = metallicOverride;
 }
 
-void FBXRenderer::SetRoughness(float value)
+void FBXRenderer::SetRoughnessOverride(float value)
 {
     roughnessOverride = value;
     for (auto& material : fbxData->GetMesh())

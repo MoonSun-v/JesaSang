@@ -29,12 +29,15 @@ public:
 	void SetIsAnimationPlay(bool value) { isAnimPlay = value; }
 
     // material get/set
-    float GetEmissiveFactor() { return emissiveFactor; }
-    void SetEmissiveFactor(float value);
-	float GetRoughnessFactor() { return roughnessFactor; }
-    void SetRoughnessFactor(float value);
-	float GetMatalicFactor() { return metalicFactor; }
-    void SetMatalicFactor(float value);
+    float GetAlpha() { return alphaFactor; }
+    void SetAlpha(float value);
+
+    float GetEmissive() { return emissiveFactor; }
+    void SetEmissive(float value);
+	float GetRoughness() { return roughnessFactor; }
+    void SetRoughness(float value);
+	float GetMatalic() { return metalicFactor; }
+    void SetMatalic(float value);
 	
     bool GetUseDiffuseOverride() { return useDiffuseOverride; }
     void SetUseDiffuseOverride(bool flag);
@@ -45,14 +48,14 @@ public:
     bool GetUseMatalicOverride() { return useMetallicOverride; }
     void SetUseMatalicOverride(bool flag);
 
-    Color GetDiffuse() { return Color(diffuseOverride.x, diffuseOverride.y, diffuseOverride.z); }
-    void SetDiffuse(Color color);
-    Color GetEmissive() { return Color(emissiveOverride.x, emissiveOverride.y, emissiveOverride.z); }
-    void SetEmissive(Color color);
-    float GetMetallic() { return metallicOverride; }
-    void SetMetallic(float value);
-    float GetRoughness() { return roughnessOverride; }
-    void SetRoughness(float value);      
+    Color GetDiffuseOverride() { return Color(diffuseOverride.x, diffuseOverride.y, diffuseOverride.z); }
+    void SetDiffuseOverride(Color color);
+    Color GetEmissiveOverride() { return Color(emissiveOverride.x, emissiveOverride.y, emissiveOverride.z); }
+    void SetEmissiveOverride(Color color);
+    float GetMetallicOverride() { return metallicOverride; }
+    void SetMetallicOverride(float value);
+    float GetRoughnessOverride() { return roughnessOverride; }
+    void SetRoughnessOverride(float value);      
 
     // bone
     void CreateBoneInfo();
@@ -73,6 +76,8 @@ private:
     bool isAnimPlay = true;   
 
     // Material
+    float alphaFactor = 1.0f;
+
     float emissiveFactor = 1.0f;
 	float roughnessFactor = 1.0f;
 	float metalicFactor = 1.0f;

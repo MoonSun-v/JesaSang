@@ -29,7 +29,7 @@ void Player1::OnUpdate(float delta)
     auto comp = GetOwner()->GetComponent<FBXRenderer>();
     if (comp != nullptr)
     {
-        comp->SetDiffuse({ r, g, b, 1.0f });
+        comp->SetDiffuseOverride({ r, g, b, 1.0f });
     }
 
     r += delta;

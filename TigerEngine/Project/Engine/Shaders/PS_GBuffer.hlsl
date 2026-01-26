@@ -39,11 +39,12 @@ PS_Output main(PS_INPUT input) : SV_TARGET
     
     // ---[ Material Texture ]----------------------------------
     
-    // base color
+    // base color, aplha
     if (useDiffuse)
     {
         base_color = diffuseMap.Sample(samLinear, input.texCoord).rgb;
         alpha = diffuseMap.Sample(samLinear, input.texCoord).a;
+        alpha *= alphaFactor;
     }
     
     if (alpha < 0.5)
