@@ -78,15 +78,16 @@ struct alignas(16) MaterialCB
     BOOL useEmissive;
     BOOL useMetallic;
     BOOL useRoughness;
-
     BOOL roughnessFromShininess; // roughness가 aiTextureType_SHININESS로 들어오는 경우
-    Vector2  padding1;
+    Vector2 padding;
 
     // PBR Factor
-    float emissiveFactor = 1.0f;
-    float metallicFactor = 1.0f;
-    float roughnessFactor = 1.0f;
-    float padding2;
+    Vector3 diffuseFactor = { 1,1,1 };
+    float   alphaFactor = 1.0f;
+    Vector3 emissiveFactor = { 1,1,1 };
+    float   metallicFactor = 1.0f;
+    float   roughnessFactor = 1.0f;
+    Vector3 padding2;
 
     // PBR override
     BOOL usediffuseOverride = false;

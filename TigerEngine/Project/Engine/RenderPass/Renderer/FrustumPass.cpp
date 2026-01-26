@@ -37,11 +37,17 @@ void FrustumPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& que
 
 void FrustumPass::FrustumDebugDraw(ComPtr<ID3D11DeviceContext>& context, const Matrix& frustumView, const Matrix& frustumProj, const Matrix& renderView, const Matrix& renderProj, FXMVECTOR color)
 {
-    // Frustum Create
-    BoundingFrustum frustum{};
-    BoundingFrustum::CreateFromMatrix(frustum, frustumProj); // view space 기준
-    Matrix invFrustumView = frustumView.Invert();
-    frustum.Transform(frustum, invFrustumView);        // view -> world
+    // Invert view matrix (view -> world)
+    XMMATRIX V = frustumView;
+    XMVECTOR det = XMVectorZero();
+    XMMATRIX invV = XMMatrixInverse(&det, V);
+
+    // Create frustum
+    BoundingFrustum frustumVS{};
+    BoundingFrustum::CreateFromMatrix(frustumVS, frustumProj); // view space 기준
+    
+    BoundingFrustum frustumWS{};
+    frustumVS.Transform(frustumWS, invV);
 
     // Effect Update (render 기준은 항상 main camera)
     m_effect->SetWorld(Matrix::Identity);
@@ -57,7 +63,7 @@ void FrustumPass::FrustumDebugDraw(ComPtr<ID3D11DeviceContext>& context, const M
 
     // Draw
     m_batch->Begin();
-    DebugDraw::Draw(m_batch.get(), frustum, color);
+    DebugDraw::Draw(m_batch.get(), frustumWS, color);
     m_batch->End();
 
     // UnBind

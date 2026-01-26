@@ -29,6 +29,8 @@ void Mesh::Draw(ComPtr<ID3D11DeviceContext>& pDeviceContext) const
     sm.materialCBData.useRoughness = material.hasRoughness;
     sm.materialCBData.roughnessFromShininess = material.roughnessFromShininess;
 
+    sm.materialCBData.diffuseFactor = material.diffuseFactor;
+    sm.materialCBData.alphaFactor = material.alphaFactor;
     sm.materialCBData.emissiveFactor = material.emissiveFactor;
     sm.materialCBData.metallicFactor = material.metallicFactor;
     sm.materialCBData.roughnessFactor = material.roughnessFactor;

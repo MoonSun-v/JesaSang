@@ -18,7 +18,7 @@ public:
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
-	// animation
+	// animation get/set
 	int GetAnimationIndex() { return animationIndex; }
 	void SetAnimationIndex(int index) { animationIndex = index; }
 	
@@ -28,15 +28,37 @@ public:
 	bool GetIsAnimationPlay() { return isAnimPlay; }
 	void SetIsAnimationPlay(bool value) { isAnimPlay = value; }
 
-	float GetRoughness() { return roughness; }
+    // material get/set
+    Color GetDiffuse() { return Color(diffuseFactor.x, diffuseFactor.y, diffuseFactor.z); }
+    void SetDiffuse(Color color);
+    float GetAlpha() { return alphaFactor; }
+    void SetAlpha(float value);
+    Color GetEmissive() { return Color(emissiveFactor.x, emissiveFactor.y, emissiveFactor.z); }
+    void SetEmissive(Color color);
+	float GetRoughness() { return roughnessFactor; }
     void SetRoughness(float value);
-
-	float GetMatalic() { return metalic; }
+	float GetMatalic() { return metalicFactor; }
     void SetMatalic(float value);
+	
+    bool GetUseDiffuseOverride() { return useDiffuseOverride; }
+    void SetUseDiffuseOverride(bool flag);
+    bool GetUseEmissiveOverride() { return useEmissiveOverride; }
+    void SetUseEmissiveOverride(bool flag);
+    bool GetUseRoughnessOverride() { return useRoughnessOverride; }
+    void SetUseRoughnessOverride(bool flag);
+    bool GetUseMatalicOverride() { return useMetallicOverride; }
+    void SetUseMatalicOverride(bool flag);
 
-	Color GetColor() { return color; }
-    void SetColor(Color value);
+    Color GetDiffuseOverride() { return Color(diffuseOverride.x, diffuseOverride.y, diffuseOverride.z); }
+    void SetDiffuseOverride(Color color);
+    Color GetEmissiveOverride() { return Color(emissiveOverride.x, emissiveOverride.y, emissiveOverride.z); }
+    void SetEmissiveOverride(Color color);
+    float GetMetallicOverride() { return metallicOverride; }
+    void SetMetallicOverride(float value);
+    float GetRoughnessOverride() { return roughnessOverride; }
+    void SetRoughnessOverride(float value);      
 
+    // bone
     void CreateBoneInfo();
 
 private:
@@ -54,7 +76,20 @@ private:
     float progressAnimationTime = 0.0f; // 현재 애니메이션 시간
     bool isAnimPlay = true;   
 
-	float roughness = 0.0f;
-	float metalic = 0.0f;
-	Color color{};
+    // Material
+    Vector3 diffuseFactor   = { 1,1,1 };
+    float   alphaFactor     = 1.0f;
+    Vector3 emissiveFactor  = { 1,1,1 };
+	float   roughnessFactor = 1.0f;
+	float   metalicFactor   = 1.0f;
+
+    bool useDiffuseOverride   = false;
+    bool useEmissiveOverride  = false;
+    bool useMetallicOverride  = false;
+    bool useRoughnessOverride = false;
+
+    Vector3 diffuseOverride   = { 1,1,1 };
+    Vector3 emissiveOverride  = { 1,1,1 };
+    float   metallicOverride  = 1.0f;
+    float   roughnessOverride = 1.0f;
 };

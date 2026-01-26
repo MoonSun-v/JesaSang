@@ -102,15 +102,16 @@ cbuffer MaterialCB : register(b3)
     bool useEmissive;
     bool useMetallic;
     bool useRoughness;
-    
     bool roughnessFromShininess;
     float2 padding3;
-
+    
     // PBR Factor
-    float emissiveFactor;
+    float3 diffuseFactor;
+    float  alphaFactor;
+    float3 emissiveFactor;
     float metallicFactor;
     float roughnessFactor;
-    float padding4;
+    float3 padding4;
 
     // PBR override
     bool useBaseColorOverride;

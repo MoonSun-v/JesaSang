@@ -8,7 +8,10 @@ void DirectionalShadowCamera::Update(Camera* camera)
     ShadowOrthoDesc desc = WorldManager::Instance().shadowData;
 
     Vector3 lightDir = LightSystem::Instance().GetSunDirection();
+    if (lightDir.LengthSquared() < 1e-6f)
+        lightDir = Vector3::Down;
     lightDir.Normalize();
+
     Vector3 camPos = camera->GetOwner()->GetTransform()->GetPosition();
 
     Vector3 sceneCenter = camPos + camera->GetForward() * desc.lookPointDist;

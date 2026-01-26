@@ -2,62 +2,6 @@
   "objects": [
     {
       "properties": {
-        "Name": "Sphere",
-        "components": {
-          "": {},
-          "FBXData": {
-            "properties": {
-              "DataPath": "..\\Assets\\Resource\\sphere.fbx"
-            },
-            "type": "FBXData"
-          },
-          "FBXRenderer": {
-            "properties": {
-              "Color": [
-                0.30333325266838074,
-                0.44897618889808655,
-                0.8370717167854309,
-                1.0
-              ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
-            },
-            "type": "FBXRenderer"
-          },
-          "Player1": {
-            "properties": {
-              "b": 0.0,
-              "g": 0.0,
-              "r": 0.0
-            },
-            "type": "Player1"
-          },
-          "Transform": {
-            "properties": {
-              "Position": [
-                300.0,
-                0.0,
-                44.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        }
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
         "Name": "Main Camera",
         "components": {
           "Camera": {
@@ -100,20 +44,49 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\Ground.fbx"
+              "DataPath": "..\\Assets\\Resource\\Ground.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.686274528503418,
-                0.686274528503418,
-                0.686274528503418,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
@@ -121,7 +94,7 @@
             "properties": {
               "Position": [
                 0.0,
-                -200.0,
+                -110.0,
                 0.0
               ],
               "Rotation": [
@@ -170,7 +143,7 @@
             "properties": {
               "Position": [
                 0.0,
-                0.0,
+                -110.0,
                 0.0
               ],
               "Rotation": [
@@ -196,20 +169,49 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\zeldaPosed001.fbx"
+              "DataPath": "..\\Assets\\Resource\\zeldaPosed001.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.0,
-                0.0,
-                0.0,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
@@ -243,20 +245,49 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\BoxHuman.fbx"
+              "DataPath": "..\\Assets\\Resource\\BoxHuman.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.0,
-                0.0,
-                0.0,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 1.1951030492782593,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
@@ -286,24 +317,53 @@
     },
     {
       "properties": {
-        "Name": "SkeletalModel",
+        "Name": "RigidModel",
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\char.fbx"
+              "DataPath": "..\\Assets\\Resource\\char.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.0,
-                0.0,
-                0.0,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
@@ -337,20 +397,49 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\Girl.fbx"
+              "DataPath": "..\\Assets\\Resource\\Girl.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.0,
-                0.0,
-                0.0,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.4617626667022705,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
@@ -380,33 +469,62 @@
     },
     {
       "properties": {
-        "Name": "Test Path Object",
+        "Name": "Tree",
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\Tree.fbx"
+              "DataPath": "..\\Assets\\Resource\\Tree.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Color": [
-                0.0,
-                0.0,
-                0.0,
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
-              "Metalic": 0.0,
-              "Roughness": 0.0
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
           "Transform": {
             "properties": {
               "Position": [
-                -225.6999969482422,
+                300.0,
                 0.0,
-                170.6999969482422
+                500.0
               ],
               "Rotation": [
                 0.0,
@@ -414,9 +532,9 @@
                 0.0
               ],
               "Scale": [
-                22.0,
-                22.0,
-                22.0
+                100.0,
+                100.0,
+                100.0
               ]
             },
             "type": "Transform"
@@ -424,6 +542,402 @@
         }
       },
       "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "PBR_TEST_1",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 0.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": true,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": true,
+              "UseRoughnessOverride": true
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -950.0,
+                50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "PBR_TEST_2",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 0.5,
+              "Roughness": 1.0,
+              "RoughnessOverride": 0.5,
+              "UseDiffuseOverride": true,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": true,
+              "UseRoughnessOverride": true
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -800.0,
+                50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "PBR_TEST_3",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 0.5,
+              "Roughness": 1.0,
+              "RoughnessOverride": 0.0,
+              "UseDiffuseOverride": true,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": true,
+              "UseRoughnessOverride": true
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -650.0,
+                50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "PBR_TEST_4",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "AnimationIndex": 0,
+              "AnimationPlayTime": 0.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsAnimationPlay": true,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "Roughness": 1.0,
+              "RoughnessOverride": 0.0,
+              "UseDiffuseOverride": true,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": true,
+              "UseRoughnessOverride": true
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -500.0,
+                50.0,
+                400.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    }
+  ],
+  "worldData": [
+    {
+      "properties": {
+        "PostProcessWorldData": {
+          "properties": {
+            "bloom_clamp": 0.0,
+            "bloom_intensity": 0.800000011920929,
+            "bloom_scatter": 0.5,
+            "bloom_threshold": 1.0,
+            "bloom_tint": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "colorTint": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "colorTint_strength": 0.5,
+            "contrast": 1.0,
+            "defaultGamma": 2.200000047683716,
+            "exposure": 0.0,
+            "gain": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gain_strength": 0.5,
+            "gamma": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gamma_strength": 1.0,
+            "grain_intensity": 0.20000000298023224,
+            "grain_response": 0.800000011920929,
+            "grain_scale": 1.0,
+            "hueShift": 0.0,
+            "isHDR": 1,
+            "lift": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lift_strength": 0.5,
+            "saturation": 1.0,
+            "temperature": 0.0,
+            "tint": 0.0,
+            "useBloom": 0,
+            "useColorAdjustments": 0,
+            "useColorTint": 0,
+            "useDefaultGamma": 1,
+            "useFilmGrain": 0,
+            "useGain": 0,
+            "useGamma": 0,
+            "useHueShift": 0,
+            "useLGG": 0,
+            "useLift": 0,
+            "useVignette": 0,
+            "useWhiteBalance": 0,
+            "vignetteCenter": [
+              0.5,
+              0.5
+            ],
+            "vignetteColor": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "vignette_intensity": 0.5,
+            "vignette_smoothness": 0.5
+          },
+          "type": "PostProcessWorldData"
+        },
+        "ShadowOrthoDesc": {
+          "properties": {
+            "lookPointDist": 500.0,
+            "shadowFar": 20000.0,
+            "shadowHeight": 10000.0,
+            "shadowLightDist": 1000.0,
+            "shadowNear": 1.0,
+            "shadowWidth": 10000.0
+          },
+          "type": "ShadowOrthoDesc"
+        },
+        "indirectIntensity": 0.20000000298023224,
+        "useIBL": 1
+      },
+      "type": "WorldManager"
     }
   ]
 }

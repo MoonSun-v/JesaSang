@@ -25,9 +25,11 @@ public:
 
     // ----- [ Values ] ----- 
     // Factor
-    float emissiveFactor  = 1.0f;
-    float metallicFactor  = 1.0f;
-    float roughnessFactor = 1.0f;
+    Vector3 diffuseFactor   = { 1,1,1 };
+    float   alphaFactor     = 1.0f;
+    Vector3 emissiveFactor  = { 1,1,1 };
+    float   metallicFactor  = 1.0f;
+    float   roughnessFactor = 1.0f;
 
     // Override
     BOOL usediffuseOverride    = false;
