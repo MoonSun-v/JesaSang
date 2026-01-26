@@ -17,7 +17,8 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
 
     context->RSSetViewports(1, &sm.viewport_screen);
     context->OMSetRenderTargets(4, gbuffers, sm.depthStencilView.Get());
-    context->ClearDepthStencilView(sm.depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+    context->ClearDepthStencilView(sm.depthStencilView.Get(),
+        D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);     // depth, stecil clear (stecil write -> geometry, lighting pass)
     context->OMSetDepthStencilState(sm.defualtDSS.Get(), 0);
 
     for (int i = 0; i < 4; i++)

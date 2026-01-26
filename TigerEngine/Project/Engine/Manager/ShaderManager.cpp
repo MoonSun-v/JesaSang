@@ -55,8 +55,8 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;         // 라이트 볼륨 표면이 씬 표면보다 앞이거나 같으면 통과    
 
         dsDesc.StencilEnable = TRUE;        // Stencil Test ON
-        dsDesc.StencilReadMask = 0xFF;
-        dsDesc.StencilWriteMask = 0xFF;     // Write ON
+        dsDesc.StencilReadMask = 0x02;
+        dsDesc.StencilWriteMask = 0x02;     // Write ON
 
         // Front Face
         dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;       // Stencil Test 무조건 통과
@@ -67,7 +67,7 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         // Back Face (동일)
         dsDesc.BackFace = dsDesc.FrontFace;
 
-        HR_T(dev->CreateDepthStencilState(&dsDesc, depthTestStencilWriteDSS.GetAddressOf()));
+        HR_T(dev->CreateDepthStencilState(&dsDesc, lightingVolumeDrawDSS.GetAddressOf()));
     }
 
     // create DSS (stencil test only)
@@ -79,7 +79,7 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 
         dsDesc.StencilEnable = TRUE;       // Stencil Test ON
-        dsDesc.StencilReadMask = 0xFF;
+        dsDesc.StencilReadMask = 0x02;
         dsDesc.StencilWriteMask = 0x00;    // Write OFF
 
         // Front Face
@@ -91,10 +91,7 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         // Back Face (동일)
         dsDesc.BackFace = dsDesc.FrontFace;
 
-        HR_T(dev->CreateDepthStencilState(
-            &dsDesc,
-            stencilTestOnlyDSS.GetAddressOf()
-        ));
+        HR_T(dev->CreateDepthStencilState(&dsDesc, lightingVolumeTestDSS.GetAddressOf()));
     }
 
     // create DSS (all disable)
