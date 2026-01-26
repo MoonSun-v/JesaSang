@@ -50,6 +50,29 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
             auto v = value.get_value<std::string>();
             datas["properties"][propName] = v;
         }
+        else if (value.is_type<Vector2>())
+        {
+            Vector2 value = { propData[propName][0], propData[propName][1] };
+            prop.set_value((this->postProcessData), value);
+        }
+        else if (value.is_type<Vector3>())
+        {
+            Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
+            prop.set_value((this->postProcessData), value);
+        }
+        else if (value.is_type<DirectX::SimpleMath::Quaternion>())
+        {
+            auto v = value.get_value<DirectX::SimpleMath::Quaternion>();
+            datas["properties"][propName] = { v.x, v.y, v.z, v.w };
+        }
+        else if (value.is_type<DirectX::SimpleMath::Matrix>())
+        {
+            auto v = value.get_value<DirectX::SimpleMath::Matrix>();    // NOTE : 이거 사용할 순간 오면 테스트 한 번 해야할 듯
+            std::vector<float> mat;
+            const float* p = (const float*)&v;
+            mat.assign(p, p + 16);
+            datas["properties"][propName] = mat;
+        }
     }
 
     return datas;
@@ -91,6 +114,34 @@ inline void JsonHelper::SetDataFromJson(T* typePtr, nlohmann::json data)
         {
             std::string data = propData[propName];
             prop.set_value(*typePtr, data);
+        }
+        else if (value.is_type<SimpleMath::Vector2>())
+        {
+            Vector2 value = { propData[propName][0], propData[propName][1] };
+            prop.set_value((this->shadowData), value);
+        }
+        else if (value.is_type<SimpleMath::Vector3>())
+        {
+            Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
+            prop.set_value((this->shadowData), value);
+        }
+        else if (value.is_type<DirectX::SimpleMath::Quaternion>())
+        {
+            if (propData[propName].size() == 4)
+            {
+                DirectX::SimpleMath::Quaternion q = { propData[propName][0], propData[propName][1], propData[propName][2], propData[propName][3] };
+                prop.set_value(*typePtr, q);
+            }
+        }
+        else if (value.is_type<DirectX::SimpleMath::Matrix>())
+        {
+            if (propData[propName].size() == 16)    // NOTE : 이거 사용할 순간 오면 테스트 해봐야할 듯
+            {
+                DirectX::SimpleMath::Matrix m;
+                float* p = (float*)&m;
+                for (int i = 0; i < 16; ++i) p[i] = propData[propName][i];
+                prop.set_value(*typePtr, m);
+            }
         }
     }
 }
