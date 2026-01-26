@@ -30,7 +30,6 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     context->IASetInputLayout(sm.inputLayout_BoneWeightVertex.Get());
 
     // Shader
-    context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
     context->PSSetShader(sm.PS_Gbuffer.Get(), NULL, 0);
 
     // Sampler
