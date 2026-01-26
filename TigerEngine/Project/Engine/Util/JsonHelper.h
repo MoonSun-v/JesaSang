@@ -52,13 +52,13 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
         }
         else if (value.is_type<Vector2>())
         {
-            Vector2 value = { propData[propName][0], propData[propName][1] };
-            prop.set_value((this->postProcessData), value);
+            Vector2 v = value.get_value<SimpleMath::Vector2>();
+            datas["properties"][propName] = { v.x, v.y };
         }
         else if (value.is_type<Vector3>())
         {
-            Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
-            prop.set_value((this->postProcessData), value);
+            Vector3 v = value.get_value<SimpleMath::Vector3>();
+            datas["properties"][propName] = { v.x, v.y, v.z };
         }
         else if (value.is_type<DirectX::SimpleMath::Quaternion>())
         {
@@ -118,12 +118,12 @@ inline void JsonHelper::SetDataFromJson(T* typePtr, nlohmann::json data)
         else if (value.is_type<SimpleMath::Vector2>())
         {
             Vector2 value = { propData[propName][0], propData[propName][1] };
-            prop.set_value((this->shadowData), value);
+            prop.set_value(*typePtr, value);
         }
         else if (value.is_type<SimpleMath::Vector3>())
         {
             Vector3 value = { propData[propName][0], propData[propName][1], propData[propName][2] };
-            prop.set_value((this->shadowData), value);
+            prop.set_value(*typePtr, value);
         }
         else if (value.is_type<DirectX::SimpleMath::Quaternion>())
         {

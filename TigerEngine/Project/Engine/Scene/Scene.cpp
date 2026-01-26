@@ -173,6 +173,7 @@ bool Scene::LoadToJson(const std::string &filename)
 	if(!root.contains("objects") || !root["objects"].is_array()) return false;
 
     ClearScene(); // 데이터가 존재하면 현재 씬 제거
+    targetLoadedPath = filename;
 
     // 데이터에 있는 게임 오브젝트 불러오기
 	for(const auto& objData : root["objects"])
@@ -226,4 +227,10 @@ GameObject* Scene::RayCastGameObject(const Ray &ray, float *outDistance)
 	}
 
     return hitObject;
+}
+
+void Scene::ReloadScene()
+{
+    ClearScene();
+    LoadToJson(targetLoadedPath);
 }

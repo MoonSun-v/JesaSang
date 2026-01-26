@@ -74,6 +74,11 @@ public:
 	/// <returns>ray와 충돌된 게임 오브젝트</returns>
 	GameObject* RayCastGameObject(const Ray& ray, float* outDistance);
 
+    /// <summary>
+    /// 가장 최근에 로드된 json 파일을 다시 로드하는 함수
+    /// </summary>
+    void ReloadScene();
+
 protected:
     /// <summary>
     /// 씬에서 사용하는 오브젝트 모음 
@@ -84,4 +89,6 @@ protected:
     /// 오브젝트를 찾을 때 사용하는 매핑 자료구조
     /// </summary>
     std::unordered_map<std::string, std::vector<std::pair<Handle, int>>> mappedGameObjects;
+
+    std::string targetLoadedPath = "";
 };

@@ -19,8 +19,9 @@ void ScriptSystem::Register(Component* comp)
 
 void ScriptSystem::RegisterScript(Component* comp)
 {
-    readyQueue.push(comp);
     scriptComps.push_back(comp);
+    scriptCompsInitReadyQueue.push(comp);
+    scriptCompsStartReadyQueue.push(comp);
 }
 
 void ScriptSystem::UnRegister(Component* comp)
@@ -57,7 +58,23 @@ void ScriptSystem::Update(float delta)
 
     if (PlayModeSystem::Instance().IsPlaying())
     {
-        // 사용자 정의 component update
+        // 1. 등록된 init 해소
+        while (!scriptCompsInitReadyQueue.empty())
+        {
+            auto comp = scriptCompsInitReadyQueue.front();
+            comp->OnInitialize();
+            scriptCompsInitReadyQueue.pop();
+        }
+
+        // 2. 등록된 start 해소
+        while (!scriptCompsStartReadyQueue.empty())
+        {
+            auto comp = scriptCompsStartReadyQueue.front();
+            comp->OnStart();
+            scriptCompsStartReadyQueue.pop();
+        }
+
+        // 3. 사용자 정의 component update
         for (auto& e : scriptComps)
         {
             e->OnUpdate(delta);

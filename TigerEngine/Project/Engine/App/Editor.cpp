@@ -324,6 +324,7 @@ void Editor::RenderPlayModeControls()
     if (ImGui::Button("Stop"))
     {
         playMode.SetPlayMode(PlayModeState::Stopped);
+        SceneSystem::Instance().GetCurrentScene()->ReloadScene();
     }
     ImGui::PopStyleColor(3);
 

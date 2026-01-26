@@ -53,18 +53,30 @@ public:
     void FixedUpdate(float dt);
 
 private:
+    // === 일반 Component ===
     /// <summary>
     /// 등록된 컴포넌드 목록
     /// </summary>
     std::vector<Component*> comps{};
 
     /// <summary>
+    /// OnStart 실행하지 않는 컴포넌트 모음 
+    /// </summary>
+    std::queue<Component*> readyQueue{};
+
+    // === Script Component ===
+    /// <summary>
     /// Play모드에만 돌아가는 스크립트 컴포넌트 목록
     /// </summary>
     std::vector<Component*> scriptComps{};
 
     /// <summary>
-    /// OnStart 실행하지 않는 컴포넌트 모음
+    /// 스크립트 컴포넌트 initialize 레디 큐 
     /// </summary>
-    std::queue<Component*> readyQueue{};
+    std::queue<Component*> scriptCompsInitReadyQueue{};
+
+    /// <summary>
+    /// 스크립트 컴포넌트 onStart 레디 큐
+    /// </summary>
+    std::queue<Component*> scriptCompsStartReadyQueue{};
 };
