@@ -53,7 +53,7 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         D3D11_DEPTH_STENCIL_DESC dsDesc = {};
         dsDesc.DepthEnable = TRUE;                              // 깊이 테스트 o  
         dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;     // 버퍼 기록 o
-        dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;         
 
         dsDesc.StencilEnable = TRUE;        // Stencil Test ON
         dsDesc.StencilReadMask = 0x01;
