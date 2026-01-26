@@ -109,10 +109,12 @@ cbuffer MaterialCB : register(b3)
     float alphaFactor;
     
     // PBR Factor
-    float emissiveFactor;
+    float3 emissiveFactor;
+    float padding__;
+    
     float metallicFactor;
     float roughnessFactor;
-    float padding4;
+    float2 padding4;
 
     // PBR override
     bool useBaseColorOverride;

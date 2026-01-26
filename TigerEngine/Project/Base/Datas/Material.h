@@ -28,7 +28,7 @@ public:
     float alphaFactor = 1.0f;
 
     // Factor
-    float emissiveFactor  = 1.0f;
+    Vector3 emissiveFactor = { 1,1,1 };
     float metallicFactor  = 1.0f;
     float roughnessFactor = 1.0f;
 

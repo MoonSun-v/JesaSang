@@ -274,13 +274,12 @@ void FBXRenderer::SetAlpha(float value)
         material.GetMaterial().alphaFactor = alphaFactor;
 }
 
-void FBXRenderer::SetEmissive(float value)
+void FBXRenderer::SetEmissive(Color color)
 {
-    float factor = std::clamp(value, 0.0f, 1.0f);
-    emissiveFactor = factor;
+    emissiveFactor = { color.R(), color.G(), color.B() };
 
     for (auto& material : fbxData->GetMesh())
-        material.GetMaterial().emissiveFactor = factor;
+        material.GetMaterial().emissiveFactor = emissiveFactor;
 }
 
 void FBXRenderer::SetRoughness(float value)

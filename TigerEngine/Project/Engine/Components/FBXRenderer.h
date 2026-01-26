@@ -32,8 +32,8 @@ public:
     float GetAlpha() { return alphaFactor; }
     void SetAlpha(float value);
 
-    float GetEmissive() { return emissiveFactor; }
-    void SetEmissive(float value);
+    Color GetEmissive() { return Color(emissiveFactor.x, emissiveFactor.y, emissiveFactor.z); }
+    void SetEmissive(Color color);
 	float GetRoughness() { return roughnessFactor; }
     void SetRoughness(float value);
 	float GetMatalic() { return metalicFactor; }
@@ -78,7 +78,7 @@ private:
     // Material
     float alphaFactor = 1.0f;
 
-    float emissiveFactor = 1.0f;
+    Vector3 emissiveFactor = { 1,1,1 };
 	float roughnessFactor = 1.0f;
 	float metalicFactor = 1.0f;
 

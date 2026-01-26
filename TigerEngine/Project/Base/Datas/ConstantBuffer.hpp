@@ -85,10 +85,12 @@ struct alignas(16) MaterialCB
     float alphaFactor = 1.0f;
 
     // PBR Factor
-    float emissiveFactor = 1.0f;
+    Vector3 emissiveFactor = { 1,1,1 };
+    float padding__;
+
     float metallicFactor = 1.0f;
     float roughnessFactor = 1.0f;
-    float padding2;
+    Vector2 padding2;
 
     // PBR override
     BOOL usediffuseOverride = false;
