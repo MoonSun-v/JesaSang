@@ -14,31 +14,25 @@ RTTR_REGISTRATION
 }
 
 
-void PhysicsTestScript::OnInitialize() // editor
+void PhysicsTestScript::OnInitialize() 
 {
+    rigidComp = GetOwner()->GetComponent<PhysicsComponent>();
 }
 
-void PhysicsTestScript::OnStart() // ?? 아직 사용하지X 
+void PhysicsTestScript::OnStart() 
 {
-
+    if (rigidComp != nullptr)
+    {
+        rigidComp->CreateDynamicBox({ 20, 30, 20 }, 5);
+        // rigidComp->CreateStaticBox({ 20, 30, 20 });
+        // rigidComp->SetLayer(CollisionLayer::Player);
+        rigidComp->SyncToPhysics();
+    }
 }
 
 void PhysicsTestScript::OnUpdate(float delta)
 {
-    // OnStart() 대용 
-    if (!isApply)
-    {
-        auto rigid = GetOwner()->GetComponent<PhysicsComponent>();
-        if (rigid != nullptr)
-        {
-            rigid->CreateDynamicBox({ 20, 30, 20 }, 5);
-            // rigid->CreateStaticBox({ 20, 30, 20 });
-            // rigid->SetLayer(CollisionLayer::Player);
-            rigid->SyncToPhysics();
-        }
 
-        isApply = true;
-    }
 }
 
 void PhysicsTestScript::OnCollisionEnter(PhysicsComponent* other) 

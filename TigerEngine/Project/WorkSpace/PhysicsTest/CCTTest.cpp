@@ -25,29 +25,27 @@ RTTR_REGISTRATION
         (rttr::policy::ctor::as_std_shared_ptr);
 }
 
-void CCTTest::OnInitialize() // editor
+void CCTTest::OnInitialize() 
 {
+    cctComp = GetOwner()->GetComponent<CharacterControllerComponent>();
 }
 
-void CCTTest::OnStart() // ?? 아직 사용하지X 
+void CCTTest::OnStart() 
 {
-
+    if (cctComp != nullptr)
+    {
+        cctComp->CreateCharacterCollider(30.0f, 120.0f, { 0,50,0 });
+        // cctComp->SetLayer(CollisionLayer::Player); // 충돌 레이어 테스트 
+    }
+    else
+    {
+        OutputDebugStringW(L"[CCTTest] OnStart의 cctComp가 null입니다. \n");
+    }
 }
 
 void CCTTest::OnUpdate(float delta)
 {
-    // OnStart() 대용 
-    if (!isApply)
-    {
-        cctComp = GetOwner()->GetComponent<CharacterControllerComponent>();
-        if (cctComp != nullptr)
-        {
-            cctComp->CreateCharacterCollider(30.0f, 120.0f, { 0,50,0 });
-            // cctComp->SetLayer(CollisionLayer::Player); // 충돌 레이어 테스트 
-        }
 
-        isApply = true;
-    }
 }
 
 void CCTTest::OnFixedUpdate(float dt)

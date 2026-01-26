@@ -11,7 +11,6 @@ class CCTTest : public ScriptComponent
     RTTR_ENABLE(ScriptComponent)
 
 private:
-    bool isApply = false;
     bool m_SpacePrev = false;
 
     CharacterControllerComponent* cctComp = nullptr;
