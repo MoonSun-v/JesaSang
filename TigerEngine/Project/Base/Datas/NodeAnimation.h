@@ -102,7 +102,7 @@ public:
     void Evaluate(float time,
         Vector3& outPosition,
         Quaternion& outRotation,
-        Vector3& outScale)
+        Vector3& outScale) const
     {
         outPosition = EvaluateChannel<PositionKey, Vector3>(Positions, time);
         outRotation = EvaluateChannel<RotationKey, Quaternion>(Rotations, time);

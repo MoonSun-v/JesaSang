@@ -2,6 +2,7 @@
 
 void AnimationController::AddState(std::unique_ptr<AnimationState> state)
 {
+    state->Controller = this;
     States[state->Name] = std::move(state);
 }
 

@@ -50,4 +50,8 @@ struct FBXResourceAsset
 	Vector3 boxMin { FLT_MAX, FLT_MAX, FLT_MAX };
 	Vector3 boxMax{};
 	Vector3 boxCenter{};
+
+    // [ 루트 노드의 Transform ]
+    // aiScene->mRootNode->mTransformation
+    Matrix rootTransform;   
 };

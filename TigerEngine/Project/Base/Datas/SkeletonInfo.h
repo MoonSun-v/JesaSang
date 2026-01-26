@@ -13,7 +13,9 @@ class BoneInfo
 public:
 	string name{};				
 	string parentBoneName{};
-	Matrix relativeTransform{};
+
+    Matrix localBind;   // aiNode->mTransformation
+    Matrix globalBind;  // 누적된 결과
 };
 
 class SkeletonInfo
@@ -30,9 +32,24 @@ public:
 
 	BoneInfo GetBoneInfoByIndex(int index);
 	BoneInfo GetBoneInfoByName(const string& boneName);
-	int GetBoneIndexByName(const string& boneName);
+	int GetBoneIndexByName(const string& boneName) const;
 	Matrix GetBoneOffsetByName(const string& boneName);
 	bool CreateFromAiScene(const aiScene* pAiScene);
+
+    void BuildGlobalBind();
+public:
+    int GetBoneCount() const
+    {
+        return (int)m_bones.size();
+    }
+
+    Matrix GetBindPose(int index) const
+    {
+        if (index < 0 || index >= m_bones.size())
+            return Matrix::Identity;
+
+        return m_bones[index].globalBind;
+    }
 
 	bool IsSkeletal() { return isSkeletal; };
 };

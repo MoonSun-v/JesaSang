@@ -43,33 +43,24 @@ void FBXResourceManager::ProcessSkeletalNode(std::shared_ptr<FBXResourceAsset>& 
 	}
 }
 
-void FBXResourceManager::ProcessRigidNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene, int parentIndex)
+void FBXResourceManager::ProcessRigidNode(
+    shared_ptr<FBXResourceAsset>& asset,
+    aiNode* node,
+    const aiScene* scene,
+    const Matrix& parent)
 {
-    if (!pAsset || !pNode || !pScene) return;
+    Matrix local = ToSimpleMathMatrix(node->mTransformation);
+    Matrix global = local * parent;   // 누적
 
-    // bind
-    auto& bindMats = pAsset->meshes_bindMat;
-
-    // sub mesh (+ texture)
-    for (UINT i = 0; i < pNode->mNumMeshes; ++i)
+    for (UINT i = 0; i < node->mNumMeshes; ++i)
     {
-        aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
-        pAsset->meshes.push_back(this->ProcessMeshTexture(pAsset, mesh, pScene));
-       
-        Mesh& outMesh = pAsset->meshes.back();
-        outMesh.parentIndex = parentIndex - 1;
-        outMesh.refBoneIndex = -1;
-        outMesh.nodeName = pNode->mName.C_Str();
-        bindMats.push_back(XMMatrixTranspose(XMLoadFloat4x4((XMFLOAT4X4*)&pNode->mTransformation)));
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        asset->meshes.push_back(ProcessMeshTexture(asset, mesh, scene));
+        asset->meshes_modelMat.push_back(global);   // 모델 행렬
     }
 
-    // cur node index
-    const int myIndex = static_cast<int>(pAsset->meshes.size());
-    // child node
-    for (UINT c = 0; c < pNode->mNumChildren; ++c)
-    {
-        this->ProcessRigidNode(pAsset, pNode->mChildren[c], pScene, myIndex);
-    }
+    for (UINT i = 0; i < node->mNumChildren; ++i)
+        ProcessRigidNode(asset, node->mChildren[i], scene, global);
 }
 
 void FBXResourceManager::ProcessStaticNode(std::shared_ptr<FBXResourceAsset>& pAsset, aiNode* pNode, const aiScene* pScene)
@@ -428,7 +419,8 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
     // Assimp Importer 설정
 	Assimp::Importer importer;
 
-	unsigned int importFlag = aiProcess_Triangulate |	// 삼각형 변환
+	unsigned int importFlag = 
+        aiProcess_Triangulate |	// 삼각형 변환
 		aiProcess_GenNormals |				// 노말 생성
 		aiProcess_GenUVCoords |				// UV 생성
 		aiProcess_CalcTangentSpace |		// 탄젠트 생성
@@ -445,6 +437,9 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 	// 없으면 load후 map에 추가 
 	auto sharedAsset = make_shared<FBXResourceAsset>();
 
+    sharedAsset->rootTransform =
+        ToSimpleMathMatrix(pScene->mRootNode->mTransformation);
+
 	if (pScene == nullptr)
 		return nullptr;
 
@@ -454,14 +449,6 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
 	sharedAsset ->skeletalInfo = SkeletonInfo();
 	sharedAsset ->skeletalInfo.CreateFromAiScene(pScene);
 
-	//// animation 저장
-	//int animationsNum = pScene->mNumAnimations;
-	//for (int i = 0; i < animationsNum; i++)
-	//{
-	//	Animation anim;
-	//	anim.CreateNodeAnimation(pScene->mAnimations[i]);
-	//	sharedAsset->animations.push_back(anim);
-	//}
 
 	// Process Node (mesh, meterial/textures)
     // 1) Skeletal Mesh
@@ -490,7 +477,8 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
         sharedAsset->type = ModelType::Rigid;       // TODO :: Static / Rigid 구분 필요
 
         // mesh, material(texture)
-        ProcessRigidNode(sharedAsset, pScene->mRootNode, pScene, -1);
+        ProcessRigidNode(sharedAsset, pScene->mRootNode, pScene, Matrix::Identity);
+
         sharedAsset->meshes_modelMat.resize(sharedAsset->meshes.size());
         sharedAsset->meshes_localMat.resize(sharedAsset->meshes.size());
     }
@@ -507,7 +495,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadFBXByPath(std::string 
     {
         if (pScene->HasAnimations()) // gltf 파일이 RootNode->mChildren[0] 이 nullptr
         {
-            // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 )
+            // NOTE : 애니메이션 박스들은 절반씩 위로 올려줌 ( 모델이랑 어긋나서 하드 코딩 ) -> pivot이 발 끝이어서 그런듯요 
             sharedAsset->boxMin = Vector3::Transform(sharedAsset->boxMin, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
             sharedAsset->boxMax = Vector3::Transform(sharedAsset->boxMax, ToSimpleMathMatrix(pScene->mRootNode->mChildren[0]->mTransformation));
             sharedAsset->boxCenter = { 0.0f, (sharedAsset->boxMax - sharedAsset->boxMin).y / 2.0f, 0.0f };
@@ -591,10 +579,20 @@ bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> a
     if (!asset) return false;
     if (!asset->skeletalInfo.IsSkeletal()) return false;
 
+
+    // Assimp Importer 설정
     Assimp::Importer importer;
+
     unsigned int importFlag =
-        aiProcess_Triangulate |
-        aiProcess_ConvertToLeftHanded;
+        aiProcess_Triangulate |	// 삼각형 변환
+        aiProcess_GenNormals |				// 노말 생성
+        aiProcess_GenUVCoords |				// UV 생성
+        aiProcess_CalcTangentSpace |		// 탄젠트 생성
+        aiProcess_LimitBoneWeights |		// 본의 영향을 받는 정점의 최대 개수 4개로 제한
+        aiProcess_GenBoundingBoxes |		// Bounding box 만들기
+        aiProcess_ConvertToLeftHanded;		// 왼손 좌표계로 변환
+
+    importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0);
 
     const aiScene* pScene = importer.ReadFile(animPath, importFlag);
     if (!pScene || !pScene->HasAnimations())
@@ -603,7 +601,7 @@ bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> a
     for (int i = 0; i < pScene->mNumAnimations; i++)
     {
         Animation anim;
-        anim.CreateNodeAnimation(pScene->mAnimations[i]);
+        anim.CreateFromAssimp(pScene->mAnimations[i]);
 
         asset->animations.push_back(anim);
     }

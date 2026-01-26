@@ -18,7 +18,7 @@ BoneInfo SkeletonInfo::GetBoneInfoByName(const string& boneName)
     return m_bones[mappedInfo->second];
 }
 
-int SkeletonInfo::GetBoneIndexByName(const string& boneName)
+int SkeletonInfo::GetBoneIndexByName(const string& boneName) const
 {
 	auto mappedInfo = m_boneMappingTable.find(boneName);
 	if (mappedInfo == m_boneMappingTable.end())
@@ -65,6 +65,8 @@ bool SkeletonInfo::CreateFromAiScene(const aiScene* pAiScene)
 		}
 	}
 
+    BuildGlobalBind();
+
     return true;
 }
 
@@ -89,7 +91,7 @@ void SkeletonInfo::CreateBoneInfoFromNode(const aiNode* pAiNode)
 	BoneInfo currInfo{};
 	currInfo.name = currentBoneName;
 	currInfo.parentBoneName = parentBoneName;
-	currInfo.relativeTransform = localMat;
+    currInfo.localBind = localMat;
 
 	m_bones.push_back(currInfo);
 	m_boneMappingTable.insert({ currentBoneName, m_bones.size() - 1 });
@@ -100,4 +102,22 @@ void SkeletonInfo::CreateBoneInfoFromNode(const aiNode* pAiNode)
 	{
 		CreateBoneInfoFromNode(pAiNode->mChildren[i]);
 	}
+}
+
+void SkeletonInfo::BuildGlobalBind()
+{
+    for (int i = 0; i < m_bones.size(); i++)
+    {
+        if (m_bones[i].parentBoneName.empty())
+        {
+            m_bones[i].globalBind = m_bones[i].localBind;
+        }
+        else
+        {
+            int parent = GetBoneIndexByName(m_bones[i].parentBoneName);
+            m_bones[i].globalBind =
+                m_bones[parent].globalBind *
+                m_bones[i].localBind;
+        }
+    }
 }
