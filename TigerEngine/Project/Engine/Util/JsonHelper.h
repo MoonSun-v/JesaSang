@@ -107,7 +107,7 @@ inline void JsonHelper::SetDataFromJson(T* typePtr, nlohmann::json data)
         }
         else if (value.is_type<Color>())
         {
-            Color color = { propData["Color"][0], propData["Color"][1], propData["Color"][2], propData["Color"][3] };
+            Color color = { propData[propName][0], propData[propName][1], propData[propName][2], propData[propName][3] };
             prop.set_value(*typePtr, color);
         }
         else if (value.is_type<std::string>())
