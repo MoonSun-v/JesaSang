@@ -26,6 +26,9 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
         std::string propName = prop.get_name().to_string();
         rttr::variant value = prop.get_value(*typePtr);
 
+        if (!value.is_valid())
+            continue;
+
         if (value.is_type<float>())
         {
             auto v = value.get_value<float>();
@@ -74,9 +77,15 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
             mat.assign(p, p + 16);
             datas["properties"][propName] = mat;
         }
+        // enum class string save
         else if (prop.get_type().is_enumeration())
         {
-            datas["properties"][propName] = value.to_string();
+            std::string enumName = value.to_string();
+
+            if (!enumName.empty())
+                datas["properties"][propName] = enumName;
+            else
+                datas["properties"][propName] = nullptr;
         }
     }
 
@@ -148,15 +157,19 @@ inline void JsonHelper::SetDataFromJson(T* typePtr, nlohmann::json data)
                 prop.set_value(*typePtr, m);
             }
         }
-        else if (value.is_type<RenderBlendType>())
+        // enum string load
+        else if (prop.get_type().is_enumeration())
         {
-            auto enumType = rttr::type::get<RenderBlendType>().get_enumeration();
-            auto enumVar = enumType.name_to_value(propData[propName].get<std::string>());
+            if (!propData[propName].is_string())
+                continue;
+
+            std::string enumStr = propData[propName];
+
+            auto enumType = prop.get_type().get_enumeration();
+            auto enumVar = enumType.name_to_value(enumStr);
 
             if (enumVar.is_valid())
-                prop.set_value(*typePtr, enumVar.get_value<RenderBlendType>());
-            else
-                prop.set_value(*typePtr, RenderBlendType::Opaque);
+                prop.set_value(*typePtr, enumVar);
         }
     }
 }
