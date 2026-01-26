@@ -8,6 +8,20 @@
 
 RTTR_REGISTRATION
 {
+    rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
+        .constructor<>()
+        .constructor<float, float, float>()
+        .property("r", &Color::x)
+        .property("g", &Color::y)
+        .property("b", &Color::z)
+        .property("a", &Color::w);
+
+    rttr::registration::enumeration<RenderBlendType>("RenderBlendType")
+        (
+            rttr::value("Opaque", RenderBlendType::Opaque),
+            rttr::value("Transparent", RenderBlendType::Transparent)
+        );
+
     rttr::registration::class_<FBXRenderer>("FBXRenderer")
         .constructor<>()
             (rttr::policy::ctor::as_std_shared_ptr)
@@ -16,7 +30,7 @@ RTTR_REGISTRATION
         .property("AnimationPlayTime", 	&FBXRenderer::GetProgressAnimationTime,		&FBXRenderer::SetProgressAnimationTime)
         .property("IsAnimationPlay", 	&FBXRenderer::GetIsAnimationPlay,			&FBXRenderer::SetIsAnimationPlay)
 
-        .property("renderBlendType",    &FBXRenderer::GetRenderBlendType,           &FBXRenderer::SetRenderBlendType)
+        .property("RenderBlendType",    &FBXRenderer::GetRenderBlendType,           &FBXRenderer::SetRenderBlendType)
     
         .property("Diffuse", 	    &FBXRenderer::GetDiffuse,       &FBXRenderer::SetDiffuse)
         .property("Alpha", 	        &FBXRenderer::GetAlpha,         &FBXRenderer::SetAlpha)
@@ -33,15 +47,6 @@ RTTR_REGISTRATION
         .property("EmissiveOverride", 	    &FBXRenderer::GetEmissiveOverride,		&FBXRenderer::SetEmissiveOverride)
         .property("MetallicOverride", 		&FBXRenderer::GetMetallicOverride,		&FBXRenderer::SetMetallicOverride)
         .property("RoughnessOverride",  	&FBXRenderer::GetRoughnessOverride,		&FBXRenderer::SetRoughnessOverride);
-
-
-		rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
-		.constructor<>()
-		.constructor<float, float, float>()
-		.property("r", &Color::x)
-		.property("g", &Color::y)
-		.property("b", &Color::z)
-		.property("a", &Color::w);
 }
 
 void FBXRenderer::OnInitialize()

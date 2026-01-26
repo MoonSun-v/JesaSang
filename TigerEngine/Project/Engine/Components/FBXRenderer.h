@@ -8,17 +8,22 @@
 class FBXRenderer : public RenderComponent
 {
 	RTTR_ENABLE(RenderComponent)
+
 public:
+    // [Component Process] -----------------
 	void OnInitialize() override;
 	void OnStart() override;
 	void OnUpdate(float delta) override;
     void OnDestory() override;
     void OnRender(RenderQueue& queue) override;
+
 	
+    // [Json Process] -----------------
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
-	// animation get/set
+
+    // [Animation get/set] -----------------
 	int GetAnimationIndex() { return animationIndex; }
 	void SetAnimationIndex(int index) { animationIndex = index; }
 	
@@ -28,11 +33,13 @@ public:
 	bool GetIsAnimationPlay() { return isAnimPlay; }
 	void SetIsAnimationPlay(bool value) { isAnimPlay = value; }
 
-    // RenderBlendType Get/Set
-    RenderBlendType GetRenderBlendType() const { return renderBlendType; }
+
+    // [RenderBlendType get/set] -----------------
+    RenderBlendType GetRenderBlendType() { return renderBlendType; }
     void SetRenderBlendType(RenderBlendType v) { renderBlendType = v; }
 
-    // Material Get/Set
+
+    // [Material get/set] -----------------
     Color GetDiffuse() { return Color(diffuseFactor.x, diffuseFactor.y, diffuseFactor.z); }
     void SetDiffuse(Color color);
     float GetAlpha() { return alphaFactor; }
@@ -62,23 +69,23 @@ public:
     float GetRoughnessOverride() { return roughnessOverride; }
     void SetRoughnessOverride(float value);      
 
-    // bone
+
+    // [Bone] -----------------
     void CreateBoneInfo();
 
 private:
-    FBXData* fbxData{};                 // 참조할 FBX 데이터
+    // FBX Asset Data
+    FBXData* fbxData{};
 
-	// 모델 인스턴스 데이터
+	// Instance Data
 	std::string directory{};		    // 로드한 파일이 위차한 폴더명
 	std::vector<Bone> bones{};			// 로드된 모델의 본 모음
+    PoseMatrixCB bonePoses{};           // 해당 모델의 상수 버퍼 내용
 
-	// 해당 모델의 상수 버퍼 내용
-    PoseMatrixCB bonePoses{};
-
-    // animation info
-    int animationIndex = 0;             // 현재 실행 중인 애니메이션 인덱스
-    float progressAnimationTime = 0.0f; // 현재 애니메이션 시간
-    bool isAnimPlay = true;   
+    // Animation Info
+    int   animationIndex = 0;             // 현재 실행 중인 애니메이션 인덱스
+    float progressAnimationTime = 0.0f;   // 현재 애니메이션 시간
+    bool  isAnimPlay = true;   
 
     // Material
     Vector3 diffuseFactor   = { 1,1,1 };
