@@ -19,7 +19,6 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     context->OMSetRenderTargets(4, gbuffers, sm.depthStencilView.Get());
     context->ClearDepthStencilView(sm.depthStencilView.Get(),
         D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);     // depth, stecil clear (stecil write -> geometry, lighting pass)
-    context->OMSetDepthStencilState(sm.defualtDSS.Get(), 0);
 
     for (int i = 0; i < 4; i++)
     {
@@ -40,6 +39,10 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     sm.transformCBData.view = XMMatrixTranspose(cam->GetView());
     sm.transformCBData.projection = XMMatrixTranspose(cam->GetProjection());
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
+
+    // stencil Ref
+    const UINT groundStencilRef = 0x01;
+    const UINT noneStencilRef = 0x00;
 
     // Render
     auto& opaqueQueue = queue.GetOpaqueQueue();
@@ -77,6 +80,12 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
                 break;
             }
         }
+
+        // DSS (보이는 Ground만 Mask)
+        if(opaqueItem.isGround)
+            context->OMSetDepthStencilState(sm.groundDrawDSS.Get(), groundStencilRef);
+        else
+            context->OMSetDepthStencilState(sm.groundDrawDSS.Get(), noneStencilRef);
 
         // IB, VB, SRV, CB -> DrawCall
         opaqueItem.mesh->Draw(context);
