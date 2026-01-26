@@ -330,6 +330,7 @@ void EngineApp::ResizeResource()
     // editor 참조
     editor->GetDSV(dxRenderer->GetDepthStencilView());
     editor->GetRTV(dxRenderer->GetBackBufferRTV());
+    editor->CreatePickingStagingTex();
 #endif
 
     // Camera

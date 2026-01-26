@@ -22,6 +22,7 @@ public:
     void SelectObject(GameObject* obj);
 
     void ReleaseBackBufferResources();
+    void CreatePickingStagingTex();
 
 private:
     void RenderMenuBar(HWND& hwnd);
@@ -66,6 +67,14 @@ private:
     bool isPhysicsDebugOpen = false;
 
     std::string currScenePath{};
+
+    // object picking 
+    bool isMouseLeftClick = false;
+    XMINT2 mouseXY{};
+    uint32_t currPickedID = -1;
+    ComPtr<ID3D11Texture2D> coppedPickingTex{};
+
+    void CheckObjectPicking();
 
     // rttr read
     void ReadVariants(rttr::variant& var);

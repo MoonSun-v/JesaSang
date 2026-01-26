@@ -28,6 +28,10 @@ private:
     // g-buffer clear color
     float clearColor[4] = { 0,0,0,1 };
 
+#if _DEBUG
+    void ExecutePickingPass(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue, Camera* cam);
+#endif
+
 public:
     void Init() {};
     void Execute(ComPtr<ID3D11DeviceContext>& context,

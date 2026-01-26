@@ -79,6 +79,13 @@ public:
     /// </summary>
     void ReloadScene();
 
+    /// <summary>
+    /// 게임 오브젝트 포인터로 인덱스 찾기
+    /// </summary>
+    /// <param name="ptr">게임 오브젝트 포인터</param>
+    /// <returns>배열 인덱스, 없으면 -1</returns>
+    int GetGameObjectIndex(GameObject* ptr);
+
 protected:
     /// <summary>
     /// 씬에서 사용하는 오브젝트 모음 

@@ -222,6 +222,12 @@ cbuffer EffectCB : register(b8)
     float2 padding17;
 }
 
+cbuffer PickingCB : register(b9)
+{
+    uint PickingID;
+    float3 pad;
+}
+
 
 // ----------------------
 //  Vertex Input Layout

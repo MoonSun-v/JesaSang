@@ -77,6 +77,8 @@ void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11D
 
     this->device = device;
     this->context = deviceContext;
+
+    CreatePickingStagingTex();
 }
 
 void Editor::Update()
@@ -87,6 +89,8 @@ void Editor::Update()
         if(obj->GetName() == "FreeCamera") return;        
         obj->UpdateAABB();
      });    
+
+    CheckObjectPicking();
 }
 
 void Editor::Render(HWND &hwnd)
@@ -687,6 +691,51 @@ void Editor::LoadScene(HWND &hwnd)
     }
 }
 
+void Editor::CreatePickingStagingTex()
+{
+    D3D11_TEXTURE2D_DESC desc = {};
+    desc.Width = screenWidth;
+    desc.Height = screenHeight;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_R32_UINT;
+    desc.SampleDesc.Count = 1; 
+    desc.SampleDesc.Quality = 0;
+    desc.Usage = D3D11_USAGE_STAGING;
+    desc.BindFlags = 0;
+    desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    desc.MiscFlags = 0;
+
+    HR_T(device->CreateTexture2D(&desc, nullptr, coppedPickingTex.ReleaseAndGetAddressOf()));
+}
+
+void Editor::CheckObjectPicking()
+{
+    isMouseLeftClick = false;
+    auto mouse = DirectX::Mouse::Get().GetState();
+    static bool lastMouseLeft = false;
+
+    bool currMouseLeft = mouse.leftButton;
+    isMouseLeftClick = (!lastMouseLeft && currMouseLeft);
+    lastMouseLeft = currMouseLeft;
+
+    mouseXY = { mouse.x, mouse.y };
+
+    if (isMouseLeftClick)
+    {
+        auto& sm = ShaderManager::Instance();
+        context->CopyResource(coppedPickingTex.Get(), sm.pickingTex.Get()); // 기록된 값 가져오기
+
+        D3D11_MAPPED_SUBRESOURCE mapped;
+        context->Map(coppedPickingTex.Get(), 0, D3D11_MAP_READ, 0, &mapped); // Map : 하위 리소스에 대한 포인터 가져오기
+
+        uint32_t* row = (uint32_t*)((uint8_t*)mapped.pData + mouseXY.y * mapped.RowPitch); // 마우스값의 row 
+        currPickedID = row[mouseXY.x] - 1;	// x, y 좌표에 있는 ID 찾기
+
+        context->Unmap(coppedPickingTex.Get(), 0);
+    }
+}
+
 void Editor::ReadVariants(rttr::variant& var)
 {
     ReadVariants(rttr::instance(var));
@@ -759,42 +808,6 @@ void Editor::ReadVariants(rttr::instance inst)
 
 void Editor::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)
 {
-    // check picking gameOject
-    
-    if(MouseTracker.leftButton == Mouse::ButtonStateTracker::PRESSED)
-    {
-        if(!ImGui::GetIO().WantCaptureMouse)
-        {
-            // 마우스 스크린 좌표를 [0, 1] -> [-1, 1] 로 변경
-            float x = (2.0f * MouseState.x) / screenWidth - 1.0f;
-            float y = 1.0f - (2.0f * MouseState.y) / screenHeight;
 
-            auto cam = CameraSystem::Instance().GetFreeCamera();
-            cameraView = cam->GetView();
-            cameraProjection = cam->GetProjection();
-            Matrix invViewProj = (cameraView * cameraProjection).Invert();
-
-            Vector4 nearNDC(x, y, 0.0f, 1.0f);
-            Vector4 farNDC(x, y, 1.0f, 1.0f);
-
-            // NDC -> World
-            Vector4 nearWorld = Vector4::Transform(nearNDC, invViewProj);
-            Vector4 farWorld = Vector4::Transform(farNDC, invViewProj);
-            
-            // 투영 행렬은 원근을 만들기 때문에 perpective divide로 월드 좌표를 얻는다.
-            nearWorld /= nearWorld.w;
-            farWorld /= farWorld.w;
-
-            Vector3 dir = (Vector3)farWorld - nearWorld;
-
-            dir.Normalize();
-            Ray ray(Vector3(nearWorld), dir);
-
-            float outHitDistance = 0.0f;
-            auto hitObject = SceneSystem::Instance().GetCurrentScene()->RayCastGameObject(ray, &outHitDistance);
-
-            SelectObject(hitObject);
-        }
-    }
 }
 #endif

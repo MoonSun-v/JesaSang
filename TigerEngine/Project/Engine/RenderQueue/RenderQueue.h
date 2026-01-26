@@ -5,6 +5,8 @@
 #include "Datas/FBXResourceData.h"
 #include "Datas/ConstantBuffer.hpp"
 
+class GameObject; // 전방선언
+
 struct RenderItem
 {
     // model
@@ -21,6 +23,8 @@ struct RenderItem
     int refBoneIndex;
     const PoseMatrixCB* poses;
     const OffsetMatrixCB* offsets;
+
+    GameObject* objPtr = nullptr; // 해당 렌더 아이템의 게임 오브젝트 포인터
 };
 
 /// <summary>

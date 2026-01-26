@@ -341,6 +341,10 @@ void ShaderManager::CreateGbufferResource(const ComPtr<ID3D11Device>& dev, int s
         emissiveTex.GetAddressOf(),
         emissiveRTV.GetAddressOf(),
         emissiveSRV.GetAddressOf());
+
+#if _DEBUG  
+    CreatePickingGBufferTex(dev, screenWidth, screenHeight);
+#endif  
 }
 
 void ShaderManager::CreateBloomResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -631,6 +635,9 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
         SAFE_RELEASE(pixelShaderBuffer);
     }
 
+#if _DEBUG
+    CreatePickingPS(dev);
+#endif
 }
 
 void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
@@ -724,6 +731,8 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
         constBuffer_Desc.CPUAccessFlags = 0;
         HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &effectCB));
     }
+
+    CreatePickingCB(dev);
 }
 
 void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -731,8 +740,10 @@ void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, in
     CreateHDRResource(dev, screenWidth, screenHeight);
     CreateGbufferResource(dev, screenWidth, screenHeight);
     CreateBloomResource(dev, screenWidth, screenHeight);
+#if _DEBUG
+    CreatePickingGBufferTex(dev, screenWidth, screenHeight);
+#endif
 }
-
 
 // [ Util Funcs ] --------------------------------------------------------------
 void ShaderManager::CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
@@ -822,4 +833,47 @@ void ShaderManager::ReleaseBackBufferResources()
     sceneHDRTex.Reset();
     sceneHDRRTV.Reset();
     sceneHDRSRV.Reset();
+
+#if _DEBUG
+    pickingSRV.Reset();
+    pickingRTV.Reset();
+    pickingTex.Reset();
+#endif
 }
+
+#if _DEBUG
+void ShaderManager::CreatePickingGBufferTex(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
+{
+    CreateRTTex_RTV_SRV(dev,
+        screenWidth,
+        screenHeight,
+        DXGI_FORMAT_R32_UINT,
+        pickingTex.ReleaseAndGetAddressOf(),
+        pickingRTV.ReleaseAndGetAddressOf(),
+        pickingSRV.ReleaseAndGetAddressOf());
+}
+void ShaderManager::CreatePickingCB(const ComPtr<ID3D11Device>& dev)
+{
+    // 9. Effect CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc{};
+        constBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
+        constBuffer_Desc.ByteWidth = sizeof(PickingCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &pickingCB));
+    }
+}
+void ShaderManager::CreatePickingPS(const ComPtr<ID3D11Device>& dev)
+{
+    //---------------------------
+    // Picking PS
+    {
+        ID3D10Blob* pixelShaderBuffer = nullptr;
+        std::wstring path = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\PS_Picking.hlsl";
+        HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", &pixelShaderBuffer));
+        HR_T(dev->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
+            pixelShaderBuffer->GetBufferSize(), NULL, PS_Picking.GetAddressOf()));
+    }
+}
+#endif
