@@ -4,20 +4,11 @@
 #include "../RenderQueue/RenderQueue.h"
 #include "../Base/Datas/EnumData.hpp"
 
-enum class RenderType
-{
-    None = 0,
-    StaticMesh = 1 << 1,
-    DynamicMesh = 1 << 2,
-    SkeltalMesh = 1 << 3
-};
-
 /// @brief 렌더링 처리하는 컴포넌트가 상속받는 컴포넌트
 class RenderComponent : public Component
 {        
     // RTTR_ENABLE(Component)
 public:
-    RenderType renderType;          // 성호야 이거 잇는거 왜 말 안해줫니? 이거 지워도 된단다
     RenderBlendType renderBlendType = RenderBlendType::Opaque;
 
     /// <summary>
