@@ -3,6 +3,9 @@
 #include "System/InputSystem.h"
 #include "Object/Component.h"
 #include "Components/FBXRenderer.h"
+#include "Util/ComponentAutoRegister.h"
+
+REGISTER_COMPONENT(Player1);
 
 RTTR_REGISTRATION
 {

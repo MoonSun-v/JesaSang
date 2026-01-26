@@ -235,6 +235,8 @@
     <ClInclude Include="Util\AnimationState.h" />
     <ClInclude Include="Util\AnimatorParameter.h" />
     <ClInclude Include="Util\CollisionLayer.h" />
+    <ClInclude Include="Util\ComponentAutoRegister.h" />
+    <ClInclude Include="Util\JsonHelper.h" />
     <ClInclude Include="Util\PathHelper.h" />
     <ClInclude Include="Util\DebugDraw.h" />
     <ClInclude Include="Manager\WorldManager.h" />

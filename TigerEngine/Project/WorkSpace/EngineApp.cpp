@@ -409,7 +409,7 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<Transform>("Transform");
     ComponentFactory::Instance().Register<Camera>("Camera");
     
-    ComponentFactory::Instance().Register<Player1>("Player1");
+    // ComponentFactory::Instance().Register<Player1>("Player1");
     ComponentFactory::Instance().Register<Weapon>("Weapon");
     ComponentFactory::Instance().Register<Light>("Light");
 

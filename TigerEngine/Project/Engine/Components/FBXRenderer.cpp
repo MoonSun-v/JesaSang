@@ -4,6 +4,7 @@
 #include "../Components/FBXData.h"
 #include "../Manager/ShaderManager.h"
 #include "../Object/GameObject.h"
+#include "../Util/JsonHelper.h"
 
 RTTR_REGISTRATION
 {
@@ -184,76 +185,14 @@ void FBXRenderer::OnRender(RenderQueue& queue)
 
 nlohmann::json FBXRenderer::Serialize()
 {
-	nlohmann::json datas;
-
-    rttr::type t = rttr::type::get(*this);
-    datas["type"] = t.get_name().to_string();       
-    datas["properties"] = nlohmann::json::object(); // 객체 생성
-
-    for(auto& prop : t.get_properties())
-    {
-		std::string propName = prop.get_name().to_string();
-		rttr::variant value = prop.get_value(*this);
-
-		if (value.is_type<float>())
-		{
-			auto v = value.get_value<float>();
-			datas["properties"][propName] = v;
-		}
-		else if (value.is_type<int>())
-		{
-			auto v = value.get_value<int>();
-			datas["properties"][propName] = v;
-		}
-		else if (value.is_type<bool>())
-		{
-			auto v = value.get_value<bool>();
-			datas["properties"][propName] = v;
-		}
-		else if (value.is_type<Color>())
-		{
-			auto v = value.get_value<Color>();
-			datas["properties"][propName] = { v.x, v.y, v.z, v.w };
-		}
-	}
-
-    return datas;
+    return JsonHelper::MakeSaveData(this);
 }
 
 void FBXRenderer::Deserialize(nlohmann::json data)
 {
 	// data : data["objects"]["properties"]["components"]["현재 컴포넌트"]
 
-    auto propData = data["properties"];
-
-    rttr::type t = rttr::type::get(*this);
-    for(auto& prop : t.get_properties())
-    {
-		std::string propName = prop.get_name().to_string();
-		rttr::variant value = prop.get_value(*this);
-        if (!propData.contains(propName)) continue;
-
-		if (value.is_type<float>())
-		{
-			float data = propData[propName];
-			prop.set_value(*this, data);
-		}
-		else if (value.is_type<int>())
-		{
-			int data = propData[propName];
-			prop.set_value(*this, data);
-		}
-        else if (value.is_type<bool>())
-		{
-			bool data = propData[propName];
-			prop.set_value(*this, data);
-		}
-		else if (value.is_type<Color>() && propName == "Color")
-		{
-			Color color = { propData["Color"][0], propData["Color"][1], propData["Color"][2], propData["Color"][3] };
-			prop.set_value(*this, color);
-		}
-	}
+    JsonHelper::SetDataFromJson(this, data);
 }
 
 void FBXRenderer::SetRoughness(float value)
