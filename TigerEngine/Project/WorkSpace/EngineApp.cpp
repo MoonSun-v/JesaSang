@@ -19,6 +19,7 @@
 #include "EngineSystem/PlayModeSystem.h"
 #include "EngineSystem/LightSystem.h"
 #include "EngineSystem/PhysicsSystem.h"
+#include "EngineSystem/AnimationSystem.h"
 
 #include "Components/FreeCamera.h"
 #include "Components/FBXData.h"
@@ -140,6 +141,7 @@ void EngineApp::OnUpdate()
 	WorldManager::Instance().Update(dxRenderer->GetDeviceContext(), freeCam, clientWidth, clientHeight);
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
     AudioManager::Instance().Update();
+    AnimationSystem::Instance().Update(GameTimer::Instance().DeltaTime());
 
 #if _DEBUG
 	editor->Update();
@@ -400,6 +402,7 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "Components/AudioSourceComponent.h"
 #include "Components/PhysicsComponent.h"
 #include "Components/CharacterControllerComponent.h"
+#include "Components/AnimationController.h"
 #include "Manager/ComponentFactory.h"
 
 #include "Player/Player1.h"
@@ -428,5 +431,6 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<CCTTest>("CCTTestScript");
     ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
     ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
+    ComponentFactory::Instance().Register<AnimationController>("AnimationController");
 }
 

@@ -10,7 +10,7 @@ class GroundTestScript : public ScriptComponent
     RTTR_ENABLE(ScriptComponent)
 
 private:
-    bool isApply = false;
+    PhysicsComponent* rigidComp;
 
 public:
     void OnInitialize() override;

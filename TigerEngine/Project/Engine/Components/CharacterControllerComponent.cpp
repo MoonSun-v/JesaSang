@@ -183,11 +183,11 @@ void CharacterControllerComponent::CreateCharacterCollider(float radius, float h
 
 void CharacterControllerComponent::MoveCharacter(const Vector3& wishDir, float fixedDt)
 {
-    if (!m_Controller)
-    {
-        OutputDebugStringW(L"[CharacterControllerComponent] MoveCharacter의 m_Controller가 null입니다. \n");
-        return;
-    }
+    //if (!m_Controller)
+    //{
+    //    OutputDebugStringW(L"[CharacterControllerComponent] MoveCharacter의 m_Controller가 null입니다. \n");
+    //    return;
+    //}
 
     // --------------------
     // 1. 수평 이동속도 (m/s) + 입력 방향 (정규화, PhysX 기준)
