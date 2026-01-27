@@ -224,6 +224,12 @@ cbuffer EffectCB : register(b8)
     float2 padding17;
 }
 
+cbuffer PickingCB : register(b9)
+{
+    uint PickingID;
+    float3 pad;
+}
+
 // 여기 성호 9번 들어감
 
 cbuffer DecalCB : register(b10)

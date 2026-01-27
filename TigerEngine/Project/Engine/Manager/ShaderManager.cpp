@@ -18,6 +18,11 @@ void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11Dev
 
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
+
+#if _DEBUG
+    CreatePickingGBufferTex(dev, width, height);
+    CreatePickingDSV(dev, width, height);
+#endif
 }
 
 
@@ -680,6 +685,9 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
         SAFE_RELEASE(pixelShaderBuffer);
     }
 
+#if _DEBUG
+    CreatePickingPS(dev);
+#endif
     //---------------------------
     // ForwardTransparent PS
     {
@@ -793,6 +801,10 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
         constBuffer_Desc.CPUAccessFlags = 0;
         HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &decalCB));
     }
+  
+#if _DEBUG
+    CreatePickingCB(dev);
+#endif
 }
 
 void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -800,8 +812,11 @@ void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, in
     CreateHDRResource(dev, screenWidth, screenHeight);
     CreateGbufferResource(dev, screenWidth, screenHeight);
     CreateBloomResource(dev, screenWidth, screenHeight);
+#if _DEBUG
+    CreatePickingGBufferTex(dev, screenWidth, screenHeight);
+    CreatePickingDSV(dev, screenWidth, screenHeight);
+#endif
 }
-
 
 // [ Util Funcs ] --------------------------------------------------------------
 void ShaderManager::CreateRTTex_RTV_SRV(const ComPtr<ID3D11Device>& device, int w, int h, DXGI_FORMAT fomat,
@@ -891,4 +906,72 @@ void ShaderManager::ReleaseBackBufferResources()
     sceneHDRTex.Reset();
     sceneHDRRTV.Reset();
     sceneHDRSRV.Reset();
+
+#if _DEBUG
+    pickingSRV.Reset();
+    pickingRTV.Reset();
+    pickingTex.Reset();
+#endif
 }
+
+#if _DEBUG
+void ShaderManager::CreatePickingGBufferTex(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
+{
+    CreateRTTex_RTV_SRV(dev,
+        screenWidth,
+        screenHeight,
+        DXGI_FORMAT_R32_UINT,
+        pickingTex.ReleaseAndGetAddressOf(),
+        pickingRTV.ReleaseAndGetAddressOf(),
+        pickingSRV.ReleaseAndGetAddressOf());
+}
+void ShaderManager::CreatePickingCB(const ComPtr<ID3D11Device>& dev)
+{
+    // 9. Effect CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc{};
+        constBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
+        constBuffer_Desc.ByteWidth = sizeof(PickingCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &pickingCB));
+    }
+}
+void ShaderManager::CreatePickingPS(const ComPtr<ID3D11Device>& dev)
+{
+    //---------------------------
+    // Picking PS
+    {
+        ID3D10Blob* pixelShaderBuffer = nullptr;
+        std::wstring path = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\PS_Picking.hlsl";
+        HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", &pixelShaderBuffer));
+        HR_T(dev->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
+            pixelShaderBuffer->GetBufferSize(), NULL, PS_Picking.GetAddressOf()));
+    }
+}
+void ShaderManager::CreatePickingDSV(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
+{
+    // Depth texture (separate from pickingTex)
+    D3D11_TEXTURE2D_DESC td{};
+    td.Width = screenWidth;
+    td.Height = screenHeight;
+    td.MipLevels = 1;
+    td.ArraySize = 1;
+    td.Format = DXGI_FORMAT_D32_FLOAT;              // depth-only is fine for picking
+    td.SampleDesc.Count = 1;
+    td.SampleDesc.Quality = 0;
+    td.Usage = D3D11_USAGE_DEFAULT;
+    td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    td.CPUAccessFlags = 0;
+    td.MiscFlags = 0;
+
+    HR_T(dev->CreateTexture2D(&td, nullptr, pickingDepthTex.GetAddressOf()));
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsv{};
+    dsv.Format = td.Format;
+    dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsv.Texture2D.MipSlice = 0;
+
+    HR_T(dev->CreateDepthStencilView(pickingDepthTex.Get(), &dsv, pickingDSV.GetAddressOf()));
+}
+#endif

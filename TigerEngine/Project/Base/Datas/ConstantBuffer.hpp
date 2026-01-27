@@ -209,6 +209,13 @@ struct alignas(16) EffectCB
     Vector2 padding;
 };
 
+/// <summary>
+/// 디버그 피킹용 상수 버퍼 CB -> b9
+/// </summary>
+struct alignas(16) PickingCB
+{
+    UINT pickID;
+    Vector3 pad1;
 
 // 여기 성호 9번 쓸고임
 // Decal CB -> b10

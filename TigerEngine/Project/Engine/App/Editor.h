@@ -22,6 +22,7 @@ public:
     void SelectObject(GameObject* obj);
 
     void ReleaseBackBufferResources();
+    void CreatePickingStagingTex();
 
 private:
     void RenderMenuBar(HWND& hwnd);
@@ -66,6 +67,15 @@ private:
     bool isPhysicsDebugOpen = false;
 
     std::string currScenePath{};
+
+    // object picking 
+    bool isMouseLeftClick = false;
+    XMINT2 mouseXY{};
+    uint32_t currPickedID = -1;
+    ComPtr<ID3D11Texture2D> coppedPickingTex{};
+
+    void CheckObjectPicking();
+    bool isAABBPicking = false; // 매 프레임마다 초기화 ( aabb와 메쉬 구분 )
 
     // rttr read
     void ReadVariants(rttr::variant& var);

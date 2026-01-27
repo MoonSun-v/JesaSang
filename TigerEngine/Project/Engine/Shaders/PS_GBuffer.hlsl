@@ -107,7 +107,6 @@ PS_Output main(PS_INPUT input) : SV_TARGET
     output.Normal = float4(EncodeNormal(normal), 1.0f); // -1,0,1 => 0,1
     output.Material = float4(metallic, roughness, 1.0f, 1.0f);
     output.Emissive = float4(emissive, 1.0f);
-    
 
     return output;
 }

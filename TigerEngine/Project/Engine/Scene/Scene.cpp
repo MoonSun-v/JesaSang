@@ -234,3 +234,27 @@ void Scene::ReloadScene()
     ClearScene();
     LoadToJson(targetLoadedPath);
 }
+
+int Scene::GetGameObjectIndex(GameObject* ptr)
+{
+    int res = -1;
+    for (int i = 0; i < gameObjects.size(); i++)
+    {
+        auto [objPtr, handle] = gameObjects[i];
+
+        if (ptr == objPtr)
+        {
+            res = i;
+            break;
+        }
+    }
+
+    return res;
+}
+
+GameObject* Scene::GetGameObjectByIndex(int index)
+{
+    if (index < 0 || index >= gameObjects.size()) return nullptr;
+
+	return gameObjects[index].objPtr;
+}

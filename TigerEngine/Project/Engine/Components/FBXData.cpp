@@ -30,6 +30,10 @@ void FBXData::OnStart()
     cout << "Component_OnStart() : FBXDatat OnStart() check...\n"; // Component OnStart 체크
 }
 
+void FBXData::OnDestory()
+{
+}
+
 std::vector<Mesh>& FBXData::GetMesh()
 {
     return meshes;
