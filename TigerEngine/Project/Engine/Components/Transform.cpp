@@ -15,27 +15,24 @@ void Transform::OnUpdate(float delta)
 {
     if (parent && parent->GetOwner()->IsDestory())
     {
-        parent = nullptr; // nullptr로 만들기
+        RemoveSelfAtParent();
+        parent = nullptr;
+        dirty = true;
+        SetChildrenDirty();
     }
 
     // dirty 해소
-    if (IsDirty())
+    if (dirty)
     {
+        Matrix local =
+            Matrix::CreateScale(scale) *
+            Matrix::CreateFromQuaternion(quaternion) *
+            Matrix::CreateTranslation(position);
+
         if (!parent)
-        {
-            worldMatrix = Matrix::CreateScale(scale) *
-                          // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-                          Matrix::CreateFromQuaternion(quaternion) *
-                          Matrix::CreateTranslation(position);
-        }
+            worldMatrix = local;
         else
-        {
-            worldMatrix = Matrix::CreateScale(scale) *
-                // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-                Matrix::CreateFromQuaternion(quaternion) *
-                Matrix::CreateTranslation(position) * 
-                parent->GetWorldTransform();
-        }
+            worldMatrix = local * parent->GetWorldTransform();
 
         dirty = false;
     }
@@ -48,14 +45,6 @@ void Transform::OnDestory()
 
 Matrix Transform::GetWorldTransform() const
 {
-    //if (dirty)
-    //{
-    //    cachedMatrix = Matrix::CreateScale(scale) *
-    //        // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-    //        Matrix::CreateFromQuaternion(quaternion) *
-    //        Matrix::CreateTranslation(position);
-    //}
-
     return worldMatrix;
 }
 
@@ -63,6 +52,7 @@ void Transform::Translate(const Vector3& delta)
 {
     position += delta;
     dirty = true;
+    SetChildrenDirty();
 }
 
 void Transform::Rotate(const Vector3& delta)
@@ -72,6 +62,7 @@ void Transform::Rotate(const Vector3& delta)
 
     SetEuler(euler + delta);
     dirty = true;
+    SetChildrenDirty();
 }
 
 // 직렬화/역직렬화는 Euler 기준 
@@ -137,6 +128,20 @@ void Transform::Deserialize(nlohmann::json data)
             dirty = true;
         }
 	}
+    SetChildrenDirty();
+}
+
+Matrix& Transform::GetLocalMatrix()
+{
+    if (dirty)
+    {
+        localMatrix = Matrix::CreateScale(scale) *
+            // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+            Matrix::CreateFromQuaternion(quaternion) *
+            Matrix::CreateTranslation(position);
+    }
+
+    return localMatrix;
 }
 
 void Transform::AddChild(Transform* transPtr)
@@ -176,12 +181,14 @@ void Transform::SetParent(Transform* newParent)
         parent->AddChild(this);
 
     dirty = true;
+    SetChildrenDirty();
 }
 
 void Transform::RemoveChildren()
 {
     for (auto it = children.begin(); it != children.end();)
     {
+        (*it)->SetParent(nullptr); // 부모 제거
         it = children.erase(it);
     }
 }
@@ -192,14 +199,16 @@ void Transform::RemoveSelfAtParent()
         parent->RemoveChild(this);
 }
 
-bool Transform::IsDirty()
+void Transform::SetChildrenDirty()
 {
-    if (parent != nullptr)
+    for (auto& child : children)
     {
-        return dirty || parent->IsDirty();
+        child->SetDirty();
+        child->SetChildrenDirty();
     }
-    else
-    {
-        return dirty;
-    }
+}
+
+void Transform::SetDirty()
+{
+    dirty = true;
 }
