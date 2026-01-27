@@ -30,6 +30,11 @@ private:
 public:
     void CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight);
 
+    // device, deviceContext
+    // DX11 소유인데 쓸데가 있어서 일단 가져옴..
+    ComPtr<ID3D11Device>            device;
+    ComPtr<ID3D11DeviceContext>     deviceContext;
+
     // DX11 Base
     D3D11_VIEWPORT viewport_screen;                                  
     ComPtr<ID3D11RenderTargetView>    backBufferRTV;                 

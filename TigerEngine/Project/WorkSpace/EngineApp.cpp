@@ -61,6 +61,8 @@ bool EngineApp::OnInitialize()
     sm.depthStencilView = dxRenderer->GetDepthStencilView();
     sm.depthStencilReadOnlyView = dxRenderer->GetDepthStencilReadOnlyView();
     sm.depthSRV = dxRenderer->GetDepthSRV();
+    sm.device = dxRenderer->GetDevice();
+    sm.deviceContext = dxRenderer->GetDeviceContext();
 
 
     renderQueue = std::make_unique<RenderQueue>();
