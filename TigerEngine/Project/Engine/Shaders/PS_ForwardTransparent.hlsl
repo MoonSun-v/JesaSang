@@ -82,6 +82,9 @@ float4 main(PS_INPUT input) : SV_TARGET
         alpha *= alphaFactor;
     }
     
+    if(alpha < 0.05f)
+        discard;   // alpha cutoff
+    
     // normal
     float3 N;
     if (useNormal)

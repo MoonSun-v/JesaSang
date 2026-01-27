@@ -17,6 +17,9 @@ using namespace DirectX::SimpleMath;
 // cbuffer PostProcessCB : register(b6)
 // cbuffer BloomCB : register(b7)
 // cbuffer EffectCB : register(b8)
+// cbuffer 성호 : register(b9)
+// cbuffer DecalCB : register(b10)
+
 
 // Frame CB -> b0
 struct alignas(16) FrameCB
@@ -213,4 +216,10 @@ struct alignas(16) PickingCB
 {
     UINT pickID;
     Vector3 pad1;
+
+// 여기 성호 9번 쓸고임
+// Decal CB -> b10
+struct alignas(16) DecalCB
+{
+   
 };

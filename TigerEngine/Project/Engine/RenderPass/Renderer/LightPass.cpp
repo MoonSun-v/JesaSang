@@ -150,85 +150,101 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
        sm.lightingCBData.outerAngle = light->outerAngle;
        context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
 
-        // Light Volume 렌더링
-        if (light->type == LightType::Directional)
-        {
-            // Stencil Test off
-            context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
+       // 임시 Lighting
+       // TODO :: Lighting Volume Stencil 디버깅
+       // 지금 데칼패스 해야돼서 일단 FullScreen으로 통일함
+       {
+           context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
 
-            // RS
-            context.Get()->RSSetState(nullptr);
+           // RS
+           context.Get()->RSSetState(nullptr);
 
-            // Full Screen Quad
-            context->IASetInputLayout(nullptr);
-            context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-            context.Get()->Draw(3, 0);
-        }
-        else
-        {
-            // Light Volume
-            if (light->type == LightType::Point)
-            {
-                if (sphereVolume->IsInsidePointLight(camPos, lightPos, light->range))
-                {
-                    // Stencil Test off
-                    context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
+           // Full Screen Quad
+           context->IASetInputLayout(nullptr);
+           context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
+           context.Get()->Draw(3, 0);
+       }
 
-                    // RS
-                    context.Get()->RSSetState(nullptr);
+       // TODO :: 아래 주석 해제 후 테스트 필요
+        //// Light Volume 렌더링
+        //if (light->type == LightType::Directional)
+        //{
+        //    // Stencil Test off
+        //    context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
 
-                    // Full Screen Quad
-                    context->IASetInputLayout(nullptr);
-                    context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-                    context.Get()->Draw(3, 0);
-                }
-                else
-                {
-                    // Stencil Test on
-                    context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
+        //    // RS
+        //    context.Get()->RSSetState(nullptr);
 
-                    // RS
-                    context.Get()->RSSetState(sm.cullfrontRS.Get());
+        //    // Full Screen Quad
+        //    context->IASetInputLayout(nullptr);
+        //    context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
+        //    context.Get()->Draw(3, 0);
+        //}
+        //else
+        //{
+        //    // Light Volume
+        //    if (light->type == LightType::Point)
+        //    {
+        //        if (sphereVolume->IsInsidePointLight(camPos, lightPos, light->range))
+        //        {
+        //            // Stencil Test off
+        //            context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
 
-                    // Light Volume
-                    context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
-                    context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
-                    sphereVolume->UpdateWolrd(*light);
-                    sphereVolume->Draw(context, *camera);
-                }
-            }
-            else if (light->type == LightType::Spot)
-            {
-                if (sphereVolume->IsInsideSpotLight(camPos, lightPos,
-                    light->direction, light->range, light->outerAngle))
-                {
-                    // Stencil Test off
-                    context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
+        //            // RS
+        //            context.Get()->RSSetState(nullptr);
 
-                    // RS
-                    context.Get()->RSSetState(nullptr);
+        //            // Full Screen Quad
+        //            context->IASetInputLayout(nullptr);
+        //            context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
+        //            context.Get()->Draw(3, 0);
+        //        }
+        //        else
+        //        {
+        //            // Stencil Test on
+        //            context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
 
-                    // Full Screen Quad
-                    context->IASetInputLayout(nullptr);
-                    context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-                    context.Get()->Draw(3, 0);
-                }
-                else
-                {
-                    // Stencil Test on
-                    context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
+        //            // RS
+        //            context.Get()->RSSetState(sm.cullfrontRS.Get());
 
-                    // RS
-                    context.Get()->RSSetState(sm.cullfrontRS.Get());
+        //            // Light Volume
+        //            context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
+        //            context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
+        //            sphereVolume->UpdateWolrd(*light);
+        //            sphereVolume->Draw(context, *camera);
+        //        }
+        //    }
+        //    else if (light->type == LightType::Spot)
+        //    {
+        //        if (sphereVolume->IsInsideSpotLight(camPos, lightPos,
+        //            light->direction, light->range, light->outerAngle))
+        //        {
+        //            // Stencil Test off
+        //            context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
 
-                    // Light Volum
-                    context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
-                    context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
-                    coneVolume->UpdateWolrd(*light);
-                    coneVolume->Draw(context, *camera);
-                }
-            }
-        }
+        //            // RS
+        //            context.Get()->RSSetState(nullptr);
+
+        //            // Full Screen Quad
+        //            context->IASetInputLayout(nullptr);
+        //            context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
+        //            context.Get()->Draw(3, 0);
+        //        }
+        //        else
+        //        {
+        //            // Stencil Test on
+        //            context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
+
+        //            // RS
+        //            context.Get()->RSSetState(sm.cullfrontRS.Get());
+
+        //            // Light Volum
+        //            context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
+        //            context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
+        //            coneVolume->UpdateWolrd(*light);
+        //            coneVolume->Draw(context, *camera);
+        //        }
+        //    }
+        //}
     }
 
     // clear

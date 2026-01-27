@@ -76,8 +76,28 @@ void ForwardTransparentPass::Execute(ComPtr<ID3D11DeviceContext>& context, Rende
         }
         }
 
-        // IB, VB, SRV, CB -> DrawCall
-        transparentItem.mesh->Draw(context);
+        // Light
+        std::vector<Light*> lights = LightSystem::Instance().GetComponents();
+        for (Light*& light : lights)
+        {
+            // CB
+            auto lightPos = light->GetOwner()->GetTransform()->GetPosition();
+
+            // CB - Light
+            sm.lightingCBData.lightType = static_cast<int>(light->type);
+            sm.lightingCBData.isSunLight = light->isSunLight;
+            sm.lightingCBData.lightColor = light->color;
+            sm.lightingCBData.directIntensity = light->intensity;
+            sm.lightingCBData.lightDirection = light->direction;
+            sm.lightingCBData.lightPos = lightPos;
+            sm.lightingCBData.lightRange = light->range;
+            sm.lightingCBData.innerAngle = light->innerAngle;
+            sm.lightingCBData.outerAngle = light->outerAngle;
+            context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
+
+            // IB, VB, SRV, CB -> DrawCall
+            transparentItem.mesh->Draw(context);
+        }
     }
 
     // clean up

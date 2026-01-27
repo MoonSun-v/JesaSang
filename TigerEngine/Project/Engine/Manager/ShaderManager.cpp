@@ -78,12 +78,12 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
 
     // create DSS 
     // Decal Pass - ground Test (0x01)
-    // stencil test only
+    // depth test / stencil test
     {
         D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-        dsDesc.DepthEnable = FALSE;                                 // Depth Test OFF
-        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-        dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+        dsDesc.DepthEnable = TRUE;                                 // Depth Test ON
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;       //
+        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
         dsDesc.StencilEnable = TRUE;       // Stencil Test ON
         dsDesc.StencilReadMask = 0x01;
@@ -792,6 +792,16 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
         HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &effectCB));
     }
 
+    // 10. Decal CB
+    {
+        D3D11_BUFFER_DESC constBuffer_Desc = {};
+        constBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+        constBuffer_Desc.ByteWidth = sizeof(DecalCB);
+        constBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        constBuffer_Desc.CPUAccessFlags = 0;
+        HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &decalCB));
+    }
+  
 #if _DEBUG
     CreatePickingCB(dev);
 #endif

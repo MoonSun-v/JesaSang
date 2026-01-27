@@ -8,7 +8,7 @@
 
     Light Component를 Register하고 관리합니다.
     Light Component는 따로 Update나 Render되지 않는 데이터 컴포넌트입니다.
-
+    => Light, ForwardTransparent Pass에서 사용됩니다.
 */
 
 class LightSystem : public Singleton<LightSystem>
@@ -22,15 +22,11 @@ public:
 
     void Register(Light* comp);
     void UnRegister(Light* comp);
+    void Clear();
 
+    std::vector<Light*> GetComponents();
+    
+    // -------------------------------------
     // SunLight Direction Getter
     Vector3 GetSunDirection();
-
-    // Lights Getter
-    std::vector<Light*> GetComponents(); 
-
-    /// <summary>
-    /// 등록된 Light 컴포넌트들 .clear()로 제거하는 함수
-    /// </summary>
-    void Clear();
 };

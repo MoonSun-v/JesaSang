@@ -11,6 +11,8 @@
 // cbuffer PostProcessCB : register(b6)
 // cbuffer BloomCB : register(b7)
 // cbuffer EffectCB : register(b8)
+// cbuffer 성호 : register(b9)
+// cbuffer DecalCB : register(b10)
 
 
 // [ Texture ]
@@ -228,6 +230,12 @@ cbuffer PickingCB : register(b9)
     float3 pad;
 }
 
+// 여기 성호 9번 들어감
+
+cbuffer DecalCB : register(b10)
+{
+    
+}
 
 // ----------------------
 //  Vertex Input Layout

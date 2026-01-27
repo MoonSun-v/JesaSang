@@ -30,27 +30,39 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     sm.transformCBData.shadowProjection = XMMatrixTranspose(projection);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
+    // Render Queue Merge
+    std::vector<RenderItem> opaqueQueue = queue.GetOpaqueQueue();
+    std::vector<RenderItem> transparentQueue = queue.GetTransparentQueue();
+
+    std::vector<RenderItem*> mergedQueue;
+    mergedQueue.reserve(opaqueQueue.size() + transparentQueue.size());
+
+    for (auto& item : opaqueQueue)
+        mergedQueue.push_back(&item);
+
+    for (auto& item : transparentQueue)
+        mergedQueue.push_back(&item);
+
     // Render
-    auto& models = queue.GetOpaqueQueue();
-    for (auto& m : models)
+    for (auto& m : mergedQueue)
     {
         // CB - Transform
-        if (m.modelType == ModelType::Rigid) sm.transformCBData.model = m.model.Transpose();
-        else if (m.modelType == ModelType::Static) sm.transformCBData.model = Matrix::Identity.Transpose();
-        sm.transformCBData.world = m.world.Transpose();
+        if (m->modelType == ModelType::Rigid) sm.transformCBData.model = m->model.Transpose();
+        else if (m->modelType == ModelType::Static) sm.transformCBData.model = Matrix::Identity.Transpose();
+        sm.transformCBData.world = m->world.Transpose();
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
         // VS
-        switch (m.modelType) {
+        switch (m->modelType) {
             case ModelType::Skeletal:
             {
                 context->VSSetShader(sm.VS_ShadowDepth_Skeletal.Get(), NULL, 0);
 
                 // CB - Offset, Pose
-                auto& boneOffset = m.offsets->boneOffset;
-                auto& bonePose = m.poses->bonePose;
+                auto& boneOffset = m->offsets->boneOffset;
+                auto& bonePose = m->poses->bonePose;
 
-                for (int i = 0; i < m.boneCount; i++)
+                for (int i = 0; i < m->boneCount; i++)
                 {
                     sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i];
                     sm.poseMatrixCBData.bonePose[i] = bonePose[i];
@@ -68,6 +80,6 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
         }
 
         // IB, VB, SRV, CB -> DrawCall
-        m.mesh->Draw(context);
+        m->mesh->Draw(context);
     }
 }

@@ -1122,16 +1122,16 @@
               "IsSunLight": false,
               "LightType": "Point",
               "OuterAngle": 30.0,
-              "Range": 50.0
+              "Range": 500.0
             },
             "type": "Light"
           },
           "Transform": {
             "properties": {
               "Position": [
-                0.0,
+                -700.0,
                 48.29999923706055,
-                0.0
+                200.0
               ],
               "Rotation": [
                 0.0,
@@ -1168,20 +1168,20 @@
                 0.0
               ],
               "InnerAngle": 15.0,
-              "Intensity": 0.0,
+              "Intensity": 100.0,
               "IsSunLight": false,
               "LightType": "Spot",
               "OuterAngle": 30.0,
-              "Range": 50.0
+              "Range": 500.0
             },
             "type": "Light"
           },
           "Transform": {
             "properties": {
               "Position": [
-                0.0,
-                0.0,
-                0.0
+                -500.0,
+                142.60000610351563,
+                200.0
               ],
               "Rotation": [
                 0.0,
