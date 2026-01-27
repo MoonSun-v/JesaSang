@@ -17,7 +17,7 @@ using namespace DirectX::SimpleMath;
 // cbuffer PostProcessCB : register(b6)
 // cbuffer BloomCB : register(b7)
 // cbuffer EffectCB : register(b8)
-// cbuffer 성호 : register(b9)
+// cbuffer PickingCB : register(b9)
 // cbuffer DecalCB : register(b10)
 
 
@@ -209,17 +209,22 @@ struct alignas(16) EffectCB
     Vector2 padding;
 };
 
-/// <summary>
 /// 디버그 피킹용 상수 버퍼 CB -> b9
-/// </summary>
 struct alignas(16) PickingCB
 {
     UINT pickID;
     Vector3 pad1;
+};
 
-// 여기 성호 9번 쓸고임
 // Decal CB -> b10
 struct alignas(16) DecalCB
 {
-   
+    Matrix decalInvWorld;       // decal world->local 변환용 역행렬 (박스 내부 판정 + uv 생성)
+    
+    Vector2 tiling;
+    Vector2 offset;
+
+    float opacity;
+    float upThreshold;
+    Vector2 padding;
 };

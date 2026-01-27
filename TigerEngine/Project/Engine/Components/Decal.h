@@ -18,8 +18,19 @@ class Decal : public Component
 
 public:
     DecalType type = DecalType::TextureMap;    // TextureMap, RingEffect
-    std::string decalTexturePath = "";
+    
+    // opacity
+    float opacity = 1.0f;
 
+    // ground
+    float upThreshold = 0.9f;
+
+    // decal texture
+    Vector2 tiling = { 1.0f, 1.0f };
+    Vector2 offset = { 0.0f, 0.0f };
+
+    // ring effect
+    std::string decalTexturePath = "";
     ComPtr<ID3D11ShaderResourceView> decalSRV = nullptr;
 
 public:

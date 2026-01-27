@@ -175,6 +175,7 @@ void EngineApp::OnRender()
         context->VSSetConstantBuffers(6, 1, sm.postProcessCB.GetAddressOf());
         context->VSSetConstantBuffers(7, 1, sm.bloomCB.GetAddressOf());
         context->VSSetConstantBuffers(8, 1, sm.effectCB.GetAddressOf());
+        context->VSSetConstantBuffers(10, 1, sm.decalCB.GetAddressOf());
 
         context->PSSetConstantBuffers(0, 1, sm.frameCB.GetAddressOf());
         context->PSSetConstantBuffers(1, 1, sm.transformCB.GetAddressOf());
@@ -185,6 +186,7 @@ void EngineApp::OnRender()
         context->PSSetConstantBuffers(6, 1, sm.postProcessCB.GetAddressOf());
         context->PSSetConstantBuffers(7, 1, sm.bloomCB.GetAddressOf());
         context->PSSetConstantBuffers(8, 1, sm.effectCB.GetAddressOf());
+        context->PSSetConstantBuffers(10, 1, sm.decalCB.GetAddressOf());
     }
 
     if (PlayModeSystem::Instance().IsPlaying())

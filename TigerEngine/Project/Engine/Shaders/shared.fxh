@@ -231,11 +231,16 @@ cbuffer PickingCB : register(b9)
     float3 pad;
 }
 
-// 여기 성호 9번 들어감
-
 cbuffer DecalCB : register(b10)
 {
+    matrix decalInvWorld;
     
+    float2 tiling;
+    float2 offset;
+
+    float opacity;
+    float upThreshold;
+    float2 padding18;
 }
 
 // ----------------------

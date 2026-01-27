@@ -20,9 +20,17 @@ void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) co
 {
     auto& sm = ShaderManager::Instance();
 
-    // CB
+    // CB - Transform
     sm.transformCBData.world = XMMatrixTranspose(world);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
+
+    // CB - Decal
+    sm.decalCBData.decalInvWorld = XMMatrixTranspose(world.Invert());
+    sm.decalCBData.opacity = decal->opacity;
+    sm.decalCBData.upThreshold = decal->upThreshold;
+    sm.decalCBData.tiling = decal->tiling;
+    sm.decalCBData.offset = decal->offset;
+    context->UpdateSubresource(sm.decalCB.Get(), 0, nullptr, &sm.decalCBData, 0, 0);
 
     // VB, IB
     UINT offset = 0;
