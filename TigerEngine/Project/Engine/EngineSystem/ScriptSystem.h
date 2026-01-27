@@ -74,9 +74,4 @@ private:
     /// 스크립트 컴포넌트 initialize 레디 큐 
     /// </summary>
     std::queue<Component*> scriptCompsInitReadyQueue{};
-
-    /// <summary>
-    /// 스크립트 컴포넌트 onStart 레디 큐
-    /// </summary>
-    std::queue<Component*> scriptCompsStartReadyQueue{};
 };

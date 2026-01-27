@@ -11,6 +11,9 @@ protected:
 	GameObject* owner{}; 	// 해당 컴포넌트를 소유하고 있는 게임 오브젝트
 	std::string name{};		// 해당 컴포넌트 이름
 
+    bool isStart = false;   // OnStart를 호출 했는가?
+
+
 public:
 	Component() = default;
 	virtual ~Component() = default;
@@ -61,4 +64,7 @@ public:
     /// </summary>
     /// <returns>true면 플레이 모드에서만 update 호출 아니면 false</returns>
     virtual bool IsPlayModeOnly() { return false; }
+
+    bool IsStart() { return isStart; }
+    void SetStartTrue() { isStart = true; }
 };

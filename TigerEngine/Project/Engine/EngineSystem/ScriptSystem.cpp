@@ -15,13 +15,13 @@ void ScriptSystem::Register(Component* comp)
 {
     readyQueue.push(comp);
     comps.push_back(comp);
+    comp->OnInitialize();
 }
 
 void ScriptSystem::RegisterScript(Component* comp)
 {
     scriptComps.push_back(comp);
     scriptCompsInitReadyQueue.push(comp);
-    scriptCompsStartReadyQueue.push(comp);
 }
 
 void ScriptSystem::UnRegister(Component* comp)
@@ -53,7 +53,15 @@ void ScriptSystem::Update(float delta)
     // 일반 component update
     for (auto& e : comps)
     {
-        e->OnUpdate(delta);
+        if (!e->IsStart())
+        {
+            e->IsStart();
+            e->SetStartTrue();
+        }
+        else
+        {
+            e->OnUpdate(delta);
+        }
     }
 
     if (PlayModeSystem::Instance().IsPlaying())
@@ -66,18 +74,18 @@ void ScriptSystem::Update(float delta)
             scriptCompsInitReadyQueue.pop();
         }
 
-        // 2. 등록된 start 해소
-        while (!scriptCompsStartReadyQueue.empty())
-        {
-            auto comp = scriptCompsStartReadyQueue.front();
-            comp->OnStart();
-            scriptCompsStartReadyQueue.pop();
-        }
-
         // 3. 사용자 정의 component update
         for (auto& e : scriptComps)
         {
-            e->OnUpdate(delta);
+            if (!e->IsStart())
+            {
+                e->OnStart();
+                e->SetStartTrue();
+            }
+            else
+            {
+                e->OnUpdate(delta);
+            }
         }
     }
 }

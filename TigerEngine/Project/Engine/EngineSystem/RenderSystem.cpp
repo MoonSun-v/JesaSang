@@ -15,6 +15,7 @@ void RenderSystem::Register(RenderComponent* comp)
 {
     readyQueue.push(comp);
     comps.push_back(comp);
+    comp->OnInitialize();
 }
 
 void RenderSystem::UnRegister(RenderComponent* comp)
@@ -33,7 +34,15 @@ void RenderSystem::Render(RenderQueue& queue)
 {
     for (auto& e : comps)
     {
-        e->OnUpdate(GameTimer::Instance().DeltaTime());
-        e->OnRender(queue);
+        if (!e->IsStart())
+        {
+            e->IsStart();
+            e->SetStartTrue(); // 시작을 알림
+        }
+        else
+        {
+            e->OnUpdate(GameTimer::Instance().DeltaTime());
+            e->OnRender(queue);
+        }
     }
 }

@@ -66,10 +66,11 @@ public:
 protected:
 	Scene* currentScene{}; // 현재 게임 오브젝트가 존재하는 씬 참조 변수
 	Transform* transform{};
-	std::vector<Component*> components;
-	std::vector<Handle> handles;
-	bool isDestory = false;
+	std::vector<Component*> components;     // 게임 오브젝트가 가지고 있는 컴포넌트 모음
+	std::vector<Handle> handles;            // 컴포넌트 핸들 (ObjectSystem 참조)
+	bool isDestory = false;                 // 해당 객체가 다음 프레임에 파괴되는가?
 
+    // aabb picking 용
 	BoundingBox aabbBox{};
 	Vector3 aabbBoxExtent{};
 	Vector3 aabbCenter{};
@@ -109,7 +110,6 @@ inline T* GameObject::AddComponent()
 	comp->SetOwner(this);
 	components.push_back(comp);
 	handles.push_back(handle);
-	comp->OnInitialize(); // 컴포넌트 초기화 실행
 
  	if (auto renderComp = dynamic_cast<RenderComponent*>(comp))
 	{
