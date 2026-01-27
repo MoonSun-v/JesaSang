@@ -27,6 +27,7 @@ public:
 private:
     void RenderMenuBar(HWND& hwnd);
     void RenderHierarchy();
+    void DrawHierarchyNode(GameObject* obj);
     void RenderInspector();
     void RenderPlayModeControls();
     void RenderCameraFrustum();

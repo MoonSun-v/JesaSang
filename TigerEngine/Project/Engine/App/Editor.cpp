@@ -173,28 +173,101 @@ void Editor::RenderMenuBar(HWND& hwnd)
     ImGui::EndMainMenuBar();
 }
 
+// 오브젝트 이동 드랍을 위한 payload
+static const char* kPayload_GameObject = "DND_GAMEOBJECT";
+
 void Editor::RenderHierarchy()
 {
     ImGui::Begin("World Hierarchy");
+
+    if (ImGui::Button("Create GameObject"))
+        SceneSystem::Instance().GetCurrentScene()->AddGameObjectByName("NewGameObject");
+
+    auto scene = SceneSystem::Instance().GetCurrentScene();
+    if (!scene) { ImGui::End(); return; }
+
+    scene->ForEachGameObject([this](GameObject* obj)
     {
-        if(ImGui::Button("Create GameObject"))
-        {
-            SceneSystem::Instance().GetCurrentScene()->AddGameObjectByName("NewGameObject");
-        }
+        Transform* tr = obj->GetComponent<Transform>();
+        if (!tr) return;
 
-        SceneSystem::Instance().GetCurrentScene()->ForEachGameObject([this](GameObject* obj)
-        {
-            ImGui::PushID(obj); // 고유 ID 부여 (ID 충돌 방지)
-            
-            if (ImGui::Selectable(obj->GetName().c_str(), selectedObject == obj))
-            {
-                SelectObject(obj);
-            }
+        if (tr->GetParent() != nullptr) return; // 루트만
 
-            ImGui::PopID();
-        });
-    }
+        DrawHierarchyNode(obj);
+    });
     ImGui::End();
+}
+
+void Editor::DrawHierarchyNode(GameObject* obj)
+{
+    Transform* tr = obj->GetComponent<Transform>();
+    if (!tr) return;    // transform 없음
+
+    ImGui::PushID(obj);
+
+    const auto& children = tr->GetChildren(); // transform의 모든 자식 받기
+    ImGuiTreeNodeFlags flags =               
+        ImGuiTreeNodeFlags_OpenOnArrow |
+        ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    if (children.empty())
+        flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+    if (selectedObject == obj) // 오브젝트 선택됨
+        flags |= ImGuiTreeNodeFlags_Selected;
+
+    bool open = ImGui::TreeNodeEx(obj->GetName().c_str(), flags); // 해당 오브젝트가 자식이 있으면 true
+
+    // 클릭 선택
+    if (ImGui::IsItemClicked())
+        SelectObject(obj);
+
+    // (1) Drag source: 이 노드를 드래그
+    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    {
+        GameObject* payloadObj = obj;
+        ImGui::SetDragDropPayload(kPayload_GameObject, &payloadObj, sizeof(GameObject*)); // payload 채우기
+        ImGui::TextUnformatted(obj->GetName().c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    // (2) Drop target: 이 노드에 드롭하면 "내 자식"으로 만든다
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
+        {
+            GameObject* dragged = *(GameObject**)payload->Data;
+            if (dragged && dragged != obj)
+            {
+                Transform* dtr = dragged->GetComponent<Transform>();
+                if (dtr)
+                {
+                    if (dtr != tr) // 순환 체크
+                    {
+                        dtr->SetParent(tr);
+                        ImGui::PopID();
+                        ImGui::EndDragDropTarget();
+                        return;
+                    }
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
+    // 자식 렌더링
+    if (!children.empty() && open)
+    {
+        for (Transform* childTr : children)
+        {
+            if (!childTr) continue;
+            GameObject* childObj = childTr->GetOwner();
+            if (childObj) DrawHierarchyNode(childObj);
+        }
+        ImGui::TreePop();
+    }
+
+    ImGui::PopID();
 }
 
 void Editor::RenderInspector()

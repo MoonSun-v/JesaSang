@@ -10,6 +10,7 @@ public:
 	~Transform() = default;
 
 	void OnUpdate(float delta) override;
+    void OnDestory() override;
 
 	Matrix GetWorldTransform() const;
 	void Translate(const Vector3& delta);
@@ -69,7 +70,15 @@ public:
         dirty = true;
     }
 
-	//std::shared_ptr<Transform> parent{};
+    void AddChild(Transform* transPtr);
+    void RemoveChild(Transform* transPtr);
+    void SetParent(Transform* transPtr);
+    void RemoveChildren();
+    void RemoveSelfAtParent(); // 부모에서 자신을 스스로 제거함
+
+    Transform* GetParent() const { return parent; }
+    const std::vector<Transform*>& GetChildren() const { return children; }
+    bool IsDirty();
 
 private:
     Vector3 position{ Vector3::Zero };
@@ -78,6 +87,9 @@ private:
     Vector3 scale{ Vector3::One };
 
     Matrix worldMatrix{};
+    Matrix cachedMatrix{};
+    Transform* parent{};    // 이건 업데이트에서 확인하고 자동 제거
+    std::vector<Transform*> children;
 
 	bool dirty = true;
 };

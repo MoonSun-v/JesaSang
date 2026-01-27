@@ -13,19 +13,49 @@ RTTR_REGISTRATION
 
 void Transform::OnUpdate(float delta)
 {
-    // dirty 해소
-    if (dirty)
+    if (parent && parent->GetOwner()->IsDestory())
     {
-        worldMatrix = Matrix::CreateScale(scale) *
-                      // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-                      Matrix::CreateFromQuaternion(quaternion) *
-                      Matrix::CreateTranslation(position);
+        parent = nullptr; // nullptr로 만들기
+    }
+
+    // dirty 해소
+    if (IsDirty())
+    {
+        if (!parent)
+        {
+            worldMatrix = Matrix::CreateScale(scale) *
+                          // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+                          Matrix::CreateFromQuaternion(quaternion) *
+                          Matrix::CreateTranslation(position);
+        }
+        else
+        {
+            worldMatrix = Matrix::CreateScale(scale) *
+                // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+                Matrix::CreateFromQuaternion(quaternion) *
+                Matrix::CreateTranslation(position) * 
+                parent->GetWorldTransform();
+        }
+
         dirty = false;
     }
 }
 
+void Transform::OnDestory()
+{
+    RemoveSelfAtParent();
+}
+
 Matrix Transform::GetWorldTransform() const
 {
+    //if (dirty)
+    //{
+    //    cachedMatrix = Matrix::CreateScale(scale) *
+    //        // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+    //        Matrix::CreateFromQuaternion(quaternion) *
+    //        Matrix::CreateTranslation(position);
+    //}
+
     return worldMatrix;
 }
 
@@ -107,4 +137,69 @@ void Transform::Deserialize(nlohmann::json data)
             dirty = true;
         }
 	}
+}
+
+void Transform::AddChild(Transform* transPtr)
+{
+    if (transPtr == nullptr) return;
+    children.push_back(transPtr);
+}
+
+void Transform::RemoveChild(Transform* transPtr)
+{
+    for (auto it = children.begin(); it != children.end();)
+    {
+        if (*it == transPtr)
+        {
+            children.erase(it);
+            break;
+        }
+        else
+        {
+            it++;
+        }
+    }
+}
+
+void Transform::SetParent(Transform* newParent)
+{
+    if (newParent == this) return; // 사이클 방지
+
+    // 기존 부모 child 목록에서 제거
+    if (parent)
+        parent->RemoveChild(this);
+
+    parent = newParent;
+
+    // 새 부모 child 목록에 추가
+    if (parent)
+        parent->AddChild(this);
+
+    dirty = true;
+}
+
+void Transform::RemoveChildren()
+{
+    for (auto it = children.begin(); it != children.end();)
+    {
+        it = children.erase(it);
+    }
+}
+
+void Transform::RemoveSelfAtParent()
+{
+    if(parent)
+        parent->RemoveChild(this);
+}
+
+bool Transform::IsDirty()
+{
+    if (parent != nullptr)
+    {
+        return dirty || parent->IsDirty();
+    }
+    else
+    {
+        return dirty;
+    }
 }
