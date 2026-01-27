@@ -29,8 +29,8 @@ void DecalPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue
 
     // DSS - Stencil Test(ground)
     const UINT stencilRef = 0x01;   // Stencil Reference Value
-    context->OMSetDepthStencilState(sm.depthTestOnlyDSS.Get(), stencilRef);   // groudn decal
-    //context->OMSetDepthStencilState(sm.depthTestOnlyDSS.Get(), 0);            // all object decal
+    context->OMSetDepthStencilState(sm.groundTestDSS.Get(), stencilRef);   // groudn decal
+    //context->OMSetDepthStencilState(sm.depthTestOnlyDSS.Get(), 0);       // all object decal
 
     // Shader
     context->VSSetShader(sm.VS_Decal.Get(), nullptr, 0);
