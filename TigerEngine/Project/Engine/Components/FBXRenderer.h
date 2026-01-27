@@ -22,6 +22,7 @@ public:
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
+
     // [Material get/set] -----------------
     Color GetDiffuse() { return Color(diffuseFactor.x, diffuseFactor.y, diffuseFactor.z); }
     void SetDiffuse(Color color);
@@ -53,13 +54,17 @@ public:
     void SetRoughnessOverride(float value);      
 
 
+    // [RenderBlendType get/set] -----------------
+    RenderBlendType GetRenderBlendType() { return renderBlendType; }
+    void SetRenderBlendType(RenderBlendType type) { renderBlendType = type; }
+
+
     // [Bone] -----------------
     void CreateBoneInfo();
 
 private:
     // FBX Asset Data
     FBXData* fbxData = nullptr;                 // 참조할 FBX 데이터
-
 
 	// Instance Data
 	std::string directory{};		    // 로드한 파일이 위차한 폴더명
