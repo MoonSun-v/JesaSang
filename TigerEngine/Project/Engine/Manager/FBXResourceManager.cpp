@@ -574,7 +574,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadStaticFBXByPath(std::s
 }
 
 
-bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName)
+bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName, bool loop)
 {
     if (!asset) return false;
     if (!asset->skeletalInfo.IsSkeletal()) return false;
@@ -602,8 +602,9 @@ bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> a
     {
         Animation anim;
         anim.CreateFromAssimp(pScene->mAnimations[i]);
+        anim.m_loop = loop; // 루프 설정
 
-        // 이름 지정
+        // 이름 지정 
         if (!clipName.empty())
             anim.m_name = clipName; // 외부에서 지정한 이름 사용
         else

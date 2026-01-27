@@ -10,6 +10,11 @@ RTTR_REGISTRATION
             (rttr::policy::ctor::as_std_shared_ptr);
 }
 
+void AnimationController::Initialize(const SkeletonInfo* skeleton)
+{
+    AnimatorInstance.Initialize(skeleton);
+}
+
 void AnimationController::OnStart()
 {
     // FBXData에서 skeletal info 가져오기
@@ -22,16 +27,10 @@ void AnimationController::OnStart()
     AnimationSystem::Instance().Register(this);
 }
 
-void AnimationController::Initialize(const SkeletonInfo* skeleton)
-{
-    AnimatorInstance.Initialize(skeleton);
-}
-
 void AnimationController::Update(float dt)
 {
     if (CurrentState)
     {
-        // OutputDebugString((L"[AnimationController] Update dalta : " + std::to_wstring(dt) + L"\n").c_str());
         CurrentState->OnUpdate(dt);
     }
 
