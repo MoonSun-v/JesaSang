@@ -20,16 +20,22 @@ void LightSystem::UnRegister(Light* comp)
 Vector3 LightSystem::GetSunDirection()
 {
     Vector3 lightDir;
+    bool foundSunLight = false;
+
     for (auto& light : comps)
     {
         if (light->isSunLight)
         {
             lightDir = light->direction;
+            foundSunLight = true;
             break;
         }
     }
+   
+   if(!foundSunLight)
+       lightDir = Vector3(0,0,1);       // 임시
 
-    return lightDir;
+   return lightDir;
 }
 
 std::vector<Light*> LightSystem::GetComponents()

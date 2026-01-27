@@ -62,7 +62,7 @@ public:
 
 public:
     // Light Camera
-    DirectionalShadowCamera* lightCamera;
+    DirectionalShadowCamera* lightCamera = nullptr;
     void LightCameraUpdate(float delta);
 
 
