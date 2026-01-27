@@ -73,12 +73,12 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
 
     // create DSS 
     // Decal Pass - ground Test (0x01)
-    // stencil test only
+    // depth test / stencil test
     {
         D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-        dsDesc.DepthEnable = FALSE;                                 // Depth Test OFF
-        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-        dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+        dsDesc.DepthEnable = TRUE;                                 // Depth Test ON
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;       //
+        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
         dsDesc.StencilEnable = TRUE;       // Stencil Test ON
         dsDesc.StencilReadMask = 0x01;

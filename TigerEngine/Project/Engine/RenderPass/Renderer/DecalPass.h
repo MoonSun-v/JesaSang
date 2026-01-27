@@ -6,13 +6,16 @@
     [ Decal Renderer ]
 
     Decal이라함은 기본적으로 scene에 그려진 depth를 참조하여 월드에 투영하듯 그리는 거지만
-    해당 렌더러는 게임 성향에 맞게 Ground 전용 Decal Pass를 진행합니다.
+    해당 렌더러는 게임 성향에 맞게 'Ground 전용 Decal Pass'를 진행합니다.
 
-    Geometry Pass에서 ground를 그릴때 기록된 stencil(0x01)을 test하고
-    Normal == Vector::Up인 position에 대해서만 Decal을 G-buffer에 기록합니다.
+    1) Geometry Pass에서 ground를 그릴때 기록된 stencil(0x01)을 test하고
+    2) Normal == Vector::Up인 position에 대해서만 Decal을 G-buffer(Albedo)에 기록합니다.
+
+    - Input(SRV) : normal, depth
+    - Output(RTV) : albedo
 
     ** Decal Renderer의 Renderable 객체 **
-     BoxVolume (소유) - Decal Component의 Data로 rendering 합니다.
+     DecalBoxVolume (소유) - Decal Component의 Data로 rendering 합니다.
 */
 
 class DecalVolumeMesh;
@@ -20,7 +23,7 @@ class DecalVolumeMesh;
 class DecalPass : public IRenderPass
 {
 private:
-    DecalVolumeMesh* decalVolume;
+    DecalVolumeMesh* decalVolume = nullptr;
 
 public:
     ~DecalPass() override;
