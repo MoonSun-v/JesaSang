@@ -1,5 +1,6 @@
 // [ PS_Skybox ]
 
+#include <shared.fxh>
 #include <PBR_Common.fxh>
 
 // --- Texture Bind Slot ------------------
@@ -13,7 +14,7 @@ float4 main(PS_Skybox_INPUT input) : SV_TARGET
 {
     float3 color = skyboxTex.Sample(samplerLinear, normalize(input.texCoord));
     
-    // LDR ´Üµ¶ÆĞ½ºÀÏ ¶§¸¸ °¨¸¶º¸Á¤
+    // LDR ë‹¨ë…íŒ¨ìŠ¤ì¼ ë•Œë§Œ ê°ë§ˆë³´ì •
     if (useDefaultGamma && !isHDR)
         color = LinearToSRGB(color);
     

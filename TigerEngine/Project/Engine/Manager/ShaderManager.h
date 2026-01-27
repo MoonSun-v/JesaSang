@@ -120,6 +120,7 @@ public:
     ComPtr<ID3D11VertexShader> VS_FullScreen;
     ComPtr<ID3D11VertexShader> VS_LightVolume;
     ComPtr<ID3D11VertexShader> VS_Effect;
+    ComPtr<ID3D11VertexShader> VS_Decal;
 
     // Pixel Shader
     ComPtr<ID3D11PixelShader> PS_ShadowDepth;
@@ -132,6 +133,7 @@ public:
     ComPtr<ID3D11PixelShader> PS_BloomDownsampleBlur;
     ComPtr<ID3D11PixelShader> PS_BloomUpsampleCombine;
     ComPtr<ID3D11PixelShader> PS_PostProcess;
+    ComPtr<ID3D11PixelShader> PS_Decal;
 
     // CB buffer
     ComPtr<ID3D11Buffer> frameCB;
