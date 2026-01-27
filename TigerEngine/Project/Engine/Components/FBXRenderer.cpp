@@ -6,6 +6,7 @@
 #include "../Object/GameObject.h"
 #include "../Util/JsonHelper.h"
 #include "AnimationController.h"
+#include "../EngineSystem/PlayModeSystem.h"
 
 RTTR_REGISTRATION
 {
@@ -54,11 +55,22 @@ void FBXRenderer::OnUpdate(float delta)
 {
     auto anim = owner->GetComponent<AnimationController>();
 
-    if (anim)
+    if (anim && PlayModeSystem::Instance().IsPlaying()) // Transpose O 
     {
         const auto& pose = anim->AnimatorInstance.GetFinalPose();
+
         for (int i = 0; i < pose.size(); i++)
-            bonePoses.bonePose[i] = pose[i];
+        {
+            bonePoses.bonePose[i] = pose[i].Transpose();
+        }
+    }
+    else  // Transpose X , bind pose
+    {
+        auto modelAsset = fbxData->GetFBXInfo();
+        for (int i = 0; i < modelAsset->skeletalInfo.m_bones.size(); i++)
+        {
+            bonePoses.bonePose[i] = modelAsset->skeletalInfo.m_bones[i].globalBind;
+        }
     }
 }
 
@@ -104,6 +116,18 @@ void FBXRenderer::OnRender(RenderQueue& queue)
         }
 
         queue.AddRenderItem(item);
+    }
+}
+
+void FBXRenderer::CreateBoneInfo()
+{
+    auto modelAsset = fbxData->GetFBXInfo();
+    int size = modelAsset->skeletalInfo.m_bones.size();
+
+    // bind pose로 초기화
+    for (int i = 0; i < size; i++)
+    {
+        bonePoses.bonePose[i] = modelAsset->skeletalInfo.m_bones[i].globalBind.Transpose();
     }
 }
 
@@ -214,17 +238,4 @@ void FBXRenderer::SetRoughnessOverride(float value)
     roughnessOverride = value;
     for (auto& material : fbxData->GetMesh())
         material.GetMaterial().roughnessOverride = roughnessOverride;
-}
-
-
-void FBXRenderer::CreateBoneInfo()
-{
-    auto modelAsset = fbxData->GetFBXInfo();
-    int size = modelAsset->skeletalInfo.m_bones.size();
-
-    // bind pose로 초기화
-    for (int i = 0; i < size; i++)
-    {
-        bonePoses.bonePose[i] = modelAsset->skeletalInfo.m_bones[i].globalBind;
-    }
 }

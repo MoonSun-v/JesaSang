@@ -60,19 +60,13 @@ void Animation::EvaluatePose( float time, const SkeletonInfo* skeleton, vector<M
     // 2. 부모 누적
     for (int i = 0; i < count; i++)
     {
-        if (skeleton->m_bones[i].parentBoneName.empty())
-        {
+        const auto& bone = skeleton->m_bones[i];
+        if (bone.parentBoneName.empty())
             outPose[i] = localPose[i];
-        }
         else
         {
-            int parent = skeleton->GetBoneIndexByName(
-                skeleton->m_bones[i].parentBoneName
-            );
-
-            outPose[i] =
-                outPose[parent] *
-                localPose[i];
+            int parentIndex = skeleton->GetBoneIndexByName(bone.parentBoneName);
+            outPose[i] = localPose[i] * outPose[parentIndex];
         }
     }
 }

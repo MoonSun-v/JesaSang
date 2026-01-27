@@ -133,6 +133,14 @@ void Animator::Update(float deltaTime)
         {
             m_FinalPose = m_CurrentPose;
         }
+
+        //for (int i = 0; i < m_FinalPose.size(); ++i)
+        //{
+        //    Matrix m = m_FinalPose[i];
+        //    // 각 본의 Translation 확인
+        //    Vector3 pos(m._41, m._42, m._43);
+        //    std::cout << i << " : " << pos.x << ", " << pos.y << ", " << pos.z << "\n";
+        //}
     }
 
     // -----------------------------------------

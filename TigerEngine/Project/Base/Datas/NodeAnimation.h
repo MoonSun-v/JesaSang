@@ -6,37 +6,54 @@
 
 using namespace std;
 
-// --------- 보간 Util ----------
-template <typename TKey, typename TValue>
-TValue EvaluateChannel(const std::vector<TKey>& keys, float time)
+// [ 키 프레임 보간 함수 ] 
+template<typename KeyType, typename ValueType>
+static ValueType SampleTrack(
+    const std::vector<KeyType>& keys,
+    float time,
+    const ValueType& defaultValue)
 {
+    // 키가 없을 경우 기본값 반환
     if (keys.empty())
-        return TValue();
+    {
+        // OutputDebugStringW(L"[AnimationClip] 키가 없으므로 기본값 반환\n");
+        return defaultValue;
+    }
 
-    if (keys.size() == 1)
-        return keys[0].Value;
+    // 키가 하나뿐일 경우 해당 키 값 반환
+    if (keys.size() == 1 || time <= keys.front().Time)
+    {
+        // OutputDebugStringW(L"[AnimationClip] 키가 하나이므로, 해당 키 반환\n");
+        return keys.front().Value;
+    }
 
-    size_t index = 0;
-    while (index + 1 < keys.size() && time >= keys[index + 1].Time)
-        index++;
+    if (time >= keys.back().Time) { return keys.back().Value; }
 
-    if (index + 1 >= keys.size())
-        return keys.back().Value;
+    // OutputDebugString((L"[AnimationClip] keys.size() : " + std::to_wstring(keys.size()) + L"\n").c_str());
+    for (size_t i = 0; i + 1 < keys.size(); ++i)
+    {
+        const auto& k0 = keys[i];
+        const auto& k1 = keys[i + 1];
 
-    const auto& A = keys[index];
-    const auto& B = keys[index + 1];
+        if (time >= k0.Time && time <= k1.Time)
+        {
+            float span = k1.Time - k0.Time;
+            float t = (span > 0.0f) ? (time - k0.Time) / span : 0.0f;
 
-    float duration = B.Time - A.Time;
-    if (duration <= 0.0f)
-        return A.Value;
+            if constexpr (std::is_same_v<ValueType, Quaternion>)
+            {
+                Quaternion q = Quaternion::Slerp(k0.Value, k1.Value, t);
+                q.Normalize();
+                return q;
+            }
+            else
+            {
+                return ValueType::Lerp(k0.Value, k1.Value, t);
+            }
+        }
+    }
 
-    float t = (time - A.Time) / duration;
-    t = std::clamp(t, 0.0f, 1.0f);
-
-    if constexpr (std::is_same_v<TValue, Quaternion>)
-        return Quaternion::Slerp(A.Value, B.Value, t);
-    else
-        return Vector3::Lerp(A.Value, B.Value, t);
+    return keys.back().Value;
 }
 
 
@@ -44,8 +61,6 @@ class NodeAnimation
 {
 public:
 	string m_nodeName;				// 사용하는 본 이름
-	// vector<AnimationKey> m_keys;	// 채널(mChaneels)에 저장되어 있는 키 값들
-	// string interpolationType		
 
     std::vector<PositionKey> Positions;
     std::vector<RotationKey> Rotations;
@@ -99,14 +114,14 @@ public:
         }
 	}
 
-    void Evaluate(float time,
-        Vector3& outPosition,
-        Quaternion& outRotation,
+    void Evaluate(
+        float time,
+        Vector3& outPos,
+        Quaternion& outRot,
         Vector3& outScale) const
     {
-        outPosition = EvaluateChannel<PositionKey, Vector3>(Positions, time);
-        outRotation = EvaluateChannel<RotationKey, Quaternion>(Rotations, time);
-        outScale = EvaluateChannel<ScaleKey, Vector3>(Scales, time);
+        outPos = SampleTrack<PositionKey, Vector3>(Positions, time, Vector3::Zero);
+        outRot = SampleTrack<RotationKey, Quaternion>(Rotations, time, Quaternion::Identity);
+        outScale = SampleTrack<ScaleKey, Vector3>(Scales, time, Vector3::One);
     }
-
 };
