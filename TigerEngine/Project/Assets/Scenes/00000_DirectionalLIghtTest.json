@@ -101,9 +101,9 @@
                 0.0
               ],
               "Scale": [
-                63.900001525878906,
+                30.0,
                 1.0,
-                131.60000610351563
+                30.0
               ]
             },
             "type": "Transform"
@@ -1192,6 +1192,38 @@
                 1.0,
                 1.0,
                 1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "Decal(Ground)",
+        "components": {
+          "Decal": {
+            "properties": {},
+            "type": "Decal"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -65.5,
+                0.0,
+                399.20001220703125
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                10.0,
+                5.0,
+                10.0
               ]
             },
             "type": "Transform"

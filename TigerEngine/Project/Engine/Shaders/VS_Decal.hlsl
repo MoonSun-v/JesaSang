@@ -3,13 +3,13 @@
 
 #include <shared.fxh>
 
-PS_FullScreen_Input main(VS_Position_INPUT input)
+PS_Position_INPUT main(VS_Position_INPUT input)
 {
-    PS_FullScreen_Input output = (PS_FullScreen_Input) 0;
+    PS_Position_INPUT output = (PS_Position_INPUT) 0;
     
-    output.position = mul(float4(input.position, 1.0f), world);
-    output.position = mul(output.position, view);
-    output.position = mul(output.position, projection);
+    output.pos = mul(float4(input.position, 1.0f), world);
+    output.pos = mul(output.pos, view);
+    output.pos = mul(output.pos, projection);
     
     return output;
 }

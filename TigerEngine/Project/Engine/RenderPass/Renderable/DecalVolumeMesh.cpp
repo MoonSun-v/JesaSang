@@ -38,8 +38,8 @@ DecalVolumeMesh* CreateDecalVolume(ID3D11Device* device)
 {
     auto* mesh = new DecalVolumeMesh();
 
-    // 원점 기준, 한 변 길이 1.0 ([-0.5, +0.5])
-    const float h = 0.5f;
+    // 원점 기준, 한 변 길이
+    const float h = 10.0f;
 
     // 8 vertices
     Position_Vertex vertices[8] =

@@ -27,16 +27,14 @@ void DecalPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     context->IASetInputLayout(sm.inputLayout_Position.Get());
 
-    // RS
-    //context.Get()->RSSetState(sm.cullfrontRS.Get());  // 확인 필요
-
     // DSS - Stencil Test(ground)
     const UINT stencilRef = 0x01;          // Stencil Reference Value
-    context->OMSetDepthStencilState(sm.groundTestDSS.Get(), stencilRef);
+    //context->OMSetDepthStencilState(sm.groundTestDSS.Get(), stencilRef);
+    context->OMSetDepthStencilState(sm.defualtDSS.Get(), NULL);
 
     // Shader
-    context->VSSetShader(nullptr, nullptr, 0);    // TODO :: Shader 작성
-    context->PSSetShader(nullptr, nullptr, 0);    // TODO :: Shader 작성
+    context->VSSetShader(sm.VS_Decal.Get(), nullptr, 0);
+    context->PSSetShader(sm.PS_Decal.Get(), nullptr, 0);
 
     // Sampler
     context->PSSetSamplers(0, 1, sm.linearSamplerState.GetAddressOf());

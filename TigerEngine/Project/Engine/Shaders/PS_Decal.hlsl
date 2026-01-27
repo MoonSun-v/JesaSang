@@ -3,7 +3,7 @@
 
 #include <shared.fxh>
 
-float4 main(PS_FullScreen_Input input) : SV_TARGET
+float4 main(PS_Position_INPUT input) : SV_TARGET
 {
-    return float4(1,1,1, 1);
+    return float4(0,0,0,1);
 }

@@ -287,7 +287,7 @@ struct PS_INPUT
     float4 posShadow : TEXCOORD1;
 };
 
-struct PS_OutLine_INPUT
+struct PS_Position_INPUT
 {
     float4 pos : SV_POSITION;
 };
