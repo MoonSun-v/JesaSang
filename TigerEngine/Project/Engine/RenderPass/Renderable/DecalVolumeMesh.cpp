@@ -40,7 +40,6 @@ void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) co
     // SRV
     if (decal->decalSRV)
     {
-        cout << "Decal Volume Draw with Decal Texture" << endl;
         context.Get()->PSSetShaderResources(19, 1, decal->decalSRV.GetAddressOf());
     }
 

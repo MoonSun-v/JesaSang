@@ -562,7 +562,7 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
                 {
                     IGFD::FileDialogConfig config;
                     config.path = "../";
-                    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".png", config);
+                    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".png,.tga", config);
                 }
                 // display
                 if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
