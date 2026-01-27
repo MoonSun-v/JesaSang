@@ -9,7 +9,6 @@
 */
 
 class Decal;
-class Camera;
 struct Position_Vertex;
 
 class DecalVolumeMesh
@@ -28,7 +27,7 @@ private:
 public:
     DecalVolumeMesh();
     void UpdateWolrd(Decal* decal);     // TODO :: Decal Compoent
-    void Draw(ComPtr<ID3D11DeviceContext>& context, const Camera& camera) const;
+    void Draw(ComPtr<ID3D11DeviceContext>& context, Decal* decal) const;
 
     // friend
     friend DecalVolumeMesh* CreateDecalVolume(ID3D11Device* device);

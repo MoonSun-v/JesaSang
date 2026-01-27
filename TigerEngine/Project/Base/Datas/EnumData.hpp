@@ -19,3 +19,12 @@ enum class LightType
     Point = 1,
     Spot = 2
 };
+
+
+// [Decal Type]
+// Decal Component의 멤버로 소유됩니다.
+enum class DecalType
+{
+    TextureMap = 0,
+    RingEffect = 1
+};

@@ -1,6 +1,5 @@
 #include "DecalVolumeMesh.h"
 #include "../../Components/Decal.h"
-#include "../../Components/Camera.h"
 #include "../../../Base/Datas/Vertex.h"
 #include "../../../Base/Datas/ConstantBuffer.hpp"
 #include "../../Manager/ShaderManager.h"
@@ -17,7 +16,7 @@ void DecalVolumeMesh::UpdateWolrd(Decal* decal)
     world = decal->GetOwner()->GetTransform()->GetWorldTransform();
 }
 
-void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, const Camera & camera) const
+void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) const
 {
     auto& sm = ShaderManager::Instance();
 
@@ -29,6 +28,10 @@ void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, const Camera & c
     UINT offset = 0;
     context.Get()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
     context.Get()->IASetIndexBuffer(indexBuffer.Get(), indexFormat, 0);
+
+    // SRV
+    if(decal->decalSRV)
+        context.Get()->PSSetShaderResources(19, 1, decal->decalSRV.GetAddressOf());
 
     // Draw Call
     context.Get()->DrawIndexed(indexCount, 0, 0);

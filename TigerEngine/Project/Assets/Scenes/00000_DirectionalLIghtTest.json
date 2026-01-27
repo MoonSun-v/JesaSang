@@ -1218,7 +1218,10 @@
         "Name": "Decal(Ground)",
         "components": {
           "Decal": {
-            "properties": {},
+            "properties": {
+              "DecalType": "TextureMap",
+              "TexturePath": "..\\Assets\\Resource\\hair_diff.png"
+            },
             "type": "Decal"
           },
           "Transform": {

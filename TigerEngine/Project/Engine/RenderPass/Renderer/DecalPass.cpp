@@ -52,7 +52,7 @@ void DecalPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue
     for(Decal* decal : decals)
     {
         decalVolume->UpdateWolrd(decal);
-        decalVolume->Draw(context, *cam);
+        decalVolume->Draw(context, decal);
     }
 
     // clean up
