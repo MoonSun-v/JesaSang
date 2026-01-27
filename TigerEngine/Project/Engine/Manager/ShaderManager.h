@@ -162,12 +162,14 @@ public:
     ComPtr<ID3D11Texture2D>             pickingTex;         // ID 기록 텍스처
     ComPtr<ID3D11Buffer>                pickingCB;          // ID 획득용 상수버퍼
     ComPtr<ID3D11PixelShader>           PS_Picking;
-
+    ComPtr<ID3D11Texture2D>             pickingDepthTex;
+    ComPtr<ID3D11DepthStencilView>      pickingDSV;
 
     // NOTE 따로 볼려고 함수 분리
     void CreatePickingGBufferTex(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight);
     void CreatePickingCB(const ComPtr<ID3D11Device>& dev);
     void CreatePickingPS(const ComPtr<ID3D11Device>& dev);
+    void CreatePickingDSV(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight);
 #endif
 
 public:

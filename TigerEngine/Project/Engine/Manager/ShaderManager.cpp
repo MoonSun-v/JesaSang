@@ -18,6 +18,11 @@ void ShaderManager::Init(const ComPtr<ID3D11Device>& dev, const ComPtr<ID3D11Dev
 
     CreateInputLayoutShader(dev, ctx);
     CreateCB(dev);
+
+#if _DEBUG
+    CreatePickingGBufferTex(dev, width, height);
+    CreatePickingDSV(dev, width, height);
+#endif
 }
 
 
@@ -390,10 +395,6 @@ void ShaderManager::CreateGbufferResource(const ComPtr<ID3D11Device>& dev, int s
         emissiveTex.GetAddressOf(),
         emissiveRTV.GetAddressOf(),
         emissiveSRV.GetAddressOf());
-
-#if _DEBUG  
-    CreatePickingGBufferTex(dev, screenWidth, screenHeight);
-#endif  
 }
 
 void ShaderManager::CreateBloomResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -791,7 +792,9 @@ void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)
         HR_T(dev->CreateBuffer(&constBuffer_Desc, nullptr, &effectCB));
     }
 
+#if _DEBUG
     CreatePickingCB(dev);
+#endif
 }
 
 void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
@@ -801,6 +804,7 @@ void ShaderManager::CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, in
     CreateBloomResource(dev, screenWidth, screenHeight);
 #if _DEBUG
     CreatePickingGBufferTex(dev, screenWidth, screenHeight);
+    CreatePickingDSV(dev, screenWidth, screenHeight);
 #endif
 }
 
@@ -934,5 +938,30 @@ void ShaderManager::CreatePickingPS(const ComPtr<ID3D11Device>& dev)
         HR_T(dev->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
             pixelShaderBuffer->GetBufferSize(), NULL, PS_Picking.GetAddressOf()));
     }
+}
+void ShaderManager::CreatePickingDSV(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight)
+{
+    // Depth texture (separate from pickingTex)
+    D3D11_TEXTURE2D_DESC td{};
+    td.Width = screenWidth;
+    td.Height = screenHeight;
+    td.MipLevels = 1;
+    td.ArraySize = 1;
+    td.Format = DXGI_FORMAT_D32_FLOAT;              // depth-only is fine for picking
+    td.SampleDesc.Count = 1;
+    td.SampleDesc.Quality = 0;
+    td.Usage = D3D11_USAGE_DEFAULT;
+    td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    td.CPUAccessFlags = 0;
+    td.MiscFlags = 0;
+
+    HR_T(dev->CreateTexture2D(&td, nullptr, pickingDepthTex.GetAddressOf()));
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsv{};
+    dsv.Format = td.Format;
+    dsv.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsv.Texture2D.MipSlice = 0;
+
+    HR_T(dev->CreateDepthStencilView(pickingDepthTex.Get(), &dsv, pickingDSV.GetAddressOf()));
 }
 #endif

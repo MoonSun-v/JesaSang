@@ -75,6 +75,7 @@ private:
     ComPtr<ID3D11Texture2D> coppedPickingTex{};
 
     void CheckObjectPicking();
+    bool isAABBPicking = false; // 매 프레임마다 초기화 ( aabb와 메쉬 구분 )
 
     // rttr read
     void ReadVariants(rttr::variant& var);

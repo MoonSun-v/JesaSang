@@ -17,6 +17,8 @@
 
 #include "Datas/ReflectionMedtaDatas.hpp"
 
+#include "../Components/FBXRenderer.h"
+
 // 사용자 정의 미리 등록 (SimpleMath 등)
 RTTR_REGISTRATION
 {
@@ -98,7 +100,7 @@ void Editor::Render(HWND &hwnd)
     RenderMenuBar(hwnd);
     RenderHierarchy();
     RenderInspector();
-    //RenderDebugAABBDraw();
+    RenderDebugAABBDraw();
     RenderCameraFrustum();
     RenderWorldSettings();
     RenderShadowMap();
@@ -609,6 +611,7 @@ void Editor::RenderDebugAABBDraw()
     SceneSystem::Instance().GetCurrentScene()->ForEachGameObject([&](GameObject* gameObject)
         {
             if (gameObject->IsDestory()) return;
+            if (gameObject->GetComponent<FBXRenderer>() != nullptr) return;
 
             XMVECTOR color = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
             DebugDraw::Draw(DebugDraw::g_Batch.get(), gameObject->GetAABB(), color);
@@ -734,7 +737,7 @@ void Editor::CheckObjectPicking()
         !io.WantCaptureMouse       // ImGui가 마우스를 쓰는 중이면 차단
         && !io.WantTextInput;      // (선택) 텍스트 입력 중이면 차단
 
-    if (isMouseLeftClick && allowWorldPick)
+    if (isMouseLeftClick && allowWorldPick && !isAABBPicking)
     {
         auto& sm = ShaderManager::Instance();
         context->CopyResource(coppedPickingTex.Get(), sm.pickingTex.Get()); // 기록된 값 가져오기
@@ -824,6 +827,46 @@ void Editor::ReadVariants(rttr::instance inst)
 
 void Editor::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::KeyboardStateTracker &KeyTracker, const Mouse::State &MouseState, const Mouse::ButtonStateTracker &MouseTracker)
 {
+    isAABBPicking = false;
 
+    if (MouseTracker.leftButton == Mouse::ButtonStateTracker::PRESSED)
+    {
+        if (!ImGui::GetIO().WantCaptureMouse)
+        {
+            // 마우스 스크린 좌표를 [0, 1] -> [-1, 1] 로 변경
+            float x = (2.0f * MouseState.x) / screenWidth - 1.0f;
+            float y = 1.0f - (2.0f * MouseState.y) / screenHeight;
+
+            auto cam = CameraSystem::Instance().GetFreeCamera();
+            cameraView = cam->GetView();
+            cameraProjection = cam->GetProjection();
+            Matrix invViewProj = (cameraView * cameraProjection).Invert();
+
+            Vector4 nearNDC(x, y, 0.0f, 1.0f);
+            Vector4 farNDC(x, y, 1.0f, 1.0f);
+
+            // NDC -> World
+            Vector4 nearWorld = Vector4::Transform(nearNDC, invViewProj);
+            Vector4 farWorld = Vector4::Transform(farNDC, invViewProj);
+
+            // 투영 행렬은 원근을 만들기 때문에 perpective divide로 월드 좌표를 얻는다.
+            nearWorld /= nearWorld.w;
+            farWorld /= farWorld.w;
+
+            Vector3 dir = (Vector3)farWorld - nearWorld;
+
+            dir.Normalize();
+            Ray ray(Vector3(nearWorld), dir);
+
+            float outHitDistance = 0.0f;
+            auto hitObject = SceneSystem::Instance().GetCurrentScene()->RayCastGameObject(ray, &outHitDistance);
+
+            if (hitObject->GetComponent<FBXRenderer>() == nullptr)
+            {
+                SelectObject(hitObject);
+                isAABBPicking = true;
+            }
+        }
+    }
 }
 #endif
