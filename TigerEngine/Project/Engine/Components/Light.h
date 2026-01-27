@@ -1,21 +1,14 @@
 #pragma once
 #include "pch.h"
 #include "../Object/Component.h"
-
-
-// Light Type enum class
-enum class LightType
-{
-    Directional = 0,
-    Point = 1,
-    Spot = 2
-};
+#include "../Base/Datas/EnumData.hpp"
 
 /*
     [ Light ]
 
     Directional, Point, Spot 라이트 데이터를 가지는 Component
 */
+
 class Light : public Component
 {
     RTTR_ENABLE(Component)
@@ -32,6 +25,10 @@ public:
     float     innerAngle;       // spot
     float     outerAngle;       // spot
 
+    // get/set
+    Color GetColor() { return Color(color.x, color.y, color.z); }
+    void SetColor(Color color) { this->color = { color.R(), color.G(), color.B() }; }
+
 public:
     // component process
     Light();
@@ -43,7 +40,3 @@ public:
     nlohmann::json Serialize();
     void Deserialize(nlohmann::json data);
 };
-
-// Utils ------------
-static nlohmann::json Vec3ToJson(const Vector3& v);
-static Vector3 JsonToVec3(const nlohmann::json& j, const Vector3& fallback = Vector3::Zero);

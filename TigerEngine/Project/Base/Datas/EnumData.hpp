@@ -9,3 +9,13 @@ enum class RenderBlendType
     Opaque,
     Transparent
 };
+
+
+// [ Light Type ]
+// Light Component의 멤버로 소유됩니다.
+enum class LightType
+{
+    Directional = 0,
+    Point = 1,
+    Spot = 2
+};
