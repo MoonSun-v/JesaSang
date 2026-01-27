@@ -1220,7 +1220,7 @@
           "Decal": {
             "properties": {
               "DecalType": "TextureMap",
-              "TexturePath": "..\\Assets\\Resource\\hair_diff.png"
+              "TexturePath": "..\\Assets\\Resource\\DB2X2_L01.png"
             },
             "type": "Decal"
           },

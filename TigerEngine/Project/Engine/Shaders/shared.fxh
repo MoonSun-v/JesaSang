@@ -38,6 +38,7 @@
 // Texture2D bloomATex           : register(t16);
 // Texture2D bloomBTex           : register(t17);
 // Texture2D effectTex           : register(t18);
+// Texture2D decalTex            : register(t19);
 
 
 // [ SamplerState ]

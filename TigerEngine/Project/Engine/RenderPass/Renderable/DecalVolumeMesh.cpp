@@ -30,8 +30,11 @@ void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) co
     context.Get()->IASetIndexBuffer(indexBuffer.Get(), indexFormat, 0);
 
     // SRV
-    if(decal->decalSRV)
+    if (decal->decalSRV)
+    {
+        cout << "Decal Volume Draw with Decal Texture" << endl;
         context.Get()->PSSetShaderResources(19, 1, decal->decalSRV.GetAddressOf());
+    }
 
     // Draw Call
     context.Get()->DrawIndexed(indexCount, 0, 0);

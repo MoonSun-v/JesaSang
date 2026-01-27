@@ -36,3 +36,5 @@ public:
     void ChangeData(std::string path);
 };
 
+// util
+std::wstring ToWString(const std::string& s);
