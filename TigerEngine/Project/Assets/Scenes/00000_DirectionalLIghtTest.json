@@ -76,6 +76,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -150,6 +151,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -224,6 +226,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -298,6 +301,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -372,6 +376,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -446,6 +451,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -520,6 +526,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 0.0,
               "RenderBlendType": "Opaque",
@@ -594,6 +601,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 0.5,
               "RenderBlendType": "Opaque",
@@ -668,6 +676,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 0.5,
               "RenderBlendType": "Opaque",
@@ -742,6 +751,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -816,6 +826,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
@@ -890,6 +901,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
@@ -964,6 +976,7 @@
                 1.0,
                 1.0
               ],
+              "IsGround": false,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
