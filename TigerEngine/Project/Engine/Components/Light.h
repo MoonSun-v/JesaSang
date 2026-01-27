@@ -32,7 +32,7 @@ public:
 public:
     // component process
     Light();
-    ~Light() = default;
+    ~Light() override = default;
     void OnInitialize() override;
     void OnDestory() override;
 
