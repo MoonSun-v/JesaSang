@@ -40,20 +40,23 @@ void LightPass::StencilPass(ComPtr<ID3D11DeviceContext>& context, Camera* camera
     // RTV, DSV (Stencil)
     context->RSSetViewports(1, &sm.viewport_screen);
     context->OMSetRenderTargets(0, nullptr, sm.depthStencilView.Get());
-    context->ClearDepthStencilView(sm.depthStencilView.Get(),
-        D3D11_CLEAR_STENCIL, 1.0f, 0);  // Stencil만 0으로 초기화
+
+    // Stencil Clear를 Geometry Pass로 옮김
+    // -> Ground Mesh를 그릴때 Stecil을 쓸거기 때문에 clear 방지
+    //context->ClearDepthStencilView(sm.depthStencilView.Get(),
+    //    D3D11_CLEAR_STENCIL, 1.0f, 0);  // Stencil만 0으로 초기화
 
     // IA
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
+    context->IASetInputLayout(sm.inputLayout_Position.Get());
 
     // Shader
-    context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
+    context->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
     context->PSSetShader(nullptr, nullptr, 0);   // PS x
 
     // DSS
-    const UINT stencilRef = 1;          // Stencil Reference Value
-    context->OMSetDepthStencilState(sm.depthTestStencilWriteDSS.Get(), stencilRef);
+    const UINT stencilRef = 0x02;          // Stencil Reference Value
+    context->OMSetDepthStencilState(sm.lightingVolumeDrawDSS.Get(), stencilRef);
 
     // RS (원래 outside는 cullBack인데, mesh가 뒤집혀있는듯?)
     context.Get()->RSSetState(sm.cullfrontRS.Get());
@@ -182,7 +185,7 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
                 else
                 {
                     // Stencil Test on
-                    context->OMSetDepthStencilState(sm.stencilTestOnlyDSS.Get(), 1);
+                    context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
 
                     // RS
                     context.Get()->RSSetState(sm.cullfrontRS.Get());
@@ -213,7 +216,7 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
                 else
                 {
                     // Stencil Test on
-                    context->OMSetDepthStencilState(sm.stencilTestOnlyDSS.Get(), 1);
+                    context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
 
                     // RS
                     context.Get()->RSSetState(sm.cullfrontRS.Get());

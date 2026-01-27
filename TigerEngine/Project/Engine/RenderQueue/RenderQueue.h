@@ -21,6 +21,9 @@ struct RenderItem
     int refBoneIndex;
     const PoseMatrixCB* poses;
     const OffsetMatrixCB* offsets;
+
+    // ground
+    bool isGround;
 };
 
 /// <summary>

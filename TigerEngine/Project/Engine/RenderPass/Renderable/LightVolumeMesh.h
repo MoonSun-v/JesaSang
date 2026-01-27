@@ -1,6 +1,7 @@
 #pragma once
 #define NOMINMAX
 
+#pragma once
 #include "pch.h"
 
 class Light;
@@ -50,7 +51,6 @@ public:
     bool IsInsidePointLight(const Vector3& camPos, const Vector3& lightPos, float radius) const;
     bool IsInsideSpotLight(const Vector3& camPos, const Vector3& lightPos,
         const Vector3& lightDirNormalized, float range, float outerAngleRadians) const;
-
 
     // friend
     friend LightVolumeMesh* CreateLightVolumeSphere(ID3D11Device* device, int slices, int stacks);

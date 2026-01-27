@@ -92,6 +92,7 @@ bool EngineApp::OnInitialize()
 	// NOTE : 랜더링하는 순서대로 추가 할 것
     shadowPass = std::make_unique<ShadowPass>();
     geometryPass = std::make_unique<GeometryPass>();
+    decalPass = std::make_unique<DecalPass>();
     lightPass = std::make_unique<LightPass>();
     skyboxPass = std::make_unique<SkyboxPass>();
     forwardTransparentPass = std::make_unique<ForwardTransparentPass>();
@@ -101,6 +102,7 @@ bool EngineApp::OnInitialize()
 
     shadowPass->Init();
     geometryPass->Init();
+    decalPass->Init(dxRenderer->GetDevice());
     lightPass->Init(dxRenderer->GetDevice());
     skyboxPass->Init(dxRenderer->GetDevice());
     forwardTransparentPass->Init();
@@ -186,6 +188,7 @@ void EngineApp::OnRender()
     {
         dxRenderer->ProcessScene(*renderQueue, *shadowPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *geometryPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *decalPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *lightPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *skyboxPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, currCam);
@@ -196,6 +199,7 @@ void EngineApp::OnRender()
     {
         dxRenderer->ProcessScene(*renderQueue, *shadowPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *geometryPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *decalPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *lightPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, freeCam);

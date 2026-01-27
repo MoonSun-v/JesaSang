@@ -11,6 +11,7 @@
 #include "RenderPass/DebugDrawPass.h"
 #include "RenderPass/Renderer/ShadowPass.h"
 #include "RenderPass/Renderer/GeometryPass.h"
+#include "RenderPass/Renderer/DecalPass.h"
 #include "RenderPass/Renderer/LightPass.h"
 #include "RenderPass/Renderer/SkyboxPass.h"
 #include "RenderPass/Renderer/ForwardTransparentPass.h"
@@ -43,6 +44,7 @@ public:
     std::unique_ptr<ShadowPass>               shadowPass{};
     std::unique_ptr<GeometryPass>             geometryPass{};
     std::unique_ptr<LightPass>                lightPass{};
+    std::unique_ptr<DecalPass>                decalPass{};
     std::unique_ptr<SkyboxPass>               skyboxPass{};
     std::unique_ptr<ForwardTransparentPass>   forwardTransparentPass{};
     std::unique_ptr<BloomPass>                bloomPass{};

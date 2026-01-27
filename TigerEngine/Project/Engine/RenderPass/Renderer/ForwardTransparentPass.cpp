@@ -83,4 +83,7 @@ void ForwardTransparentPass::Execute(ComPtr<ID3D11DeviceContext>& context, Rende
     // clean up
     context->OMSetRenderTargets(0, nullptr, nullptr);
     context->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+
+    ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
+    context->PSSetShaderResources(5, 1, nullSRV);  // shadowMap
 }

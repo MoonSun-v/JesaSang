@@ -52,8 +52,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -78,7 +76,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -117,55 +114,6 @@
     },
     {
       "properties": {
-        "Name": "Directional light",
-        "components": {
-          "Light": {
-            "properties": {
-              "color": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-              },
-              "direction": {
-                "x": -0.5,
-                "y": -0.30000001192092896,
-                "z": 1.0
-              },
-              "innerAngle": 15.0,
-              "intensity": 1.0,
-              "isSunLight": true,
-              "outerAngle": 30.0,
-              "range": 15.0,
-              "type": 0
-            },
-            "type": "Light"
-          },
-          "Transform": {
-            "properties": {
-              "Position": [
-                0.0,
-                -110.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        }
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
         "Name": "StaticModel",
         "components": {
           "FBXData": {
@@ -178,8 +126,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -204,7 +150,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -255,8 +200,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.14950361847877502,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -281,7 +224,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -332,8 +274,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -358,7 +298,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -409,8 +348,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 1.5078089237213135,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -435,7 +372,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -486,8 +422,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -512,7 +446,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -563,8 +496,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -589,7 +520,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 0.0,
               "RenderBlendType": "Opaque",
@@ -640,8 +570,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -666,7 +594,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 0.5,
               "RenderBlendType": "Opaque",
@@ -717,8 +644,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -743,7 +668,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 0.5,
               "RenderBlendType": "Opaque",
@@ -794,8 +718,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 1.0,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -820,7 +742,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
@@ -871,8 +792,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 0.5,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -897,7 +816,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
@@ -948,8 +866,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 0.5,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -974,7 +890,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
@@ -1025,8 +940,6 @@
           "FBXRenderer": {
             "properties": {
               "Alpha": 0.5,
-              "AnimationIndex": 0,
-              "AnimationPlayTime": 0.0,
               "Diffuse": [
                 1.0,
                 1.0,
@@ -1051,7 +964,6 @@
                 1.0,
                 1.0
               ],
-              "IsAnimationPlay": true,
               "Metalic": 1.0,
               "MetallicOverride": 1.0,
               "RenderBlendType": "Transparent",
@@ -1070,6 +982,206 @@
                 0.0,
                 0.0,
                 100.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "DirectionalLight(Sun)",
+        "components": {
+          "Light": {
+            "properties": {
+              "Color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Direction": [
+                0.0,
+                -0.30000001192092896,
+                1.0
+              ],
+              "InnerAngle": 15.0,
+              "Intensity": 1.0,
+              "IsSunLight": true,
+              "LightType": "Directional",
+              "OuterAngle": 30.0,
+              "Range": 15.0
+            },
+            "type": "Light"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "DirectionalLight",
+        "components": {
+          "Light": {
+            "properties": {
+              "Color": [
+                0.6960784196853638,
+                0.3472363352775574,
+                0.15695887804031372,
+                1.0
+              ],
+              "Direction": [
+                0.0,
+                -0.30000001192092896,
+                1.0
+              ],
+              "InnerAngle": 15.0,
+              "Intensity": 0.10000000149011612,
+              "IsSunLight": false,
+              "LightType": "Directional",
+              "OuterAngle": 30.0,
+              "Range": 15.0
+            },
+            "type": "Light"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "PointLight",
+        "components": {
+          "Light": {
+            "properties": {
+              "Color": [
+                1.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "Direction": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "InnerAngle": 15.0,
+              "Intensity": 1000.0,
+              "IsSunLight": false,
+              "LightType": "Point",
+              "OuterAngle": 30.0,
+              "Range": 50.0
+            },
+            "type": "Light"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                48.29999923706055,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "SpotLight",
+        "components": {
+          "Light": {
+            "properties": {
+              "Color": [
+                0.0588231086730957,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "Direction": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "InnerAngle": 15.0,
+              "Intensity": 0.0,
+              "IsSunLight": false,
+              "LightType": "Spot",
+              "OuterAngle": 30.0,
+              "Range": 50.0
+            },
+            "type": "Light"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
               ],
               "Rotation": [
                 0.0,

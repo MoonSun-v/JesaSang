@@ -216,6 +216,8 @@ void GameObject::ClearAll()
             ScriptSystem::Instance().UnRegister(objPtr);
         }
 
+        objPtr->OnDestory();
+        ObjectSystem::Instance().Destory(*it);
         it = handles.erase(it);
     }
 

@@ -46,17 +46,18 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         HR_T(dev->CreateDepthStencilState(&dsDesc, depthTestOnlyDSS.GetAddressOf()));
     }
 
-    // create DSS (depth test only / stencil write on (stencil test ALWAYS))
-    // Light Volume Stencil Pass
+    // create DSS 
+    // Ground Geometry Pass - ground Draw (0x01)
+    // (depth test + write / stencil write on (stencil test ALWAYS))
     {
         D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-        dsDesc.DepthEnable = TRUE;                              // Depth Test ON                          
-        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;    // 버퍼 기록 x        
-        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;         // 라이트 볼륨 표면이 씬 표면보다 앞이거나 같으면 통과    
+        dsDesc.DepthEnable = TRUE;                              // 깊이 테스트 o  
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;     // 버퍼 기록 o
+        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;         
 
         dsDesc.StencilEnable = TRUE;        // Stencil Test ON
-        dsDesc.StencilReadMask = 0xFF;
-        dsDesc.StencilWriteMask = 0xFF;     // Write ON
+        dsDesc.StencilReadMask = 0x01;
+        dsDesc.StencilWriteMask = 0x01;     // Write ON
 
         // Front Face
         dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;       // Stencil Test 무조건 통과
@@ -67,11 +68,12 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         // Back Face (동일)
         dsDesc.BackFace = dsDesc.FrontFace;
 
-        HR_T(dev->CreateDepthStencilState(&dsDesc, depthTestStencilWriteDSS.GetAddressOf()));
+        HR_T(dev->CreateDepthStencilState(&dsDesc, groundDrawDSS.GetAddressOf()));
     }
 
-    // create DSS (stencil test only)
-    // Llight Volume Light Pass
+    // create DSS 
+    // Decal Pass - ground Test (0x01)
+    // stencil test only
     {
         D3D11_DEPTH_STENCIL_DESC dsDesc = {};
         dsDesc.DepthEnable = FALSE;                                 // Depth Test OFF
@@ -79,7 +81,7 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 
         dsDesc.StencilEnable = TRUE;       // Stencil Test ON
-        dsDesc.StencilReadMask = 0xFF;
+        dsDesc.StencilReadMask = 0x01;
         dsDesc.StencilWriteMask = 0x00;    // Write OFF
 
         // Front Face
@@ -91,10 +93,57 @@ void ShaderManager::CreateDSS(const ComPtr<ID3D11Device>& dev)
         // Back Face (동일)
         dsDesc.BackFace = dsDesc.FrontFace;
 
-        HR_T(dev->CreateDepthStencilState(
-            &dsDesc,
-            stencilTestOnlyDSS.GetAddressOf()
-        ));
+        HR_T(dev->CreateDepthStencilState(&dsDesc, groundTestDSS.GetAddressOf()));
+    }
+
+    // create DSS 
+    // Light Volume Stencil Pass - lightingVolume Draw (0x02)
+    // (depth test only / stencil write on (stencil test ALWAYS))
+    {
+        D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+        dsDesc.DepthEnable = TRUE;                              // Depth Test ON                          
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;    // 버퍼 기록 x        
+        dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;         // 라이트 볼륨 표면이 씬 표면보다 앞이거나 같으면 통과    
+
+        dsDesc.StencilEnable = TRUE;        // Stencil Test ON
+        dsDesc.StencilReadMask = 0x02;
+        dsDesc.StencilWriteMask = 0x02;     // Write ON
+
+        // Front Face
+        dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;       // Stencil Test 무조건 통과
+        dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;       // 변경 x
+        dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;  // 변경 x
+        dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;    // Depth, Stencil 통과시 Ref로 Stencil 값 변경
+
+        // Back Face (동일)
+        dsDesc.BackFace = dsDesc.FrontFace;
+
+        HR_T(dev->CreateDepthStencilState(&dsDesc, lightingVolumeDrawDSS.GetAddressOf()));
+    }
+
+    // create DSS 
+    // Llight Volume Light Pass - lightingVolume Test (0x02)
+    // stencil test only
+    {
+        D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+        dsDesc.DepthEnable = FALSE;                                 // Depth Test OFF
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+        dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+
+        dsDesc.StencilEnable = TRUE;       // Stencil Test ON
+        dsDesc.StencilReadMask = 0x02;
+        dsDesc.StencilWriteMask = 0x00;    // Write OFF
+
+        // Front Face
+        dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL;      // stencil == 1(Ref)인 픽셀만 통과
+        dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+        dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+        dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+
+        // Back Face (동일)
+        dsDesc.BackFace = dsDesc.FrontFace;
+
+        HR_T(dev->CreateDepthStencilState(&dsDesc, lightingVolumeTestDSS.GetAddressOf()));
     }
 
     // create DSS (all disable)

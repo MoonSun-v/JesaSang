@@ -72,6 +72,9 @@ private:
 	// 해당 모델의 상수 버퍼 내용
     PoseMatrixCB bonePoses{};
 
+    // Ground Mesh
+    bool isGround = false;      // Ground Projection Decal 처리를 위한 flag
+
     // Material
     Vector3 diffuseFactor   = { 1,1,1 };
     float   alphaFactor     = 1.0f;
