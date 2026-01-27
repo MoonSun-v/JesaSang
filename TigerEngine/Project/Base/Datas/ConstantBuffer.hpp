@@ -216,6 +216,7 @@ struct alignas(16) PickingCB
 {
     UINT pickID;
     Vector3 pad1;
+};
 
 // 여기 성호 9번 쓸고임
 // Decal CB -> b10
