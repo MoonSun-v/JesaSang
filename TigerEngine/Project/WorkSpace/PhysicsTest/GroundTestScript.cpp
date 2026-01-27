@@ -6,35 +6,33 @@
 
 RTTR_REGISTRATION
 {
-    rttr::registration::class_<GroundTestScript>("PhysicsTestScript")
+    rttr::registration::class_<GroundTestScript>("GroundTestScript")
         .constructor<>()
         (rttr::policy::ctor::as_std_shared_ptr);
 }
 
-void GroundTestScript::OnInitialize() // editor
+void GroundTestScript::OnInitialize() 
 {
+    rigidComp = GetOwner()->GetComponent<PhysicsComponent>();
 }
 
-void GroundTestScript::OnStart() // ?? 아직 사용하지X 
+void GroundTestScript::OnStart()
 {
-
+    if (rigidComp != nullptr)
+    {
+        rigidComp->CreateStaticBox({ 600, 70, 600 });
+        // rigidComp->CreateTriggerBox({ 600, 70, 600 });
+        // rigidComp->SetLayer(CollisionLayer::IgnoreTest); // 충돌 레이어 테스트 
+        rigidComp->SyncToPhysics();
+    }
 }
 
 void GroundTestScript::OnUpdate(float delta)
 {
-    // OnStart() 대용 
-    if (!isApply)
+    if (!rigidComp)
     {
-        auto rigid = GetOwner()->GetComponent<PhysicsComponent>();
-        if (rigid != nullptr)
-        {
-            rigid->CreateStaticBox({ 600, 70, 600 });
-            // rigid->CreateTriggerBox({ 600, 70, 600 });
-            // rigid->SetLayer(CollisionLayer::IgnoreTest); // 충돌 레이어 테스트 
-            rigid->SyncToPhysics();
-        }
-
-        isApply = true;
+        OutputDebugStringW(L"[GroundTestScript] OnUpdate의 rigidComp가 null입니다. \n");
+        return;
     }
 }
 

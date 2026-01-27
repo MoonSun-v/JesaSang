@@ -10,12 +10,13 @@ class PhysicsTestScript : public ScriptComponent
 {
     RTTR_ENABLE(ScriptComponent)
 
+private:
+    PhysicsComponent* rigidComp;
+
 public:
     void OnInitialize() override;
     void OnStart() override;
     void OnUpdate(float delta) override;
-
-    bool isApply = false;
 
 public:
     // [ rigid 감지하는 메소드 ]

@@ -1,6 +1,7 @@
 #pragma once
 #include "Components/ScriptComponent.h"
 #include "Components/CharacterControllerComponent.h"
+#include "Components/AnimationController.h"
 
 /// <summary>
 /// 캐릭터 컨트롤러 컴포넌트 테스트용 클래스.
@@ -11,10 +12,13 @@ class CCTTest : public ScriptComponent
     RTTR_ENABLE(ScriptComponent)
 
 private:
-    bool isApply = false;
     bool m_SpacePrev = false;
 
     CharacterControllerComponent* cctComp = nullptr;
+    AnimationController* animController = nullptr;
+
+    float elapsedTime = 0.0f;  // 시간 측정용
+    bool hasRunStateChanged = false;
 
 private:
     void CCTMoveExample(float dt); // 플레이어 이동 & 점프 예제 

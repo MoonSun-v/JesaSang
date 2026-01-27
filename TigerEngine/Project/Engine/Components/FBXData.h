@@ -3,6 +3,7 @@
 #include "../Object/Component.h"
 #include "Datas/Mesh.h"
 #include "../Manager/FBXResourceManager.h"
+#include "AnimationController.h"
 
 class FBXData : public Component
 {

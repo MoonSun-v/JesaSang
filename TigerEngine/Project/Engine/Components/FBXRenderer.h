@@ -23,22 +23,6 @@ public:
 	void Deserialize(nlohmann::json data) override;
 
 
-    // [Animation get/set] -----------------
-	int GetAnimationIndex() { return animationIndex; }
-	void SetAnimationIndex(int index) { animationIndex = index; }
-	
-	float GetProgressAnimationTime() { return progressAnimationTime; }	
-	void SetProgressAnimationTime(float animTime) { progressAnimationTime = animTime; }
-
-	bool GetIsAnimationPlay() { return isAnimPlay; }
-	void SetIsAnimationPlay(bool value) { isAnimPlay = value; }
-
-
-    // [RenderBlendType get/set] -----------------
-    RenderBlendType GetRenderBlendType() { return renderBlendType; }
-    void SetRenderBlendType(RenderBlendType v) { renderBlendType = v; }
-
-
     // [Material get/set] -----------------
     Color GetDiffuse() { return Color(diffuseFactor.x, diffuseFactor.y, diffuseFactor.z); }
     void SetDiffuse(Color color);
@@ -70,22 +54,23 @@ public:
     void SetRoughnessOverride(float value);      
 
 
+    // [RenderBlendType get/set] -----------------
+    RenderBlendType GetRenderBlendType() { return renderBlendType; }
+    void SetRenderBlendType(RenderBlendType type) { renderBlendType = type; }
+
+
     // [Bone] -----------------
     void CreateBoneInfo();
 
 private:
     // FBX Asset Data
-    FBXData* fbxData{};
+    FBXData* fbxData = nullptr;                 // 참조할 FBX 데이터
 
 	// Instance Data
 	std::string directory{};		    // 로드한 파일이 위차한 폴더명
-	std::vector<Bone> bones{};			// 로드된 모델의 본 모음
-    PoseMatrixCB bonePoses{};           // 해당 모델의 상수 버퍼 내용
 
-    // Animation Info
-    int   animationIndex = 0;             // 현재 실행 중인 애니메이션 인덱스
-    float progressAnimationTime = 0.0f;   // 현재 애니메이션 시간
-    bool  isAnimPlay = true;   
+	// 해당 모델의 상수 버퍼 내용
+    PoseMatrixCB bonePoses{};
 
     // Material
     Vector3 diffuseFactor   = { 1,1,1 };
