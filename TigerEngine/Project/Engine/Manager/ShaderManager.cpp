@@ -631,6 +631,16 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
         SAFE_RELEASE(pixelShaderBuffer);
     }
 
+    //---------------------------
+    // ForwardTransparent PS
+    {
+        ID3D10Blob* pixelShaderBuffer = nullptr;
+        std::wstring path = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\PS_ForwardTransparent.hlsl";
+        HR_T(CompileShaderFromFile(path.c_str(), "main", "ps_5_0", &pixelShaderBuffer));
+        HR_T(dev->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
+            pixelShaderBuffer->GetBufferSize(), NULL, &PS_ForwardTransparent));
+        SAFE_RELEASE(pixelShaderBuffer);
+    }
 }
 
 void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)

@@ -30,7 +30,6 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     context->IASetInputLayout(sm.inputLayout_BoneWeightVertex.Get());
 
     // Shader
-    context->VSSetShader(sm.VS_BaseLit_Rigid.Get(), NULL, 0);
     context->PSSetShader(sm.PS_Gbuffer.Get(), NULL, 0);
 
     // Sampler
@@ -42,26 +41,26 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
     // Render
-    auto& models = queue.GetRendertems();
-    for (auto& m : models)
+    auto& opaqueQueue = queue.GetOpaqueQueue();
+    for (auto& opaqueItem : opaqueQueue)
     {
         // CB - Transform
-        if (m.modelType == ModelType::Rigid) sm.transformCBData.model = m.model.Transpose();
-        else if (m.modelType == ModelType::Static) sm.transformCBData.model = Matrix::Identity.Transpose();
-        sm.transformCBData.world = m.world.Transpose();
+        if (opaqueItem.modelType == ModelType::Rigid) sm.transformCBData.model = opaqueItem.model.Transpose();
+        else if (opaqueItem.modelType == ModelType::Static) sm.transformCBData.model = Matrix::Identity.Transpose();
+        sm.transformCBData.world = opaqueItem.world.Transpose();
         context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
         // VS
-        switch (m.modelType) {
+        switch (opaqueItem.modelType) {
             case ModelType::Skeletal:
             {
                 context->VSSetShader(sm.VS_BaseLit_Skeletal.Get(), NULL, 0);
 
                 // CB - Offset, Pose
-                auto& boneOffset = m.offsets->boneOffset;
-                auto& bonePose = m.poses->bonePose;
+                auto& boneOffset = opaqueItem.offsets->boneOffset;
+                auto& bonePose = opaqueItem.poses->bonePose;
 
-                for (int i = 0; i < m.boneCount; i++)
+                for (int i = 0; i < opaqueItem.boneCount; i++)
                 {
                     sm.offsetMatrixCBData.boneOffset[i] = boneOffset[i];
                     sm.poseMatrixCBData.bonePose[i] = bonePose[i];
@@ -79,7 +78,7 @@ void GeometryPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& qu
         }
 
         // IB, VB, SRV, CB -> DrawCall
-        m.mesh->Draw(context);
+        opaqueItem.mesh->Draw(context);
     }
 
     // clean up

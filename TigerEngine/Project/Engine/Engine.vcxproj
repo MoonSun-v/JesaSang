@@ -136,7 +136,10 @@
   <ItemGroup>
     <ClCompile Include="App\Editor.cpp" />
     <ClCompile Include="Components\AnimationController.cpp" />
+
     <ClCompile Include="EngineSystem\AnimationSystem.cpp" />
+    <ClCompile Include="RenderPass\Renderer\ForwardTransparentPass.cpp" />
+
     <ClCompile Include="Util\Animator.cpp" />
     <ClCompile Include="Components\AudioListenerComponent.cpp" />
     <ClCompile Include="Components\AudioSourceComponent.cpp" />
@@ -187,7 +190,11 @@
   <ItemGroup>
     <ClInclude Include="App\Editor.h" />
     <ClInclude Include="Components\AnimationController.h" />
+
     <ClInclude Include="EngineSystem\AnimationSystem.h" />
+
+    <ClInclude Include="RenderPass\Renderer\ForwardTransparentPass.h" />
+
     <ClInclude Include="Util\Animator.h" />
     <ClInclude Include="Components\AudioListenerComponent.h" />
     <ClInclude Include="Components\AudioSourceComponent.h" />
@@ -291,6 +298,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\PS_ForwardTransparent.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shaders\PS_GBuffer.hlsl">

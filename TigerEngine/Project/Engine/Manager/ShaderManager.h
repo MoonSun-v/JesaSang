@@ -125,6 +125,7 @@ public:
     ComPtr<ID3D11PixelShader> PS_DeferredLighting;
     ComPtr<ID3D11PixelShader> PS_Effect;
     ComPtr<ID3D11PixelShader> PS_Skybox;
+    ComPtr<ID3D11PixelShader> PS_ForwardTransparent;
     ComPtr<ID3D11PixelShader> PS_BloomPrefilter;
     ComPtr<ID3D11PixelShader> PS_BloomDownsampleBlur;
     ComPtr<ID3D11PixelShader> PS_BloomUpsampleCombine;

@@ -272,7 +272,7 @@ struct PS_INPUT
 {
     float4 pos : SV_POSITION;
     float3 worldPos : WORLD_POSITION;
-    float3 normal : NORMAL;
+    float3 worldNormal : NORMAL;
     float3x3 TBN : TBN;
     float2 texCoord : TEXCOORD;
     matrix finalWorld : FINAL_WORLD;

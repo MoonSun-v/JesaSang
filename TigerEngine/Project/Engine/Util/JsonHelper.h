@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "../Base/Datas/EnumData.hpp"
 
 class JsonHelper
 {
@@ -24,6 +25,9 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
     {
         std::string propName = prop.get_name().to_string();
         rttr::variant value = prop.get_value(*typePtr);
+
+        if (!value.is_valid())
+            continue;
 
         if (value.is_type<float>())
         {
@@ -72,6 +76,16 @@ nlohmann::json JsonHelper::MakeSaveData(const T* typePtr)
             const float* p = (const float*)&v;
             mat.assign(p, p + 16);
             datas["properties"][propName] = mat;
+        }
+        // enum class string save
+        else if (prop.get_type().is_enumeration())
+        {
+            std::string enumName = value.to_string();
+
+            if (!enumName.empty())
+                datas["properties"][propName] = enumName;
+            else
+                datas["properties"][propName] = nullptr;
         }
     }
 
@@ -142,6 +156,20 @@ inline void JsonHelper::SetDataFromJson(T* typePtr, nlohmann::json data)
                 for (int i = 0; i < 16; ++i) p[i] = propData[propName][i];
                 prop.set_value(*typePtr, m);
             }
+        }
+        // enum string load
+        else if (prop.get_type().is_enumeration())
+        {
+            if (!propData[propName].is_string())
+                continue;
+
+            std::string enumStr = propData[propName];
+
+            auto enumType = prop.get_type().get_enumeration();
+            auto enumVar = enumType.name_to_value(enumStr);
+
+            if (enumVar.is_valid())
+                prop.set_value(*typePtr, enumVar);
         }
     }
 }

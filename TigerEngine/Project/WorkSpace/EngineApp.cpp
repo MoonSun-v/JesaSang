@@ -94,6 +94,7 @@ bool EngineApp::OnInitialize()
     geometryPass = std::make_unique<GeometryPass>();
     lightPass = std::make_unique<LightPass>();
     skyboxPass = std::make_unique<SkyboxPass>();
+    forwardTransparentPass = std::make_unique<ForwardTransparentPass>();
     bloomPass = std::make_unique<BloomPass>();
     postProcessPass = std::make_unique<PostProcessPass>();
     frustumPass = std::make_unique<FrustumPass>();
@@ -102,6 +103,7 @@ bool EngineApp::OnInitialize()
     geometryPass->Init();
     lightPass->Init(dxRenderer->GetDevice());
     skyboxPass->Init(dxRenderer->GetDevice());
+    forwardTransparentPass->Init();
     bloomPass->Init();
     postProcessPass->Init();
     frustumPass->Init(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
@@ -186,6 +188,7 @@ void EngineApp::OnRender()
         dxRenderer->ProcessScene(*renderQueue, *geometryPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *lightPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *skyboxPass, currCam);
+        dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *bloomPass, currCam);
         dxRenderer->ProcessScene(*renderQueue, *postProcessPass, currCam);
     }
@@ -195,6 +198,7 @@ void EngineApp::OnRender()
         dxRenderer->ProcessScene(*renderQueue, *geometryPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *lightPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
+        dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *bloomPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *postProcessPass, freeCam);
         dxRenderer->ProcessScene(*renderQueue, *frustumPass, freeCam);      // light cam frustum용으로 잠깐 추가

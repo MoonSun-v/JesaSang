@@ -8,17 +8,21 @@
 class FBXRenderer : public RenderComponent
 {
 	RTTR_ENABLE(RenderComponent)
+
 public:
+    // [Component Process] -----------------
 	void OnInitialize() override;
 	void OnStart() override;
 	void OnUpdate(float delta) override;
     void OnDestory() override;
     void OnRender(RenderQueue& queue) override;
+
 	
+    // [Json Process] -----------------
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
-    // material get/set
+    // [Material get/set] -----------------
     Color GetDiffuse() { return Color(diffuseFactor.x, diffuseFactor.y, diffuseFactor.z); }
     void SetDiffuse(Color color);
     float GetAlpha() { return alphaFactor; }
@@ -48,13 +52,16 @@ public:
     float GetRoughnessOverride() { return roughnessOverride; }
     void SetRoughnessOverride(float value);      
 
-    // bone
+
+    // [Bone] -----------------
     void CreateBoneInfo();
 
 private:
+    // FBX Asset Data
     FBXData* fbxData = nullptr;                 // 참조할 FBX 데이터
 
-	// 모델 인스턴스 데이터
+
+	// Instance Data
 	std::string directory{};		    // 로드한 파일이 위차한 폴더명
 
 	// 해당 모델의 상수 버퍼 내용

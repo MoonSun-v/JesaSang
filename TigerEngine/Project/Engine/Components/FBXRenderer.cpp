@@ -10,10 +10,26 @@
 
 RTTR_REGISTRATION
 {
+    rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
+        .constructor<>()
+        .constructor<float, float, float>()
+        .property("r", &Color::x)
+        .property("g", &Color::y)
+        .property("b", &Color::z)
+        .property("a", &Color::w);
+
+    rttr::registration::enumeration<RenderBlendType>("RenderBlendType")
+        (
+            rttr::value("Opaque", RenderBlendType::Opaque),
+            rttr::value("Transparent", RenderBlendType::Transparent)
+        );
+
     rttr::registration::class_<FBXRenderer>("FBXRenderer")
         .constructor<>()
             (rttr::policy::ctor::as_std_shared_ptr)
 
+        .property("RenderBlendType",    &FBXRenderer::GetRenderBlendType,           &FBXRenderer::SetRenderBlendType)
+    
         .property("Diffuse", 	    &FBXRenderer::GetDiffuse,       &FBXRenderer::SetDiffuse)
         .property("Alpha", 	        &FBXRenderer::GetAlpha,         &FBXRenderer::SetAlpha)
         .property("Emissive", 	    &FBXRenderer::GetEmissive,		&FBXRenderer::SetEmissive)
@@ -22,22 +38,13 @@ RTTR_REGISTRATION
 
         .property("UseDiffuseOverride", 	&FBXRenderer::GetUseDiffuseOverride,	&FBXRenderer::SetUseDiffuseOverride)
         .property("UseEmissiveOverride", 	&FBXRenderer::GetUseEmissiveOverride,	&FBXRenderer::SetUseEmissiveOverride)
-        .property("UseMetallicOverride", 	&FBXRenderer::GetUseRoughnessOverride,	&FBXRenderer::SetUseRoughnessOverride)
-        .property("UseRoughnessOverride", 	&FBXRenderer::GetUseMatalicOverride,	&FBXRenderer::SetUseMatalicOverride)
+        .property("UseMetallicOverride", 	&FBXRenderer::GetUseMatalicOverride,	&FBXRenderer::SetUseMatalicOverride)
+        .property("UseRoughnessOverride", 	&FBXRenderer::GetUseRoughnessOverride,	&FBXRenderer::SetUseRoughnessOverride)
 
         .property("DiffuseOverride", 	    &FBXRenderer::GetDiffuseOverride,		&FBXRenderer::SetDiffuseOverride)
         .property("EmissiveOverride", 	    &FBXRenderer::GetEmissiveOverride,		&FBXRenderer::SetEmissiveOverride)
         .property("MetallicOverride", 		&FBXRenderer::GetMetallicOverride,		&FBXRenderer::SetMetallicOverride)
         .property("RoughnessOverride",  	&FBXRenderer::GetRoughnessOverride,		&FBXRenderer::SetRoughnessOverride);
-
-
-		rttr::registration::class_<DirectX::SimpleMath::Color>("Color")
-		.constructor<>()
-		.constructor<float, float, float>()
-		.property("r", &Color::x)
-		.property("g", &Color::y)
-		.property("b", &Color::z)
-		.property("a", &Color::w);
 }
 
 void FBXRenderer::OnInitialize()
@@ -88,7 +95,7 @@ void FBXRenderer::OnRender(RenderQueue& queue)
     auto world = owner->GetTransform()->GetWorldTransform();
     auto fbxRoot = fbxData->GetFBXInfo()->rootTransform;
 
-    // Render Item Push
+    // Render Queue Add
     for (int i = 0; i < meshData.size(); i++)
     {
         auto& mesh = meshData[i];
@@ -115,7 +122,11 @@ void FBXRenderer::OnRender(RenderQueue& queue)
             break;
         }
 
-        queue.AddRenderItem(item);
+        // Hybird Render Queue
+        if(renderBlendType == RenderBlendType::Opaque)
+            queue.AddOpaqueQueue(item);
+        else if (renderBlendType == RenderBlendType::Transparent)
+            queue.AddTransparentQueue(item);
     }
 }
 
@@ -129,6 +140,7 @@ void FBXRenderer::CreateBoneInfo()
     {
         bonePoses.bonePose[i] = modelAsset->skeletalInfo.m_bones[i].globalBind.Transpose();
     }
+
 }
 
 nlohmann::json FBXRenderer::Serialize()

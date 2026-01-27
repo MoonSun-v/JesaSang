@@ -32,8 +32,8 @@ PS_INPUT main(VS_Weight_INPUT input)
     // world TBN
     float3 tangent = normalize(mul(input.tangent, (float3x3) finalWorld));
     float3 bitangent = normalize(mul(input.bitangent, (float3x3) finalWorld));
-    output.normal = normalize(mul(input.normal, (float3x3) finalWorld));
-    output.TBN = float3x3(tangent, bitangent, output.normal);
+    output.worldNormal = normalize(mul(input.normal, (float3x3) finalWorld));
+    output.TBN = float3x3(tangent, bitangent, output.worldNormal);
     
     // uv
     output.texCoord = input.texCoord;

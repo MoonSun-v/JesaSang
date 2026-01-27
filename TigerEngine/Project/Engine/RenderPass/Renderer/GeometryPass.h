@@ -10,7 +10,7 @@
 
 
      ** Geometry Renderer의 Renderable 객체 **
-     Model
+     Model(Opaque)
 
      
      ** G-buffer **

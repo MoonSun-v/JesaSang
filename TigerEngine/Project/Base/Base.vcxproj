@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="Datas\Animation.cpp" />
     <ClCompile Include="Datas\Bone.cpp" />
+    <ClCompile Include="Datas\EnumData.hpp" />
     <ClCompile Include="Datas\Mesh.cpp" />
     <ClCompile Include="Datas\SkeletonInfo.cpp" />
     <ClCompile Include="Helper.cpp" />

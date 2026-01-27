@@ -31,7 +31,7 @@ void ShadowPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
     // Render
-    auto& models = queue.GetRendertems();
+    auto& models = queue.GetOpaqueQueue();
     for (auto& m : models)
     {
         // CB - Transform

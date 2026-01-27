@@ -64,6 +64,10 @@ void SkyboxPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queu
     // Draw
     skybox->Draw(context);
 
+    // view 복원
+    sm.transformCBData.view = XMMatrixTranspose(cam->GetView());
+    context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
+
     // clear
     context->RSSetState(nullptr);
     context->OMSetDepthStencilState(nullptr, 0);

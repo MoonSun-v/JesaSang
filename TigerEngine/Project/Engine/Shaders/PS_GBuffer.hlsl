@@ -59,7 +59,7 @@ PS_Output main(PS_INPUT input) : SV_TARGET
     }
     else
     {
-        normal = normalize(input.normal);
+        normal = normalize(input.worldNormal);
     }
     
     // emission
