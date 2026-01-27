@@ -1,5 +1,5 @@
 #include "DecalVolumeMesh.h"
-#include "../../Components/Camera.h"
+#include "../../Components/Decal.h"
 #include "../../../Base/Datas/Vertex.h"
 #include "../../../Base/Datas/ConstantBuffer.hpp"
 #include "../../Manager/ShaderManager.h"
@@ -11,23 +11,37 @@ DecalVolumeMesh::DecalVolumeMesh()
 {
 }
 
-void DecalVolumeMesh::UpdateWolrd()
+void DecalVolumeMesh::UpdateWolrd(Decal* decal)
 {
-    // TODO :: Decal Compoent 받아서 world update
+    world = decal->GetOwner()->GetTransform()->GetWorldTransform();
 }
 
-void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, const Camera & camera) const
+void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) const
 {
     auto& sm = ShaderManager::Instance();
 
-    // CB
+    // CB - Transform
     sm.transformCBData.world = XMMatrixTranspose(world);
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
+
+    // CB - Decal
+    sm.decalCBData.decalInvWorld = XMMatrixTranspose(world.Invert());
+    sm.decalCBData.opacity = decal->opacity;
+    sm.decalCBData.upThreshold = decal->upThreshold;
+    sm.decalCBData.tiling = decal->tiling;
+    sm.decalCBData.offset = decal->offset;
+    context->UpdateSubresource(sm.decalCB.Get(), 0, nullptr, &sm.decalCBData, 0, 0);
 
     // VB, IB
     UINT offset = 0;
     context.Get()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
     context.Get()->IASetIndexBuffer(indexBuffer.Get(), indexFormat, 0);
+
+    // SRV
+    if (decal->decalSRV)
+    {
+        context.Get()->PSSetShaderResources(19, 1, decal->decalSRV.GetAddressOf());
+    }
 
     // Draw Call
     context.Get()->DrawIndexed(indexCount, 0, 0);
@@ -37,8 +51,8 @@ DecalVolumeMesh* CreateDecalVolume(ID3D11Device* device)
 {
     auto* mesh = new DecalVolumeMesh();
 
-    // 원점 기준, 한 변 길이 1.0 ([-0.5, +0.5])
-    const float h = 0.5f;
+    // 원점 기준, 한 변 길이
+    const float h = 10.0f;
 
     // 8 vertices
     Position_Vertex vertices[8] =

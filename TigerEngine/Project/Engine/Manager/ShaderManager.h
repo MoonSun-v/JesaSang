@@ -30,6 +30,11 @@ private:
 public:
     void CreateBackBufferResource(const ComPtr<ID3D11Device>& dev, int screenWidth, int screenHeight);
 
+    // device, deviceContext
+    // DX11 소유인데 쓸데가 있어서 일단 가져옴..
+    ComPtr<ID3D11Device>            device;
+    ComPtr<ID3D11DeviceContext>     deviceContext;
+
     // DX11 Base
     D3D11_VIEWPORT viewport_screen;                                  
     ComPtr<ID3D11RenderTargetView>    backBufferRTV;                 
@@ -120,6 +125,7 @@ public:
     ComPtr<ID3D11VertexShader> VS_FullScreen;
     ComPtr<ID3D11VertexShader> VS_LightVolume;
     ComPtr<ID3D11VertexShader> VS_Effect;
+    ComPtr<ID3D11VertexShader> VS_Decal;
 
     // Pixel Shader
     ComPtr<ID3D11PixelShader> PS_ShadowDepth;
@@ -132,6 +138,7 @@ public:
     ComPtr<ID3D11PixelShader> PS_BloomDownsampleBlur;
     ComPtr<ID3D11PixelShader> PS_BloomUpsampleCombine;
     ComPtr<ID3D11PixelShader> PS_PostProcess;
+    ComPtr<ID3D11PixelShader> PS_Decal;
 
     // CB buffer
     ComPtr<ID3D11Buffer> frameCB;

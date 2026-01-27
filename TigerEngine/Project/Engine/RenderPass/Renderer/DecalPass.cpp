@@ -2,6 +2,7 @@
 #include "../Renderable/DecalVolumeMesh.h"
 #include "../../Manager/ShaderManager.h"
 #include "../../EngineSystem/CameraSystem.h"
+#include "../../EngineSystem/DecalSystem.h"
 #include "../../Object/GameObject.h"
 
 DecalPass::~DecalPass()
@@ -26,16 +27,14 @@ void DecalPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     context->IASetInputLayout(sm.inputLayout_Position.Get());
 
-    // RS
-    //context.Get()->RSSetState(sm.cullfrontRS.Get());  // 확인 필요
-
-    // DSS
-    const UINT stencilRef = 0x01;          // Stencil Reference Value
-    context->OMSetDepthStencilState(sm.groundTestDSS.Get(), stencilRef);
+    // DSS - Stencil Test(ground)
+    const UINT stencilRef = 0x01;   // Stencil Reference Value
+    context->OMSetDepthStencilState(sm.depthTestOnlyDSS.Get(), stencilRef);   // groudn decal
+    //context->OMSetDepthStencilState(sm.depthTestOnlyDSS.Get(), 0);            // all object decal
 
     // Shader
-    context->VSSetShader(nullptr, nullptr, 0);    // TODO :: Shader 작성
-    context->PSSetShader(nullptr, nullptr, 0);    // TODO :: Shader 작성
+    context->VSSetShader(sm.VS_Decal.Get(), nullptr, 0);
+    context->PSSetShader(sm.PS_Decal.Get(), nullptr, 0);
 
     // Sampler
     context->PSSetSamplers(0, 1, sm.linearSamplerState.GetAddressOf());
@@ -49,8 +48,20 @@ void DecalPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue
     float blendFactor[4] = { 0,0,0,0 }; UINT sampleMask = 0xffffffff;
     context->OMSetBlendState(sm.alphaBlendState.Get(), blendFactor, sampleMask);
 
+    // CB - Transform
+    auto view = cam->GetView(); auto projection = cam->GetProjection();
+    sm.transformCBData.view = XMMatrixTranspose(view);
+    sm.transformCBData.projection = XMMatrixTranspose(projection);
+    sm.transformCBData.invViewProjection = XMMatrixTranspose(XMMatrixInverse(nullptr, view * projection));
+    context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
+
     // Render
-    // TODO :: decal Compoennt 추가 후 for each 돌면서 world update/ draw
+    auto decals = DecalSystem::Instance().GetComponents();
+    for(Decal* decal : decals)
+    {
+        decalVolume->UpdateWolrd(decal);
+        decalVolume->Draw(context, decal);
+    }
 
     // clean up
     context->OMSetDepthStencilState(nullptr, 0);

@@ -54,26 +54,28 @@ public:
     void SetRoughnessOverride(float value);      
 
 
-    // [RenderBlendType get/set] -----------------
+    // [RenderType get/set] -----------------
     RenderBlendType GetRenderBlendType() { return renderBlendType; }
     void SetRenderBlendType(RenderBlendType type) { renderBlendType = type; }
 
+    bool GetIsGround() { return isGround; }
+    void SetIsGround(bool flag) { isGround = flag; }
 
     // [Bone] -----------------
     void CreateBoneInfo();
 
 private:
     // FBX Asset Data
-    FBXData* fbxData = nullptr;                 // 참조할 FBX 데이터
+    FBXData* fbxData = nullptr;   // 참조할 FBX 데이터
 
 	// Instance Data
-	std::string directory{};		    // 로드한 파일이 위차한 폴더명
+	std::string directory{};	  // 로드한 파일이 위차한 폴더명
 
 	// 해당 모델의 상수 버퍼 내용
     PoseMatrixCB bonePoses{};
 
     // Ground Mesh
-    bool isGround = false;      // Ground Projection Decal 처리를 위한 flag
+    bool isGround = false;        // Ground Projection Decal 처리를 위한 flag
 
     // Material
     Vector3 diffuseFactor   = { 1,1,1 };

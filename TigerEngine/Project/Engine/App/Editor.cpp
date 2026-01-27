@@ -7,6 +7,7 @@
 #include <commdlg.h>
 #include "imguiFileDialog/ImGuiFileDialog.h"
 #include "../Components/FBXData.h"
+#include "../Components/Decal.h"
 #include "../Object/GameObject.h"
 #include "../Util/DebugDraw.h"
 #include "../Manager/WorldManager.h"
@@ -543,6 +544,49 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             }
         }        
     }
+    else if (compName == "Decal")
+    {
+        for (auto& prop : t.get_properties())
+        {
+            rttr::variant value = prop.get_value(*comp);   
+            std::string name = prop.get_name().to_string();
+            if (value.is_type<std::string>() && name == "TexturePath")
+            {
+                std::string path = value.get_value<std::string>();
+
+                // 현재 경로 표시   
+                ImGui::Text("Current Path: %s", path.c_str());
+
+                // 탐색기 열기 버튼
+                if (ImGui::Button("Browse"))
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = "../";
+                    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".png,.tga", config);
+                }
+                // display
+                if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+                {
+                    if (ImGuiFileDialog::Instance()->IsOk())
+                    { // action if OK
+                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();     // 절대 경로 + 파일 이름
+                        std::string currFilePath = ImGuiFileDialog::Instance()->GetCurrentFileName();   // 진짜 파일 이름만 뜸
+                        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();           // 절대 경로만 뜸
+                        std::string fileFilterPath = ImGuiFileDialog::Instance()->GetCurrentFilter();   // 확장자만 나옴
+
+                        std::filesystem::path relativePath = std::filesystem::relative(filePathName);
+                        std::string relativePathStr = relativePath.string();
+                        // action
+
+                        Decal* decalComp = dynamic_cast<Decal*>(comp);
+                        decalComp->ChangeData(relativePathStr);
+                    }
+                    ImGuiFileDialog::Instance()->Close();
+                } 
+            }
+        }
+        ReadVariants(*comp);
+    }
     else
     {
         ImGui::PushID(comp);
@@ -809,6 +853,12 @@ void Editor::ReadVariants(rttr::instance inst)
             bool v = value.get_value<bool>();
             if (ImGui::Checkbox(name.c_str(), &v))
                 prop.set_value(inst, v);
+        }
+        else if (value.is_type<Vector2>())
+        {
+            Vector2 vec = value.get_value<SimpleMath::Vector2>();
+            if (ImGui::DragFloat2(name.c_str(), &vec.x, 0.1f))
+                prop.set_value(inst, vec);
         }
         else if (value.is_type<DirectX::SimpleMath::Vector3>())
         {
