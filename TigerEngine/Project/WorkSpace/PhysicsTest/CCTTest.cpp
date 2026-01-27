@@ -88,7 +88,7 @@ void CCTTest::OnUpdate(float delta)
 
     if (elapsedTime >= 3.0f)
     {
-        animController->ChangeState("Run", 0.5f); // 애니메이션 전환 
+        animController->ChangeState("Walk", 0.2f); // 애니메이션 전환 
         hasRunStateChanged = true;
     }
 }

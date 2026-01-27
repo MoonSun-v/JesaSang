@@ -90,7 +90,6 @@ const Animation* AnimationController::FindClip(const std::string& name)
 }
 
 
-
 nlohmann::json AnimationController::Serialize()
 {
     nlohmann::json datas;
