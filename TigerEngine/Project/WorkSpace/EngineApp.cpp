@@ -20,6 +20,7 @@
 #include "EngineSystem/LightSystem.h"
 #include "EngineSystem/PhysicsSystem.h"
 #include "EngineSystem/AnimationSystem.h"
+#include "EngineSystem/DecalSystem.h"
 
 #include "Components/FreeCamera.h"
 #include "Components/FBXData.h"
@@ -423,6 +424,7 @@ void EngineApp::RegisterAllComponents()
     // ComponentFactory::Instance().Register<Player1>("Player1");
     ComponentFactory::Instance().Register<Weapon>("Weapon");
     ComponentFactory::Instance().Register<Light>("Light");
+    ComponentFactory::Instance().Register<Decal>("Decal");
 
     ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
     ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
