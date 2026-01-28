@@ -202,6 +202,8 @@ void Transform::RemoveSelfAtParent()
     {
         parent->RemoveChild(this);  // 부모한테서 자신 제거
         parent = nullptr;           // 부모 제거
+        dirty = true;
+        SetChildrenDirty();
     }
 }
 
