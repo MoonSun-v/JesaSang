@@ -153,6 +153,7 @@
     <ClInclude Include="Datas\Mesh.h" />
     <ClInclude Include="Datas\ReflectionMedtaDatas.hpp" />
     <ClInclude Include="Datas\SkeletonInfo.h" />
+    <ClInclude Include="Datas\HandleData.h" />
     <ClInclude Include="Datas\Vertex.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Helper.h" />

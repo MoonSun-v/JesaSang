@@ -4,27 +4,22 @@
 #include <vector>
 #include "../Entity/Object.h"
 #include "Singleton.h"
+#include "../Datas/HandleData.h"
 
+/// === 변수 사용 용도 ===
+/// Handle은 런타임 참조용
+/// ObjID는 저장용 
+/// ====================
 class Object;
-
-/// <summary>
-/// slotMap 인덱스 참조 구조체
-/// </summary>
-struct Handle
-{
-	// Handle은 slot를 참조하기 위한 값
-	uint32_t index;		// slot 배열 위치
-	uint32_t generation;	// 세대 
-};
 
 /// <summary>
 /// slotMap의 슬롯 내용
 /// </summary>
 struct Slot
 {
-	// 해당 객체의 생명 상태
-	Object* ptr;
-	uint32_t generation;
+    // 해당 객체의 생명 상태
+    Object* ptr;
+    uint32_t generation;
 };
 
 /// <summary>
@@ -54,6 +49,7 @@ public:
 private:
 	std::vector<Slot> slots;
 	std::vector<uint32_t> freeSlots;
+    uint32_t ObjID = 0; // 생성 아이디 ( 계속 증가함 )
 };
 
 template<DerivedOfObject T>
@@ -74,6 +70,7 @@ inline Handle ObjectSystem::Create()
 	Slot& slot = slots[index];
 	T* t = new T();
 	slots[index].ptr = t;
+    t->SetId(++ObjID);
 
 	return  Handle{ index, slots[index].generation };
 }
