@@ -73,6 +73,12 @@ RTTR_REGISTRATION
         .property("_44", &Matrix::_44);
 }
 
+void Editor::GetScreenSize(int width, int height)
+{
+    screenWidth = width;
+    screenHeight = height;
+}
+
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
 {
     DebugDraw::Initialize(device, deviceContext);
@@ -204,39 +210,40 @@ void Editor::RenderHierarchy()
 
 void Editor::DrawHierarchyNode(GameObject* obj)
 {
-    // 1. 노드 드래그 앤 드롭으로 부모 자식 구조 설정
     Transform* tr = obj->GetComponent<Transform>();
-    if (!tr) return;    // transform 없음
+    if (!tr) return;
 
     ImGui::PushID(obj);
 
-    const auto& children = tr->GetChildren(); // transform의 모든 자식 받기
+    const auto& children = tr->GetChildren();
+
     ImGuiTreeNodeFlags flags =
         ImGuiTreeNodeFlags_OpenOnArrow |
         ImGuiTreeNodeFlags_SpanAvailWidth;
 
-    if (children.empty())
+    bool isLeaf = children.empty();
+    if (isLeaf)
         flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-    if (selectedObject == obj) // 오브젝트 선택됨
+    if (selectedObject == obj)
         flags |= ImGuiTreeNodeFlags_Selected;
 
-    bool open = ImGui::TreeNodeEx(obj->GetName().c_str(), flags); // 해당 오브젝트가 자식이 있으면 true
+    bool open = ImGui::TreeNodeEx(obj->GetName().c_str(), flags);
 
     // 클릭 선택
     if (ImGui::IsItemClicked())
         SelectObject(obj);
 
-    // (1) Drag source: 이 노드를 드래그
+    // (1) Drag source
     if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
     {
         GameObject* payloadObj = obj;
-        ImGui::SetDragDropPayload(kPayload_GameObject, &payloadObj, sizeof(GameObject*)); // payload 채우기
+        ImGui::SetDragDropPayload(kPayload_GameObject, &payloadObj, sizeof(GameObject*));
         ImGui::TextUnformatted(obj->GetName().c_str());
         ImGui::EndDragDropSource();
     }
 
-    // (2) Drop target: 이 노드에 드롭하면 "내 자식"으로 만든다
+    // (2) Drop target
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
@@ -245,18 +252,24 @@ void Editor::DrawHierarchyNode(GameObject* obj)
             if (dragged && dragged != obj)
             {
                 Transform* dtr = dragged->GetComponent<Transform>();
-                if (dtr)
+                if (dtr && dtr != tr)
                 {
-                    if (dtr != tr) // 순환 체크
+                    // 순환 참조 체크: obj가 dragged의 자손인지 확인
+                    bool wouldCreateCycle = false;
+                    Transform* ancestor = tr;
+                    while (ancestor)
                     {
-                        bool isChanged = dtr->SetParent(tr);
-
-                        if (isChanged)
+                        if (ancestor == dtr)
                         {
-                            ImGui::PopID();
-                            ImGui::EndDragDropTarget();
-                            return;
+                            wouldCreateCycle = true;
+                            break;
                         }
+                        ancestor = ancestor->GetParent();
+                    }
+
+                    if (!wouldCreateCycle)
+                    {
+                        dtr->SetParent(tr);
                     }
                 }
             }
@@ -264,20 +277,21 @@ void Editor::DrawHierarchyNode(GameObject* obj)
         ImGui::EndDragDropTarget();
     }
 
-    // 자식 렌더링
-    if (!children.empty() && open)
+    // 자식 렌더링 (Leaf가 아니고 열려있을 때만)
+    if (!isLeaf && open)
     {
         for (Transform* childTr : children)
         {
             if (!childTr) continue;
             GameObject* childObj = childTr->GetOwner();
-            if (childObj) DrawHierarchyNode(childObj);
+            if (childObj)
+                DrawHierarchyNode(childObj);
         }
-        ImGui::TreePop();
+        ImGui::TreePop();  // TreePush가 되었을 때만 Pop
     }
+
     ImGui::PopID();
 }
-
 void Editor::DrawHierarchyDropSpace()
 {
     // 2. 빈 공간을 드롭 타겟으로 지정한다.
