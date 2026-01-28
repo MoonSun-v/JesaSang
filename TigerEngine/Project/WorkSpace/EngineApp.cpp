@@ -136,13 +136,16 @@ void EngineApp::OnPreUpdate()
 
 void EngineApp::OnUpdate()
 {
-    auto freeCam = CameraSystem::Instance().GetFreeCamera();
-    auto currCam = CameraSystem::Instance().GetCurrCamera();
+    Camera* curCam;
+    if(PlayModeSystem::Instance().IsPlaying())
+        curCam = CameraSystem::Instance().GetCurrCamera();
+    else
+        curCam = CameraSystem::Instance().GetFreeCamera();
 
 	SceneSystem::Instance().BeforUpdate();	
 	CameraSystem::Instance().FreeCameraUpdate(GameTimer::Instance().DeltaTime());
 	CameraSystem::Instance().LightCameraUpdate(GameTimer::Instance().DeltaTime());
-	WorldManager::Instance().Update(dxRenderer->GetDeviceContext(), freeCam, clientWidth, clientHeight);
+	WorldManager::Instance().Update(dxRenderer->GetDeviceContext(), curCam, clientWidth, clientHeight);
 	SceneSystem::Instance().UpdateScene(GameTimer::Instance().DeltaTime());
     AudioManager::Instance().Update();
     AnimationSystem::Instance().Update(GameTimer::Instance().DeltaTime());
@@ -157,11 +160,8 @@ void EngineApp::OnRender()
 	BeginRender(); 					// 업데이트 준비
 
     RenderSystem::Instance().Render(*renderQueue);
-	
-	auto freeCam = CameraSystem::Instance().GetFreeCamera();	
-    auto currCam = CameraSystem::Instance().GetCurrCamera();
 
-    // Default CB Setting (TODO :: 이거 어디로 뺄까?)
+    // Default CB Setting
     {
         auto& sm = ShaderManager::Instance();
         const auto& context = dxRenderer->GetDeviceContext();
@@ -190,29 +190,23 @@ void EngineApp::OnRender()
         context->PSSetConstantBuffers(10, 1, sm.decalCB.GetAddressOf());
     }
 
+    // current camera
+    Camera* curCam;
     if (PlayModeSystem::Instance().IsPlaying())
-    {
-        dxRenderer->ProcessScene(*renderQueue, *shadowPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *geometryPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *decalPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *lightPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *bloomPass, currCam);
-        dxRenderer->ProcessScene(*renderQueue, *postProcessPass, currCam);
-    }
+        curCam = CameraSystem::Instance().GetCurrCamera();
     else
-    {
-        dxRenderer->ProcessScene(*renderQueue, *shadowPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *geometryPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *decalPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *lightPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *skyboxPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *bloomPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *postProcessPass, freeCam);
-        dxRenderer->ProcessScene(*renderQueue, *frustumPass, freeCam);      // light cam frustum용으로 잠깐 추가
-    }
+        curCam = CameraSystem::Instance().GetFreeCamera();
+
+    // render pass
+    dxRenderer->ProcessScene(*renderQueue, *shadowPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *geometryPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *decalPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *lightPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *skyboxPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *bloomPass, curCam);
+    dxRenderer->ProcessScene(*renderQueue, *postProcessPass, curCam);
+
 
 #if _DEBUG
 	editor->Render(hwnd); 	// 엔진 오버레이 렌더링
