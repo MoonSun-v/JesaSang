@@ -146,6 +146,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EngineApp.h" />
+    <ClInclude Include="AudioTest\AudioListenerSyncScript.h" />
+    <ClInclude Include="AudioTest\AudioKeyTriggerScript.h" />
+    <ClInclude Include="AudioTest\AudioOrbitScript.h" />
     <ClInclude Include="AudioTest\AudioPlayModeScript.h" />
     <ClInclude Include="PhysicsTest\CCTTest.h" />
     <ClInclude Include="PhysicsTest\GroundTestScript.h" />
@@ -155,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineApp.cpp" />
+    <ClCompile Include="AudioTest\AudioListenerSyncScript.cpp" />
+    <ClCompile Include="AudioTest\AudioKeyTriggerScript.cpp" />
+    <ClCompile Include="AudioTest\AudioOrbitScript.cpp" />
     <ClCompile Include="AudioTest\AudioPlayModeScript.cpp" />
     <ClCompile Include="PhysicsTest\CCTTest.cpp" />
     <ClCompile Include="PhysicsTest\GroundTestScript.cpp" />

@@ -32,6 +32,14 @@ void AudioSource::SetPitch(float pitch)
     }
 }
 
+void AudioSource::SetChannelGroup(FMOD::ChannelGroup* group)
+{
+    m_Group = group;
+    if (m_Channel && m_Group) {
+        m_Channel->setChannelGroup(m_Group);
+    }
+}
+
 void AudioSource::Set3DMinMaxDistance(float minDist, float maxDist)
 {
     m_MinDistance = minDist;
@@ -73,7 +81,7 @@ void AudioSource::Play(bool restart)
     mode |= (m_Loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
     m_Clip->GetSound()->setMode(mode);
 
-    m_System->playSound(m_Clip->GetSound(), nullptr, false, &m_Channel);
+    m_System->playSound(m_Clip->GetSound(), m_Group, false, &m_Channel);
     if (m_Channel) {
         m_Channel->setVolume(m_Volume);
         m_Channel->setPitch(m_Pitch);
@@ -98,7 +106,7 @@ void AudioSource::PlayOneShot()
     mode &= ~(FMOD_LOOP_NORMAL | FMOD_LOOP_OFF);
     mode |= FMOD_LOOP_OFF;
     m_Clip->GetSound()->setMode(mode);
-    m_System->playSound(m_Clip->GetSound(), nullptr, false, &m_Channel);
+    m_System->playSound(m_Clip->GetSound(), m_Group, false, &m_Channel);
     if (m_Channel) {
         m_Channel->setVolume(m_Volume);
         m_Channel->setPitch(m_Pitch);

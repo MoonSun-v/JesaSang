@@ -36,6 +36,8 @@ public:
     void SetVolume(float volume);
     float GetPitch() const;
     void SetPitch(float pitch);
+    const std::string& GetChannelGroup() const;
+    void SetChannelGroup(const std::string& name);
     float GetMinDistance() const;
     float GetMaxDistance() const;
     void Set3DMinMaxDistance(float minDist, float maxDist);
@@ -59,6 +61,7 @@ private:
     float m_Volume = 1.0f;
     float m_Pitch = 1.0f;
     bool m_Loop = false;
+    std::string m_ChannelGroup{};
     float m_MinDistance = 1.0f;
     float m_MaxDistance = 100.0f;
 };

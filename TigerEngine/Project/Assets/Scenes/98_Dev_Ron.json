@@ -6,6 +6,14 @@
         "Name": "Main Camera",
         "ParentID": -1,
         "components": {
+          "AudioListenerComponent": {
+            "properties": {},
+            "type": "AudioListenerComponent"
+          },
+          "AudioListenerSyncScript": {
+            "properties": {},
+            "type": "AudioListenerSyncScript"
+          },
           "Camera": {
             "properties": {
               "angle": 1.5707963705062866,
@@ -205,6 +213,164 @@
         "Name": "CurScene_98_Dev_Ron",
         "ParentID": -1,
         "components": {
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 1,
+        "Name": "Audio_BGM",
+        "ParentID": -1,
+        "components": {
+          "AudioPlayModeScript": {
+            "properties": {
+              "AutoPlay": true
+            },
+            "type": "AudioPlayModeScript"
+          },
+          "AudioSourceComponent": {
+            "properties": {
+              "ChannelGroup": "BGM",
+              "ClipId": "BGM_Main",
+              "Loop": true,
+              "MaxDistance": 100.0,
+              "MinDistance": 1.0,
+              "Pitch": 1.0,
+              "Volume": 1.0
+            },
+            "type": "AudioSourceComponent"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 2,
+        "Name": "Audio_AMB",
+        "ParentID": -1,
+        "components": {
+          "AudioPlayModeScript": {
+            "properties": {
+              "AutoPlay": true
+            },
+            "type": "AudioPlayModeScript"
+          },
+          "AudioSourceComponent": {
+            "properties": {
+              "ChannelGroup": "AMB",
+              "ClipId": "AMB_Wind",
+              "Loop": true,
+              "MaxDistance": 100.0,
+              "MinDistance": 1.0,
+              "Pitch": 1.0,
+              "Volume": 1.0
+            },
+            "type": "AudioSourceComponent"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 3,
+        "Name": "Audio_Mover",
+        "ParentID": -1,
+        "components": {
+          "AudioKeyTriggerScript": {
+            "properties": {
+              "ClipId": "SFX_OneShot"
+            },
+            "type": "AudioKeyTriggerScript"
+          },
+          "AudioOrbitScript": {
+            "properties": {
+              "Height": 0.0,
+              "Radius": 100.0,
+              "Speed": 1.0
+            },
+            "type": "AudioOrbitScript"
+          },
+          "AudioPlayModeScript": {
+            "properties": {
+              "AutoPlay": true
+            },
+            "type": "AudioPlayModeScript"
+          },
+          "AudioSourceComponent": {
+            "properties": {
+              "ChannelGroup": "SFX",
+              "ClipId": "SFX_TestLoop1",
+              "Loop": true,
+              "MaxDistance": 800.0,
+              "MinDistance": 100.0,
+              "Pitch": 1.0,
+              "Volume": 2.0
+            },
+            "type": "AudioSourceComponent"
+          },
           "Transform": {
             "properties": {
               "Position": [

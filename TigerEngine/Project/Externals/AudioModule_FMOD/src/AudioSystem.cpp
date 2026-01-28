@@ -42,6 +42,14 @@ void AudioSystem::Shutdown()
         return;
     }
 
+    for (auto& entry : m_ChannelGroups) {
+        if (entry.second) {
+            entry.second->release();
+        }
+    }
+    m_ChannelGroups.clear();
+    m_MasterGroup = nullptr;
+
     m_System->close();
     m_System->release();
     m_System = nullptr;
@@ -68,6 +76,68 @@ void AudioSystem::SetMasterVolume(float volume)
     if (m_MasterGroup) {
         m_MasterGroup->setVolume(volume);
     }
+}
+
+FMOD::ChannelGroup* AudioSystem::GetOrCreateChannelGroup(const std::string& name)
+{
+    if (!m_System) {
+        return nullptr;
+    }
+
+    if (name.empty()) {
+        return m_MasterGroup;
+    }
+
+    auto it = m_ChannelGroups.find(name);
+    if (it != m_ChannelGroups.end()) {
+        return it->second;
+    }
+
+    FMOD::ChannelGroup* group = nullptr;
+    FMOD_RESULT result = m_System->createChannelGroup(name.c_str(), &group);
+    if (result != FMOD_OK || !group) {
+        return m_MasterGroup;
+    }
+
+    if (m_MasterGroup) {
+        m_MasterGroup->addGroup(group);
+    }
+    m_ChannelGroups.emplace(name, group);
+    return group;
+}
+
+void AudioSystem::SetChannelGroupVolume(const std::string& name, float volume)
+{
+    if (volume < 0.0f) {
+        volume = 0.0f;
+    }
+
+    FMOD::ChannelGroup* group = GetOrCreateChannelGroup(name);
+    if (group) {
+        group->setVolume(volume);
+    }
+}
+
+float AudioSystem::GetChannelGroupVolume(const std::string& name) const
+{
+    if (!m_System) {
+        return m_MasterVolume;
+    }
+
+    if (name.empty()) {
+        return m_MasterVolume;
+    }
+
+    auto it = m_ChannelGroups.find(name);
+    if (it == m_ChannelGroups.end() || !it->second) {
+        return m_MasterVolume;
+    }
+
+    float volume = m_MasterVolume;
+    if (it->second->getVolume(&volume) == FMOD_OK) {
+        return volume;
+    }
+    return m_MasterVolume;
 }
 
 std::shared_ptr<AudioClip> AudioSystem::CreateClip(const std::string& path, FMOD_MODE mode)

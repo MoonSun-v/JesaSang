@@ -1,6 +1,7 @@
 #include "AudioListenerComponent.h"
 
 #include "..\\Manager\\AudioManager.h"
+#include "..\\Util\\JsonHelper.h"
 
 RTTR_REGISTRATION
 {
@@ -27,18 +28,12 @@ void AudioListenerComponent::OnDestory()
 
 nlohmann::json AudioListenerComponent::Serialize()
 {
-    nlohmann::json datas;
-
-    rttr::type t = rttr::type::get(*this);
-    datas["type"] = t.get_name().to_string();
-    datas["properties"] = nlohmann::json::object();
-
-    return datas;
+    return JsonHelper::MakeSaveData(this);
 }
 
 void AudioListenerComponent::Deserialize(nlohmann::json data)
 {
-    (void)data;
+    JsonHelper::SetDataFromJson(this, data);
 }
 
 void AudioListenerComponent::Init(AudioSystem* system)

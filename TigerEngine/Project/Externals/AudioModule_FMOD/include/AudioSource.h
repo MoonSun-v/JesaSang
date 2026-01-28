@@ -14,6 +14,7 @@ public:
     void SetLoop(bool loop);
     void SetVolume(float volume);
     void SetPitch(float pitch);
+    void SetChannelGroup(FMOD::ChannelGroup* group);
     void Set3DMinMaxDistance(float minDist, float maxDist);
     void SetPosition(const DirectX::XMFLOAT3& pos);
     void SetVelocity(const DirectX::XMFLOAT3& vel);
@@ -29,6 +30,7 @@ private:
     FMOD::System* m_System = nullptr;
     std::shared_ptr<AudioClip> m_Clip;
     FMOD::Channel* m_Channel = nullptr;
+    FMOD::ChannelGroup* m_Group = nullptr;
 
     DirectX::XMFLOAT3 m_Position{ 0.0f, 0.0f, 0.0f };
     DirectX::XMFLOAT3 m_Velocity{ 0.0f, 0.0f, 0.0f };
