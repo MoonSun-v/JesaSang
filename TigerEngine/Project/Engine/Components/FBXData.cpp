@@ -83,10 +83,14 @@ void FBXData::Deserialize(nlohmann::json data)
     JsonHelper::SetDataFromJson(this, data); // 1. Json으로 불러온 데이터를 설정한다.
 
     // 2. 설정한 데이터를 가지고 컴포넌트 설정.
-    if (isStatic)
-        fbxAsset = FBXResourceManager::Instance().LoadStaticFBXByPath(path);
-    else
-        fbxAsset = FBXResourceManager::Instance().LoadFBXByPath(path);
-    meshes = fbxAsset->meshes;
-    owner->SetAABB(fbxAsset->boxMin, fbxAsset->boxMax, fbxAsset->boxCenter);
+    if (path != "")
+    {
+        if (isStatic)
+            fbxAsset = FBXResourceManager::Instance().LoadStaticFBXByPath(path);
+        else
+            fbxAsset = FBXResourceManager::Instance().LoadFBXByPath(path);
+
+        meshes = fbxAsset->meshes;
+        owner->SetAABB(fbxAsset->boxMin, fbxAsset->boxMax, fbxAsset->boxCenter);
+    }
 }
