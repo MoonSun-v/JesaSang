@@ -13,15 +13,34 @@ RTTR_REGISTRATION
 
 void Transform::OnUpdate(float delta)
 {
+    if (parent && parent->GetOwner()->IsDestory())
+    {
+        RemoveSelfAtParent();
+        parent = nullptr;
+        dirty = true;
+        SetChildrenDirty();
+    }
+
     // dirty 해소
     if (dirty)
     {
-        worldMatrix = Matrix::CreateScale(scale) *
-                      // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-                      Matrix::CreateFromQuaternion(quaternion) *
-                      Matrix::CreateTranslation(position);
+        Matrix local =
+            Matrix::CreateScale(scale) *
+            Matrix::CreateFromQuaternion(quaternion) *
+            Matrix::CreateTranslation(position);
+
+        if (!parent)
+            worldMatrix = local;
+        else
+            worldMatrix = local * parent->GetWorldTransform();
+
         dirty = false;
     }
+}
+
+void Transform::OnDestory()
+{
+    RemoveSelfAtParent();
 }
 
 Matrix Transform::GetWorldTransform() const
@@ -33,6 +52,7 @@ void Transform::Translate(const Vector3& delta)
 {
     position += delta;
     dirty = true;
+    SetChildrenDirty();
 }
 
 void Transform::Rotate(const Vector3& delta)
@@ -42,6 +62,7 @@ void Transform::Rotate(const Vector3& delta)
 
     SetEuler(euler + delta);
     dirty = true;
+    SetChildrenDirty();
 }
 
 // 직렬화/역직렬화는 Euler 기준 
@@ -107,4 +128,95 @@ void Transform::Deserialize(nlohmann::json data)
             dirty = true;
         }
 	}
+    SetChildrenDirty();
+}
+
+Matrix& Transform::GetLocalMatrix()
+{
+    if (dirty)
+    {
+        localMatrix = Matrix::CreateScale(scale) *
+            // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
+            Matrix::CreateFromQuaternion(quaternion) *
+            Matrix::CreateTranslation(position);
+    }
+
+    return localMatrix;
+}
+
+void Transform::AddChild(Transform* transPtr)
+{
+    if (transPtr == nullptr) return;
+    children.push_back(transPtr);
+}
+
+void Transform::RemoveChild(Transform* transPtr)
+{
+    for (auto it = children.begin(); it != children.end();)
+    {
+        if (*it == transPtr)
+        {
+            children.erase(it);
+            break;
+        }
+        else
+        {
+            it++;
+        }
+    }
+}
+
+bool Transform::SetParent(Transform* newParent)
+{
+    if (newParent == this) return false; // 사이클 방지
+    if (newParent == parent) return false; // 동일한 부모면 무시
+
+    // 기존 부모 child 목록에서 제거
+    if (parent)
+        parent->RemoveChild(this);
+
+    parent = newParent;
+
+    // 새 부모 child 목록에 추가
+    if (parent)
+        parent->AddChild(this);
+
+    dirty = true;
+    SetChildrenDirty();
+
+    return true;
+}
+
+void Transform::RemoveChildren()
+{
+    for (auto it = children.begin(); it != children.end();)
+    {
+        (*it)->SetParent(nullptr); // 부모 제거
+        it = children.erase(it);
+    }
+}
+
+void Transform::RemoveSelfAtParent()
+{
+    if (parent)
+    {
+        parent->RemoveChild(this);  // 부모한테서 자신 제거
+        parent = nullptr;           // 부모 제거
+        dirty = true;
+        SetChildrenDirty();
+    }
+}
+
+void Transform::SetChildrenDirty()
+{
+    for (auto& child : children)
+    {
+        child->SetDirty();
+        child->SetChildrenDirty();
+    }
+}
+
+void Transform::SetDirty()
+{
+    dirty = true;
 }

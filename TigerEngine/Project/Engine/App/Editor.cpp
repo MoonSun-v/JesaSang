@@ -75,6 +75,12 @@ RTTR_REGISTRATION
         .property("_44", &Matrix::_44);
 }
 
+void Editor::GetScreenSize(int width, int height)
+{
+    screenWidth = width;
+    screenHeight = height;
+}
+
 void Editor::Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext)
 {
     DebugDraw::Initialize(device, deviceContext);
@@ -175,28 +181,148 @@ void Editor::RenderMenuBar(HWND& hwnd)
     ImGui::EndMainMenuBar();
 }
 
+// 오브젝트 이동 드랍을 위한 payload
+static const char* kPayload_GameObject = "DND_GAMEOBJECT";
+
 void Editor::RenderHierarchy()
 {
     ImGui::Begin("World Hierarchy");
+
+    if (ImGui::Button("Create GameObject"))
+        SceneSystem::Instance().GetCurrentScene()->AddGameObjectByName("NewGameObject");
+
+    auto scene = SceneSystem::Instance().GetCurrentScene();
+    if (!scene) { ImGui::End(); return; }
+
+    // 각 오브젝트 표시
+    scene->ForEachGameObject([this](GameObject* obj)
     {
-        if(ImGui::Button("Create GameObject"))
-        {
-            SceneSystem::Instance().GetCurrentScene()->AddGameObjectByName("NewGameObject");
-        }
+        Transform* tr = obj->GetComponent<Transform>();
+        if (!tr) return;
 
-        SceneSystem::Instance().GetCurrentScene()->ForEachGameObject([this](GameObject* obj)
-        {
-            ImGui::PushID(obj); // 고유 ID 부여 (ID 충돌 방지)
-            
-            if (ImGui::Selectable(obj->GetName().c_str(), selectedObject == obj))
-            {
-                SelectObject(obj);
-            }
+        if (tr->GetParent() != nullptr) return; // 루트만
 
-            ImGui::PopID();
-        });
-    }
+        DrawHierarchyNode(obj);
+    });
+
+    // 빈 공간을 dropspace로 만들기
+    DrawHierarchyDropSpace();
     ImGui::End();
+}
+
+void Editor::DrawHierarchyNode(GameObject* obj)
+{
+    Transform* tr = obj->GetComponent<Transform>();
+    if (!tr) return;
+
+    ImGui::PushID(obj);
+
+    const auto& children = tr->GetChildren();
+
+    ImGuiTreeNodeFlags flags =
+        ImGuiTreeNodeFlags_OpenOnArrow |
+        ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    bool isLeaf = children.empty();
+    if (isLeaf)
+        flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+    if (selectedObject == obj)
+        flags |= ImGuiTreeNodeFlags_Selected;
+
+    bool open = ImGui::TreeNodeEx(obj->GetName().c_str(), flags);
+
+    // 클릭 선택
+    if (ImGui::IsItemClicked())
+        SelectObject(obj);
+
+    // (1) Drag source
+    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    {
+        GameObject* payloadObj = obj;
+        ImGui::SetDragDropPayload(kPayload_GameObject, &payloadObj, sizeof(GameObject*));
+        ImGui::TextUnformatted(obj->GetName().c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    // (2) Drop target
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
+        {
+            GameObject* dragged = *(GameObject**)payload->Data;
+            if (dragged && dragged != obj)
+            {
+                Transform* dtr = dragged->GetComponent<Transform>();
+                if (dtr && dtr != tr)
+                {
+                    // 순환 참조 체크: obj가 dragged의 자손인지 확인
+                    bool wouldCreateCycle = false;
+                    Transform* ancestor = tr;
+                    while (ancestor)
+                    {
+                        if (ancestor == dtr)
+                        {
+                            wouldCreateCycle = true;
+                            break;
+                        }
+                        ancestor = ancestor->GetParent();
+                    }
+
+                    if (!wouldCreateCycle)
+                    {
+                        dtr->SetParent(tr);
+                    }
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
+    // 자식 렌더링 (Leaf가 아니고 열려있을 때만)
+    if (!isLeaf && open)
+    {
+        for (Transform* childTr : children)
+        {
+            if (!childTr) continue;
+            GameObject* childObj = childTr->GetOwner();
+            if (childObj)
+                DrawHierarchyNode(childObj);
+        }
+        ImGui::TreePop();  // TreePush가 되었을 때만 Pop
+    }
+
+    ImGui::PopID();
+}
+void Editor::DrawHierarchyDropSpace()
+{
+    // 2. 빈 공간을 드롭 타겟으로 지정한다.
+    ImVec2 avail = ImGui::GetContentRegionAvail(); // 창에서 사용 가능한 남은 공간
+
+    if (avail.y < 1.0f) avail.y = 1.0f; // 최소 남은 공간 == 1.0f
+
+    // 배경 전체(남은 영역)를 아이템으로 만든다
+    ImGui::InvisibleButton("##HierarchyBlankSpace", avail,
+        ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+
+    // DragDrop 확인
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
+        {
+            GameObject* dragged = *(GameObject**)payload->Data;
+            if (dragged)
+            {
+                Transform* dtr = dragged->GetComponent<Transform>();
+                if (dtr)
+                {
+                    dtr->RemoveSelfAtParent(); // 부모 해제
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
 }
 
 void Editor::RenderInspector()
@@ -837,7 +963,6 @@ void Editor::ReadVariants(rttr::instance inst)
 
     rttr::type t = inst.get_derived_type();
 
-
     // Get value from type
     for (auto& prop : t.get_properties())
     {
@@ -853,7 +978,64 @@ void Editor::ReadVariants(rttr::instance inst)
         // Render elements
         // ImGui::Text("%s : %s", name.c_str(), value.get_type().get_name().to_string().c_str());
 
-        if (metaBool.is_valid() && metaBool.to_bool())
+        if (value.get_type().is_enumeration())
+        {
+            rttr::type enumType = value.get_type();
+            rttr::enumeration e = enumType.get_enumeration();
+
+            // 현재 선택된 항목 이름
+            std::string currentName;
+            {
+                rttr::variant cur = value; // 현재 enum 값
+                rttr::string_view sv = e.value_to_name(cur);
+                currentName = sv.empty() ? std::string("<invalid>") : sv.to_string();
+            }
+
+            // 모든 enum 이름 리스트
+            auto names = e.get_names(); // array_range<string_view>
+            if (!names.empty())
+            {
+                // currentName이 names 중 몇 번째인지 찾기
+                int currentIndex = 0;
+                int idx = 0;
+                for (auto n : names)
+                {
+                    if (n.to_string() == currentName) // 선택한 인덱스 찾기
+                    {
+                        currentIndex = idx;
+                        break;
+                    }
+                    ++idx;
+                }
+
+                // ImGui Combo
+                const char* preview = currentName.c_str();
+                if (ImGui::BeginCombo(name.c_str(), preview))
+                {
+                    int i = 0;
+                    for (auto n : names)
+                    {
+                        std::string itemName = n.to_string();
+                        bool selected = (i == currentIndex);
+                        if (ImGui::Selectable(itemName.c_str(), selected))
+                        {
+                            // 이름 -> enum 값 variant
+                            rttr::variant newVal = e.name_to_value(n);
+                            if (newVal.is_valid())
+                            {
+                                // prop이 enum 타입이면 그대로 set_value
+                                prop.set_value(inst, newVal);
+                            }
+                        }
+                        if (selected)
+                            ImGui::SetItemDefaultFocus();
+                        ++i;
+                    }
+                    ImGui::EndCombo();
+                }
+            }
+        }
+        else if (metaBool.is_valid() && metaBool.to_bool())
         {
             int iv = value.to_int();     // BOOL이든 int든 흡수
             bool b = (iv != 0);

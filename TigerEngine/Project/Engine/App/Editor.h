@@ -10,7 +10,7 @@
 class Editor : public InputProcesser
 {
 public:
-    void GetScreenSize(int width, int height) { screenWidth = width; screenHeight = height; }
+    void GetScreenSize(int width, int height);
     void Initialize(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& context);
     void GetDSV(const ComPtr<ID3D11DepthStencilView>& dsv) { depthStencliView = dsv; };
     void GetRTV(const ComPtr <ID3D11RenderTargetView>& rtv) { renderTargetView = rtv; };
@@ -27,6 +27,8 @@ public:
 private:
     void RenderMenuBar(HWND& hwnd);
     void RenderHierarchy();
+    void DrawHierarchyNode(GameObject* obj);
+    void DrawHierarchyDropSpace();
     void RenderInspector();
     void RenderPlayModeControls();
     void RenderCameraFrustum();

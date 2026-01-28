@@ -73,6 +73,7 @@ bool EngineApp::OnInitialize()
 	editor->Initialize(dxRenderer->GetDevice(), dxRenderer->GetDeviceContext());
 	editor->GetDSV(dxRenderer->GetDepthStencilView());
 	editor->GetRTV(dxRenderer->GetBackBufferRTV());
+    editor->CreatePickingStagingTex();
 #endif
 
 	SceneSystem::Instance().AddScene();			    	// create first scene
@@ -343,6 +344,7 @@ void EngineApp::ResizeResource()
 
 #if _DEBUG
     // editor 참조
+    editor->GetScreenSize(clientWidth, clientHeight);
     editor->GetDSV(dxRenderer->GetDepthStencilView());
     editor->GetRTV(dxRenderer->GetBackBufferRTV());
     editor->CreatePickingStagingTex();

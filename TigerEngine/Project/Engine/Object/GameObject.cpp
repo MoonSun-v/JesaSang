@@ -107,6 +107,23 @@ nlohmann::json GameObject::Serialize() const
     datas["type"] = t.get_name().to_string();    
     datas["properties"] = nlohmann::json::object(); // 객체 생성
 
+    // ID 저장 : GameObject의 ID로 기억한다. ( 모든 컴포넌트와 게임 오브젝트는 Object를 상속받기 때문에 )
+    int parentID = -1; // 기본 값 : 루트 오브젝트
+    if (transform != nullptr) 
+    {
+        Transform* parent = transform->GetParent();
+        if (parent != nullptr) 
+        {
+            GameObject* parentObj = parent->GetOwner();
+            if (parentObj != nullptr) 
+            {
+                parentID = static_cast<int>(parentObj->GetId());
+            }
+        }
+    }
+    datas["properties"]["ParentID"] = parentID;
+    datas["properties"]["ID"] = static_cast<int>(GetId());
+
     // 오브젝트 내용 직렬화화
     for(auto& prop : t.get_properties())
     {

@@ -176,6 +176,7 @@ bool Scene::LoadToJson(const std::string &filename)
     targetLoadedPath = filename;
 
     // 데이터에 있는 게임 오브젝트 불러오기
+    vector<int> parentIDs; // 넣은 순서대로 부모 ID 기억하기 ( 부모가 없으면 -1 )
 	for(const auto& objData : root["objects"])
 	{
 		if(!objData.contains("type")) continue;
@@ -190,6 +191,16 @@ bool Scene::LoadToJson(const std::string &filename)
 		if(!instance) continue; 
 
 		instance->Deserialize(objData["properties"]);
+
+        if (objData["properties"].contains("ID"))
+        {
+            instance->SetId(objData["properties"]["ID"]); // ID 추가
+        }        
+
+        if (objData["properties"].contains("ParentID"))
+        {
+            parentIDs.push_back(objData["properties"]["ParentID"]); // 미리 부모 ID 기억
+        }
 	}
 
     // 월드 데이터 불러오기
@@ -197,6 +208,31 @@ bool Scene::LoadToJson(const std::string &filename)
 
     auto& wm = WorldManager::Instance();
     wm.Deserialize(root["worldData"][0]);
+
+    // 게임 오브젝트 계층 구조 맞추기
+
+    // ObjectsID와 1:1 대응이라고 가정
+    // id가 없는 데이터 이거나 데이터 개수가 안맞으면 무시한다.
+    if (!parentIDs.empty() && parentIDs.size() == gameObjects.size())
+    {
+        for (int i = 0; i < gameObjects.size(); i++)
+        {
+            auto currObject = gameObjects[i].objPtr;
+            int currParentID = parentIDs[i];
+            if (currParentID == -1) continue; // 부모없음
+
+            for (int j = 0; j < gameObjects.size(); j++)
+            {
+                if (i == j) continue;
+
+                if (currParentID == gameObjects[j].objPtr->GetId()) // 부모 찾음
+                {
+                    currObject->GetTransform()->SetParent(gameObjects[j].objPtr->GetTransform()); // 부모 설정
+                    break;
+                }
+            }
+        }
+    }
 
     return true;
 }
