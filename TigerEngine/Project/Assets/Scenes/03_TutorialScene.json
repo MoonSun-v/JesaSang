@@ -1,0 +1,325 @@
+{
+  "objects": [
+    {
+      "properties": {
+        "ID": 194,
+        "Name": "Main Camera",
+        "ParentID": -1,
+        "components": {
+          "Camera": {
+            "properties": {
+              "angle": 1.5707963705062866,
+              "farDist": 2000.0,
+              "moveSpeed": 100.0,
+              "nearDist": 0.009999999776482582,
+              "rotSpeed": 0.004000000189989805
+            },
+            "type": "Camera"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                -98.92500305175781,
+                130.0,
+                -100.0
+              ],
+              "Rotation": [
+                0.06457717716693878,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 264,
+        "Name": "DirectionalLight(Sun)",
+        "ParentID": -1,
+        "components": {
+          "Light": {
+            "properties": {
+              "Color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Direction": [
+                -0.30000001192092896,
+                -0.30000001192092896,
+                1.0
+              ],
+              "InnerAngle": 15.0,
+              "Intensity": 1.0,
+              "IsSunLight": true,
+              "LightType": "Directional",
+              "OuterAngle": 30.0,
+              "Range": 15.0
+            },
+            "type": "Light"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 267,
+        "Name": "----------------------",
+        "ParentID": -1,
+        "components": {
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 269,
+        "Name": "Ground",
+        "ParentID": -1,
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\Ground.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                10.0,
+                0.05000000074505806,
+                10.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 30,
+        "Name": "CurScene_03_TutorialScene",
+        "ParentID": -1,
+        "components": {
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    }
+  ],
+  "worldData": [
+    {
+      "properties": {
+        "PostProcessWorldData": {
+          "properties": {
+            "bloom_clamp": 0.0,
+            "bloom_intensity": 0.800000011920929,
+            "bloom_scatter": 0.5,
+            "bloom_threshold": 1.0,
+            "bloom_tint": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "colorTint": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "colorTint_strength": 0.5,
+            "contrast": 1.0,
+            "defaultGamma": 2.200000047683716,
+            "exposure": 0.0,
+            "gain": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gain_strength": 0.5,
+            "gamma": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gamma_strength": 1.0,
+            "grain_intensity": 0.20000000298023224,
+            "grain_response": 0.800000011920929,
+            "grain_scale": 1.0,
+            "hueShift": 0.0,
+            "isHDR": 1,
+            "lift": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lift_strength": 0.5,
+            "saturation": 1.0,
+            "temperature": 0.0,
+            "tint": 0.0,
+            "useBloom": 0,
+            "useColorAdjustments": 0,
+            "useColorTint": 0,
+            "useDefaultGamma": 1,
+            "useFilmGrain": 0,
+            "useGain": 0,
+            "useGamma": 0,
+            "useHueShift": 0,
+            "useLGG": 0,
+            "useLift": 0,
+            "useVignette": 0,
+            "useWhiteBalance": 0,
+            "vignetteCenter": [
+              0.5,
+              0.5
+            ],
+            "vignetteColor": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "vignette_intensity": 0.5,
+            "vignette_smoothness": 0.5
+          },
+          "type": "PostProcessWorldData"
+        },
+        "ShadowOrthoDesc": {
+          "properties": {
+            "lookPointDist": 500.0,
+            "shadowFar": 20000.0,
+            "shadowHeight": 10000.0,
+            "shadowLightDist": 1000.0,
+            "shadowNear": 1.0,
+            "shadowWidth": 10000.0
+          },
+          "type": "ShadowOrthoDesc"
+        },
+        "indirectIntensity": 0.20000000298023224,
+        "useIBL": 1
+      },
+      "type": "WorldManager"
+    }
+  ]
+}

@@ -2,7 +2,9 @@
   "objects": [
     {
       "properties": {
+        "ID": 194,
         "Name": "Main Camera",
+        "ParentID": -1,
         "components": {
           "Camera": {
             "properties": {
@@ -40,7 +42,9 @@
     },
     {
       "properties": {
-        "Name": "Light",
+        "ID": 264,
+        "Name": "DirectionalLight(Sun)",
+        "ParentID": -1,
         "components": {
           "Light": {
             "properties": {
@@ -51,7 +55,7 @@
                 1.0
               ],
               "Direction": [
-                0.0,
+                -0.30000001192092896,
                 -0.30000001192092896,
                 1.0
               ],
@@ -90,12 +94,44 @@
     },
     {
       "properties": {
-        "Name": "Player",
+        "ID": 267,
+        "Name": "----------------------",
+        "ParentID": -1,
+        "components": {
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 269,
+        "Name": "Ground",
+        "ParentID": -1,
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\FBX\\Player\\charcter_test.fbx",
-              "IsStatic": false
+              "DataPath": "..\\Assets\\Resource\\Ground.fbx",
+              "IsStatic": true
             },
             "type": "FBXData"
           },
@@ -139,6 +175,36 @@
             },
             "type": "FBXRenderer"
           },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                10.0,
+                0.05000000074505806,
+                10.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 30,
+        "Name": "CurScene_04_MainGameScene",
+        "ParentID": -1,
+        "components": {
           "Transform": {
             "properties": {
               "Position": [
