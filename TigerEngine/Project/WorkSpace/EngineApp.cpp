@@ -417,6 +417,7 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "PhysicsTest/PhysicsTestScript.h"
 #include "PhysicsTest/GroundTestScript.h"
 #include "PhysicsTest/CCTTest.h"
+#include "AudioTest/AudioPlayModeScript.h"
 
 
 void EngineApp::RegisterAllComponents()
@@ -433,6 +434,7 @@ void EngineApp::RegisterAllComponents()
 
     ComponentFactory::Instance().Register<AudioListenerComponent>("AudioListenerComponent");
     ComponentFactory::Instance().Register<AudioSourceComponent>("AudioSourceComponent");
+    ComponentFactory::Instance().Register<AudioPlayModeScript>("AudioPlayModeScript");
     ComponentFactory::Instance().Register<PhysicsTestScript>("PhysicsTestScript");
     ComponentFactory::Instance().Register<GroundTestScript>("GroundTestScript");
     ComponentFactory::Instance().Register<CCTTest>("CCTTestScript");

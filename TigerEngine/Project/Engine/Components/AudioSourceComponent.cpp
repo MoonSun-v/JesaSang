@@ -24,6 +24,7 @@ void AudioSourceComponent::OnInitialize()
 void AudioSourceComponent::OnUpdate(float delta)
 {
     (void)delta;
+
     Update3D();
 }
 
@@ -148,6 +149,7 @@ void AudioSourceComponent::SetClipId(const std::string& id)
     {
         m_Source.SetClip(std::move(clip));
     }
+
 }
 
 bool AudioSourceComponent::GetLoop() const
@@ -225,6 +227,11 @@ void AudioSourceComponent::Play(bool restart)
 void AudioSourceComponent::PlayOneShot()
 {
     m_Source.PlayOneShot();
+}
+
+void AudioSourceComponent::Pause(bool paused)
+{
+    m_Source.Pause(paused);
 }
 
 void AudioSourceComponent::Stop()

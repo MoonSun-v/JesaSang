@@ -107,6 +107,13 @@ void AudioSource::PlayOneShot()
     }
 }
 
+void AudioSource::Pause(bool paused)
+{
+    if (m_Channel) {
+        m_Channel->setPaused(paused);
+    }
+}
+
 void AudioSource::Stop()
 {
     if (m_Channel) {
