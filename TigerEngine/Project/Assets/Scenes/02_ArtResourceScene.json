@@ -2006,8 +2006,8 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "",
-              "IsStatic": false
+              "DataPath": "..\\Assets\\Resource\\FBX\\Food\\teble_Food.fbx",
+              "IsStatic": true
             },
             "type": "FBXData"
           },
@@ -2054,9 +2054,9 @@
           "Transform": {
             "properties": {
               "Position": [
+                -200.0,
                 0.0,
-                0.0,
-                0.0
+                -100.0
               ],
               "Rotation": [
                 0.0,
