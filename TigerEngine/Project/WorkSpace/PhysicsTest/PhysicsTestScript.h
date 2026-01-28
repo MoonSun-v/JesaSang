@@ -19,7 +19,15 @@ public:
     void OnUpdate(float delta) override;
 
 public:
-    // [ rigid 감지하는 메소드 ]
+
+    // [ 충돌 감지 함수 종류 ]
+    // OnCollision ~    : RigidComponent를 가진 객체를 감지 (Trigger X)
+    // OnTrigger ~      : RigidComponent를 가진 객체를 감지 (Trigger O)
+    // OnCCTCollision ~ : CharacterControllerComponent를 가진 객체를 감지 (Trigger X)
+    // OnCCTTrigger ~   : CharacterControllerComponent를 가진 객체를 감지 (Trigger O)
+
+
+    // [ rigid 감지하는 메소드 ] : RigidComponent를 가진 객체를 감지 한다. 
     void OnCollisionEnter(PhysicsComponent* other) override;
     //void OnCollisionStay(PhysicsComponent* other) override;
     //void OnCollisionExit(PhysicsComponent* other) override;
@@ -29,12 +37,13 @@ public:
     //void OnTriggerExit(PhysicsComponent* other) override;
 
 
-    // [ CCT 감지하는 메소드 ]
+    // [ CCT 감지하는 메소드 ] : CharacterControllerComponent를 가진 객체를 감지 한다. 
+    void OnCCTCollisionEnter(CharacterControllerComponent* cct) override;
+    //void OnCCTCollisionStay(CharacterControllerComponent* cct) override;
+    //void OnCCTCollisionExit(CharacterControllerComponent* cct) override;
+
     //void OnCCTTriggerEnter(CharacterControllerComponent* cct) override;
     //void OnCCTTriggerStay(CharacterControllerComponent* cct) override;
     //void OnCCTTriggerExit(CharacterControllerComponent* cct) override;
 
-    void OnCCTCollisionEnter(CharacterControllerComponent* cct) override;
-    //void OnCCTCollisionStay(CharacterControllerComponent* cct) override;
-    //void OnCCTCollisionExit(CharacterControllerComponent* cct) override;
 };

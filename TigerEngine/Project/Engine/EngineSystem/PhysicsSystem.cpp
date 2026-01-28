@@ -111,17 +111,17 @@ void PhysicsSystem::Simulate(float dt)
     // 2. Actor 위치 동기화
     for (auto& it : m_ActorMap)
     {
-        if (it.second)
-            it.second->SyncFromPhysics();
+        PhysicsComponent* comp = it.first;
+        if (comp)
+            comp->SyncFromPhysics();
     }
 
     // 3. Trigger 체크
     for (auto& it : m_ActorMap)
     {
-        if (it.second)
-        {
-            it.second->CheckTriggers();   
-        }
+        PhysicsComponent* comp = it.first;
+        if (comp)
+            comp->CheckTriggers();
     }
 
     // 4. CCT 후처리 (Trigger / Collision 이벤트)
@@ -139,9 +139,9 @@ void PhysicsSystem::ResolveTriggerEvents()
     // --------------------------------------------------
     // 1. 모든 PhysicsComponent에서 Trigger 수집
     // --------------------------------------------------
-    for (auto it = m_ActorMap.begin(); it != m_ActorMap.end(); ++it)
+    for (auto& it : m_ActorMap)
     {
-        PhysicsComponent* comp = it->second;
+        PhysicsComponent* comp = it.first;
 
         if (!comp)
             continue;
@@ -151,7 +151,6 @@ void PhysicsSystem::ResolveTriggerEvents()
             // (A,B) == (B,A) 정규화
             PhysicsComponent* a = comp < other ? comp : other;
             PhysicsComponent* b = comp < other ? other : comp;
-
             m_TriggerCurr.insert(std::make_pair(a, b));
         }
 
@@ -190,24 +189,47 @@ void PhysicsSystem::ResolveTriggerEvents()
 }
 
 
-void PhysicsSystem::RegisterComponent(PxRigidActor* actor, PhysicsComponent* comp)
+void PhysicsSystem::RegisterComponent(PhysicsComponent* comp, PxRigidActor* actor)
 {
-    if (actor) m_ActorMap[actor] = comp;
+    m_ActorMap[comp] = actor;
 }
-void PhysicsSystem::UnregisterComponent(PxActor* actor)
+
+void PhysicsSystem::UnregisterComponent(PhysicsComponent* comp)
 {
-    if (!actor) return;
-    m_ActorMap.erase(actor);
+    if (!comp) return;
+
+    auto it = m_ActorMap.find(comp);
+    if (it == m_ActorMap.end())
+        return;
+
+    PxActor* actor = it->second;
+    m_ActorMap.erase(it);
+
+    if (actor)
+        actor->release();
+
+    comp->m_Actor = nullptr;
 }
+
 PhysicsComponent* PhysicsSystem::GetComponent(PxActor* actor)
 {
-    auto it = m_ActorMap.find(actor);
-    return (it != m_ActorMap.end()) ? it->second : nullptr;
+    for (auto& it : m_ActorMap)
+    {
+        if (it.second == actor) return it.first;
+    }
+    return nullptr;
+
 }
 
 void PhysicsSystem::Shutdown()
 {
-    // PX_RELEASE(m_ControllerManager);
+    for (auto& it : m_ActorMap)
+    {
+        if (it.second)
+            it.second->release();
+    }
+    m_ActorMap.clear();
+
     CharacterControllerSystem::Instance().Shutdown();
     PX_RELEASE(m_Scene);
     PX_RELEASE(m_Dispatcher);
@@ -215,7 +237,6 @@ void PhysicsSystem::Shutdown()
     PX_RELEASE(m_Physics);
 
     if (m_Pvd) m_Pvd->disconnect();
-
     PX_RELEASE(m_PvdTransport);
     PX_RELEASE(m_Pvd);
     PX_RELEASE(m_Foundation);
@@ -422,7 +443,8 @@ void PhysicsSystem::DrawPhysXActors()
 {
     for (auto& it : m_ActorMap)
     {
-        if (it.second)
-            it.second->DrawPhysXActors();
+        PhysicsComponent* comp = it.first;
+        if (comp)
+            comp->DrawPhysXActors();
     }
 }

@@ -40,7 +40,8 @@ public:
     nlohmann::json Serialize() override;
     void Deserialize(nlohmann::json data) override;
 
-public: // [ 디버그용 ]
+
+public: // [ 디버그용 ] ---------- 아마 안쓰려나..? -------------- 
 
     // States 읽기용 getter
     const std::unordered_map<std::string, std::unique_ptr<AnimationState>>& GetStates() const

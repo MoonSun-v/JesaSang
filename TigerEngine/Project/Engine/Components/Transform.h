@@ -59,16 +59,6 @@ public:
         return euler.y;
     }
 
-    // Y축 회전만 설정 (rad)
-    void SetRotationY(float yaw)
-    {
-        euler.y = yaw;
-        quaternion = Quaternion::CreateFromYawPitchRoll(
-            euler.y, euler.x, euler.z
-        );
-        dirty = true;
-    }
-
 	//std::shared_ptr<Transform> parent{};
 
 private:

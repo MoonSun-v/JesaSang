@@ -15,6 +15,7 @@
 #include "../EngineSystem/PlayModeSystem.h"
 #include "../Components/Camera.h"
 #include "../EngineSystem/PhysicsSystem.h"
+#include "../Components/CharacterControllerComponent.h"
 
 #include "Datas/ReflectionMedtaDatas.hpp"
 
@@ -465,15 +466,40 @@ void Editor::RenderComponentInfo(std::string compName, T* comp)
             {
                 DirectX::SimpleMath::Vector3 rot = value.get_value<DirectX::SimpleMath::Vector3>();
                 DirectX::SimpleMath::Vector3 eulerDegree = { XMConvertToDegrees(rot.x), XMConvertToDegrees(rot.y),  XMConvertToDegrees(rot.z) };
-                ImGui::DragFloat3("Rotation", &eulerDegree.x, 0.1f);
-                rot = { XMConvertToRadians(eulerDegree.x), XMConvertToRadians(eulerDegree.y),  XMConvertToRadians(eulerDegree.z) };
-                prop.set_value(*comp, rot);
+
+                if (ImGui::DragFloat3("Rotation", &eulerDegree.x, 0.1f))
+                {
+                    rot = { XMConvertToRadians(eulerDegree.x), XMConvertToRadians(eulerDegree.y), XMConvertToRadians(eulerDegree.z) };
+
+                    prop.set_value(*comp, rot);
+
+                    GameObject* owner = comp->GetOwner();
+                    if (auto phys = owner->GetComponent<PhysicsComponent>())
+                    {
+                        phys->SyncToPhysics();
+                    }
+                }
+
             }
             else if (value.is_type<DirectX::SimpleMath::Vector3>())
             {
                 DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
-                ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f);
-                prop.set_value(*comp, vec);
+
+                // [ Physics, CCT 컴포넌트 Transform 동기화 ]
+                if (ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f))
+                {
+                    prop.set_value(*comp, vec);
+
+                    GameObject* owner = comp->GetOwner();
+                    if (auto phys = owner->GetComponent<PhysicsComponent>())
+                    {
+                        phys->SyncToPhysics();
+                    }
+                    if (auto cct = owner->GetComponent<CharacterControllerComponent>())
+                    {
+                        cct->Teleport(vec); // setPosition 래핑 함수
+                    }
+                }
             }
         } 
     }

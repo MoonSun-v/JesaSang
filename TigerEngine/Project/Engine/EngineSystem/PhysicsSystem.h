@@ -105,8 +105,8 @@ public:
     void Simulate(float dt); // 물리 시뮬레이션 1프레임 수행 
     void Shutdown();
 
-    void RegisterComponent(PxRigidActor* actor, PhysicsComponent* comp);
-    void UnregisterComponent(PxActor* actor);
+    void RegisterComponent(PhysicsComponent* comp, PxRigidActor* actor);
+    void UnregisterComponent(PhysicsComponent* comp);
 
     // getter 
     PxPhysics* GetPhysics() const { return m_Physics; }
@@ -115,13 +115,13 @@ public:
     PhysicsComponent* GetComponent(PxActor* actor);
 
     // Actor <-> Component 매핑
-    std::unordered_map<PxActor*, PhysicsComponent*> m_ActorMap;
+    // std::unordered_map<PxActor*, PhysicsComponent*> m_ActorMap;
+    std::unordered_map<PhysicsComponent*, PxActor*> m_ActorMap;
 
     std::unordered_set<std::pair<PhysicsComponent*, PhysicsComponent*>, PairHash> m_TriggerCurr;
     std::unordered_set<std::pair<PhysicsComponent*, PhysicsComponent*>, PairHash> m_TriggerPrev;
 
     void ResolveTriggerEvents();
-
 
 private:
     // ------------------------------------------------------

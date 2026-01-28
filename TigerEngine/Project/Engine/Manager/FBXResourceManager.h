@@ -62,5 +62,5 @@ public:
     /// <summary>
     /// 애니메이션만 로드해서 기존 asset에 추가
     /// </summary>
-    bool LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName = "");
+    bool LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName = "", bool loop = true);
 };
