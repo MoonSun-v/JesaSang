@@ -192,11 +192,15 @@ bool Scene::LoadToJson(const std::string &filename)
 
 		instance->Deserialize(objData["properties"]);
 
-        if(objData["properties"].contains("ID"))
+        if (objData["properties"].contains("ID"))
+        {
             instance->SetId(objData["properties"]["ID"]); // ID 추가
+        }        
 
         if (objData["properties"].contains("ParentID"))
+        {
             parentIDs.push_back(objData["properties"]["ParentID"]); // 미리 부모 ID 기억
+        }
 	}
 
     // 월드 데이터 불러오기
@@ -209,7 +213,7 @@ bool Scene::LoadToJson(const std::string &filename)
 
     // ObjectsID와 1:1 대응이라고 가정
     // id가 없는 데이터 이거나 데이터 개수가 안맞으면 무시한다.
-    if (!parentIDs.empty() && parentIDs.size() == gameObjects.size()) 
+    if (!parentIDs.empty() && parentIDs.size() == gameObjects.size())
     {
         for (int i = 0; i < gameObjects.size(); i++)
         {
