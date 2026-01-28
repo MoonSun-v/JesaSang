@@ -34,29 +34,25 @@
 
     <!-- 리소스 복제 -->
     <Target Name="CopyResources" AfterTargets="Build">
-        <!-- 1) 공통 위치로 복사: $(SolutionDir)\bin\Assets\... -->
         <Copy SourceFiles="@(ResourceFiles)"
               DestinationFolder="$(CommonAssetsDir)%(RecursiveDir)"
-              SkipUnchangedFiles="true" />
+              SkipUnchangedFiles="false" />
 
-        <!-- 2) 현재 빌드 출력(= x64\Debug 등)로 복사: $(OutDir)\Assets\... -->
         <Copy SourceFiles="@(ResourceFiles)"
               DestinationFolder="$(OutAssetsDir)%(RecursiveDir)"
-              SkipUnchangedFiles="true" />
+              SkipUnchangedFiles="false" />
     </Target>
 
-    <!-- 셰이더 파일들 복제 -->
     <Target Name="CopyHlsl" AfterTargets="Build">
-        <!-- 1) 공통 위치로 복사: $(SolutionDir)\bin\Shaders\... -->
         <Copy SourceFiles="@(HlslFiles)"
               DestinationFolder="$(CommonShadersDir)%(RecursiveDir)"
-              SkipUnchangedFiles="true" />
+              SkipUnchangedFiles="false" />
 
-        <!-- 2) 현재 빌드 출력(= x64\Debug 등)로 복사: $(OutDir)\Shaders\... -->
         <Copy SourceFiles="@(HlslFiles)"
               DestinationFolder="$(OutShadersDir)%(RecursiveDir)"
-              SkipUnchangedFiles="true" />
+              SkipUnchangedFiles="false" />
     </Target>
+
 
     <!-- 빌드 후 결과물 복사 (공통 bin으로) -->
     <Target Name="CopyOutputsToCommonBin" AfterTargets="Build">
