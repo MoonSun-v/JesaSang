@@ -186,6 +186,7 @@ void Editor::RenderHierarchy()
     auto scene = SceneSystem::Instance().GetCurrentScene();
     if (!scene) { ImGui::End(); return; }
 
+    // 각 오브젝트 표시
     scene->ForEachGameObject([this](GameObject* obj)
     {
         Transform* tr = obj->GetComponent<Transform>();
@@ -195,18 +196,22 @@ void Editor::RenderHierarchy()
 
         DrawHierarchyNode(obj);
     });
+
+    // 빈 공간을 dropspace로 만들기
+    DrawHierarchyDropSpace();
     ImGui::End();
 }
 
 void Editor::DrawHierarchyNode(GameObject* obj)
 {
+    // 1. 노드 드래그 앤 드롭으로 부모 자식 구조 설정
     Transform* tr = obj->GetComponent<Transform>();
     if (!tr) return;    // transform 없음
 
     ImGui::PushID(obj);
 
     const auto& children = tr->GetChildren(); // transform의 모든 자식 받기
-    ImGuiTreeNodeFlags flags =               
+    ImGuiTreeNodeFlags flags =
         ImGuiTreeNodeFlags_OpenOnArrow |
         ImGuiTreeNodeFlags_SpanAvailWidth;
 
@@ -244,10 +249,14 @@ void Editor::DrawHierarchyNode(GameObject* obj)
                 {
                     if (dtr != tr) // 순환 체크
                     {
-                        dtr->SetParent(tr);
-                        ImGui::PopID();
-                        ImGui::EndDragDropTarget();
-                        return;
+                        bool isChanged = dtr->SetParent(tr);
+
+                        if (isChanged)
+                        {
+                            ImGui::PopID();
+                            ImGui::EndDragDropTarget();
+                            return;
+                        }
                     }
                 }
             }
@@ -266,8 +275,38 @@ void Editor::DrawHierarchyNode(GameObject* obj)
         }
         ImGui::TreePop();
     }
-
     ImGui::PopID();
+}
+
+void Editor::DrawHierarchyDropSpace()
+{
+    // 2. 빈 공간을 드롭 타겟으로 지정한다.
+    ImVec2 avail = ImGui::GetContentRegionAvail(); // 창에서 사용 가능한 남은 공간
+
+    if (avail.y < 1.0f) avail.y = 1.0f; // 최소 남은 공간 == 1.0f
+
+    // 배경 전체(남은 영역)를 아이템으로 만든다
+    ImGui::InvisibleButton("##HierarchyBlankSpace", avail,
+        ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+
+    // DragDrop 확인
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
+        {
+            GameObject* dragged = *(GameObject**)payload->Data;
+            if (dragged)
+            {
+                Transform* dtr = dragged->GetComponent<Transform>();
+                if (dtr)
+                {
+                    dtr->RemoveSelfAtParent(); // 부모 해제
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
 }
 
 void Editor::RenderInspector()

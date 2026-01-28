@@ -166,9 +166,10 @@ void Transform::RemoveChild(Transform* transPtr)
     }
 }
 
-void Transform::SetParent(Transform* newParent)
+bool Transform::SetParent(Transform* newParent)
 {
-    if (newParent == this) return; // 사이클 방지
+    if (newParent == this) return false; // 사이클 방지
+    if (newParent == parent) return false; // 동일한 부모면 무시
 
     // 기존 부모 child 목록에서 제거
     if (parent)
@@ -182,6 +183,8 @@ void Transform::SetParent(Transform* newParent)
 
     dirty = true;
     SetChildrenDirty();
+
+    return true;
 }
 
 void Transform::RemoveChildren()
@@ -195,8 +198,11 @@ void Transform::RemoveChildren()
 
 void Transform::RemoveSelfAtParent()
 {
-    if(parent)
-        parent->RemoveChild(this);
+    if (parent)
+    {
+        parent->RemoveChild(this);  // 부모한테서 자신 제거
+        parent = nullptr;           // 부모 제거
+    }
 }
 
 void Transform::SetChildrenDirty()

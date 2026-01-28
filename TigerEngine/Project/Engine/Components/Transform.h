@@ -78,7 +78,7 @@ public:
 
     void AddChild(Transform* transPtr);
     void RemoveChild(Transform* transPtr);
-    void SetParent(Transform* transPtr);
+    bool SetParent(Transform* transPtr);
     void RemoveChildren();
     void RemoveSelfAtParent();  // 부모에서 자신을 스스로 제거함
     void SetChildrenDirty();    // 모든 자식 dirty 플래그 활성화
