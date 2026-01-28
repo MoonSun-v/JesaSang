@@ -2198,11 +2198,12 @@
             },
             "type": "FBXRenderer"
           },
+          "PlayerMove_Test": {},
           "Transform": {
             "properties": {
               "Position": [
                 0.0,
-                0.0,
+                100.0,
                 0.0
               ],
               "Rotation": [

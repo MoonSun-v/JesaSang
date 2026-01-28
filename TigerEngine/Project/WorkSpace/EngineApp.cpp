@@ -414,6 +414,7 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "PhysicsTest/GroundTestScript.h"
 #include "PhysicsTest/CCTTest.h"
 #include "AudioTest/AudioPlayModeScript.h"
+#include "Dev/Woo/PlayerMove_Test.h"
 
 
 void EngineApp::RegisterAllComponents()
@@ -437,5 +438,8 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<CharacterControllerComponent>("CharacterControllerComponent");
     ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
     ComponentFactory::Instance().Register<AnimationController>("AnimationController");
+
+    // 우정 physics test
+    ComponentFactory::Instance().Register<PlayerMove_Test>("PlayerMove_Test");
 }
 
