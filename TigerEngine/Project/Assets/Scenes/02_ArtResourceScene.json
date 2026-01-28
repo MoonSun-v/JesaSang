@@ -2006,55 +2006,130 @@
         "components": {
           "FBXData": {
             "properties": {
-              "DataPath": "..\\Assets\\Resource\\FBX\\Food\\teble_Food.fbx",
+              "DataPath": "",
               "IsStatic": false
             },
             "type": "FBXData"
           },
           "FBXRenderer": {
             "properties": {
-              "Alpha": 0.0,
+              "Alpha": 1.0,
               "Diffuse": [
-                84.66021728515625,
-                -0.7689761519432068,
-                -42.78260803222656,
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
               "DiffuseOverride": [
-                -20.85501480102539,
-                0.0,
-                0.0,
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
               "Emissive": [
-                -0.9082712531089783,
-                -99.99586486816406,
-                46.07173538208008,
+                1.0,
+                1.0,
+                1.0,
                 1.0
               ],
               "EmissiveOverride": [
-                0.0,
                 1.0,
-                53.21705627441406,
+                1.0,
+                1.0,
                 1.0
               ],
-              "IsGround": true,
-              "Metalic": 53.21486282348633,
-              "MetallicOverride": 84.66021728515625,
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
               "RenderBlendType": "Opaque",
-              "Roughness": -84.66370391845703,
-              "RoughnessOverride": -0.7689761519432068,
-              "UseDiffuseOverride": true,
-              "UseEmissiveOverride": true,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
             },
             "type": "FBXRenderer"
           },
           "Transform": {
             "properties": {
               "Position": [
-                -200.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Name": "Player",
+        "components": {
+          "FBXData": {
+            "properties": {
+              "DataPath": "..\\Assets\\Resource\\FBX\\Player\\charcter_test.fbx",
+              "IsStatic": false
+            },
+            "type": "FBXData"
+          },
+          "FBXRenderer": {
+            "properties": {
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false
+            },
+            "type": "FBXRenderer"
+          },
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
                 0.0,
                 -100.0
               ],
