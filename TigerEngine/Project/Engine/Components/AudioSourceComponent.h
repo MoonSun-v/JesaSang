@@ -44,6 +44,7 @@ public:
 
     void Play(bool restart = true);
     void PlayOneShot();
+    void Pause(bool paused);
     void Stop();
     void Update3D();
     bool IsPlaying() const;

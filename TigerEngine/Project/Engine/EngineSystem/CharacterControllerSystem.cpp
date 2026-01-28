@@ -11,8 +11,8 @@
 // ------------------------------------------------------------
 void ControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 {
-    auto* cctComp = CharacterControllerSystem::Instance().GetComponent(hit.controller);
-    auto* otherComp = PhysicsSystem::Instance().GetComponent(hit.actor);
+    CharacterControllerComponent* cctComp = owner;
+    PhysicsComponent* otherComp = PhysicsSystem::Instance().GetComponent(hit.actor);
 
     if (!cctComp || !otherComp)
         return;
@@ -157,18 +157,13 @@ void CharacterControllerSystem::Shutdown()
 {
     for (auto& it : m_CCTMap)
     {
-        if (it.first)
-        {
-            it.first->release();
-        }
+        PxController* cct = it.second;
+        if (cct)
+            cct->release();
     }
     m_CCTMap.clear();
 
-    if (m_ControllerManager)
-    {
-        PX_RELEASE(m_ControllerManager);
-        m_ControllerManager = nullptr;
-    }
+    PX_RELEASE(m_ControllerManager);
 }
 
 void CharacterControllerSystem::Simulate(float dt)
@@ -177,7 +172,7 @@ void CharacterControllerSystem::Simulate(float dt)
 
     for (auto& it : m_CCTMap)
     {
-        CharacterControllerComponent* comp = it.second;
+        CharacterControllerComponent* comp = it.first;
         if (comp)
         {
             comp->SyncFromController();
@@ -189,19 +184,27 @@ void CharacterControllerSystem::Simulate(float dt)
 }
 
 
-CharacterControllerComponent* CharacterControllerSystem::GetComponent(PxController* cct)
+void CharacterControllerSystem::RegisterComponent(CharacterControllerComponent* comp, PxController* cct)
 {
-    auto it = m_CCTMap.find(cct);
-    return (it != m_CCTMap.end()) ? it->second : nullptr;
+    if (comp && cct)
+        m_CCTMap[comp] = cct;
 }
-void CharacterControllerSystem::RegisterComponent(PxController* cct, CharacterControllerComponent* comp)
+
+void CharacterControllerSystem::UnRegisterComponent(CharacterControllerComponent* comp)
 {
-    if (cct) m_CCTMap[cct] = comp;
-}
-void CharacterControllerSystem::UnregisterComponent(PxController* cct)
-{
-    if (!cct) return;
-    m_CCTMap.erase(cct);
+    if (!comp) return;
+
+    auto it = m_CCTMap.find(comp);
+    if (it == m_CCTMap.end())
+        return;
+
+    PxController* cct = it->second;
+    m_CCTMap.erase(it);
+
+    if (cct)
+        cct->release();
+
+    comp->m_Controller = nullptr;
 }
 
 
@@ -241,7 +244,7 @@ PxController* CharacterControllerSystem::CreateCapsuleCollider(
             // CCT Shape은 Simulation에서 제거함. 
             // - RigidBody와 직접 충돌 계산하지 않음
             // - 모든 충돌은 Sweep(Query) 기반
-            shapes[i]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false/*true*/);
+            shapes[i]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
             shapes[i]->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
         }
     }

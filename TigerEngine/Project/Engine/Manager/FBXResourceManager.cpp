@@ -204,7 +204,22 @@ void FBXResourceManager::ProcessBoneWeight(std::shared_ptr<FBXResourceAsset>& pA
 	}
 }
 
-std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FBXResourceAsset>& pAsset, aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene)
+static std::u8string ToU8(const std::string& s)
+{
+    return std::u8string(reinterpret_cast<const char8_t*>(s.data()), s.size());
+}
+
+static std::string FromU8(const std::u8string& s)
+{
+    return std::string(reinterpret_cast<const char*>(s.data()), s.size());
+}
+
+std::vector<Texture> FBXResourceManager::loadMaterialTextures(
+    std::shared_ptr<FBXResourceAsset>& pAsset,
+    aiMaterial* mat,
+    aiTextureType type,
+    std::string typeName,
+    const aiScene* scene)
 {
     std::vector<Texture> textures;
     auto& textureloadeds = pAsset->textures;
@@ -214,10 +229,13 @@ std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FB
         aiString str;
         mat->GetTexture(type, i, &str);
 
+        const std::string texRef = str.C_Str();
+
+        // 중복 스킵
         bool skip = false;
         for (UINT j = 0; j < textureloadeds.size(); j++)
         {
-            if (std::strcmp(textureloadeds[j].path.c_str(), str.C_Str()) == 0)
+            if (textureloadeds[j].path == texRef)
             {
                 textures.push_back(textureloadeds[j]);
                 skip = true;
@@ -226,32 +244,40 @@ std::vector<Texture> FBXResourceManager::loadMaterialTextures(std::shared_ptr<FB
         }
         if (skip) continue;
 
-        // texture file name
-        Texture texture;
-        const std::string texRef = str.C_Str();
-        const std::string filenameOnly = std::filesystem::path(texRef).filename().string();
+        Texture texture{};
 
+        // filenameOnly (UTF-8 안전)
+        const std::filesystem::path texPath{ ToU8(texRef) };
+        const std::filesystem::path filenameOnlyPath = texPath.filename();
+        const std::string filenameOnly = FromU8(filenameOnlyPath.u8string()); // SaveEmbeddedTextureIfExists 용
 
-        // texture file path
-        std::string fullpath = pAsset->directory + "\\" + filenameOnly;
+        // full path (UTF-8 안전)
+        std::filesystem::path fullPath{ ToU8(pAsset->directory) };
+        fullPath /= filenameOnlyPath;
+
+        // SaveEmbeddedTextureIfExists가 string*을 받으니 UTF-8 string도 준비
+        std::string fullpathUtf8 = FromU8(fullPath.u8string());
 
         // 내장 텍스처 save
         if (scene && scene->GetEmbeddedTexture(str.C_Str()))
         {
-            SaveEmbeddedTextureIfExists(scene, pAsset->directory, filenameOnly, &fullpath);
+            SaveEmbeddedTextureIfExists(scene, pAsset->directory, filenameOnly, &fullpathUtf8);
+
+            // u8path 쓰지 말고 (경고 제거)
+            // fullpathUtf8(UTF-8 bytes) -> u8string -> path
+            fullPath = std::filesystem::path{ ToU8(fullpathUtf8) };
         }
 
-        std::wstring wfullpath(fullpath.begin(), fullpath.end());
+        // CreateTextureFromFile용 wide path
+        const std::wstring wfullpath = fullPath.wstring();
 
-        // texture load (SRGB / Linear)
         if (typeName == TEXTURE_DIFFUSE)
             CreateTextureFromFile(device.Get(), wfullpath.c_str(), texture.pTexture.GetAddressOf(), TextureColorSpace::SRGB);
         else
             CreateTextureFromFile(device.Get(), wfullpath.c_str(), texture.pTexture.GetAddressOf(), TextureColorSpace::LINEAR);
 
-        // push
         texture.type = typeName;
-        texture.path = str.C_Str();
+        texture.path = texRef;
         textures.push_back(texture);
         textureloadeds.push_back(texture);
     }
@@ -574,7 +600,7 @@ std::shared_ptr<FBXResourceAsset> FBXResourceManager::LoadStaticFBXByPath(std::s
 }
 
 
-bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName)
+bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> asset, std::string animPath, const std::string& clipName, bool loop)
 {
     if (!asset) return false;
     if (!asset->skeletalInfo.IsSkeletal()) return false;
@@ -602,8 +628,9 @@ bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> a
     {
         Animation anim;
         anim.CreateFromAssimp(pScene->mAnimations[i]);
+        anim.m_loop = loop; // 루프 설정
 
-        // 이름 지정
+        // 이름 지정 
         if (!clipName.empty())
             anim.m_name = clipName; // 외부에서 지정한 이름 사용
         else

@@ -23,7 +23,6 @@ void GroundTestScript::OnStart()
         rigidComp->CreateStaticBox({ 600, 70, 600 });
         // rigidComp->CreateTriggerBox({ 600, 70, 600 });
         // rigidComp->SetLayer(CollisionLayer::IgnoreTest); // 충돌 레이어 테스트 
-        rigidComp->SyncToPhysics();
     }
 }
 

@@ -29,6 +29,7 @@ RTTR_REGISTRATION
             (rttr::policy::ctor::as_std_shared_ptr)
 
         .property("RenderBlendType",    &FBXRenderer::GetRenderBlendType,           &FBXRenderer::SetRenderBlendType)
+        .property("IsGround",           &FBXRenderer::GetIsGround,                  &FBXRenderer::SetIsGround)
     
         .property("Diffuse", 	    &FBXRenderer::GetDiffuse,       &FBXRenderer::SetDiffuse)
         .property("Alpha", 	        &FBXRenderer::GetAlpha,         &FBXRenderer::SetAlpha)

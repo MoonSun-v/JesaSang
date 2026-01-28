@@ -698,6 +698,24 @@ void ShaderManager::CreateInputLayoutShader(const ComPtr<ID3D11Device>& dev, con
             pixelShaderBuffer->GetBufferSize(), NULL, &PS_ForwardTransparent));
         SAFE_RELEASE(pixelShaderBuffer);
     }
+
+    //---------------------------
+    // Decal VS, PS
+    {
+        ID3D10Blob* vertexShaderBuffer = nullptr;
+        std::wstring path = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\VS_Decal.hlsl";
+        HR_T(CompileShaderFromFile(path.c_str(), "main", "vs_5_0", &vertexShaderBuffer));
+        HR_T(dev->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(),
+            vertexShaderBuffer->GetBufferSize(), NULL, &VS_Decal));
+        SAFE_RELEASE(vertexShaderBuffer);
+
+        ID3D10Blob* pixelShaderBuffer = nullptr;
+        std::wstring path2 = PathHelper::GetExeDir().wstring() + L"\\..\\..\\Engine\\Shaders\\PS_Decal.hlsl";
+        HR_T(CompileShaderFromFile(path2.c_str(), "main", "ps_5_0", &pixelShaderBuffer));
+        HR_T(dev->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
+            pixelShaderBuffer->GetBufferSize(), NULL, &PS_Decal));
+        SAFE_RELEASE(pixelShaderBuffer);
+    }
 }
 
 void ShaderManager::CreateCB(const ComPtr<ID3D11Device>& dev)

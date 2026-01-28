@@ -18,6 +18,8 @@ class CharacterControllerComponent;
 class ControllerHitReport : public PxUserControllerHitReport
 {
 public:
+    CharacterControllerComponent* owner = nullptr;
+
     virtual void onShapeHit(const PxControllerShapeHit& hit) override;
     virtual void onControllerHit(const PxControllersHit&) override {}
     virtual void onObstacleHit(const PxControllerObstacleHit&) override {}
@@ -81,15 +83,16 @@ public:
     void Simulate(float dt);
     void Shutdown();
 
-    void RegisterComponent(PxController* cct, CharacterControllerComponent* comp);
-    void UnregisterComponent(PxController* cct);
+    void RegisterComponent(CharacterControllerComponent* comp, PxController* cct);
+    void UnRegisterComponent(CharacterControllerComponent* comp);
 
     PxControllerManager* GetControllerManager() const { return m_ControllerManager; }
-    CharacterControllerComponent* GetComponent(PxController* cct);
 
     // CCT <-> Component 매핑
-    std::unordered_map<PxController*, CharacterControllerComponent*> m_CCTMap;
+    std::unordered_map<CharacterControllerComponent*, PxController*> m_CCTMap;
 
+    // getter 
+    ControllerHitReport& GetHitReport() { return m_ControllerHitReport; }
 
 private:
     PxControllerManager* m_ControllerManager = nullptr;

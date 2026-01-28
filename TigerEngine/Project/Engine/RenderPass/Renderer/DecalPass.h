@@ -5,9 +5,14 @@
 /*
     [ Decal Renderer ]
 
-    Decal이라함은 기본적으로 scene에 그려진 depth를 참조하여 월드에 투영하듯 그리는 거지만
-    해당 렌더러는 게임 성향에 맞게 'Ground 전용 Decal Pass'를 진행합니다.
+    Box Volume를 이용한 Decal Renderer입니다.
+    Texture Map, Ring Effect를 지원합니다.
+    현재 Opaque 오브젝트에만 적용 가능합니다.
+    
+    - 일반 Decal : DSS depth test only
+    - Groudn Decal : DSS depth + stencil test (0x01)
 
+    // 아래 무시. Normal Test는 일단 삭제했고,
     1) Geometry Pass에서 ground를 그릴때 기록된 stencil(0x01)을 test하고
     2) Normal == Vector::Up인 position에 대해서만 Decal을 G-buffer(Albedo)에 기록합니다.
 

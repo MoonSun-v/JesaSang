@@ -228,11 +228,7 @@ void PhysicsComponent::OnInitialize()
 
 PhysicsComponent::~PhysicsComponent()
 {
-    if (m_Actor)
-    {
-        PhysicsSystem::Instance().UnregisterComponent(m_Actor);
-        PX_RELEASE(m_Actor);
-    }
+    PhysicsSystem::Instance().UnregisterComponent(this);
 }
 
 
@@ -463,7 +459,11 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
     }
     
     phys.GetScene()->addActor(*m_Actor); // 물리 씬에 추가 
-    phys.RegisterComponent(m_Actor, this);
+    // phys.RegisterComponent(m_Actor, this);
+    phys.RegisterComponent(this, m_Actor);
+
+
+    SyncToPhysics(); // 좌표 연결 
 
     m_BodyType = body;
     m_ColliderType = collider;

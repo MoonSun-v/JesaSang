@@ -23,10 +23,9 @@ void PhysicsTestScript::OnStart()
 {
     if (rigidComp != nullptr)
     {
-        rigidComp->CreateDynamicBox({ 20, 30, 20 }, 5);
+        rigidComp->CreateDynamicBox({ 20, 30, 20 }, 15);
         // rigidComp->CreateStaticBox({ 20, 30, 20 });
         // rigidComp->SetLayer(CollisionLayer::Player);
-        rigidComp->SyncToPhysics();
     }
 }
 
