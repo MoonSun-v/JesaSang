@@ -138,6 +138,7 @@
     <ClCompile Include="Components\AnimationController.cpp" />
     <ClCompile Include="Components\Decal.cpp" />
     <ClCompile Include="EngineSystem\DecalSystem.cpp" />
+    <ClCompile Include="Object\enableable.cpp" />
     <ClCompile Include="RenderPass\Renderable\DecalVolumeMesh.cpp" />
     <ClCompile Include="RenderPass\Renderer\DecalPass.cpp" />
     <ClCompile Include="EngineSystem\AnimationSystem.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Components\AnimationController.h" />
     <ClInclude Include="Components\Decal.h" />
     <ClInclude Include="EngineSystem\DecalSystem.h" />
+    <ClInclude Include="Object\Enableable.h" />
     <ClInclude Include="RenderPass\Renderable\DecalVolumeMesh.h" />
     <ClInclude Include="RenderPass\Renderer\DecalPass.h" />
     <ClInclude Include="EngineSystem\AnimationSystem.h" />

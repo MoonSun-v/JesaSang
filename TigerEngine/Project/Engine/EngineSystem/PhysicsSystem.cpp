@@ -4,6 +4,7 @@
 #include "../Util/PhysicsLayerMatrix.h"
 #include "../Components/PhysicsComponent.h"
 #include <Helper.h>
+#include "../Object/GameObject.h"
 
 
 // ------------------------------------------------------------
@@ -112,6 +113,7 @@ void PhysicsSystem::Simulate(float dt)
     for (auto& it : m_ActorMap)
     {
         PhysicsComponent* comp = it.first;
+
         if (comp)
             comp->SyncFromPhysics();
     }
@@ -120,6 +122,9 @@ void PhysicsSystem::Simulate(float dt)
     for (auto& it : m_ActorMap)
     {
         PhysicsComponent* comp = it.first;
+
+        if (!comp->GetActiveSelf() || comp->GetOwner()->GetActiveSelf()) continue; // enable 체크 추가 - [26.01.29] 이성호
+
         if (comp)
             comp->CheckTriggers();
     }
@@ -146,6 +151,8 @@ void PhysicsSystem::ResolveTriggerEvents()
         if (!comp)
             continue;
 
+        if (!comp->GetActiveSelf() || comp->GetOwner()->GetActiveSelf()) continue; // enable 체크 추가 - [26.01.29] 이성호
+
         for (PhysicsComponent* other : comp->m_PendingTriggers)
         {
             // (A,B) == (B,A) 정규화
@@ -162,6 +169,9 @@ void PhysicsSystem::ResolveTriggerEvents()
     // --------------------------------------------------
     for (const auto& pair : m_TriggerCurr)
     {
+        if (!pair.first->GetActiveSelf() || pair.first->GetOwner()->GetActiveSelf() ||
+            !pair.second->GetActiveSelf() || pair.second->GetOwner()->GetActiveSelf()) continue; // enable 체크 추가 - [26.01.29] 이성호
+
         if (m_TriggerPrev.find(pair) == m_TriggerPrev.end())
         {
             pair.first->OnTriggerEnter(pair.second);
@@ -179,6 +189,9 @@ void PhysicsSystem::ResolveTriggerEvents()
     // --------------------------------------------------
     for (const auto& pair : m_TriggerPrev)
     {
+        if (!pair.first->GetActiveSelf() || pair.first->GetOwner()->GetActiveSelf() ||
+            !pair.second->GetActiveSelf() || pair.second->GetOwner()->GetActiveSelf()) continue; // enable 체크 추가 - [26.01.29] 이성호
+
         if (m_TriggerCurr.find(pair) == m_TriggerCurr.end())
         {
             pair.first->OnTriggerExit(pair.second);

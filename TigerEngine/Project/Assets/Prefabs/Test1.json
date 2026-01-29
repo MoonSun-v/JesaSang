@@ -1,0 +1,374 @@
+{
+  "prefab": [
+    {
+      "ID": 122,
+      "Name": "Parent",
+      "ParentID": -1,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\cube2.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              -272.5,
+              183.1999969482422,
+              0.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              -0.3455751836299896
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    },
+    {
+      "ID": 123,
+      "Name": "child1",
+      "ParentID": 122,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\fire.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              0.0,
+              120.0,
+              -200.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    },
+    {
+      "ID": 124,
+      "Name": "Child2",
+      "ParentID": 123,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              0.0,
+              -51.400001525878906,
+              -133.10000610351563
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    },
+    {
+      "ID": 125,
+      "Name": "NewGameObject",
+      "ParentID": 122,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\Character.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              159.0,
+              154.6999969482422,
+              0.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    },
+    {
+      "ID": 126,
+      "Name": "NewGameObject",
+      "ParentID": 125,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              0.0,
+              0.0,
+              -157.6999969482422
+            ],
+            "Rotation": [
+              0.0,
+              -0.1745154708623886,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    }
+  ]
+}

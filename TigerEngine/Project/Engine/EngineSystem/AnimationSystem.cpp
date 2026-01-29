@@ -21,6 +21,7 @@ void AnimationSystem::Update(float dt)
 {
     for (auto* controller : comps)
     {
+
         if (controller)
             controller->Update(dt);
     }

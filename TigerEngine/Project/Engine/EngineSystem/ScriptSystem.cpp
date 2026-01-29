@@ -1,5 +1,6 @@
 #include "ScriptSystem.h"
 #include "../EngineSystem/PlayModeSystem.h"
+#include "../Object/GameObject.h"
 
 void ScriptSystem::CheckReadyQueue()
 {
@@ -21,7 +22,7 @@ void ScriptSystem::Register(Component* comp)
 void ScriptSystem::RegisterScript(Component* comp)
 {
     scriptComps.push_back(comp);
-    scriptCompsInitReadyQueue.push(comp);
+    scriptCompsInitReady.push_back(comp);
 }
 
 void ScriptSystem::UnRegister(Component* comp)
@@ -53,6 +54,9 @@ void ScriptSystem::Update(float delta)
     // 일반 component update
     for (auto& e : comps)
     {
+        if (!e->GetOwner()->GetActiveSelf()) continue;  // Object 활성화 여부
+        if (!e->GetActiveSelf()) continue;              // 컴포넌트 활성화 여부
+
         if (!e->IsStart())
         {
             e->IsStart();
@@ -67,16 +71,25 @@ void ScriptSystem::Update(float delta)
     if (PlayModeSystem::Instance().IsPlaying())
     {
         // 1. 등록된 init 해소
-        while (!scriptCompsInitReadyQueue.empty())
+
+        for (auto it = scriptCompsInitReady.begin(); it != scriptCompsInitReady.end();)
         {
-            auto comp = scriptCompsInitReadyQueue.front();
-            comp->OnInitialize();
-            scriptCompsInitReadyQueue.pop();
+            if (!(*it)->GetOwner()->GetActiveSelf() || !(*it)->GetActiveSelf())
+            {
+                it++;
+            }
+            else
+            {
+                (*it)->OnInitialize();
+                it = scriptCompsInitReady.erase(it);
+            }
         }
 
         // 3. 사용자 정의 component update
         for (auto& e : scriptComps)
         {
+            if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
+                
             if (!e->IsStart())
             {
                 e->OnStart();
@@ -97,6 +110,8 @@ void ScriptSystem::FixedUpdate(float dt)
         // 사용자 정의 component update
         for (auto& e : scriptComps)
         {
+            if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
+
             e->OnFixedUpdate(dt);
         }
     }
@@ -109,6 +124,8 @@ void ScriptSystem::LateUpdate(float dt)
         // 사용자 정의 component update
         for (auto& e : scriptComps)
         {
+            if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
+
             e->OnLateUpdate(dt);
         }
     }

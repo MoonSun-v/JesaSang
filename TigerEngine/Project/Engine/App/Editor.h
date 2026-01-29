@@ -4,6 +4,12 @@
 #include "System/InputSystem.h"
 #include "../Object/GameObject.h"
 
+struct PrefabEntry
+{
+    std::string name; 
+    std::vector<std::string> jsons; // Serialize() 한 결과물 ( 계층 구조의 모든 Object의 json data )
+};
+
 /// @brief imgui를 사용하고 렌더링 하는 객체
 /// @date 26 01 07
 /// @details
@@ -25,25 +31,37 @@ public:
     void CreatePickingStagingTex();
 
 private:
+    // Menu bar
     void RenderMenuBar(HWND& hwnd);
+    void RenderPlayModeControls();
+    void RenderWorldSettings();
+    void RenderShadowMap();
+    void RenderWorldManager();
+    void SaveCurrentScene(HWND& hwnd);
+    void LoadScene(HWND& hwnd);
+
+    // Hierarchy
     void RenderHierarchy();
     void DrawHierarchyNode(GameObject* obj);
     void DrawHierarchyDropSpace();
+    void RenderPrefabWindow(HWND& hwnd);
+    std::string MakeUniquePrefabName(const std::string& base, const std::vector<PrefabEntry>& list);
+    GameObject* InstantiatePrefabFromJson(const std::vector<std::string>& jsonStr, Transform* parent);
+    void CollectSubtree(GameObject* root, std::vector<std::string>& out);
+    bool SavePrefabToJson(HWND& hwnd, PrefabEntry& data, const char* filePath);
+    void LoadPrefabsFromFolder(const std::string& folder);
+    bool LoadPrefabFromJsonFile(const std::string& filepath, PrefabEntry& outPrefab);
+
+    // inspector
     void RenderInspector();
-    void RenderPlayModeControls();
+
+    // Debug Draw
     void RenderCameraFrustum();
-    void RenderWorldSettings();
-    void RenderShadowMap();
-
-    void RenderWorldManager();
-
-    template<typename T>
-    void RenderComponentInfo(std::string name, T* comp);
-
     void RenderDebugAABBDraw();
 
-    void SaveCurrentScene(HWND& hwnd);
-    void LoadScene(HWND& hwnd);
+    // Reender RTTR
+    template<typename T>
+    void RenderComponentInfo(std::string name, T* comp);
     
     GameObject* selectedObject; // 현재 inspector 정보를 보고 있는 게임 오브젝트
 
@@ -82,6 +100,15 @@ private:
     // rttr read
     void ReadVariants(rttr::variant& var);
     void ReadVariants(rttr::instance inst);
+
+    // prefabs
+    std::vector<PrefabEntry> prefabs;
+    int selectedPrefabIndex = -1;
+    bool isPrefabWindowOpen = true;
+
+    // Check Key
+    void CheckObjectDeleteKey();
+    bool isHierarchyFocused = false;
 
 public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,

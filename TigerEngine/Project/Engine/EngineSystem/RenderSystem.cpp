@@ -1,5 +1,6 @@
 #include "RenderSystem.h"
 #include "System/TimeSystem.h"
+#include "../Object/GameObject.h"
 
 void RenderSystem::CheckReadyQueue()
 {
@@ -34,6 +35,8 @@ void RenderSystem::Render(RenderQueue& queue)
 {
     for (auto& e : comps)
     {
+        if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
+
         if (!e->IsStart())
         {
             e->IsStart();
