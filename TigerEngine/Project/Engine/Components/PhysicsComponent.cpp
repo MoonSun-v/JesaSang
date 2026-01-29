@@ -6,15 +6,41 @@
 #include "Transform.h"
 #include <DirectXColors.h>
 #include "../Object/GameObject.h"
-
+#include "../Util/JsonHelper.h"
 
 RTTR_REGISTRATION
 {
+    rttr::registration::enumeration<PhysicsBodyType>("PhysicsBodyType")
+        (
+            rttr::value("Static", PhysicsBodyType::Static),
+            rttr::value("Dynamic", PhysicsBodyType::Dynamic),
+            rttr::value("Kinematic", PhysicsBodyType::Kinematic)
+        );
+
+    rttr::registration::enumeration<ColliderType>("ColliderType")
+    (
+        rttr::value("Box", ColliderType::Box),
+        rttr::value("Sphere", ColliderType::Sphere),
+        rttr::value("Capsule", ColliderType::Capsule)
+        );
+
+    rttr::registration::enumeration<CollisionLayer>("CollisionLayer")
+        (
+            rttr::value("Default", CollisionLayer::Default),
+            rttr::value("Player", CollisionLayer::Player),
+            rttr::value("Enemy", CollisionLayer::Enemy),
+            rttr::value("World", CollisionLayer::World),
+            rttr::value("Trigger", CollisionLayer::Trigger),
+            rttr::value("Projectile", CollisionLayer::Projectile),
+            rttr::value("Ball", CollisionLayer::Ball),
+            rttr::value("IgnoreTest", CollisionLayer::IgnoreTest)
+            );
+
     rttr::registration::class_<PhysicsComponent>("PhysicsComponent")
         .constructor<>()
 
-        .property("bodyType", &PhysicsComponent::m_BodyType)
-        .property("colliderType", &PhysicsComponent::m_ColliderType)
+        .property("PhysicsBodyType", &PhysicsComponent::m_BodyType)
+        .property("ColliderType", &PhysicsComponent::m_ColliderType)
 
         .property("halfExtents", &PhysicsComponent::m_HalfExtents)
         .property("radius", &PhysicsComponent::m_Radius)
@@ -26,137 +52,28 @@ RTTR_REGISTRATION
         .property("isTrigger", &PhysicsComponent::m_IsTrigger);
 }
 
-nlohmann::json Vec3_Json(const Vector3& v)
-{
-    return nlohmann::json{
-        {"x", v.x},
-        {"y", v.y},
-        {"z", v.z}
-    };
-}
-
-Vector3 Json_Vec3(const nlohmann::json& j, const Vector3& fallback)
-{
-    if (!j.is_object()) return fallback;
-
-    Vector3 v = fallback;
-    if (j.contains("x")) v.x = j["x"].get<float>();
-    if (j.contains("y")) v.y = j["y"].get<float>();
-    if (j.contains("z")) v.z = j["z"].get<float>();
-    return v;
-}
-
 nlohmann::json PhysicsComponent::Serialize()
 {
-    nlohmann::json datas;
-    rttr::type t = rttr::type::get(*this);
-
-    datas["type"] = t.get_name().to_string();
-    datas["properties"] = nlohmann::json::object();
-
-    for (auto& prop : t.get_properties())
-    {
-        std::string name = prop.get_name().to_string();
-        rttr::variant value = prop.get_value(*this);
-
-        // enum
-        if (value.is_type<PhysicsBodyType>())
-            datas["properties"][name] = (int)value.get_value<PhysicsBodyType>();
-
-        else if (value.is_type<ColliderType>())
-            datas["properties"][name] = (int)value.get_value<ColliderType>();
-
-        else if (value.is_type<CollisionLayer>())
-            datas["properties"][name] = (int)value.get_value<CollisionLayer>();
-
-        // bool / float
-        else if (value.is_type<bool>())
-            datas["properties"][name] = value.get_value<bool>();
-
-        else if (value.is_type<float>())
-            datas["properties"][name] = value.get_value<float>();
-
-        // Vector3
-        else if (value.is_type<Vector3>())
-            datas["properties"][name] = Vec3_Json(value.get_value<Vector3>());
-    }
-
-    return datas;
+    return JsonHelper::MakeSaveData(this);
 }
 
 void PhysicsComponent::Deserialize(nlohmann::json data)
 {
-    if (!data.is_object() || !data.contains("properties"))
-        return;
+    JsonHelper::SetDataFromJson(this, data);
 
-    auto propData = data["properties"];
-    rttr::type t = rttr::type::get(*this);
+    //// -------------------------
+    //// PhysX 재생성
+    //// -------------------------
+    //ColliderDesc d;
+    //d.halfExtents = m_HalfExtents;
+    //d.radius = m_Radius;
+    //d.height = m_Height;
+    //d.density = m_Density;
+    //d.localOffset = m_LocalOffset;
+    //d.isTrigger = m_IsTrigger;
 
-    for (auto& prop : t.get_properties())
-    {
-        std::string name = prop.get_name().to_string();
-        if (!propData.contains(name))
-            continue;
-
-        // enum
-        if (name == "bodyType")
-        {
-            prop.set_value(*this, (PhysicsBodyType)propData[name].get<int>());
-        }
-        else if (name == "colliderType")
-        {
-            prop.set_value(*this, (ColliderType)propData[name].get<int>());
-        }
-        else if (name == "layer")
-        {
-            prop.set_value(*this, (CollisionLayer)propData[name].get<int>());
-        }
-
-        // bool / float
-        else if (name == "isTrigger")
-        {
-            prop.set_value(*this, propData[name].get<bool>());
-        }
-        else if (name == "radius")
-        {
-            prop.set_value(*this, propData[name].get<float>());
-        }
-        else if (name == "height")
-        {
-            prop.set_value(*this, propData[name].get<float>());
-        }
-        else if (name == "density")
-        {
-            prop.set_value(*this, propData[name].get<float>());
-        }
-
-        else if (name == "halfExtents")
-        {
-            Vector3 curr = prop.get_value(*this).get_value<Vector3>();
-            Vector3 v = Json_Vec3(propData[name], curr);
-            prop.set_value(*this, v);
-        }
-        else if (name == "localOffset")
-        {
-            Vector3 curr = prop.get_value(*this).get_value<Vector3>();
-            Vector3 v = Json_Vec3(propData[name], curr);
-            prop.set_value(*this, v);
-        }
-    }
-
-    // -------------------------
-    // PhysX 재생성
-    // -------------------------
-    ColliderDesc d;
-    d.halfExtents = m_HalfExtents;
-    d.radius = m_Radius;
-    d.height = m_Height;
-    d.density = m_Density;
-    d.localOffset = m_LocalOffset;
-    d.isTrigger = m_IsTrigger;
-
-    CreateCollider(m_ColliderType, m_BodyType, d); // Note : 반드시 PysicsSystem.Initialize()가 호출된 뒤에 호출되야함.
-    SetLayer(m_Layer);
+    //CreateCollider(m_ColliderType, m_BodyType, d); // Note : 반드시 PysicsSystem.Initialize()가 호출된 뒤에 호출되야함.
+    //SetLayer(m_Layer);
 }
 
 void PhysicsComponent::OnCollisionEnter(PhysicsComponent* other)
@@ -224,6 +141,23 @@ void PhysicsComponent::OnCCTCollisionExit(CharacterControllerComponent* cct)
 void PhysicsComponent::OnInitialize()
 {
     transform = GetOwner()->GetTransform();
+
+    
+}
+
+void PhysicsComponent::OnStart()
+{
+    // 우정 0128 | PhysicsComponent에서 스스로 collider Create
+    ColliderDesc d;
+    d.halfExtents = m_HalfExtents;
+    d.radius = m_Radius;
+    d.height = m_Height;
+    d.density = m_Density;
+    d.localOffset = m_LocalOffset;
+    d.isTrigger = m_IsTrigger;
+
+    CreateCollider(m_ColliderType, m_BodyType, d);
+    SetLayer(m_Layer);
 }
 
 PhysicsComponent::~PhysicsComponent()

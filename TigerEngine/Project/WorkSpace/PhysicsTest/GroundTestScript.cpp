@@ -20,7 +20,9 @@ void GroundTestScript::OnStart()
 {
     if (rigidComp != nullptr)
     {
-        rigidComp->CreateStaticBox({ 600, 70, 600 });
+        // 우정 0128 | PhysicsComponent에서 스스로 Create
+        //rigidComp->CreateStaticBox({ 600, 70, 600 });
+
         // rigidComp->CreateTriggerBox({ 600, 70, 600 });
         // rigidComp->SetLayer(CollisionLayer::IgnoreTest); // 충돌 레이어 테스트 
     }

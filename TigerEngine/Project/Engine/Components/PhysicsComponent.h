@@ -7,29 +7,13 @@
 #include "../Util/CollisionLayer.h"
 #include "../Object/Component.h"
 #include "../Util/DebugDraw.h"
+#include "../Base/Datas/EnumData.hpp"
 
 using namespace DirectX::SimpleMath;
 using namespace physx;
 
 class Transform;
 class CharacterControllerComponent;
-
-// ------------------------------
-// Enum (엔진 내부용)
-// ------------------------------
-enum class PhysicsBodyType
-{
-    Static,
-    Dynamic,
-    Kinematic
-};
-
-enum class ColliderType
-{
-    Box,
-    Sphere,
-    Capsule
-};
 
 
 // ------------------------------
@@ -65,6 +49,7 @@ public:
 
 public:
     void OnInitialize() override;
+    void OnStart() override;
 
 public:
     Transform* transform = nullptr;

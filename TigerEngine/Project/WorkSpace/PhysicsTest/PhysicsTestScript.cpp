@@ -23,7 +23,9 @@ void PhysicsTestScript::OnStart()
 {
     if (rigidComp != nullptr)
     {
-        rigidComp->CreateDynamicBox({ 20, 30, 20 }, 15);
+        // 우정 0128 | PhysicsComponent에서 스스로 Create
+        //rigidComp->CreateDynamicBox({ 20, 30, 20 }, 15);
+
         // rigidComp->CreateStaticBox({ 20, 30, 20 });
         // rigidComp->SetLayer(CollisionLayer::Player);
     }

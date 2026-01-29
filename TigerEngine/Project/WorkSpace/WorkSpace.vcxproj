@@ -150,6 +150,7 @@
     <ClInclude Include="PhysicsTest\CCTTest.h" />
     <ClInclude Include="PhysicsTest\GroundTestScript.h" />
     <ClInclude Include="PhysicsTest\PhysicsTestScript.h" />
+    <ClInclude Include="Dev\Woo\PlayerMove_Test.h" />
     <ClInclude Include="Player\Player1.h" />
     <ClInclude Include="Player\Weapon.h" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClCompile Include="PhysicsTest\CCTTest.cpp" />
     <ClCompile Include="PhysicsTest\GroundTestScript.cpp" />
     <ClCompile Include="PhysicsTest\PhysicsTestScript.cpp" />
+    <ClCompile Include="Dev\Woo\PlayerMove_Test.cpp" />
     <ClCompile Include="Player\Player1.cpp" />
     <ClCompile Include="Player\Weapon.cpp" />
     <ClCompile Include="winMain.cpp" />

@@ -1,19 +1,9 @@
 #pragma once
 #include <cstdint>
+#include "../Base/Datas/EnumData.hpp"
 
-enum class CollisionLayer : uint32_t
-{
-    Default = 1 << 0,
-    Player = 1 << 1,
-    Enemy = 1 << 2,
-    World = 1 << 3,
-    Trigger = 1 << 4,
-    Projectile = 1 << 5,
-    Ball = 1 << 6,
-    IgnoreTest = 1 << 7 // 테스트 하려고 임시로 만듦, 추후 삭제 ㄱㄱ
-};
+
 constexpr uint32_t LayerCount = 32;
-
 using CollisionMask = uint32_t;
 
 
