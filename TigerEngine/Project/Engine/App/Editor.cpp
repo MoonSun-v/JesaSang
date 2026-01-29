@@ -767,6 +767,14 @@ void Editor::RenderInspector()
                         ImGui::InputText(name.c_str(), buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue);
                         prop.set_value(obj, std::string(buf));
                     }
+                    else if (value.is_type<bool>())
+                    {
+                        bool active = value.get_value<bool>();
+                        if (ImGui::Checkbox("Active", &active))
+                        {
+                            prop.set_value(obj, active);
+                        }
+                    }
                 }
 
                 /* -------------------------------- transform ------------------------------- */

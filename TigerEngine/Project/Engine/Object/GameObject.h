@@ -4,9 +4,9 @@
 #include <string> 
 #include <vector>
 #include "../Scene/Scene.h"
-#include "System/ObjectSystem.h"
 #include "../EngineSystem/RenderSystem.h"
 #include "../EngineSystem/ScriptSystem.h"
+#include "Enableable.h"
 
 class RenderComponent; // NOTE : Component 있는 거랑 순환 참조 조심하기
 class PhysicsComponent;
@@ -14,8 +14,9 @@ class PhysicsComponent;
 /// <summary>
 /// GameObject는 컴포넌트를 담고 있는 순수한 컨테이너
 /// </summary>
-class GameObject : public Object
+class GameObject : public Enableable
 {
+    RTTR_ENABLE(Enableable)
 public:
 	GameObject() { Initialize(); };
 	GameObject(Scene* scene, std::string name) : GameObject()

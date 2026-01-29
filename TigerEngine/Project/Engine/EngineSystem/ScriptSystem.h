@@ -71,7 +71,7 @@ private:
     std::vector<Component*> scriptComps{};
 
     /// <summary>
-    /// 스크립트 컴포넌트 initialize 레디 큐 
+    /// 스크립트 컴포넌트 initialize 레디 목록 
     /// </summary>
-    std::queue<Component*> scriptCompsInitReadyQueue{};
+    std::vector<Component*> scriptCompsInitReady{};
 };

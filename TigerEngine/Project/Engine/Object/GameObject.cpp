@@ -7,9 +7,11 @@
 
 RTTR_REGISTRATION
 {
+    rttr::registration::class_<Enableable>("Enableable")
+        .property("Active", &Enableable::GetActiveSelf, &Enableable::SetActive);
+
     rttr::registration::class_<GameObject>("GameObject")
-        .constructor<>()
-            (rttr::policy::ctor::as_std_shared_ptr) 
+        
         .property("Name", &GameObject::name);
 }
 
