@@ -1525,17 +1525,17 @@ void Editor::CheckObjectDeleteKey()
     if (PlayModeSystem::Instance().IsPlaying())
         return;
 
-    // 마지막
-    if (selectedObject->GetComponent<Camera>() && CameraSystem::Instance().GetAllCamera().size() == 1)
-    {
-        MessageBoxA(NULL, "Scene need at least one camera.", "Delete not allowed", 0);
-        return;
-    }
-
     // imgui로 키 입력 확인
     if (ImGui::IsKeyPressed(ImGuiKey_Delete, false))
     {
         GameObject* victim = selectedObject;
+
+        if (victim->GetComponent<Camera>() && CameraSystem::Instance().GetAllCamera().size() == 1)
+        {
+            MessageBoxA(NULL, "Scene need at least one camera.", "Delete not allowed", 0);
+            return;
+        }
+
         selectedObject = nullptr;
         victim->Destory();
     }
