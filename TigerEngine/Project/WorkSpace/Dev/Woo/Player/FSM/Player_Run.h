@@ -5,7 +5,7 @@
 class Player_Run : public IPlayerState
 {
 public:
-    Player_Run(PlayerController _player)
+    Player_Run(PlayerController* _player)
         : IPlayerState(_player) {
     }
     ~Player_Run() = default;

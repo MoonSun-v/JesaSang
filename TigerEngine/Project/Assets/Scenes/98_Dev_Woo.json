@@ -2,9 +2,9 @@
   "objects": [
     {
       "properties": {
-        "ID": 147,
+        "ID": 148,
         "Name": "Main Camera",
-        "ParentID": 168,
+        "ParentID": 169,
         "components": {
           "Camera": {
             "properties": {
@@ -42,7 +42,7 @@
     },
     {
       "properties": {
-        "ID": 148,
+        "ID": 149,
         "Name": "DirectionalLight(Sun)",
         "ParentID": -1,
         "components": {
@@ -94,7 +94,7 @@
     },
     {
       "properties": {
-        "ID": 149,
+        "ID": 150,
         "Name": "---------Floor----------",
         "ParentID": -1,
         "components": {
@@ -124,9 +124,9 @@
     },
     {
       "properties": {
-        "ID": 150,
+        "ID": 151,
         "Name": "Floor",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -223,7 +223,7 @@
     },
     {
       "properties": {
-        "ID": 151,
+        "ID": 152,
         "Name": "---------Wall----------",
         "ParentID": -1,
         "components": {
@@ -253,9 +253,9 @@
     },
     {
       "properties": {
-        "ID": 152,
+        "ID": 153,
         "Name": "Door_Open",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -330,9 +330,9 @@
     },
     {
       "properties": {
-        "ID": 153,
+        "ID": 154,
         "Name": "Pillar",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -429,9 +429,9 @@
     },
     {
       "properties": {
-        "ID": 154,
+        "ID": 155,
         "Name": "wall_4",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -528,9 +528,9 @@
     },
     {
       "properties": {
-        "ID": 155,
+        "ID": 156,
         "Name": "wall_5",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -627,9 +627,9 @@
     },
     {
       "properties": {
-        "ID": 156,
+        "ID": 157,
         "Name": "Room",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -704,9 +704,9 @@
     },
     {
       "properties": {
-        "ID": 157,
+        "ID": 158,
         "Name": "Room_a_love_room",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -781,9 +781,9 @@
     },
     {
       "properties": {
-        "ID": 158,
+        "ID": 159,
         "Name": "Room_Kitchen",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -858,9 +858,9 @@
     },
     {
       "properties": {
-        "ID": 159,
+        "ID": 160,
         "Name": "Room_main_room",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -935,9 +935,9 @@
     },
     {
       "properties": {
-        "ID": 160,
+        "ID": 161,
         "Name": "Room_saibi",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -1012,9 +1012,9 @@
     },
     {
       "properties": {
-        "ID": 161,
+        "ID": 162,
         "Name": "Room_Table_of_memorial_ceremony",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -1089,9 +1089,9 @@
     },
     {
       "properties": {
-        "ID": 162,
+        "ID": 163,
         "Name": "Room_Warehouse",
-        "ParentID": 149,
+        "ParentID": 150,
         "components": {
           "FBXData": {
             "properties": {
@@ -1166,7 +1166,7 @@
     },
     {
       "properties": {
-        "ID": 163,
+        "ID": 164,
         "Name": "---------Object----------",
         "ParentID": -1,
         "components": {
@@ -1196,9 +1196,9 @@
     },
     {
       "properties": {
-        "ID": 164,
+        "ID": 165,
         "Name": "teble",
-        "ParentID": 163,
+        "ParentID": 164,
         "components": {
           "FBXData": {
             "properties": {
@@ -1295,9 +1295,9 @@
     },
     {
       "properties": {
-        "ID": 165,
+        "ID": 166,
         "Name": "cabinet",
-        "ParentID": 163,
+        "ParentID": 164,
         "components": {
           "FBXData": {
             "properties": {
@@ -1394,9 +1394,9 @@
     },
     {
       "properties": {
-        "ID": 166,
+        "ID": 167,
         "Name": "cabinet_Open",
-        "ParentID": 163,
+        "ParentID": 164,
         "components": {
           "FBXData": {
             "properties": {
@@ -1493,9 +1493,9 @@
     },
     {
       "properties": {
-        "ID": 167,
+        "ID": 168,
         "Name": "food",
-        "ParentID": 163,
+        "ParentID": 164,
         "components": {
           "FBXData": {
             "properties": {
@@ -1570,7 +1570,7 @@
     },
     {
       "properties": {
-        "ID": 168,
+        "ID": 169,
         "Name": "Player",
         "ParentID": -1,
         "components": {
@@ -1641,10 +1641,6 @@
             "properties": {},
             "type": "PlayerController"
           },
-          "PlayerMove_Test": {
-            "properties": {},
-            "type": "PlayerMove_Test"
-          },
           "Transform": {
             "properties": {
               "Position": [
@@ -1671,38 +1667,8 @@
     },
     {
       "properties": {
-        "ID": 169,
-        "Name": "-----------------------",
-        "ParentID": -1,
-        "components": {
-          "Transform": {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        }
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
         "ID": 170,
-        "Name": "CurScene_98_Dev_Woo",
+        "Name": "-----------------------",
         "ParentID": -1,
         "components": {
           "Transform": {
@@ -1732,7 +1698,7 @@
     {
       "properties": {
         "ID": 171,
-        "Name": "-----------------------",
+        "Name": "CurScene_98_Dev_Woo",
         "ParentID": -1,
         "components": {
           "Transform": {
@@ -1762,8 +1728,38 @@
     {
       "properties": {
         "ID": 172,
+        "Name": "-----------------------",
+        "ParentID": -1,
+        "components": {
+          "Transform": {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        }
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "ID": 173,
         "Name": "wall_5",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -1860,9 +1856,9 @@
     },
     {
       "properties": {
-        "ID": 173,
+        "ID": 174,
         "Name": "wall_5",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -1959,9 +1955,9 @@
     },
     {
       "properties": {
-        "ID": 174,
+        "ID": 175,
         "Name": "wall_5",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -2058,9 +2054,9 @@
     },
     {
       "properties": {
-        "ID": 175,
+        "ID": 176,
         "Name": "wall_4",
-        "ParentID": 151,
+        "ParentID": 152,
         "components": {
           "FBXData": {
             "properties": {
@@ -2145,160 +2141,6 @@
               ],
               "Scale": [
                 0.8999999761581421,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        }
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "ID": 176,
-        "Name": "Test_Parent",
-        "ParentID": -1,
-        "components": {
-          "FBXData": {
-            "properties": {
-              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          "FBXRenderer": {
-            "properties": {
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false
-            },
-            "type": "FBXRenderer"
-          },
-          "Transform": {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                -100.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        }
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "ID": 177,
-        "Name": "Test_Child",
-        "ParentID": 176,
-        "components": {
-          "FBXData": {
-            "properties": {
-              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          "FBXRenderer": {
-            "properties": {
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false
-            },
-            "type": "FBXRenderer"
-          },
-          "Transform": {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                -100.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
                 1.0,
                 1.0
               ]

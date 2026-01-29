@@ -5,7 +5,7 @@
 class Player_Die : public IPlayerState
 {
 public:
-    Player_Die(PlayerController _player)
+    Player_Die(PlayerController* _player)
         : IPlayerState(_player) {
     }
     ~Player_Die() = default;

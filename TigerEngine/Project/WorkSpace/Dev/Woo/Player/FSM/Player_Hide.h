@@ -5,7 +5,7 @@
 class Player_Hide : public IPlayerState
 {
 public:
-    Player_Hide(PlayerController _player)
+    Player_Hide(PlayerController* _player)
         : IPlayerState(_player) {
     }
     ~Player_Hide() = default;

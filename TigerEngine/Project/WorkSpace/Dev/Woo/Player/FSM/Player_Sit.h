@@ -5,7 +5,7 @@
 class Player_Sit : public IPlayerState
 {
 public:
-    Player_Sit(PlayerController _player)
+    Player_Sit(PlayerController* _player)
         : IPlayerState(_player) {
     }
     ~Player_Sit() = default;

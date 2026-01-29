@@ -30,19 +30,22 @@ RTTR_REGISTRATION
 /*-------[ Component Process ]-------------------------------------*/
 void PlayerController::OnInitialize()
 {
-    transform = GetOwner()->GetComponent<Transform>();
-    fbxRenderer = GetOwner()->GetComponent<FBXRenderer>();
-    cct = GetOwner()->GetComponent<CharacterControllerComponent>();
+    
 }
 
 void PlayerController::OnStart()
 {
+    // get components
+    transform = GetOwner()->GetComponent<Transform>();
+    fbxRenderer = GetOwner()->GetComponent<FBXRenderer>();
+    cct = GetOwner()->GetComponent<CharacterControllerComponent>();
+
     // init fsm
     AddFSMStates();
     ChangeState(PlayerState::Idle);
 
     // init stat
-    InitPlayerStat();
+    InitStat();
 }
 
 void PlayerController::OnUpdate(float delta)
@@ -56,6 +59,14 @@ void PlayerController::OnUpdate(float delta)
         curState->ChangeStateLogic();
         curState->Update(delta);
     }
+
+    // Debug----
+    //cout << "[Player] State : " << (int)state << endl;
+    //cout << "[Player] Walk MoveDir : (" << moveDir.x << ", " << moveDir.y << ", " << moveDir.z << ")" << endl;
+    //cout << "[Player] Current Speed : " << curSpeed << endl;
+
+    //cout << "L:" << isMoveLKey << " R:" << isMoveRKey << " F:" << isMoveFKey << " B:" << isMoveBKey
+    //    << " Sit:" << isSitKey << " Run:" << isRunKey << " Interact:" << isInteractionKey << endl;
 }
 
 void PlayerController::OnFixedUpdate(float delta)
@@ -65,6 +76,9 @@ void PlayerController::OnFixedUpdate(float delta)
     {
         curState->FixedUpdate(delta);
     }
+
+    // move
+    Move(delta);
 }
 
 void PlayerController::OnDestory()
@@ -117,13 +131,13 @@ void PlayerController::Deserialize(nlohmann::json data)
 /*----------------------------------------------------------------*/
 void PlayerController::AddFSMStates()
 {
-    fsmStates[(int)PlayerState::Idle] = new Player_Idle(*this);
-    fsmStates[(int)PlayerState::Walk] = new Player_Walk(*this);
-    fsmStates[(int)PlayerState::Run] = new Player_Run(*this);
-    fsmStates[(int)PlayerState::Sit] = new Player_Sit(*this);
-    fsmStates[(int)PlayerState::Hide] = new Player_Hide(*this);
-    fsmStates[(int)PlayerState::Hit] = new Player_Hit(*this);
-    fsmStates[(int)PlayerState::Die] = new Player_Die(*this);
+    fsmStates[(int)PlayerState::Idle] = new Player_Idle(this);
+    fsmStates[(int)PlayerState::Walk] = new Player_Walk(this);
+    fsmStates[(int)PlayerState::Run] = new Player_Run(this);
+    fsmStates[(int)PlayerState::Sit] = new Player_Sit(this);
+    fsmStates[(int)PlayerState::Hide] = new Player_Hide(this);
+    fsmStates[(int)PlayerState::Hit] = new Player_Hit(this);
+    fsmStates[(int)PlayerState::Die] = new Player_Die(this);
 }
 
 void PlayerController::ChangeState(PlayerState state)
@@ -139,7 +153,7 @@ void PlayerController::ChangeState(PlayerState state)
 }
 
 /*-------[ Init ]-------------------------------------*/
-void PlayerController::InitPlayerStat()
+void PlayerController::InitStat()
 {
 
 }
@@ -154,8 +168,11 @@ void PlayerController::KeyInputUpdate()
     isSitKey = Input::GetKey(sit_Key);
     isRunKey = Input::GetKey(run_Key);
     isInteractionKey = Input::GetKey(interaction_Key);
-
-    //cout << "L:" << isMoveLKey << " R:" << isMoveRKey << " F:" << isMoveFKey << " B:" << isMoveBKey
-    //    << " Sit:" << isSitKey << " Run:" << isRunKey << " Interact:" << isInteractionKey << endl;
 }
 
+/*-------[ Move ]-------------------------------------*/
+void PlayerController::Move(float delta)
+{
+    cct->m_MoveSpeed = curSpeed;
+    cct->MoveCharacter(moveDir, delta);
+}

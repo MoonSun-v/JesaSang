@@ -10,7 +10,7 @@ class IPlayerState;
 // Player State Enum
 enum class PlayerState
 {
-    Idle, Walk, Run, Sit, Hide, Hit, Die
+    Idle, Walk, Run, Sit, SitWalk, Hide, Hit, Die
 };
 
 // Player Controller Script Component
@@ -27,19 +27,18 @@ private:
     // --- [ State ] ---------------------------
     PlayerState state = PlayerState::Idle;
     IPlayerState* curState;
-    IPlayerState* fsmStates[7];
+    IPlayerState* fsmStates[8];
 
     // --- [ Stat ] --------------------------------
     // current
-    float curSpeed;
+    float curSpeed = 0.0f;
+    Vector3 moveDir = Vector3::Zero;
 
     // init
-    float speed;
-    float sitSpeed;
-    float runSpeed;
-
-    // --- [ State Flags ] -------------------------
-
+    float walkSpeed = 3.0f;
+    float runSpeed = 6.0f;
+    float sitSpeed = 1.0f;
+        
 
     // --- [ Controll ] ----------------------------
 
@@ -92,13 +91,33 @@ public:
     void AddFSMStates();
     void ChangeState(PlayerState state);
 
-    // Key Input Handler
+    // Init
+    void InitStat();
+
+    // Key Input
     void KeyInputUpdate();
-    
-    // Initialize Player Stat
-    void InitPlayerStat();
+
+    // Move Player
+    void Move(float delta);
 
 public:
     // 외부 Funcs.. TODO
+
+
+
+
+
+
+
+    //---------------------------------------------------------------
+    // friend
+    friend class IPlayerState;
+    friend class Player_Idle;
+    friend class Player_Walk;
+    friend class Player_Run;
+    friend class Player_Sit;
+    friend class Player_Hide;
+    friend class Player_Hit;
+    friend class Player_Die;
 };
 

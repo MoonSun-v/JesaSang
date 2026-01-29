@@ -5,7 +5,7 @@
 class Player_Hit : public IPlayerState
 {
 public:
-    Player_Hit(PlayerController _player)
+    Player_Hit(PlayerController* _player)
         : IPlayerState(_player) {
     }
     ~Player_Hit() = default;

@@ -5,7 +5,7 @@
 class Player_Idle : public IPlayerState
 {
 public:
-    Player_Idle(PlayerController _player)
+    Player_Idle(PlayerController* _player)
         : IPlayerState(_player) { }
     ~Player_Idle() = default;
 

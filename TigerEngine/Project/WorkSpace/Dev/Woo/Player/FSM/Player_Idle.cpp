@@ -3,16 +3,43 @@
 void Player_Idle::Enter()
 {
     cout << "[Player] Enter Idle State" << endl;
+
+    // set speed
+    player->curSpeed = 0;
+
+    // set moved dir
+    player->moveDir = Vector3::Zero;
 }
 
 void Player_Idle::ChangeStateLogic()
 {
+    const bool isMove =
+        player->isMoveLKey || player->isMoveRKey ||
+        player->isMoveFKey || player->isMoveBKey;
 
+    // sit
+    if (player->isSitKey)
+    {
+        player->ChangeState(PlayerState::Sit);
+        return;
+    }
+
+    // run, walk
+    if (isMove)
+    {
+        if (player->isRunKey)
+            player->ChangeState(PlayerState::Run);
+        else
+            player->ChangeState(PlayerState::Walk);
+
+        return;
+    }
 }
 
 void Player_Idle::Update(float deltaTime)
 {
-
+    // dir
+    player->moveDir = Vector3::Zero;
 }
 
 void Player_Idle::FixedUpdate(float deltaTime)
