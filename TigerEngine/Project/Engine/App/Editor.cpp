@@ -20,6 +20,13 @@
 #include "Datas/ReflectionMedtaDatas.hpp"
 
 #include "../Components/FBXRenderer.h"
+#include "../Util/PathHelper.h"
+
+// Payload
+// Prefab payload
+static const char* kPayload_Prefab = "DND_PREFAB";
+// 오브젝트 이동 드랍을 위한 payload
+static const char* kPayload_GameObject = "DND_GAMEOBJECT";
 
 // 사용자 정의 미리 등록 (SimpleMath 등)
 RTTR_REGISTRATION
@@ -112,7 +119,7 @@ void Editor::Render(HWND &hwnd)
     RenderCameraFrustum();
     RenderWorldSettings();
     RenderShadowMap();
-
+    RenderPrefabWindow(hwnd);
 
     ImGui::Begin("DebugPickItem");
     {
@@ -181,9 +188,6 @@ void Editor::RenderMenuBar(HWND& hwnd)
     ImGui::EndMainMenuBar();
 }
 
-// 오브젝트 이동 드랍을 위한 payload
-static const char* kPayload_GameObject = "DND_GAMEOBJECT";
-
 void Editor::RenderHierarchy()
 {
     ImGui::Begin("World Hierarchy");
@@ -248,6 +252,7 @@ void Editor::DrawHierarchyNode(GameObject* obj)
     // (2) Drop target
     if (ImGui::BeginDragDropTarget())
     {
+        // 오브젝트 이동
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
         {
             GameObject* dragged = *(GameObject**)payload->Data;
@@ -274,8 +279,20 @@ void Editor::DrawHierarchyNode(GameObject* obj)
                         dtr->SetParent(tr);
                     }
                 }
+            }         
+        }
+
+        // 프리팹 -> 오브젝트 부모 연결 후 구성
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_Prefab))
+        {
+            int prefabIndex = *(int*)payload->Data;
+            if (prefabIndex >= 0 && prefabIndex < (int)prefabs.size())
+            {
+                Transform* parent = obj->GetComponent<Transform>();
+                InstantiatePrefabFromJson(prefabs[prefabIndex].jsons, parent);
             }
         }
+
         ImGui::EndDragDropTarget();
     }
 
@@ -308,6 +325,7 @@ void Editor::DrawHierarchyDropSpace()
     // DragDrop 확인
     if (ImGui::BeginDragDropTarget())
     {
+        // 루트 빼기
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
         {
             GameObject* dragged = *(GameObject**)payload->Data;
@@ -320,9 +338,401 @@ void Editor::DrawHierarchyDropSpace()
                 }
             }
         }
+
+        // 루트에 프리팹 생성
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_Prefab))
+        {
+            int prefabIndex = *(int*)payload->Data;
+            if (prefabIndex >= 0 && prefabIndex < (int)prefabs.size())
+            {
+                InstantiatePrefabFromJson(prefabs[prefabIndex].jsons, nullptr);
+            }
+        }
+
         ImGui::EndDragDropTarget();
     }
 
+}
+
+void Editor::RenderPrefabWindow(HWND& hwnd)
+{
+    if (!isPrefabWindowOpen) return;
+
+    ImGui::Begin("Prefabs", &isPrefabWindowOpen);
+
+    ImGui::TextUnformatted("Drag a GameObject here to register as a prefab.");
+    ImGui::Separator();
+
+    // (A) 등록 Drop Zone
+    {
+        ImVec2 avail = ImGui::GetContentRegionAvail();
+        float zoneH = 80.0f;
+        ImVec2 zoneSize(avail.x, zoneH);
+
+        ImGui::InvisibleButton("##PrefabDropZone", zoneSize,
+            ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+
+        // 시각적 안내 (간단)
+        ImVec2 p0 = ImGui::GetItemRectMin();
+        ImVec2 p1 = ImGui::GetItemRectMax();
+        ImGui::GetWindowDrawList()->AddRect(p0, p1, IM_COL32(200, 200, 200, 255));
+        ImGui::GetWindowDrawList()->AddText(ImVec2(p0.x + 8, p0.y + 8), IM_COL32(200, 200, 200, 255),
+            "DROP HERE");
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            // 하이어라키에서 쓰는 payload 재사용: kPayload_GameObject
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(kPayload_GameObject))
+            {
+                GameObject* dragged = *(GameObject**)payload->Data;
+                if (dragged && !dragged->IsDestory())
+                {
+                    std::vector<std::string> datas;
+                    CollectSubtree(dragged, datas);
+
+                    std::string base = dragged->GetName() + std::string("_Prefab");
+                    std::string uniqueName = MakeUniquePrefabName(base, prefabs);
+
+                    prefabs.push_back({ uniqueName, std::move(datas) });
+                    selectedPrefabIndex = (int)prefabs.size() - 1;
+                }
+            }
+
+            ImGui::EndDragDropTarget();
+        }
+    }
+
+    ImGui::Separator();
+
+    // (B) 프리팹 리스트
+    ImGui::Text("Registered Prefabs: %d", (int)prefabs.size());
+    if (ImGui::Button("Reload Prefabs From Folder")) // 파일 리로드 버튼
+    {
+        auto prefabsDir = PathHelper::FindDirectory("Assets\\Prefabs");
+        if (prefabsDir.has_value())
+        {
+            std::string path = prefabsDir.value().string();
+            LoadPrefabsFromFolder(path);
+        }
+        else
+        {
+            MessageBoxA(hwnd, "No directory found : ..\\Assets\\Prefabs", "Error", MB_OK | MB_ICONINFORMATION);
+        }
+    }
+
+    ImGui::Spacing();
+
+    // 선택/삭제 UI
+    if (selectedPrefabIndex >= 0 && selectedPrefabIndex < (int)prefabs.size())
+    {
+        ImGui::SameLine();
+        if (ImGui::Button("Save Prefab"))
+        {
+            // 파일 저장 다이얼로그
+            OPENFILENAMEA ofn = {};
+            char szFile[260] = {};
+
+            ofn.lStructSize = sizeof(ofn);
+            ofn.hwndOwner = hwnd;
+            ofn.lpstrFile = szFile;
+            ofn.nMaxFile = sizeof(szFile);
+            ofn.lpstrFilter = "JSON Files (*.json)\0*.json\0All Files (*.*)\0*.*\0";
+            ofn.nFilterIndex = 1;
+            ofn.lpstrFileTitle = NULL;
+            ofn.nMaxFileTitle = 0;
+            ofn.lpstrInitialDir = NULL;
+            ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT
+                | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;;
+            ofn.lpstrDefExt = "json";
+
+            if (GetSaveFileNameA(&ofn) != TRUE)
+                return; // 사용자가 취소함
+
+            // GameWorld를 파일에 저장
+            if (SavePrefabToJson(hwnd, prefabs[selectedPrefabIndex], szFile))
+            {
+                MessageBoxA(hwnd, "Scene saved successfully!", "Save", MB_OK | MB_ICONINFORMATION);
+            }
+            else
+            {
+                MessageBoxA(hwnd, "Failed to save scene!", "Error", MB_OK | MB_ICONERROR);
+            }
+        }
+        else if (ImGui::Button("Delete Selected"))
+        {
+            prefabs.erase(prefabs.begin() + selectedPrefabIndex);
+            if (prefabs.empty()) selectedPrefabIndex = -1;
+            else selectedPrefabIndex = std::min(selectedPrefabIndex, (int)prefabs.size() - 1);
+        }
+    }
+
+    ImGui::BeginChild("##PrefabList", ImVec2(0, 0), true);
+
+    for (int i = 0; i < (int)prefabs.size(); ++i)
+    {
+        ImGui::PushID(i);
+
+        bool selected = (i == selectedPrefabIndex);
+        if (ImGui::Selectable(prefabs[i].name.c_str(), selected))
+            selectedPrefabIndex = i;
+
+        // (C) Drag source: Prefab -> Hierarchy
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+        {
+            int payloadIndex = i;
+            ImGui::SetDragDropPayload(kPayload_Prefab, &payloadIndex, sizeof(int));
+            ImGui::Text("Prefab: %s", prefabs[i].name.c_str());
+            ImGui::EndDragDropSource();
+        }
+
+        // 우클릭 메뉴(옵션): 이름 변경, 복제 등
+        if (ImGui::BeginPopupContextItem("##PrefabContext"))
+        {
+            if (ImGui::MenuItem("Duplicate"))
+            {
+                std::string newName = MakeUniquePrefabName(prefabs[i].name, prefabs);
+                prefabs.push_back({ newName, prefabs[i].jsons });
+            }
+            ImGui::EndPopup();
+        }
+
+        ImGui::PopID();
+    }
+
+    ImGui::EndChild();
+
+    ImGui::End();
+}
+
+std::string Editor::MakeUniquePrefabName(const std::string& base, const std::vector<PrefabEntry>& list)
+{
+    // base가 이미 있으면 base(1), base(2)...
+    auto exists = [&](const std::string& n) {
+        for (auto& e : list) if (e.name == n) return true;
+        return false;
+        };
+
+    if (!exists(base)) return base;
+
+    for (int i = 1; i < 9999; ++i)
+    {
+        std::string cand = base + "(" + std::to_string(i) + ")";
+        if (!exists(cand)) return cand;
+    }
+    return base + "(?)";
+}
+
+GameObject* Editor::InstantiatePrefabFromJson(const std::vector<std::string>& jsonStrs, Transform* attachParent)
+{
+    auto scene = SceneSystem::Instance().GetCurrentScene();
+    if (!scene) return nullptr;
+
+    if (jsonStrs.empty()) return nullptr;
+
+    std::vector<GameObject*> created;
+    created.reserve(jsonStrs.size());
+
+    std::vector<int> parentIDs;      // 생성 순서대로 ParentID 저장 (-1 가능)
+    parentIDs.reserve(jsonStrs.size());
+
+    // 1) 전부 생성 + Deserialize + ID/ParentID 수집
+    for (const std::string& s : jsonStrs)
+    {
+        nlohmann::json props = nlohmann::json::parse(s, nullptr, false);
+        if (props.is_discarded()) continue;
+
+        std::string objectName = "PrefabInstance";
+        if (props.contains("Name")) objectName = props["Name"].get<std::string>();
+
+        GameObject* instance = scene->AddGameObjectByName(objectName);
+        if (!instance) continue;
+
+        instance->Deserialize(props);
+
+        if (props.contains("ID"))
+            instance->SetId(props["ID"]);
+
+        int p = -1;
+        if (props.contains("ParentID"))
+            p = props["ParentID"];
+        parentIDs.push_back(p);
+
+        created.push_back(instance);
+    }
+
+    if (created.empty()) return nullptr;
+
+    // 2) 계층 재구성 (씬 로드 로직과 동일)
+    // created[i] <-> parentIDs[i] 1:1 매칭
+    if (!parentIDs.empty() && parentIDs.size() == created.size())
+    {
+        for (int i = 0; i < (int)created.size(); ++i)
+        {
+            int currParentID = parentIDs[i];
+            if (currParentID == -1) continue;
+
+            GameObject* currObject = created[i];
+            if (!currObject) continue;
+
+            for (int j = 0; j < (int)created.size(); ++j)
+            {
+                if (i == j) continue;
+                if (!created[j]) continue;
+
+                if (currParentID == created[j]->GetId())
+                {
+                    currObject->GetTransform()->SetParent(created[j]->GetTransform());
+                    break;
+                }
+            }
+        }
+    }
+
+    // 3) Hierarchy에 드랍한 경우: 루트들(ParentID == -1)만 attachParent 아래로
+    // 생성한 오브젝트 끼리의ID여서 충돌날 일 없음
+    if (attachParent)
+    {
+        for (int i = 0; i < (int)created.size(); ++i)
+        {
+            if (!created[i]) continue;
+            if (parentIDs[i] == -1)
+            {
+                created[i]->GetTransform()->SetParent(attachParent);
+            }
+        }
+    }
+
+    // 3-1) 구성 후 ObjID 충돌 방지를 위한 ID 재구성
+    for (int i = 0; i < (int)created.size(); ++i)
+    {
+        if (!created[i]) continue;
+
+        created[i]->SetId(ObjectSystem::Instance().GetNewID()); // 새 ID 갱신
+    }
+
+    // 4) 반환값: 첫 번째 루트(ParentID == -1)를 대표로 반환
+    for (int i = 0; i < (int)created.size(); ++i)
+    {
+        if (created[i] && parentIDs[i] == -1)
+            return created[i];
+    }
+}
+
+void Editor::CollectSubtree(GameObject* root, std::vector<std::string>& out)
+{
+    if (!root || root->IsDestory()) return;
+
+    // Serialize가 root 전체를 준다면, properties만 쓰는 게 씬 로드 로직과 완전히 호환됨
+    // - root->Serialize()가 {"type","properties"} 형태라고 가정
+    nlohmann::json objData = root->Serialize();
+    if (objData.contains("properties"))
+    {
+        out.push_back(objData["properties"].dump(2));
+    }
+
+    Transform* tr = root->GetTransform();
+    if (!tr) return;
+
+    for (Transform* c : tr->GetChildren())
+    {
+        if (!c) continue;
+        GameObject* child = c->GetOwner();
+        CollectSubtree(child, out);
+    }
+}
+
+bool Editor::SavePrefabToJson(HWND& hwnd, PrefabEntry& data, const char* filePath)
+{
+    // prefabs
+    //  obj1
+    //  obj2
+    //  ...
+
+    nlohmann::json root;
+    root["prefab"] = nlohmann::json::array();
+    // 저장할 json 구성하기
+    for (const std::string& s : data.jsons)
+    {
+        nlohmann::json props = nlohmann::json::parse(s, nullptr, false);
+        if (props.is_discarded()) continue;
+        root["prefab"].push_back(props); // 각 배열마다 오브젝트 내용 저장
+    }
+
+    // 파일 이름 -> 프리팹 이름
+    std::ofstream file(filePath);
+    if (!file.is_open()) return false;
+
+    file << root.dump(2);
+    file.close();
+
+    return true;
+}
+
+void Editor::LoadPrefabsFromFolder(const std::string& folder)
+{
+    namespace fs = std::filesystem;
+
+    prefabs.clear();
+    selectedPrefabIndex = -1;
+
+    fs::path dir(folder);
+    if (!fs::exists(dir) || !fs::is_directory(dir))
+        return;
+
+    for (const auto& entry : fs::directory_iterator(dir))
+    {
+        if (!entry.is_regular_file()) continue;
+
+        fs::path p = entry.path();
+        if (p.extension() != ".json") continue; // .json 확장자인지 확ㅇ니
+
+        PrefabEntry prefab;
+        if (LoadPrefabFromJsonFile(p.string(), prefab))
+        {
+            prefab.name = MakeUniquePrefabName(prefab.name, prefabs);
+            prefabs.push_back(prefab);
+        }
+    }
+
+    if (!prefabs.empty())
+        selectedPrefabIndex = 0;
+}
+
+bool Editor::LoadPrefabFromJsonFile(const std::string& filepath, PrefabEntry& outPrefab)
+{
+    std::ifstream file(filepath);
+    if (!file.is_open()) return false;
+
+    nlohmann::json root;
+    try
+    {
+        file >> root;
+    }
+    catch (const nlohmann::json::exception&)
+    {
+        file.close();
+        return false;
+    }
+    file.close();
+
+    // 저장 포맷: { "prefab": [ {properties...}, {properties...}, ... ] }
+    if (!root.contains("prefab") || !root["prefab"].is_array())
+        return false;
+
+    outPrefab.jsons.clear();
+    for (const auto& props : root["prefab"])
+    {
+        if (!props.is_object()) continue;
+        outPrefab.jsons.push_back(props.dump(2));
+    }
+
+    if (outPrefab.jsons.empty())
+        return false;
+
+    std::filesystem::path p(filepath);
+    outPrefab.name = p.stem().string(); // stem : 일반 파일에서 확장자를 제거한 이름을 반환
+
+    return true;
 }
 
 void Editor::RenderInspector()

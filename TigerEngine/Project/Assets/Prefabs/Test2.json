@@ -1,0 +1,78 @@
+{
+  "prefab": [
+    {
+      "ID": 22,
+      "Name": "Ground",
+      "ParentID": -1,
+      "components": {
+        "FBXData": {
+          "properties": {
+            "DataPath": "..\\Assets\\Resource\\Ground.fbx",
+            "IsStatic": true
+          },
+          "type": "FBXData"
+        },
+        "FBXRenderer": {
+          "properties": {
+            "Alpha": 1.0,
+            "Diffuse": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "DiffuseOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "Emissive": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "EmissiveOverride": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "IsGround": false,
+            "Metalic": 1.0,
+            "MetallicOverride": 1.0,
+            "RenderBlendType": "Opaque",
+            "Roughness": 1.0,
+            "RoughnessOverride": 1.0,
+            "UseDiffuseOverride": false,
+            "UseEmissiveOverride": false,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false
+          },
+          "type": "FBXRenderer"
+        },
+        "Transform": {
+          "properties": {
+            "Position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              10.0,
+              0.05000000074505806,
+              10.0
+            ]
+          },
+          "type": "Transform"
+        }
+      }
+    }
+  ]
+}
