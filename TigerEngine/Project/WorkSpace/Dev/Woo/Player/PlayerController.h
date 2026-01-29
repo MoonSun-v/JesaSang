@@ -44,7 +44,8 @@ private:
     // --- [ Controll ] ----------------------------
 
 
-    // --- [ Key Input Flags ] ---------------------
+    // --- [ Key ] ---------------------------------
+    // key input flags
     bool isMoveLKey;
     bool isMoveRKey;
     bool isMoveFKey;
@@ -53,7 +54,7 @@ private:
     bool isRunKey;
     bool isInteractionKey;
 
-    // --- [ Key Bild ] ----------------------------
+    // key buindings
     Keyboard::Keys moveL_Key = Keyboard::Left;
     Keyboard::Keys moveR_Key = Keyboard::Right;
     Keyboard::Keys moveF_Key = Keyboard::Up;
@@ -62,6 +63,7 @@ private:
     Keyboard::Keys sit_Key = Keyboard::LeftControl;
     Keyboard::Keys run_Key = Keyboard::LeftShift;
     Keyboard::Keys interaction_Key = Keyboard::F;
+
 
 public:
     // Component process

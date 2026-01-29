@@ -147,6 +147,15 @@ void PlayerController::InitPlayerStat()
 /*-------[ Input ]-------------------------------------*/
 void PlayerController::KeyInputUpdate()
 {
+    isMoveLKey = Input::GetKey(moveL_Key);
+    isMoveRKey = Input::GetKey(moveR_Key);
+    isMoveFKey = Input::GetKey(moveF_Key);
+    isMoveBKey = Input::GetKey(moveB_Key);
+    isSitKey = Input::GetKey(sit_Key);
+    isRunKey = Input::GetKey(run_Key);
+    isInteractionKey = Input::GetKey(interaction_Key);
 
+    //cout << "L:" << isMoveLKey << " R:" << isMoveRKey << " F:" << isMoveFKey << " B:" << isMoveBKey
+    //    << " Sit:" << isSitKey << " Run:" << isRunKey << " Interact:" << isInteractionKey << endl;
 }
 
