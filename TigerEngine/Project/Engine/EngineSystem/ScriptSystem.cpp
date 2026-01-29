@@ -110,8 +110,7 @@ void ScriptSystem::FixedUpdate(float dt)
         // 사용자 정의 component update
         for (auto& e : scriptComps)
         {
-            if (!e->GetOwner()->GetActiveSelf()) continue;  // Object 활성화 여부
-            if (!e->GetActiveSelf()) continue;              // 컴포넌트 활성화 여부
+            if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
 
             e->OnFixedUpdate(dt);
         }
@@ -125,6 +124,8 @@ void ScriptSystem::LateUpdate(float dt)
         // 사용자 정의 component update
         for (auto& e : scriptComps)
         {
+            if (!e->GetOwner()->GetActiveSelf() || !e->GetActiveSelf()) continue;
+
             e->OnLateUpdate(dt);
         }
     }
