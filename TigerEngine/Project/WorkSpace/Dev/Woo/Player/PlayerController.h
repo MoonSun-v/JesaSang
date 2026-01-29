@@ -13,7 +13,14 @@ enum class PlayerState
     Idle, Walk, Run, Sit, SitWalk, Hide, Hit, Die, None
 };
 
-// Player Controller Script Component
+/*
+     [ Player Controller Script Component ]
+
+     1) FSM
+     2) Input
+     3) Movement
+     4) TODO :: Interaction...
+*/
 class PlayerController : public ScriptComponent
 {
     RTTR_ENABLE(ScriptComponent)

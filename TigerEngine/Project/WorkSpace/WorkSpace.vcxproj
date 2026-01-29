@@ -145,13 +145,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Dev\Woo\Camera\CameraController.h" />
     <ClInclude Include="EngineApp.h" />
     <ClInclude Include="AudioTest\AudioPlayModeScript.h" />
     <ClInclude Include="Dev\Woo\Player\FSM\IPlayerState.h" />
     <ClInclude Include="PhysicsTest\CCTTest.h" />
     <ClInclude Include="PhysicsTest\GroundTestScript.h" />
     <ClInclude Include="PhysicsTest\PhysicsTestScript.h" />
-    <ClInclude Include="Dev\Woo\PlayerMove_Test.h" />
     <ClInclude Include="Dev\Woo\Player\PlayerController.h" />
     <ClInclude Include="Player\Player1.h" />
     <ClInclude Include="Player\Weapon.h" />
@@ -165,13 +165,13 @@
     <ClInclude Include="Dev\Woo\Player\FSM\Player_SitWalk.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Dev\Woo\Camera\CameraController.cpp" />
     <ClCompile Include="EngineApp.cpp" />
     <ClCompile Include="AudioTest\AudioPlayModeScript.cpp" />
     <ClCompile Include="Dev\Woo\Player\FSM\IPlayerState.cpp" />
     <ClCompile Include="PhysicsTest\CCTTest.cpp" />
     <ClCompile Include="PhysicsTest\GroundTestScript.cpp" />
     <ClCompile Include="PhysicsTest\PhysicsTestScript.cpp" />
-    <ClCompile Include="Dev\Woo\PlayerMove_Test.cpp" />
     <ClCompile Include="Dev\Woo\Player\PlayerController.cpp" />
     <ClCompile Include="Player\Player1.cpp" />
     <ClCompile Include="Player\Weapon.cpp" />

@@ -16,6 +16,10 @@
             },
             "type": "Camera"
           },
+          "CameraController": {
+            "properties": {},
+            "type": "CameraController"
+          },
           "Transform": {
             "properties": {
               "Position": [
@@ -1645,7 +1649,7 @@
             "properties": {
               "Position": [
                 0.0,
-                -55.9000129699707,
+                -50.900001525878906,
                 0.0
               ],
               "Rotation": [
