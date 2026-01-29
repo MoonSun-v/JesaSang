@@ -52,6 +52,11 @@ public:
     /// </summary>
     void FixedUpdate(float dt);
 
+    /// <summary>
+   /// 등록된 컴포넌트 호출
+   /// </summary>
+    void LateUpdate(float dt);
+
 private:
     // === 일반 Component ===
     /// <summary>

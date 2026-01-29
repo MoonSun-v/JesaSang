@@ -49,11 +49,13 @@ public:
 	void Update();
 	void Render();
     void FixedUpdate();
+    void LateUpdate();
     
     virtual void OnPreUpdate();
 	virtual void OnUpdate();		// Update
     virtual void OnFixedUpdate();
 	virtual void OnRender() = 0;	// Render
+	virtual void OnLateUpdate();
 
     void ConsoleInitialize();
     void ConsoleUninitalize();

@@ -16,6 +16,11 @@ void Scene::OnFixedUpdate(float dt)
     ScriptSystem::Instance().FixedUpdate(dt);
 }
 
+void Scene::OnLateUpdate(float dt)
+{
+    ScriptSystem::Instance().LateUpdate(dt);
+}
+
 void Scene::CheckDestroy()
 {
 	for(auto it = gameObjects.begin(); it != gameObjects.end();)
