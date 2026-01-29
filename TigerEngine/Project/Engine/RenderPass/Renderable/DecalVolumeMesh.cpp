@@ -13,7 +13,7 @@ DecalVolumeMesh::DecalVolumeMesh()
 
 void DecalVolumeMesh::UpdateWolrd(Decal* decal)
 {
-    world = decal->GetOwner()->GetTransform()->GetWorldTransform();
+    world = decal->GetOwner()->GetTransform()->GetWorldMatrix();
 }
 
 void DecalVolumeMesh::Draw(ComPtr<ID3D11DeviceContext>&context, Decal* decal) const

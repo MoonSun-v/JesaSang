@@ -98,9 +98,9 @@ void CharacterControllerComponent::CreateCharacterCollider(float radius, float h
     m_Offset = offset;
 
     PxExtendedVec3 pos(
-        (transform->GetPosition().x + offset.x) * WORLD_TO_PHYSX,
-        (transform->GetPosition().y + offset.y) * WORLD_TO_PHYSX,
-        (transform->GetPosition().z + offset.z) * WORLD_TO_PHYSX
+        (transform->GetLocalPosition().x + offset.x) * WORLD_TO_PHYSX,
+        (transform->GetLocalPosition().y + offset.y) * WORLD_TO_PHYSX,
+        (transform->GetLocalPosition().z + offset.z) * WORLD_TO_PHYSX
     );
 
     m_Controller = CharacterControllerSystem::Instance().CreateCapsuleCollider(

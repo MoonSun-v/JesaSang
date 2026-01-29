@@ -17,19 +17,19 @@ RTTR_REGISTRATION
 
 Vector3 Camera::GetForward()
 {
-	Matrix world = owner->GetTransform()->GetWorldTransform();
+	Matrix world = owner->GetTransform()->GetWorldMatrix();
 	return -world.Forward();
 }
 
 Vector3 Camera::GetRight()
 {
-	Matrix world = owner->GetTransform()->GetWorldTransform();
+	Matrix world = owner->GetTransform()->GetWorldMatrix();
     return world.Right();
 }
 
 Matrix Camera::GetView()
 {
-	Matrix world = owner->GetTransform()->GetWorldTransform();
+	Matrix world = owner->GetTransform()->GetWorldMatrix();
 	Vector3 eye = world.Translation();
 	Vector3 target = eye + GetForward();
 	Vector3 up = world.Up();

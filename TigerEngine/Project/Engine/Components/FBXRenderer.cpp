@@ -102,7 +102,7 @@ void FBXRenderer::OnRender(RenderQueue& queue)
     ModelType modelType = fbxData->GetFBXInfo()->type;
 
     auto& meshData = fbxData->GetMesh();
-    auto world = owner->GetTransform()->GetWorldTransform();
+    auto world = owner->GetTransform()->GetWorldMatrix();
     auto fbxRoot = fbxData->GetFBXInfo()->rootTransform;
 
     // Render Queue Add

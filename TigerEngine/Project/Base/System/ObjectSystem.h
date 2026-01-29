@@ -46,6 +46,8 @@ public:
 
 	void Destory(Handle h);
 
+    uint32_t GetNewID() { return ++ObjID; } // 새로운 ID 주입 ( 로드 시 중복 방지용으로 사용하는 함수 )
+
 private:
 	std::vector<Slot> slots;
 	std::vector<uint32_t> freeSlots;

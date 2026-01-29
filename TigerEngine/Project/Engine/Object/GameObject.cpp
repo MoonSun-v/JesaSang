@@ -188,7 +188,7 @@ void GameObject::UpdateAABB()
 {
     Transform* trans = transform;
     Vector3 updatedExtent = aabbBoxExtent * trans->GetScale();
-    aabbBox.Center = trans->GetPosition() + aabbCenter;
+    aabbBox.Center = trans->GetWorldPosition() + aabbCenter;
     aabbBox.Extents = updatedExtent;
 }
 
@@ -208,7 +208,7 @@ void GameObject::SetAABB(Vector3 min, Vector3 max, Vector3 centor)
 {
     auto tran = transform;
 
-    aabbBox.Center = tran->GetPosition();
+    aabbBox.Center = tran->GetLocalPosition();
     aabbBoxExtent = (max - min) / 2.0f;
     aabbCenter = centor;
 }

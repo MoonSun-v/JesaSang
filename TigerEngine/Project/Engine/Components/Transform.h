@@ -2,6 +2,15 @@
 #include "pch.h"
 #include "../Object/Component.h"
 
+/// <summary>
+/// GameObject가 기본으로 가지고 있는 위치 정보
+/// </summary>
+/// <remarks>
+/// 내부 연산은 Quaternion으로 하며 사용자 편의를 위해 Euler Getter/Setter도 제공합니다.
+/// 모든 Euler의 단위는 Radian으로 통일됩니다.
+/// Editor 모드에서만 Degree로 변환되며, 클라이언트가 사용할 때는 Degree -> Radian 변환 작업을 적용시키고 Set합니다.
+/// Json 저장도 Radian 단위 입니다.
+/// </remarks>
 class Transform : public Component
 {
 	RTTR_ENABLE(Component)
@@ -12,69 +21,33 @@ public:
 	void OnUpdate(float delta) override;
     void OnDestory() override;
 
-	Matrix GetWorldTransform() const;
 	void Translate(const Vector3& delta);
     void Rotate(const Vector3& delta);
 
 	nlohmann::json Serialize() override;
 	void Deserialize(nlohmann::json data) override;
 
-    const Vector3& GetPosition() const { return position; }
+    // Position
+    const Vector3& GetLocalPosition();
+    Vector3 GetWorldPosition();
+    void SetPosition(const Vector3& p);
+
+    // 회전 ( Euler, Quaternion )
     const Vector3& GetEuler() const { return euler; }
+    void SetEuler(const Vector3& rad);            // Euler : 주로 클라이언트가 편하게 계산하기 위해 사용
     const Quaternion& GetQuaternion() const { return quaternion; }
+    void SetQuaternion(const Quaternion& quat);    // Quaternion : 엔진 내부 계산할 때 사용 
+    float GetYaw() const; // Y축 회전값 (Yaw) getter (rad)
+
+    // Scale
     const Vector3& GetScale() const { return scale; }
-    const Matrix& GetWorldMatrix() const { return worldMatrix; }
+    void SetScale(const Vector3& scal);
+
+    // Matrix
+    Matrix& GetWorldMatrix();
     Matrix& GetLocalMatrix();
-
-    void SetPosition(const Vector3& p)
-    {
-        position = p;
-        dirty = true;
-        SetChildrenDirty();
-    }
-
-    // 에디터/직렬화용
-    void SetEuler(const Vector3& r)
-    {
-        euler = r;
-        quaternion = Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z);
-        dirty = true;
-        SetChildrenDirty();
-    }
-
-    // Physics/엔진 내부용
-    void SetQuaternion(const Quaternion& q)
-    {
-        quaternion = q;
-        quaternion.Normalize();
-        euler = q.ToEuler();   
-        dirty = true;
-        SetChildrenDirty();
-    }
-
-    void SetScale(const Vector3& s)
-    {
-        scale = s;
-        dirty = true;
-        SetChildrenDirty();
-    }
-
-    // Y축 회전값 (Yaw) getter (rad)
-    float GetYaw() const
-    {
-        return euler.y;
-    }
-
-    // Y축 회전만 설정 (rad)
-    void SetRotationY(float yaw)
-    {
-        euler.y = yaw;
-        quaternion = Quaternion::CreateFromYawPitchRoll(
-            euler.y, euler.x, euler.z
-        );
-        dirty = true;
-        SetChildrenDirty();
-    }
+    
+    void SetRotationY(float yaw); // Y축 회전만 설정 (rad)
 
     void AddChild(Transform* transPtr);
     void RemoveChild(Transform* transPtr);
@@ -88,8 +61,13 @@ public:
     const std::vector<Transform*>& GetChildren() const { return children; }
 
 private:
-    Vector3 position{ Vector3::Zero };
-    Vector3 euler{ Vector3::Zero };     // 오일러 각으로 표현한 라디안 값
+    /// <summary>
+    /// dirty flag 해소 함수
+    /// </summary>
+    void UpdateMatricesIfDirty();
+
+    Vector3 position{ Vector3::Zero };  // local Position
+    Vector3 euler{ Vector3::Zero };     // 오일러 각으로 표현한 라디안 값, local Position
     Quaternion quaternion{ Quaternion::Identity }; // 쿼터니언 
     Vector3 scale{ Vector3::One };
 

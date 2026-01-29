@@ -512,10 +512,7 @@ void Editor::RenderCameraFrustum()
             cam->GetProjection()
         );
 
-        Matrix frustumWorld = cam->GetView().Transpose();
-        frustum.Transform(frustum, frustumWorld);
-        
-        Matrix camWorld = cam->GetOwner()->GetTransform()->GetWorldTransform();
+        Matrix camWorld = cam->GetOwner()->GetTransform()->GetWorldMatrix();
         frustum.Transform(frustum, camWorld);
 
         DebugDraw::Draw(DebugDraw::g_Batch.get(), frustum);
@@ -810,7 +807,8 @@ void Editor::RenderDebugAABBDraw()
             if (gameObject->GetComponent<FBXRenderer>() != nullptr) return;
 
             XMVECTOR color = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-            DebugDraw::Draw(DebugDraw::g_Batch.get(), gameObject->GetAABB(), color);
+            BoundingBox box = gameObject->GetAABB();
+            DebugDraw::Draw(DebugDraw::g_Batch.get(), box, color);
         });
 
     // PhysX

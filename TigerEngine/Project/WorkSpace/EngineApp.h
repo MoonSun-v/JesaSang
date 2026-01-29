@@ -82,4 +82,9 @@ private:
 
 	std::shared_ptr<DirectX11Renderer> dxRenderer{};
     std::unique_ptr<RenderQueue> renderQueue{};
+
+    void Woo_Registeration();
+    void Moon_Registeration();
+    void Ron_Registeration();
+    void Ho_Registeration();
 };

@@ -14,7 +14,7 @@ LightVolumeMesh::LightVolumeMesh()
 
 void LightVolumeMesh::UpdateWolrd(Light& light)
 {
-    Vector3 lightPos = light.GetOwner()->GetTransform()->GetPosition();
+    Vector3 lightPos = light.GetOwner()->GetTransform()->GetLocalPosition();
 
     if (volumeType == LightVolumeType::Sphere)
     {

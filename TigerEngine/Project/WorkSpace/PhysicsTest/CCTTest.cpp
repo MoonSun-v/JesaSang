@@ -167,7 +167,7 @@ void CCTTest::CCTMoveExample(float dt)
 void CCTTest::RaycastExample()
 {
     Vector3 offset(0, 60.0f, 0);
-    PxVec3 originPx = ToPx(GetOwner()->GetTransform()->GetPosition() + offset);
+    PxVec3 originPx = ToPx(GetOwner()->GetTransform()->GetLocalPosition() + offset);
 
     // 아래 방향
     PxVec3 downPx(0, -1, 0);

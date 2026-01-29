@@ -6,7 +6,7 @@ RTTR_REGISTRATION
 	rttr::registration::class_<Transform>("Transform")
 		.constructor<>()
 			(rttr::policy::ctor::as_std_shared_ptr)
-		.property("Position",   &Transform::GetPosition,    &Transform::SetPosition)
+		.property("Position",   &Transform::GetLocalPosition,    &Transform::SetPosition)
 		.property("Rotation",   &Transform::GetEuler,       &Transform::SetEuler)
 		.property("Scale",      &Transform::GetScale,       &Transform::SetScale);
 }
@@ -22,30 +22,12 @@ void Transform::OnUpdate(float delta)
     }
 
     // dirty 해소
-    if (dirty)
-    {
-        Matrix local =
-            Matrix::CreateScale(scale) *
-            Matrix::CreateFromQuaternion(quaternion) *
-            Matrix::CreateTranslation(position);
-
-        if (!parent)
-            worldMatrix = local;
-        else
-            worldMatrix = local * parent->GetWorldTransform();
-
-        dirty = false;
-    }
+    UpdateMatricesIfDirty();
 }
 
 void Transform::OnDestory()
 {
     RemoveSelfAtParent();
-}
-
-Matrix Transform::GetWorldTransform() const
-{
-    return worldMatrix;
 }
 
 void Transform::Translate(const Vector3& delta)
@@ -131,17 +113,75 @@ void Transform::Deserialize(nlohmann::json data)
     SetChildrenDirty();
 }
 
+Matrix& Transform::GetWorldMatrix()
+{
+    UpdateMatricesIfDirty();
+    return worldMatrix;
+}
+
 Matrix& Transform::GetLocalMatrix()
 {
-    if (dirty)
-    {
-        localMatrix = Matrix::CreateScale(scale) *
-            // Matrix::CreateFromYawPitchRoll(euler.y, euler.x, euler.z) *
-            Matrix::CreateFromQuaternion(quaternion) *
-            Matrix::CreateTranslation(position);
-    }
-
+    UpdateMatricesIfDirty();
     return localMatrix;
+}
+
+Vector3 Transform::GetWorldPosition()
+{
+    UpdateMatricesIfDirty();
+    return worldMatrix.Translation();
+}
+
+const Vector3& Transform::GetLocalPosition()
+{
+    return position;
+}
+
+void Transform::SetPosition(const Vector3& pos)
+{
+    position = pos;
+    dirty = true;
+    SetChildrenDirty();
+}
+
+void Transform::SetEuler(const Vector3& rad)
+{
+    euler = rad;
+    quaternion = Quaternion::CreateFromYawPitchRoll(euler.y, euler.x, euler.z);
+    dirty = true;
+    SetChildrenDirty();
+}
+
+void Transform::SetQuaternion(const Quaternion& q)
+{
+    quaternion = q;
+    quaternion.Normalize();
+
+    euler = q.ToEuler(); // ToEuler : Radian값 반환
+
+    dirty = true;
+    SetChildrenDirty();
+}
+
+void Transform::SetScale(const Vector3& s)
+{
+    scale = s;
+    dirty = true;
+    SetChildrenDirty();
+}
+
+float Transform::GetYaw() const
+{
+    return euler.y;
+}
+
+void Transform::SetRotationY(float yawRad)
+{
+    euler.y = yawRad;
+    quaternion = Quaternion::CreateFromYawPitchRoll(
+        euler.y, euler.x, euler.z
+    );
+    dirty = true;
+    SetChildrenDirty();
 }
 
 void Transform::AddChild(Transform* transPtr)
@@ -206,7 +246,7 @@ void Transform::RemoveSelfAtParent()
         SetChildrenDirty();
     }
 }
-
+    
 void Transform::SetChildrenDirty()
 {
     for (auto& child : children)
@@ -219,4 +259,21 @@ void Transform::SetChildrenDirty()
 void Transform::SetDirty()
 {
     dirty = true;
+}
+
+void Transform::UpdateMatricesIfDirty()
+{
+    if (!dirty) return;
+
+    localMatrix =
+        Matrix::CreateScale(scale) *
+        Matrix::CreateFromQuaternion(quaternion) *
+        Matrix::CreateTranslation(position);
+
+    if (!parent)
+        worldMatrix = localMatrix;
+    else
+        worldMatrix = localMatrix * parent->GetWorldMatrix(); 
+
+    dirty = false;
 }

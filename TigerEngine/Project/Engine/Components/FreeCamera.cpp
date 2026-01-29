@@ -45,12 +45,12 @@ void FreeCamera::OnUpdate(float delta)
     // qe
     if (Input::GetKey(DirectX::Keyboard::Keys::Q))
     {
-        Matrix world = owner->GetTransform()->GetWorldTransform();
+        Matrix world = owner->GetTransform()->GetWorldMatrix();
         SetInputVec(world.Up());
     }
     else if (Input::GetKey(DirectX::Keyboard::Keys::E))
     {
-        Matrix world = owner->GetTransform()->GetWorldTransform();
+        Matrix world = owner->GetTransform()->GetWorldMatrix();
         SetInputVec(-world.Up());
     }
 
@@ -59,12 +59,13 @@ void FreeCamera::OnUpdate(float delta)
     {
         float dx = float(Input::GetMouseX()) * rotSpeed;
         float dy = float(Input::GetMouseY()) * rotSpeed;
+
         AddPitch(dy);
         AddYaw(dx);
     }
 
     auto& transform = *owner->GetTransform();
-    auto& position = transform.GetPosition();
+    auto& position = transform.GetLocalPosition();
     auto& rotation = transform.GetEuler();
     if (inputVec.Length() > 0.0f)
     {
@@ -103,12 +104,12 @@ void FreeCamera::SetInputVec(const Vector3& inputVec)
 
 Vector3 FreeCamera::GetForward()
 {
-    Matrix world = owner->GetTransform()->GetWorldTransform();
+    Matrix world = owner->GetTransform()->GetWorldMatrix();
     return -world.Forward();
 }
 
 Vector3 FreeCamera::GetRight()
 {
-    Matrix world = owner->GetTransform()->GetWorldTransform();
+    Matrix world = owner->GetTransform()->GetWorldMatrix();
     return world.Right();
 }

@@ -234,6 +234,12 @@ bool Scene::LoadToJson(const std::string &filename)
         }
     }
 
+    // 새로운 ID 부여 -> 이전 Save데이터와 ID 충돌 방지
+    for (auto& obj : gameObjects)
+    {
+        obj.objPtr->SetId(ObjectSystem::Instance().GetNewID());
+    }
+
     return true;
 }
 

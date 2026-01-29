@@ -12,7 +12,7 @@ void DirectionalShadowCamera::Update(Camera* camera)
         lightDir = Vector3::Down;
     lightDir.Normalize();
 
-    Vector3 camPos = camera->GetOwner()->GetTransform()->GetPosition();
+    Vector3 camPos = camera->GetOwner()->GetTransform()->GetLocalPosition();
 
     Vector3 sceneCenter = camPos + camera->GetForward() * desc.lookPointDist;
     Vector3 lightPos = sceneCenter - lightDir * desc.shadowLightDist;

@@ -439,7 +439,28 @@ void EngineApp::RegisterAllComponents()
     ComponentFactory::Instance().Register<PhysicsComponent>("PhysicsComponent");
     ComponentFactory::Instance().Register<AnimationController>("AnimationController");
 
+    Woo_Registeration();
+    Moon_Registeration();
+    Ron_Registeration();
+    Ho_Registeration();
+}
+
+void EngineApp::Woo_Registeration()
+{    
     // 우정 physics test
+    // 개인 등록함수로 이동시켜서 Conflict 해결함 [ 26.01.29 ]
     ComponentFactory::Instance().Register<PlayerMove_Test>("PlayerMove_Test");
 }
 
+void EngineApp::Moon_Registeration()
+{
+}
+
+void EngineApp::Ron_Registeration()
+{
+
+}
+
+void EngineApp::Ho_Registeration()
+{
+}

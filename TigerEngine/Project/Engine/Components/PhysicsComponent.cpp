@@ -176,7 +176,7 @@ void PhysicsComponent::SyncToPhysics()
     if (!m_Actor || !transform) return;
 
     PxTransform px;
-    px.p = ToPx(transform->GetPosition());
+    px.p = ToPx(transform->GetLocalPosition());
     px.q = ToPxQuat(transform->GetQuaternion()); 
 
     m_Actor->setGlobalPose(px);
