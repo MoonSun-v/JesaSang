@@ -106,6 +106,10 @@ private:
     int selectedPrefabIndex = -1;
     bool isPrefabWindowOpen = true;
 
+    // Check Key
+    void CheckObjectDeleteKey();
+    bool isHierarchyFocused = false;
+
 public:
 	void OnInputProcess(const Keyboard::State& KeyState, const Keyboard::KeyboardStateTracker& KeyTracker,
 		const Mouse::State& MouseState, const Mouse::ButtonStateTracker& MouseTracker) override;

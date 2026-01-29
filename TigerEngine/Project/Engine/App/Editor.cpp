@@ -108,6 +108,7 @@ void Editor::Update()
      });    
 
     CheckObjectPicking();
+    CheckObjectDeleteKey();
 }
 
 void Editor::Render(HWND &hwnd)
@@ -191,6 +192,8 @@ void Editor::RenderMenuBar(HWND& hwnd)
 void Editor::RenderHierarchy()
 {
     ImGui::Begin("World Hierarchy");
+
+    isHierarchyFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows); // focus 확인
 
     if (ImGui::Button("Create GameObject"))
         SceneSystem::Instance().GetCurrentScene()->AddGameObjectByName("NewGameObject");
@@ -986,183 +989,193 @@ void Editor::RenderWorldManager()
 template<typename T>
 void Editor::RenderComponentInfo(std::string compName, T* comp)
 {
-    rttr::type t = rttr::type::get(*comp); // 역참조로 실제 인스턴스 정보 가져오기
-    ImGui::Text(t.get_name().to_string().c_str());
-    if(compName == "Transform")
-    {
-        for(auto& prop : t.get_properties())
-        {
-            rttr::variant value = prop.get_value(*comp);   // 프로퍼티 값
-            std::string name = prop.get_name().to_string();         // 프로퍼티 이름
+    if (!comp) return;
 
-            if(value.is_type<DirectX::SimpleMath::Vector3>() && name == "Rotation")
+    rttr::type t = rttr::type::get(*comp);
+
+    // 표시용 라벨 + ID 분리
+    std::string headerLabel = t.get_name().to_string();
+    std::string headerId = "##" + std::to_string((uintptr_t)comp);
+    std::string header = headerLabel + headerId;
+
+    // 헤더
+    bool open = ImGui::CollapsingHeader(header.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+
+    // 헤더 오른쪽에 Remove 버튼(Transform 제외)
+    if (compName != "Transform")
+    {
+        // 같은 줄에 오른쪽으로 밀기 (대충)
+        float avail = ImGui::GetContentRegionAvail().x;
+        ImGui::SameLine(ImGui::GetCursorPosX() + avail - 110.0f);
+
+        ImGui::PushID(comp);
+        if (ImGui::SmallButton("Remove"))
+        {
+            selectedObject->RemoveComponent(comp);
+            ImGui::PopID();
+            return; // 삭제했으면 더 그리지 말기(댕글링 방지)
+        }
+        ImGui::PopID();
+    }
+
+    if (!open) return;
+
+    // 내용은 헤더가 열렸을 때만
+    if (compName == "Transform")
+    {
+        for (auto& prop : t.get_properties())
+        {
+            rttr::variant value = prop.get_value(*comp);
+            std::string name = prop.get_name().to_string();
+            if (!value.is_valid()) continue;
+
+            if (value.is_type<DirectX::SimpleMath::Vector3>() && name == "Rotation")
             {
-                DirectX::SimpleMath::Vector3 rot = value.get_value<DirectX::SimpleMath::Vector3>();
-                DirectX::SimpleMath::Vector3 eulerDegree = { XMConvertToDegrees(rot.x), XMConvertToDegrees(rot.y),  XMConvertToDegrees(rot.z) };
+                auto rot = value.get_value<DirectX::SimpleMath::Vector3>();
+                DirectX::SimpleMath::Vector3 eulerDegree =
+                {
+                    XMConvertToDegrees(rot.x),
+                    XMConvertToDegrees(rot.y),
+                    XMConvertToDegrees(rot.z)
+                };
 
                 if (ImGui::DragFloat3("Rotation", &eulerDegree.x, 0.1f))
                 {
-                    rot = { XMConvertToRadians(eulerDegree.x), XMConvertToRadians(eulerDegree.y), XMConvertToRadians(eulerDegree.z) };
-
+                    rot = {
+                        XMConvertToRadians(eulerDegree.x),
+                        XMConvertToRadians(eulerDegree.y),
+                        XMConvertToRadians(eulerDegree.z)
+                    };
                     prop.set_value(*comp, rot);
 
                     GameObject* owner = comp->GetOwner();
                     if (auto phys = owner->GetComponent<PhysicsComponent>())
-                    {
                         phys->SyncToPhysics();
-                    }
                 }
-
             }
             else if (value.is_type<DirectX::SimpleMath::Vector3>())
             {
-                DirectX::SimpleMath::Vector3 vec = value.get_value<DirectX::SimpleMath::Vector3>();
-
-                // [ Physics, CCT 컴포넌트 Transform 동기화 ]
+                auto vec = value.get_value<DirectX::SimpleMath::Vector3>();
                 if (ImGui::DragFloat3(name.c_str(), &vec.x, 0.1f))
                 {
                     prop.set_value(*comp, vec);
 
                     GameObject* owner = comp->GetOwner();
                     if (auto phys = owner->GetComponent<PhysicsComponent>())
-                    {
                         phys->SyncToPhysics();
-                    }
                     if (auto cct = owner->GetComponent<CharacterControllerComponent>())
-                    {
-                        cct->Teleport(vec); // setPosition 래핑 함수
-                    }
+                        cct->Teleport(vec);
                 }
             }
-        } 
+        }
+        return;
     }
-    else if(compName == "FBXData")
+
+    if (compName == "FBXData")
     {
-        for(auto& prop : t.get_properties())
+        // FileDialog 키 유니크하게
+        std::string keyNonStatic = "ChooseFileDlgKey##" + std::to_string((uintptr_t)comp);
+        std::string keyStatic = "ChooseStaticFileDlgKey##" + std::to_string((uintptr_t)comp);
+
+        for (auto& prop : t.get_properties())
         {
-            rttr::variant value = prop.get_value(*comp);   // 프로퍼티 값
-            std::string name = prop.get_name().to_string();// 프로퍼티 이름
-            if(value.is_type<std::string>() && name == "DataPath")
+            rttr::variant value = prop.get_value(*comp);
+            std::string name = prop.get_name().to_string();
+            if (!value.is_valid()) continue;
+
+            if (value.is_type<std::string>() && name == "DataPath")
             {
                 std::string path = value.get_value<std::string>();
-
-                // 현재 경로 표시   
                 ImGui::Text("Current Path: %s", path.c_str());
-                
-                // 탐색기 열기 버튼 -> rigid, skeletal asset path
+
                 if (ImGui::Button("Browse nonStatic"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = "../";
-                    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".fbx,.glb", config);
+                    ImGuiFileDialog::Instance()->OpenDialog(keyNonStatic, "Choose File", ".fbx,.glb", config);
                 }
-                    // display
-                if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) 
+
+                if (ImGuiFileDialog::Instance()->Display(keyNonStatic))
                 {
-                    if (ImGuiFileDialog::Instance()->IsOk()) 
-                    { // action if OK
-                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();     // 절대 경로 + 파일 이름
-                        std::string currFilePath = ImGuiFileDialog::Instance()->GetCurrentFileName();   // 진짜 파일 이름만 뜸
-                        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();           // 절대 경로만 뜸
-                        std::string fileFilterPath = ImGuiFileDialog::Instance()->GetCurrentFilter();   // 확장자만 나옴
-
+                    if (ImGuiFileDialog::Instance()->IsOk())
+                    {
+                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
                         std::filesystem::path relativePath = std::filesystem::relative(filePathName);
-                        std::string relativePathStr = relativePath.string();
-                        // action
-
-                        FBXData* fbxDataComp = dynamic_cast<FBXData*>(comp);
-                        fbxDataComp->ChangeData(relativePathStr);
+                        auto* fbx = dynamic_cast<FBXData*>(comp);
+                        if (fbx) fbx->ChangeData(relativePath.string());
                     }
-
                     ImGuiFileDialog::Instance()->Close();
-                } // imguiFileDialog end - non static  
+                }
 
-                // 탐색기 열기 버튼 -> static mesh asset path 찾기
                 if (ImGui::Button("Browse static"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = "../";
-                    ImGuiFileDialog::Instance()->OpenDialog("ChooseStaticFileDlgKey", "Choose File", ".fbx,.glb", config);
+                    ImGuiFileDialog::Instance()->OpenDialog(keyStatic, "Choose File", ".fbx,.glb", config);
                 }
 
-                if (ImGuiFileDialog::Instance()->Display("ChooseStaticFileDlgKey"))
+                if (ImGuiFileDialog::Instance()->Display(keyStatic))
                 {
                     if (ImGuiFileDialog::Instance()->IsOk())
-                    { // action if OK
-                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();     // 절대 경로 + 파일 이름
-
+                    {
+                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
                         std::filesystem::path relativePath = std::filesystem::relative(filePathName);
-                        std::string relativePathStr = relativePath.string();
-                        // action
-
-                        FBXData* fbxDataComp = dynamic_cast<FBXData*>(comp);
-                        fbxDataComp->ChangeStaticData(relativePathStr);
+                        auto* fbx = dynamic_cast<FBXData*>(comp);
+                        if (fbx) fbx->ChangeStaticData(relativePath.string());
                     }
                     ImGuiFileDialog::Instance()->Close();
-                } // imguiFileDialog end - static
+                }
             }
-        }        
+        }
+        return;
     }
-    else if (compName == "Decal")
+
+    if (compName == "Decal")
     {
+        std::string keyTex = "ChooseDecalTexDlgKey##" + std::to_string((uintptr_t)comp);
+
         for (auto& prop : t.get_properties())
         {
-            rttr::variant value = prop.get_value(*comp);   
+            rttr::variant value = prop.get_value(*comp);
             std::string name = prop.get_name().to_string();
+            if (!value.is_valid()) continue;
+
             if (value.is_type<std::string>() && name == "TexturePath")
             {
                 std::string path = value.get_value<std::string>();
-
-                // 현재 경로 표시   
                 ImGui::Text("Current Path: %s", path.c_str());
 
-                // 탐색기 열기 버튼
                 if (ImGui::Button("Browse"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = "../";
-                    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".png,.tga", config);
+                    ImGuiFileDialog::Instance()->OpenDialog(keyTex, "Choose File", ".png,.tga", config);
                 }
-                // display
-                if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+
+                if (ImGuiFileDialog::Instance()->Display(keyTex))
                 {
                     if (ImGuiFileDialog::Instance()->IsOk())
-                    { // action if OK
-                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();     // 절대 경로 + 파일 이름
-                        std::string currFilePath = ImGuiFileDialog::Instance()->GetCurrentFileName();   // 진짜 파일 이름만 뜸
-                        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();           // 절대 경로만 뜸
-                        std::string fileFilterPath = ImGuiFileDialog::Instance()->GetCurrentFilter();   // 확장자만 나옴
-
+                    {
+                        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
                         std::filesystem::path relativePath = std::filesystem::relative(filePathName);
-                        std::string relativePathStr = relativePath.string();
-                        // action
-
-                        Decal* decalComp = dynamic_cast<Decal*>(comp);
-                        decalComp->ChangeData(relativePathStr);
+                        auto* decal = dynamic_cast<Decal*>(comp);
+                        if (decal) decal->ChangeData(relativePath.string());
                     }
                     ImGuiFileDialog::Instance()->Close();
-                } 
+                }
             }
         }
+
         ReadVariants(*comp);
+        return;
     }
-    else
-    {
-        ImGui::PushID(comp);
-        ReadVariants(*comp);
-        ImGui::PopID();
-    }
-    
-    if (compName != "Transform") 
-    {
-        ImGui::PushID(comp);
-        if(ImGui::Button("Remove Component"))
-        {
-            selectedObject->RemoveComponent(comp);
-        }
-        ImGui::PopID();
-    }
+
+    // 기본
+    ImGui::PushID(comp);
+    ReadVariants(*comp);
+    ImGui::PopID();
 }
+
 
 void Editor::RenderDebugAABBDraw()
 {
@@ -1488,6 +1501,43 @@ void Editor::ReadVariants(rttr::instance inst)
             if (ImGui::ColorEdit3(name.c_str(), &c.x))
                 prop.set_value(inst, c);
         }
+    }
+}
+
+void Editor::CheckObjectDeleteKey()
+{
+    // Hieararchy가 선택되었을 때만 제거 단축키 사용 가능
+
+    if (!isHierarchyFocused) return;
+    if (!selectedObject) return;
+    if (selectedObject->IsDestory()) { selectedObject = nullptr; return; }
+
+    ImGuiIO& io = ImGui::GetIO();
+
+    // UI가 키보드 입력을 쓰고 있으면 삭제 금지 (텍스트 입력/단축키 충돌 방지)
+    if (io.WantTextInput)
+        return;
+
+    if (!ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
+    // 플레이 모드일 때 막기
+    if (PlayModeSystem::Instance().IsPlaying())
+        return;
+
+    // 마지막
+    if (selectedObject->GetComponent<Camera>() && CameraSystem::Instance().GetAllCamera().size() == 1)
+    {
+        MessageBoxA(NULL, "Scene need at least one camera.", "Delete not allowed", 0);
+        return;
+    }
+
+    // imgui로 키 입력 확인
+    if (ImGui::IsKeyPressed(ImGuiKey_Delete, false))
+    {
+        GameObject* victim = selectedObject;
+        selectedObject = nullptr;
+        victim->Destory();
     }
 }
 
