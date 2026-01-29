@@ -7,6 +7,7 @@
 #include "Object/GameObject.h"
 #include "System/InputSystem.h"
 #include "EngineSystem/PhysicsSystem.h"
+#include "EngineSystem/CameraSystem.h"
 
 #include "FSM/IPlayerState.h"
 #include "FSM/Player_Idle.h"
@@ -40,6 +41,7 @@ void PlayerController::OnStart()
     transform = GetOwner()->GetComponent<Transform>();
     fbxRenderer = GetOwner()->GetComponent<FBXRenderer>();
     cct = GetOwner()->GetComponent<CharacterControllerComponent>();
+    camTransform = CameraSystem::Instance().GetCurrCamera()->GetOwner()->GetTransform();
 
     // init fsm
     AddFSMStates();
@@ -52,7 +54,7 @@ void PlayerController::OnStart()
 void PlayerController::OnUpdate(float delta)
 {
     // input
-    KeyInputUpdate();
+    InputProcess();
     
     // fsm
     if(curState)
@@ -78,8 +80,9 @@ void PlayerController::OnFixedUpdate(float delta)
         curState->FixedUpdate(delta);
     }
 
-    // move
+    // movement
     Move(delta);
+    Rotation(delta);
 }
 
 void PlayerController::OnDestory()
@@ -164,8 +167,9 @@ void PlayerController::InitStat()
 }
 
 /*-------[ Input ]-------------------------------------*/
-void PlayerController::KeyInputUpdate()
+void PlayerController::InputProcess()
 {
+    // key
     isMoveLKey = Input::GetKey(moveL_Key);
     isMoveRKey = Input::GetKey(moveR_Key);
     isMoveFKey = Input::GetKey(moveF_Key);
@@ -173,11 +177,48 @@ void PlayerController::KeyInputUpdate()
     isSitKey = Input::GetKey(sit_Key);
     isRunKey = Input::GetKey(run_Key);
     isInteractionKey = Input::GetKey(interaction_Key);
+
+    // move dir
+    Vector3 input(0, 0, 0);
+
+    if (isMoveLKey) input.x -= 1;
+    if (isMoveRKey) input.x += 1;
+    if (isMoveFKey) input.z += 1;
+    if (isMoveBKey) input.z -= 1;
+
+    if (input.LengthSquared() > 0)
+        input.Normalize();
+
+    this->moveDir = input;
 }
 
-/*-------[ Move ]-------------------------------------*/
+/*-------[ Movement ]----------------------------------*/
 void PlayerController::Move(float delta)
 {
     cct->m_MoveSpeed = curSpeed;
     cct->MoveCharacter(moveDir, delta);
+}
+
+static float WrapAngleRad(float a)      // util
+{
+    while (a > DirectX::XM_PI)  a -= DirectX::XM_2PI;
+    while (a < -DirectX::XM_PI) a += DirectX::XM_2PI;
+    return a;
+}
+
+void PlayerController::Rotation(float delta)
+{
+    if (moveDir.LengthSquared() <= 0.0001f)
+        return;
+
+    Vector3 rotationDir = -moveDir;         // 너 왜 반전이닝?
+
+    float targetYaw = atan2f(rotationDir.x, rotationDir.z);
+    float currentYaw = transform->GetYaw();
+    float deltaYaw = WrapAngleRad(targetYaw - currentYaw);
+
+    float turnSpeed = 10.0f;
+    float newYaw = currentYaw + deltaYaw * turnSpeed * delta;
+
+    transform->SetEuler(Vector3(0.0f, newYaw, 0.0f));
 }

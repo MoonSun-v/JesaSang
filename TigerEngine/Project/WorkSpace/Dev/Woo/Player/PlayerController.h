@@ -24,6 +24,8 @@ private:
     FBXRenderer* fbxRenderer = nullptr;
     CharacterControllerComponent* cct = nullptr;
 
+    Transform* camTransform = nullptr;
+
     // --- [ State ] ---------------------------
     PlayerState state = PlayerState::None;
     IPlayerState* curState;
@@ -94,11 +96,12 @@ public:
     // Init
     void InitStat();
 
-    // Key Input
-    void KeyInputUpdate();
+    // Input
+    void InputProcess();
 
-    // Move Player
+    // Movement
     void Move(float delta);
+    void Rotation(float delta);
 
 public:
     // 외부 Funcs.. TODO
