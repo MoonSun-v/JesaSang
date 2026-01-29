@@ -10,7 +10,7 @@ class IPlayerState;
 // Player State Enum
 enum class PlayerState
 {
-    Idle, Walk, Run, Sit, SitWalk, Hide, Hit, Die
+    Idle, Walk, Run, Sit, SitWalk, Hide, Hit, Die, None
 };
 
 // Player Controller Script Component
@@ -25,7 +25,7 @@ private:
     CharacterControllerComponent* cct = nullptr;
 
     // --- [ State ] ---------------------------
-    PlayerState state = PlayerState::Idle;
+    PlayerState state = PlayerState::None;
     IPlayerState* curState;
     IPlayerState* fsmStates[8];
 
@@ -116,6 +116,7 @@ public:
     friend class Player_Walk;
     friend class Player_Run;
     friend class Player_Sit;
+    friend class Player_SitWalk;
     friend class Player_Hide;
     friend class Player_Hit;
     friend class Player_Die;

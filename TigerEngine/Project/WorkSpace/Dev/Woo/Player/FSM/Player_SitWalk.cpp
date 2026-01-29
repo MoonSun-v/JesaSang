@@ -1,42 +1,39 @@
-#include "Player_Run.h"
+#include "Player_SitWalk.h"
 
-void Player_Run::Enter()
+void Player_SitWalk::Enter()
 {
-    cout << "[Player] Enter Run State" << endl;
+    cout << "[Player] Enter SitWalk State" << endl;
 
     // set speed
-    player->curSpeed = player->runSpeed;
+    player->curSpeed = player->sitSpeed;
 }
 
-void Player_Run::ChangeStateLogic()
+void Player_SitWalk::ChangeStateLogic()
 {
     const bool isMove =
         player->isMoveLKey || player->isMoveRKey ||
         player->isMoveFKey || player->isMoveBKey;
 
-    // sit, sit walk
-    if (player->isSitKey)
+    // idle, walk, run
+    if (!player->isSitKey)
     {
-        player->ChangeState(isMove ? PlayerState::SitWalk : PlayerState::Sit);
+        if (isMove)
+            player->ChangeState(player->isRunKey ? PlayerState::Run : PlayerState::Walk);
+        else
+            player->ChangeState(PlayerState::Idle);
+
         return;
     }
 
-    // idle
+    // sit
     if (!isMove)
     {
-        player->ChangeState(PlayerState::Idle);
-        return;
-    }
-
-    // walk
-    if (!player->isRunKey)
-    {
-        player->ChangeState(PlayerState::Walk);
+        player->ChangeState(PlayerState::Sit);
         return;
     }
 }
 
-void Player_Run::Update(float deltaTime)
+void Player_SitWalk::Update(float deltaTime)
 {
     // input dir
     Vector3 input(0, 0, 0);
@@ -62,13 +59,11 @@ void Player_Run::Update(float deltaTime)
     player->moveDir = moveDir;
 }
 
-void Player_Run::FixedUpdate(float deltaTime)
+void Player_SitWalk::FixedUpdate(float deltaTime)
 {
-   
 }
 
-void Player_Run::Exit()
+void Player_SitWalk::Exit()
 {
-    cout << "[Player] Exit Run State" << endl;
+    cout << "[Player] Exit SitWalk State" << endl;
 }
-

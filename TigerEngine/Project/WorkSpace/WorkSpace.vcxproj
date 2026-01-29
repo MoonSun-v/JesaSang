@@ -162,6 +162,7 @@
     <ClInclude Include="Dev\Woo\Player\FSM\Player_Hide.h" />
     <ClInclude Include="Dev\Woo\Player\FSM\Player_Hit.h" />
     <ClInclude Include="Dev\Woo\Player\FSM\Player_Die.h" />
+    <ClInclude Include="Dev\Woo\Player\FSM\Player_SitWalk.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineApp.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Dev\Woo\Player\FSM\Player_Hide.cpp" />
     <ClCompile Include="Dev\Woo\Player\FSM\Player_Hit.cpp" />
     <ClCompile Include="Dev\Woo\Player\FSM\Player_Die.cpp" />
+    <ClCompile Include="Dev\Woo\Player\FSM\Player_SitWalk.cpp" />
     <ClCompile Include="winMain.cpp" />
   </ItemGroup>
   <ItemGroup>

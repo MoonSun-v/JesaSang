@@ -14,10 +14,10 @@ void Player_Walk::ChangeStateLogic()
         player->isMoveLKey || player->isMoveRKey ||
         player->isMoveFKey || player->isMoveBKey;
 
-    // sit
+    // sit, sit walk
     if (player->isSitKey)
-    {         
-        player->ChangeState(PlayerState::Sit);
+    {
+        player->ChangeState(isMove ? PlayerState::SitWalk : PlayerState::Sit);
         return;
     }
 

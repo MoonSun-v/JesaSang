@@ -17,10 +17,10 @@ void Player_Idle::ChangeStateLogic()
         player->isMoveLKey || player->isMoveRKey ||
         player->isMoveFKey || player->isMoveBKey;
 
-    // sit
+    // sit, sit walk
     if (player->isSitKey)
     {
-        player->ChangeState(PlayerState::Sit);
+        player->ChangeState(isMove? PlayerState::SitWalk : PlayerState::Sit);
         return;
     }
 
@@ -38,8 +38,7 @@ void Player_Idle::ChangeStateLogic()
 
 void Player_Idle::Update(float deltaTime)
 {
-    // dir
-    player->moveDir = Vector3::Zero;
+   
 }
 
 void Player_Idle::FixedUpdate(float deltaTime)

@@ -13,6 +13,7 @@
 #include "FSM/Player_Walk.h"
 #include "FSM/Player_Run.h"
 #include "FSM/Player_Sit.h"
+#include "FSM/Player_SitWalk.h"
 #include "FSM/Player_Hide.h"
 #include "FSM/Player_Hit.h"
 #include "FSM/Player_Die.h"
@@ -135,18 +136,22 @@ void PlayerController::AddFSMStates()
     fsmStates[(int)PlayerState::Walk] = new Player_Walk(this);
     fsmStates[(int)PlayerState::Run] = new Player_Run(this);
     fsmStates[(int)PlayerState::Sit] = new Player_Sit(this);
+    fsmStates[(int)PlayerState::SitWalk] = new Player_SitWalk(this);
     fsmStates[(int)PlayerState::Hide] = new Player_Hide(this);
     fsmStates[(int)PlayerState::Hit] = new Player_Hit(this);
     fsmStates[(int)PlayerState::Die] = new Player_Die(this);
 }
 
-void PlayerController::ChangeState(PlayerState state)
+void PlayerController::ChangeState(PlayerState nextState)
 {
+    if(curState == fsmStates[(int)nextState])
+        return;
+
     if(curState)
         curState->Exit();
 
-    curState = fsmStates[(int)state];
-    this->state = state;
+    curState = fsmStates[(int)nextState];
+    this->state = nextState;
 
     if(curState)
         curState->Enter();
