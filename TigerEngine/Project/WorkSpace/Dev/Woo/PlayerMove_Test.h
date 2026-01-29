@@ -24,6 +24,10 @@ public:
     // collision event
     void OnCollisionEnter(PhysicsComponent* other) override;
 
+    // json
+    nlohmann::json Serialize();
+    void Deserialize(nlohmann::json data);
+
 public:
     void Move(float dt);
 };

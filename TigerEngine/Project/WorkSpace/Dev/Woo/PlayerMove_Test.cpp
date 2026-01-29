@@ -4,6 +4,7 @@
 #include "System/InputSystem.h"
 #include "EngineSystem/PhysicsSystem.h"
 #include "Util/DebugDraw.h"
+#include "Util/JsonHelper.h"
 
 #include <directxtk/Keyboard.h>
 #include <Util/PhysXUtils.h>
@@ -51,6 +52,16 @@ void PlayerMove_Test::OnCollisionEnter(PhysicsComponent* other)
     std::wstring wName(name.begin(), name.end());
     std::wstring wOtherName(otherName.begin(), otherName.end());
     OutputDebugStringW((L"[CCT] " + wName + L" - OnCollisionEnter : " + wOtherName + L"\n").c_str());
+}
+
+nlohmann::json PlayerMove_Test::Serialize()
+{
+    return JsonHelper::MakeSaveData(this);
+}
+
+void PlayerMove_Test::Deserialize(nlohmann::json data)
+{
+    JsonHelper::SetDataFromJson(this, data);
 }
 
 void PlayerMove_Test::Move(float dt)
