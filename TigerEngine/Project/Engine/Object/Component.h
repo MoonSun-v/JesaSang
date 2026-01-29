@@ -40,6 +40,11 @@ public:
     virtual void OnFixedUpdate(float delta) {};
 
     /// <summary>
+    /// 우정추가. 렌더링이 끝난 뒤 호출(카메라 이동 등에 사용)
+    /// </summary>
+    virtual void OnLateUpdate(float delta) {};
+
+    /// <summary>
     /// 객체가 파괴 될 때 호출됩니다.
     /// </summary>
     virtual void OnDestory() {};

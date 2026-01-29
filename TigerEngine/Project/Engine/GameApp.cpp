@@ -172,6 +172,7 @@ bool GameApp::Run()
 		{
 			Update();
 			Render();
+            LateUpdate();
 		}
 	}
 
@@ -204,6 +205,11 @@ void GameApp::FixedUpdate()
     OnFixedUpdate();
 }
 
+void GameApp::LateUpdate()
+{
+    OnLateUpdate();
+}
+
 void GameApp::OnPreUpdate()
 {
 }
@@ -212,6 +218,12 @@ void GameApp::OnUpdate()
 {
 
 }
+
+void GameApp::OnLateUpdate()
+{
+
+}
+
 //
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //

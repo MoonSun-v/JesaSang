@@ -235,6 +235,11 @@ void EngineApp::OnFixedUpdate()
     }
 }
 
+void EngineApp::OnLateUpdate()
+{
+    SceneSystem::Instance().LateUpdateScene(GameTimer::Instance().DeltaTime());
+}
+
 void GameApp::ConsoleInitialize()
 {
 #if _DEBUG
@@ -414,7 +419,6 @@ void EngineApp::OnInputProcess(const Keyboard::State &KeyState, const Keyboard::
 #include "PhysicsTest/GroundTestScript.h"
 #include "PhysicsTest/CCTTest.h"
 #include "AudioTest/AudioPlayModeScript.h"
-#include "Dev/Woo/PlayerMove_Test.h"
 
 
 void EngineApp::RegisterAllComponents()
@@ -447,9 +451,7 @@ void EngineApp::RegisterAllComponents()
 
 void EngineApp::Woo_Registeration()
 {    
-    // 우정 physics test
-    // 개인 등록함수로 이동시켜서 Conflict 해결함 [ 26.01.29 ]
-    ComponentFactory::Instance().Register<PlayerMove_Test>("PlayerMove_Test");
+    
 }
 
 void EngineApp::Moon_Registeration()

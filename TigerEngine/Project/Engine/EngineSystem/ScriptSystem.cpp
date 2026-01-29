@@ -117,3 +117,15 @@ void ScriptSystem::FixedUpdate(float dt)
         }
     }
 }
+
+void ScriptSystem::LateUpdate(float dt)
+{
+    if (PlayModeSystem::Instance().IsPlaying())
+    {
+        // 사용자 정의 component update
+        for (auto& e : scriptComps)
+        {
+            e->OnLateUpdate(dt);
+        }
+    }
+}
