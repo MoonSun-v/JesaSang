@@ -14,6 +14,7 @@ public:
 	void BeforUpdate();
 	void UpdateScene(float deltaTime);
 	void FixedUpdateScene(float deltaTime);
+	void LateUpdateScene(float deltaTime);
 
 	std::shared_ptr<Scene> GetSceneByIndex(int index);
 	void AddScene();

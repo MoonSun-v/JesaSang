@@ -34,6 +34,7 @@ public:
 	void OnUpdate() override;
 	void OnRender() override;
     void OnFixedUpdate() override;
+    void OnLateUpdate() override;
 
 #if _DEBUG
 	std::unique_ptr<ImguiRenderer> imguiRenderer{};

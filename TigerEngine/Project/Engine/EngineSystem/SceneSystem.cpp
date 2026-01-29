@@ -21,6 +21,13 @@ void SceneSystem::FixedUpdateScene(float deltaTime)
     currentScene->OnFixedUpdate(deltaTime);
 }
 
+void SceneSystem::LateUpdateScene(float deltaTime)
+{
+    if (scenes.empty()) return; // 씬 없어서 터지는거 방지
+
+    currentScene->OnLateUpdate(deltaTime);
+}
+
 std::shared_ptr<Scene> SceneSystem::GetSceneByIndex(int index)
 {
 	return scenes.find(index)->second;
