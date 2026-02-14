@@ -108,10 +108,23 @@ bool GameApp::Initialize(UINT Width, UINT Height)
 	AdjustWindowRect(&rcClient, WS_OVERLAPPEDWINDOW, FALSE);
 
 	//생성
-	hwnd = CreateWindowW(windowClassName, titleName, WS_OVERLAPPEDWINDOW,
+	hwnd = CreateWindowW(windowClassName, titleName, WS_POPUP | WS_VISIBLE,
 		100, 100,	// 시작 위치
 		rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
 		nullptr, nullptr, hInstance, nullptr);
+
+    // 모니터 정보 가져오기 (주 모니터 기준)
+    HMONITOR hMonitor = MonitorFromWindow(GetDesktopWindow(), MONITOR_DEFAULTTONEAREST);
+    MONITORINFO mi = { sizeof(mi) };
+    GetMonitorInfo(hMonitor, &mi);
+
+    int posX = (mi.rcMonitor.right - mi.rcMonitor.left - internalWidth) / 2;
+    int posY = (mi.rcMonitor.bottom - mi.rcMonitor.top - internalHeight) / 2;
+
+    // 창 위치와 크기 설정
+    SetWindowPos(hwnd, HWND_TOP,
+        posX, posY, internalWidth, internalHeight,
+        SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 	if (!hwnd)
 	{

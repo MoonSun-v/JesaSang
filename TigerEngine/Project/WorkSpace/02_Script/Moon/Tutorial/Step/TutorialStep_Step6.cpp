@@ -1,4 +1,4 @@
-#include "TutorialStep_Step6.h"
+ï»¿#include "TutorialStep_Step6.h"
 
 #include "System/InputSystem.h"
 #include "EngineSystem/SceneSystem.h"
@@ -13,10 +13,10 @@ void TutorialStep_Step6::Enter()
     waitingStart = true;
     phase = Step6Phase::Monologue1;
 
-    // Á¶ÀÛ ºÒ°¡ 
+    // ì¡°ì‘ ë¶ˆê°€ 
     tutorialController->player_Obj->GetComponent<PlayerController>()->SetInputLock(true);
 
-    // ´ÙÀÌ¾ó·Î±× À§Ä¡ ´Ù½Ã ÇÃ·¹ÀÌ¾î·Î ¹Ù²Ù±â 
+    // ë‹¤ì´ì–¼ë¡œê·¸ ìœ„ì¹˜ ë‹¤ì‹œ í”Œë ˆì´ì–´ë¡œ ë°”ê¾¸ê¸° 
     if (tutorialController->dialogue)
     {
         auto pointObj = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("DialoguePoint");
@@ -29,7 +29,7 @@ void TutorialStep_Step6::Enter()
 
 void TutorialStep_Step6::Update(float deltaTime)
 {
-    // ½ÃÀÛ µô·¹ÀÌ
+    // ì‹œì‘ ë”œë ˆì´
     if (waitingStart)
     {
         stepTimer += deltaTime;
@@ -90,7 +90,7 @@ void TutorialStep_Step6::Exit()
 void TutorialStep_Step6::Monologue1()
 {
     if (tutorialController->dialogue)
-        tutorialController->dialogue->ShowDialogueHold(L"ºĞ¸í... À¯·É ÀÌ¾ú¾î!");
+        tutorialController->dialogue->ShowDialogueHold(L"ë¶„ëª…... ìœ ë ¹ ì´ì—ˆì–´!");
 
     phase = Step6Phase::WaitInput1;
 }
@@ -115,7 +115,7 @@ void TutorialStep_Step6::WaitInput1()
 void TutorialStep_Step6::Monologue2()
 {
     if (tutorialController->dialogue)
-        tutorialController->dialogue->ShowDialogueHold(L"¾öÃ» È­³ªº¸¿´¾î. ¹è°¡ °íÇÁ´Ù Çß´Âµ¥..");
+        tutorialController->dialogue->ShowDialogueHold(L"ì—„ì²­ í™”ë‚˜ë³´ì˜€ì–´. ë°°ê°€ ê³ í”„ë‹¤ í–ˆëŠ”ë°..");
 
     phase = Step6Phase::WaitInput2;
 }
@@ -140,7 +140,7 @@ void TutorialStep_Step6::WaitInput2()
 void TutorialStep_Step6::Monologue3()
 {
     if (tutorialController->dialogue)
-        tutorialController->dialogue->ShowDialogueHold(L"¿ì¸®°¡ Á¦»ç¸¦ ¾È Áö³»¼­ ¹äÀ» ¸ø ¸ÔÀº °Ç°¡?");
+        tutorialController->dialogue->ShowDialogueHold(L"ìš°ë¦¬ê°€ ì œì‚¬ë¥¼ ì•ˆ ì§€ë‚´ì„œ ë°¥ì„ ëª» ë¨¹ì€ ê±´ê°€?");
 
     phase = Step6Phase::WaitInput3;
 }

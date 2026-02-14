@@ -4,6 +4,8 @@
 #include "../Util/AnimatorParameter.h"
 #include "../EngineSystem/AnimationSystem.h"
 
+struct FBXResourceAsset;
+
 // ----------------------------------------------------
 // [ AnimationController ] 
 // 
@@ -22,6 +24,7 @@ public:
 private:
     std::unordered_map<std::string, std::unique_ptr<AnimationState>> States;
     AnimationState* CurrentState = nullptr;
+    const FBXResourceAsset* cachedAsset = nullptr;
 
 public:
     Animator AnimatorInstance; // 실제 애니메이션 재생기

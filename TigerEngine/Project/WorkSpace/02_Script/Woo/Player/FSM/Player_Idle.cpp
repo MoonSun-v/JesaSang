@@ -13,7 +13,7 @@ void Player_Idle::Enter()
     player->animController->ChangeState("Idle");
 
     // set sound
-    player->sound->StopSound();
+    player->sound->StopFootStep();
 
     // set sense radius
     player->curSenseRadius = player->idleSenseRadius;

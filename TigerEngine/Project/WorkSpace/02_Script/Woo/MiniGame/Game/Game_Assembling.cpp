@@ -7,9 +7,11 @@
 #include "System/InputSystem.h"
 #include "Object/GameObject.h"
 #include "Components/UI/Image.h"
+#include "../../../Ho/Sound/SoundManager.h"
 
 using std::cout;
 using std::endl;
+
 
 void Game_Assembling::SetImage(Image* image, string& path)
 {
@@ -113,10 +115,12 @@ void Game_Assembling::ResolveHit(bool correct)
     if (correct)
     {
         MarkCurrentSlotGood();
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Success_Sound); // 중간 성공
     }
     else
     {
         MarkCurrentSlotFail();
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Wrong_Sound);   // 중간 실패
         curTurnFailCount++;
     }
 
@@ -130,6 +134,7 @@ void Game_Assembling::FinishTurnIfNeeded()
     {
         isFinished = true;
         isSuccess = false;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Fail_Sound);
         return;
     }
 
@@ -142,6 +147,7 @@ void Game_Assembling::FinishTurnIfNeeded()
         {
             isFinished = true;
             isSuccess = true;
+            SoundManager::Instance()->PlaySFX(SFXType::Minigame_Clear_Sound);
             return;
         }
 

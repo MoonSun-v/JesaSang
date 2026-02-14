@@ -153,11 +153,11 @@ std::string SoundManager::ToString(SFXType type)
     case SFXType::Altar_Mapchange_Sound:               return "Altar_Mapchange_Sound";
 
     // ---- Minigame ----
-    case SFXType::Minigame_Interaction_Sound:          return "Minigame_Interaction_Sound";
-    case SFXType::Minigame_Clear_Sound:                return "Minigame_Clear_Sound";
-    case SFXType::Minigame_Success_Sound:              return "Minigame_Success_Sound";
-    case SFXType::Minigame_Fail_Sound:                 return "Minigame_Fail_Sound";
-    case SFXType::Minigame_Wrong_Sound:                return "Minigame_Wrong_Sound";
+    case SFXType::Minigame_Interaction_Sound:          return "Minigmae_Interaction_Sound";
+    case SFXType::Minigame_Clear_Sound:                return "Minigmae_Clear_Sound";
+    case SFXType::Minigame_Success_Sound:              return "Minigmae_Success_Sound";
+    case SFXType::Minigame_Fail_Sound:                 return "Minigmae_Fail_Sound";
+    case SFXType::Minigame_Wrong_Sound:                return "Minigmae_Wrong_Sound";
     }
     return "SFX_Unknown";
 }

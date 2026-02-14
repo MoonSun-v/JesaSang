@@ -7,6 +7,9 @@
 
 #include "../../Ho/ResultPanels/WinCinemachine.h"
 #include "../../Ho/ResultPanels/LoseCinemachine.h"
+#include "../../Ho/Sound/SoundManager.h"
+#include "../../Woo/Player/PlayerController.h"
+
 
 REGISTER_COMPONENT(GameManager)
 
@@ -59,6 +62,9 @@ void GameManager::GameSuccess()
     if (panel)
         panel->Play();
 
+    // sound
+    SoundManager::Instance()->PlayBGM(BGMType::Game_Win_BG, false);
+
     std::cout << "[GameManager] Game Success!" << endl;
 }
 
@@ -72,6 +78,16 @@ void GameManager::GameOver()
     auto panel = SceneUtil::GetObjectByName("LoseCinemachine")->GetComponent<LoseCinemachine>();
     if (panel)
         panel->Play();
+
+    // sound
+    SoundManager::Instance()->PlayBGM(BGMType::Game_Lose_BG, false);
+
+    // player 
+    auto p = SceneUtil::GetObjectByName("Player");
+    if (p)
+    {
+        p->GetComponent<PlayerController>();
+    }
 
     std::cout << "[GameManager] Game Over..." << endl;
 }

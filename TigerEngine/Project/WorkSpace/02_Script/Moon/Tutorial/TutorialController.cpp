@@ -152,6 +152,10 @@ void TutorialController::ChangeStep(TutorialStep next)
         }
 
         state = TutorialStep::None;
+
+        auto s = SceneSystem::Instance().GetCurrentScene();
+        s->LoadToJson("..\\Assets\\Scenes\\04_MainGameScene.json");
+
         std::cout << "=== Tutorial FINISH ===" << std::endl;
         return;
     }

@@ -654,17 +654,17 @@ bool FBXResourceManager::LoadAnimationByPath(std::shared_ptr<FBXResourceAsset> a
 
     for (int i = 0; i < pScene->mNumAnimations; i++)
     {
-        Animation anim;
-        anim.CreateFromAssimp(pScene->mAnimations[i]);
-        anim.m_loop = loop; // 루프 설정
+        auto anim = std::make_unique<Animation>();
+        anim->CreateFromAssimp(pScene->mAnimations[i]);
+        anim->m_loop = loop; // 루프 설정
 
         // 이름 지정 
         if (!clipName.empty())
-            anim.m_name = clipName; // 외부에서 지정한 이름 사용
+            anim->m_name = clipName; // 외부에서 지정한 이름 사용
         else
-            anim.m_name = pScene->mAnimations[i]->mName.C_Str(); // Assimp 애니메이션 이름 사용
+            anim->m_name = pScene->mAnimations[i]->mName.C_Str(); // Assimp 애니메이션 이름 사용
 
-        asset->animations.push_back(anim);
+        asset->animations.push_back(std::move(anim));
     }
 
     return true;

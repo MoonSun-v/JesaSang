@@ -235,7 +235,7 @@ void BabyGhostController::ResetAgentForMove(float speed)
 // TODO : 플레이어가 Hide 상태이면, Target을 못봐야 함
 bool BabyGhostController::IsSeeing(GameObject* target) const
 {
-    return target && vision->CheckVision(target, 90, 400);
+    return target && vision->CheckVision(target, 30, 400);
 }
 
 // Object Getter 

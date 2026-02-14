@@ -13,7 +13,7 @@ void Player_Walk::Enter()
     player->animController->ChangeState("Walk");
 
     // set sound
-    player->sound->PlaySound(PlayerSoundType::Walk, true);
+    player->sound->PlayFootStepLoop(FootStepLoopMode::Walk);
 
     // set sense radius
     player->curSenseRadius = player->walkSenseRadius;

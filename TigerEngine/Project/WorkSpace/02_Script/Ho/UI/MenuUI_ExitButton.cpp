@@ -64,7 +64,7 @@ void MenuUI_ExitButton::OnStart()
             }
 
             PlayClickSound();
-
+            exit(0);
             // TODO: 씬 전환 로직 연결
             // SceneManager::Get().LoadScene(targetScenePath);
         });

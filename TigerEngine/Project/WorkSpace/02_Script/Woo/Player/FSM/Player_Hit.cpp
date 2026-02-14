@@ -17,8 +17,7 @@ void Player_Hit::Enter()
 
     // sound
     player->sound->PlaySound(PlayerSoundType::Hit, false);
-    //SoundManager::Instance()->PlaySFX(SFXType::Confused);
-    //player->sound->PlaySound(PlayerSoundType::HpDown, false);
+    player->sound->StopFootStep();
 
     // effect
     player->hitEffect->GetOwner()->SetActive(true);

@@ -16,7 +16,7 @@
 
 #include "../Item/Item.h"
 #include "../../Ho/Sound/SoundManager.h"
-
+#include "../../Ron/MiniMapTest/MiniMapManager.h"
 
 REGISTER_COMPONENT(AltarManager)
 
@@ -466,7 +466,9 @@ void AltarManager::UpdateDirectSequence()
         altarOffWall->SetActive(false);
         altarOnWall->SetActive(true);
 
-        // TODO :: 여기 미니맵 호출 연결
+        // 미니맵에 제단영역 활성화
+        auto* ob = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("UI_MiniMap_Controller");
+        if(ob) ob->GetComponent<MiniMapManager>()->TriggerShrineEvent(true);
 
         // sound
         SoundManager::Instance()->PlaySFX(SFXType::Altar_Mapchange_Sound);

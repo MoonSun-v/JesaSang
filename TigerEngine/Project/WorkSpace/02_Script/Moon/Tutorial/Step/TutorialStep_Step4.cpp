@@ -1,10 +1,9 @@
-#include "TutorialStep_Step4.h"
+﻿#include "TutorialStep_Step4.h"
 
 #include "System/InputSystem.h"
 #include "System/TimeSystem.h"
 
 #include "Manager/WorldManager.h"
-//#include "Manager/QuestManager.h"
 
 #include "EngineSystem/SceneSystem.h"
 #include "../../../Woo/Player/PlayerController.h"
@@ -59,8 +58,8 @@ void TutorialStep_Step4::Enter()
         ui->QuestPannelClose(0.0f);  // 즉시 닫힘 위치로 이동
         ui->TickQuestPanel(0.0f);    // 바로 적용
 
-        ui->UpdateQuestTitle(L"[Tutorial] Hide");
-        ui->UpdateQuestLable(L"You Should Hide");
+        ui->UpdateQuestTitle(L"[퀘스트] 몸을 숨기자!");
+        ui->UpdateQuestLable(L"서둘러서 장농 또는 항아리에 몸을 숨기세요!");
         ui->SetQuestTitleOn(true);
         ui->SetQuestLableOn(true);
         ui->SetQuestCheakboxOn(false);
@@ -116,6 +115,8 @@ bool TutorialStep_Step4::IsComplete()
 
 void TutorialStep_Step4::Exit()
 {
+    frozenImage->SetActive(false);
+
     std::cout << "[Step4] Exit " << std::endl;
 }
 

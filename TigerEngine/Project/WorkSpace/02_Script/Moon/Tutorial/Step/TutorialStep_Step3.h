@@ -33,6 +33,7 @@ private:
 
     float frozenPhaseTimer = 0.0f;
     bool dialogueShown = false;
+    bool secondDialogueShown = false;
 
     Step3Phase phase = Step3Phase::BabyInCome;
 

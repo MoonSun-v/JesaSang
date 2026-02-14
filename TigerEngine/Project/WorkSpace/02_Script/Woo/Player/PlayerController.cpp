@@ -274,24 +274,39 @@ void PlayerController::InputProcess()
 
     // ------ Debuging ----------
     // cheet
-    if (Input::GetKeyDown(cheetKey))
-        isCheetMode = !isCheetMode;
+    if (Input::GetKeyDown(cheatKey))
+        isCheatMode = !isCheatMode;
 
-    //ai attack test
-    if (Input::GetKeyDown(Keyboard::D9))
-        TakeAttack();
+    if (isCheatMode)
+    {
+        // game success
+        if (Input::GetKeyDown(Keyboard::D1))
+            GameManager::Instance()->GameSuccess();
 
-    // quarter view
-    if (Input::GetKeyDown(Keyboard::D8))
-        camController->SetViewMode(CameraController::ViewMode::Quarter);
-    
-    // top view
-    if (Input::GetKeyDown(Keyboard::D7))
-        camController->SetViewMode(CameraController::ViewMode::Top);
+        // game fail
+        if (Input::GetKeyDown(Keyboard::D2))
+            GameManager::Instance()->GameOver();
 
-    // front view
-    if (Input::GetKeyDown(Keyboard::D6))
-        camController->SetViewMode(CameraController::ViewMode::Front);
+        // ai attack test
+        if (Input::GetKeyDown(Keyboard::D3))
+            TakeAttack();
+
+        // 제단 연출
+        //if (Input::GetKeyDown(Keyboard::D4))
+            
+
+        // quarter view
+        if (Input::GetKeyDown(Keyboard::D5))
+            camController->SetViewMode(CameraController::ViewMode::Quarter);
+
+        // top view
+        if (Input::GetKeyDown(Keyboard::D6))
+            camController->SetViewMode(CameraController::ViewMode::Top);
+
+        // front view
+        if (Input::GetKeyDown(Keyboard::D7))
+            camController->SetViewMode(CameraController::ViewMode::Front);
+    }
 }
 
 /*-------[ Movement ]----------------------------------*/
@@ -707,7 +722,7 @@ void PlayerController::ReceiveMiniGameItem(unique_ptr<IItem> ingredient)
 void PlayerController::TakeAttack()
 {
     // cheet
-    if (isCheetMode) return;
+    if (isCheatMode) return;
     
     // 이미 죽은상태 return
     if (state == PlayerState::Die) return;
@@ -772,6 +787,13 @@ void PlayerController::TakeAttack()
 float PlayerController::GetCurSenseRadiuse() const
 {
     return curSenseRadius;
+}
+
+void PlayerController::GameSuceesPlayerStop()
+{
+    isInputLocked = true;
+    fbxRenderer->SetActive(false);
+    ChangeState(PlayerState::Idle);
 }
 
 

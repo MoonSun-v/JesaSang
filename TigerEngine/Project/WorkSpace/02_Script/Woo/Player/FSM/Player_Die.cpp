@@ -16,6 +16,7 @@ void Player_Die::Enter()
     player->animController->ChangeState("Hit");
 
     // set sound
+    player->sound->StopFootStep();
     player->sound->PlaySound(PlayerSoundType::HpDown, false);
 }
 

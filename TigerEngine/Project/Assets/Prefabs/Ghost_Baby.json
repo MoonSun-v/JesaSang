@@ -2,7 +2,7 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 6259,
+      "ID": 4742,
       "Name": "Ghost_Baby",
       "ParentID": -1,
       "components": [
@@ -118,6 +118,391 @@
             "Active": true
           },
           "type": "BabyGhostController"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5289,
+      "Name": "BABY_GHOST_LIGHT",
+      "ParentID": 4742,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5290,
+      "Name": "GHOST_LIGHT_F1",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              58.53010559082031,
+              -38.1732177734375
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 300.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 500.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5291,
+      "Name": "GHOST_LIGHT_F2",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              42.5001220703125,
+              -35.434722900390625
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 600.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 300.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5292,
+      "Name": "GHOST_LIGHT_L",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              -29.32861328125,
+              54.736083984375,
+              -20.619293212890625
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 500.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 600.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5293,
+      "Name": "GHOST_LIGHT_R",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              37.02818298339844,
+              54.736000061035156,
+              -18.436370849609375
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 500.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 600.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5294,
+      "Name": "GHOST_LIGHT_B1",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              75.06524658203125,
+              21.944122314453125
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 500.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 500.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5295,
+      "Name": "GHOST_LIGHT_B2",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              52.326725006103516,
+              26.697174072265625
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.16488850116729736,
+              0.4402875006198883,
+              0.7156862616539001,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 500.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 500.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5296,
+      "Name": "GHOST_LIGHT_B3",
+      "ParentID": 5289,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              14.226164817810059,
+              0.0
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.0,
+              0.37990230321884155,
+              0.7598038911819458,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 800.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 500.0
+          },
+          "type": "Light"
         }
       ]
     }

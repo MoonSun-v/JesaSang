@@ -259,7 +259,7 @@ bool AdultGhostController::IsSeeing(GameObject* target) const
     }
 
     // 시야 체크
-    return vision->CheckVision(target, 90, 400);
+    return vision->CheckVision(target, 30, 400);
 }
 
 // Object Getter 

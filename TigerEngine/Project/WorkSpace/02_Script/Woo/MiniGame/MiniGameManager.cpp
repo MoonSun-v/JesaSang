@@ -14,6 +14,7 @@
 #include "Game/Game_Assembling.h"
 
 #include "../Player/PlayerController.h"
+#include "../../Ho/Sound/SoundManager.h"
 
 REGISTER_COMPONENT(MiniGameManager)
 
@@ -206,6 +207,9 @@ void MiniGameManager::StartMiniGame(std::unique_ptr<IItem> ingredient)
 
     // popup ui
     ShowPopup();
+
+    // sound
+    SoundManager::Instance()->PlaySFX(SFXType::Minigame_Interaction_Sound);
 }
 
 // 미니게임 종료시 (성공/실패+패널티)

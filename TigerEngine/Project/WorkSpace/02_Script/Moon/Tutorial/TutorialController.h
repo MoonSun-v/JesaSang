@@ -36,10 +36,10 @@ private:
     ITutorialStep* currentStep = nullptr;
     ITutorialStep* fsmSteps[9];
 
-    //// [ Player ]
-    //AnimationController* Player_animController = nullptr;
-    //FBXRenderer* Player_fbxRenderer = nullptr;
-    //FBXData* Player_fbxData = nullptr;
+    // [ Player ]
+    AnimationController* Player_animController = nullptr;
+    FBXRenderer* Player_fbxRenderer = nullptr;
+    FBXData* Player_fbxData = nullptr;
 
     // [ Baby Ghost ]
     AnimationController* BabyGhost_animController = nullptr;

@@ -44,7 +44,7 @@ void AdultGhost_Patrol::ChangeStateLogic()
             if (playerObj && grid->WorldToGridFromCenter(playerObj->GetTransform()->GetLocalPosition(), px, py))
             {
                 adultGhost->lastPlayerGrid = { px, py, true };
-                // std::cout << "[Patrol → Search] Save Sense/Grid = (" << px << "," << py << ")\n";
+                std::cout << "[Patrol → Search] Save Sense/Grid = (" << px << "," << py << ")\n";
             }
         }
         adultGhost->searchReason = SearchReason::FromPatrol;

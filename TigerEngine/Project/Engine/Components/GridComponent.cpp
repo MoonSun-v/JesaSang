@@ -50,7 +50,14 @@ void GridComponent::OnInitialize()
      
     // 임의로 (-1,2) 그리드를 걸을 수 없게 설정
     //SetWalkableFromCenter(-1, 2, false);
-    //SetWalkableFromCenter(3, -4, false);
+
+    SetWalkableFromCenter(0, 3, true);
+    SetWalkableFromCenter(8, -11, true);
+    SetWalkableFromCenter(8, -12, true);
+    SetWalkableFromCenter(9, -11, true);
+    SetWalkableFromCenter(9, -12, true);
+    // SetWalkableFromCenter(8, -11, true);
+
 }
 
 void GridComponent::Enable_Inner()
@@ -166,18 +173,27 @@ void GridComponent::BuildBlockedFromPhysics()
             {
                 if (auto* cell = GetCell(x, y))
                 {
-                    cell->walkable = false;
+                    Vector3 cellCenter = GridToWorld(x, y);
+                    Vector3 cellMin = cellCenter - Vector3(cellSize * 0.5f, 0, cellSize * 0.5f);
+                    Vector3 cellMax = cellCenter + Vector3(cellSize * 0.5f, 0, cellSize * 0.5f);
 
-                    int cx = x - centerX;
-                    int cy = y - centerY;
-                    Vector3 cellWorld = GridToWorld(x, y);
+                    float overlapX = std::max(0.f, std::min(cellMax.x, maxW.x) - std::max(cellMin.x, minW.x));
+                    float overlapZ = std::max(0.f, std::min(cellMax.z, maxW.z) - std::max(cellMin.z, minW.z));
 
-                    DebugPrintBlock(
-                        objName,
-                        x, y,
-                        cx, cy,
-                        cellWorld,
-                        phys->m_ColliderType);
+                    float overlapArea = overlapX * overlapZ;
+                    float cellArea = cellSize * cellSize;
+
+                    // 5% 이상 겹칠 때만 막기
+                    if (overlapArea > cellArea * 0.05f)
+                    {
+                        cell->walkable = false;
+
+                        int cx = x - centerX;
+                        int cy = y - centerY;
+                        Vector3 cellWorld = GridToWorld(x, y);
+
+                        DebugPrintBlock(objName, x, y, cx, cy, cellWorld, phys->m_ColliderType);
+                    }
                 }
             }
         }
@@ -186,6 +202,16 @@ void GridComponent::BuildBlockedFromPhysics()
     std::cout << "===========================================\n";
 }
 
+void GridComponent::BuildWalkableFromCostum()
+{
+    for (auto& ovr : walkableOverrides)
+    {
+        SetWalkableFromCenter(ovr.cx, ovr.cy, ovr.walkable);
+        std::cout << "[GridComponent] Override applied: ("
+            << ovr.cx << "," << ovr.cy << ") walkable="
+            << ovr.walkable << "\n";
+    }
+}
 
 // Width 와 Height에 의해 재설정되는 그리드 cell 
 void GridComponent::ResizeGrid(int newWidth, int newHeight)

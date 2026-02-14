@@ -14,8 +14,7 @@
 enum class Step9Phase
 {
     Monologue,
-    WaitInput,
-    PlayerOut,
+    FadeOut,
     Done
 };
 
@@ -23,15 +22,22 @@ class TutorialStep_Step9 : public ITutorialStep
 {
 private:
     bool isDone = false;
+    int monoIndex = 0;
+    bool phaseStarted = false;
 
     float stepTimer = 0.0f;
     float delayStart = 1.0f;
 
     Step9Phase phase = Step9Phase::Monologue;
 
+    // --- fade out ---
+    float fadeTimer = 0.0f;
+    float fadeMaxTime = 3.0f;
+    bool fadeStarted = false;
+
     void Monologue();
-    void WaitInput();
-    void PlayerOut();
+    // void PlayerOut();
+    void FadeOut(float dt);
 
 public:
     TutorialStep_Step9(TutorialController* _tutorialController) : ITutorialStep(_tutorialController) {}

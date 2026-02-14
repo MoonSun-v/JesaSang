@@ -27,7 +27,7 @@ void Player_Hide::Enter()
     player->curSenseRadius = 0;
 
     // set sound
-    player->sound->StopSound();
+    player->sound->StopFootStep();
     SoundManager::Instance()->PlaySFX(SFXType::HiddenObj_Playerin_Sound);
 
     //cout << "[Player] Enter Hide State" << endl;

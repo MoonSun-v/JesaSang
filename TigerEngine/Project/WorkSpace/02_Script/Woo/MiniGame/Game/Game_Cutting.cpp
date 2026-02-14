@@ -8,6 +8,7 @@
 #include "Components/RectTransform.h"
 #include "Components/UI/Image.h"
 #include <algorithm>
+#include "../../../Ho/Sound/SoundManager.h"
 
 using std::cout;
 using std::endl;
@@ -53,11 +54,13 @@ void Game_Cutting::EvaluateOnce()
     if (hit)
     {
         curSuccessCount++;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Success_Sound);
         cout << "[MiniGame Cutting] SUCCESS! (" << curSuccessCount << "/5)" << endl;
     }
     else
     {
         curFailCount++;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Wrong_Sound);
         cout << "[MiniGame Cutting] FAIL! (" << curFailCount << "/3)" << endl;
     }
 
@@ -66,11 +69,13 @@ void Game_Cutting::EvaluateOnce()
     {
         isFinished = true;
         isSuccess = true;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Clear_Sound);
     }
     else if (curFailCount >= 3)
     {
         isFinished = true;
         isSuccess = false;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Fail_Sound);
     }
 }
 

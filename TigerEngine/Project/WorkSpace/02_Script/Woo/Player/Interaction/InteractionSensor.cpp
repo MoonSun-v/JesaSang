@@ -33,6 +33,8 @@ void InteractionSensor::OnUpdate(float delta)
     // transform->physics udpate
     auto ob = GetOwner();
     auto tr = ob->GetTransform();
+    if (!tr->GetParent()) return;
+
     Vector3 upatePos = tr->GetParent()->GetOwner()->GetTransform()->GetWorldPosition() + Vector3(0, 30, 0);
     tr->SetPosition(upatePos);
     GetOwner()->GetComponent<PhysicsComponent>()->SyncToPhysics();

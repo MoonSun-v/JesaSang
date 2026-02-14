@@ -13,7 +13,7 @@ void Player_Sit::Enter()
     player->lookDir = Vector3::Zero;
 
     // set sound
-    player->sound->StopSound();
+    player->sound->StopFootStep();
 
     // set animation
     player->animController->ChangeState("Idle");

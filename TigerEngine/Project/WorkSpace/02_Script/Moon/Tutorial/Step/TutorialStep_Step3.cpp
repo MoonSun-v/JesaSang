@@ -1,4 +1,4 @@
-#include "TutorialStep_Step3.h"
+﻿#include "TutorialStep_Step3.h"
 
 #include "System/InputSystem.h"
 #include "System/TimeSystem.h"
@@ -8,6 +8,9 @@ void TutorialStep_Step3::Enter()
 {
     isDone = false;
     step3Timer = 0.0f;
+    dialogueShown = false;
+    secondDialogueShown = false;
+    frozenPhaseTimer = 0.0f;
     phase = Step3Phase::BabyInCome;
 
     targetA = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Baby_Target_A");
@@ -242,8 +245,14 @@ void TutorialStep_Step3::Frozen()
     // 3초 후 대사 출력
     if (!dialogueShown && frozenPhaseTimer >= 3.0f)
     {
-        tutorialController->dialogue->ShowDialogueText(L"..!! What..?");
+        tutorialController->dialogue->ShowDialogueText(L"갑자기 왜 이렇게 춥지..? 뭔가 불길해..!!");
         dialogueShown = true;
+    }
+
+    if (dialogueShown && !secondDialogueShown && frozenPhaseTimer >= 5.0f)
+    {
+        tutorialController->dialogue->ShowDialogueText( L"일단 숨어서 상황을 지켜보자..!");
+        secondDialogueShown = true;
     }
 
     // 대사 출력 후 3초 뒤 Done 상태로 전환

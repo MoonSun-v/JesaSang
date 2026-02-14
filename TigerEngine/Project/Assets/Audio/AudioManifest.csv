@@ -58,3 +58,5 @@ Minigmae_Fail_Sound,..\\Assets\\Audio\\MiniGame\\Minigmae_Fail_Sound.mp3,SFX,2D,
 Minigmae_Wrong_Sound,..\\Assets\\Audio\\MiniGame\\Minigmae_Wrong_Sound.mp3,SFX,2D,1,0
 Game_Win_BG,..\\Assets\\Audio\\Endding\\Game_Win_BG.mp3,BGM,2D,1,1
 Game_Lose_BG,..\\Assets\\Audio\\Endding\\Game_Lose_BG.mp3,BGM,2D,1,1
+Player_Walk_Sound_Left,..\\Assets\\Audio\\Player\\Player_Walk_Sound_Left.mp3,SFX,3D,1,0
+Player_Walk_Sound_Right,..\\Assets\\Audio\\Player\\Player_Walk_Sound_Right.mp3,SFX,3D,1,0

@@ -26,9 +26,9 @@ public:
     void Deserialize(nlohmann::json data) override;
 
 public:
-    int width = 50;
-    int height = 50;
-    float cellSize = 100.0f;
+    int width = 70;
+    int height = 70;
+    float cellSize = 80.0f;
 
     std::vector<GridCell> cells;
     std::vector<WalkableOverride> walkableOverrides;
@@ -69,7 +69,7 @@ public:
 
     // 씬에 있는 Trigger 아닌 Collider는 Grid 차단 
     void BuildBlockedFromPhysics();
-
+    void BuildWalkableFromCostum();
 
     // [ A* ]
     std::vector<std::pair<int, int>> FindPath(int startCX, int startCY, int endCX, int endCY);

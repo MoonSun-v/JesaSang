@@ -402,19 +402,19 @@ LRESULT EngineApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
     switch (message)
     {
-    case WM_ENTERSIZEMOVE:
-        isResize = true;
-        break;
-    case WM_EXITSIZEMOVE:
-        isResize = false;
-        RECT rc;
-        GetClientRect(hWnd, &rc);
-
-        if (rc.right - rc.left == clientWidth && rc.bottom - rc.top == clientHeight) break;
-
-        ResizeScreen(rc.right - rc.left, rc.bottom - rc.top);
-
-        break;
+    //case WM_ENTERSIZEMOVE:
+    //    isResize = true;
+    //    break;
+    //case WM_EXITSIZEMOVE:
+    //    isResize = false;
+    //    RECT rc;
+    //    GetClientRect(hWnd, &rc);
+    //
+    //    if (rc.right - rc.left == clientWidth && rc.bottom - rc.top == clientHeight) break;
+    //
+    //    ResizeScreen(rc.right - rc.left, rc.bottom - rc.top);
+    //
+    //    break;
     default:
         break;
     }

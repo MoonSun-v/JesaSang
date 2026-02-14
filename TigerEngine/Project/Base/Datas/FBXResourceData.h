@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Mesh.h"
 #include "ConstantBuffer.hpp"
+#include <memory>
 
 ///// @brief Bone offset 정보 버퍼
 ///// skeletalInfo 본 위치 정보
@@ -35,7 +36,7 @@ struct FBXResourceAsset
     // mesh, texture, animation
     std::vector<Mesh> meshes;
 	std::vector<Texture> textures;	
-    std::vector<Animation> animations;
+    std::vector<std::unique_ptr<Animation>> animations;
 
     // skeleton
     SkeletonInfo skeletalInfo;

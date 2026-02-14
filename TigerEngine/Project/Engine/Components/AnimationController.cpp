@@ -39,14 +39,26 @@ void AnimationController::Disable_Inner()
 void AnimationController::OnInitialize()
 {
     auto fbx = GetOwner()->GetComponent<FBXData>();
-    if (fbx && fbx->GetFBXInfo())
-    {
-        AnimatorInstance.Initialize(&fbx->GetFBXInfo()->skeletalInfo); // Animator 초기화
-    }
+    auto asset = fbx ? fbx->GetFBXInfo() : nullptr;
+    cachedAsset = asset.get();
+    AnimatorInstance.Initialize(asset ? &asset->skeletalInfo : nullptr); // Animator ???
 }
+
 
 void AnimationController::OnUpdate(float delta)
 {
+    // FBX ???? ???? ?? ??? ??? ??
+    auto fbx = GetOwner()->GetComponent<FBXData>();
+    auto asset = fbx ? fbx->GetFBXInfo() : nullptr;
+    const FBXResourceAsset* assetPtr = asset.get();
+    if (assetPtr != cachedAsset)
+    {
+        cachedAsset = assetPtr;
+        States.clear();
+        CurrentState = nullptr;
+        AnimatorInstance.Initialize(asset ? &asset->skeletalInfo : nullptr);
+    }
+
     if (CurrentState)
     {
         CurrentState->OnUpdate(delta);
@@ -95,8 +107,8 @@ const Animation* AnimationController::FindClip(const std::string& name)
 
     for (auto& anim : asset->animations)
     {
-        if (anim.m_name == name)
-            return &anim;
+        if (anim && anim->m_name == name)
+            return anim.get();
     }
     return nullptr;
 }

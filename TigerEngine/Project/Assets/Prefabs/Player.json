@@ -2,21 +2,21 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 1319,
+      "ID": 5115,
       "Name": "Player",
       "ParentID": -1,
       "components": [
         {
           "properties": {
             "Position": [
-              0.0,
-              0.0,
-              0.0
+              60.797306060791016,
+              1.492921819590265e-05,
+              29.92231559753418
             ],
             "Rotation": [
+              -0.0,
               0.0,
-              0.0,
-              0.0
+              -0.0
             ],
             "Scale": [
               1.0,
@@ -129,14 +129,14 @@
             "TotalItems": 6,
             "TotalPieces": 6,
             "WorldMax": [
-              500.0,
+              1650.0,
               0.0,
-              500.0
+              626.4000244140625
             ],
             "WorldMin": [
-              -500.0,
+              -1493.4000244140625,
               0.0,
-              -500.0
+              -2430.0
             ]
           },
           "type": "MiniMapTestScript"
@@ -152,14 +152,33 @@
             "Active": true
           },
           "type": "PlayerThreatMonitor"
+        },
+        {
+          "properties": {
+            "Active": true
+          },
+          "type": "PlayerSoundSource"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "ChannelGroup": "",
+            "ClipId": "",
+            "Loop": false,
+            "MaxDistance": 100.0,
+            "MinDistance": 1.0,
+            "Pitch": 1.0,
+            "Volume": 1.0
+          },
+          "type": "AudioSourceComponent"
         }
       ]
     },
     {
       "Active": true,
-      "ID": 1320,
+      "ID": 5116,
       "Name": "CameraTrackingPoint",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -185,9 +204,9 @@
     },
     {
       "Active": true,
-      "ID": 1321,
+      "ID": 5117,
       "Name": "OcclusionFadePoint",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -213,9 +232,9 @@
     },
     {
       "Active": true,
-      "ID": 1322,
+      "ID": 5118,
       "Name": "InteractionSensor",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -270,9 +289,9 @@
     },
     {
       "Active": true,
-      "ID": 1323,
+      "ID": 5119,
       "Name": "InteractZone",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -327,9 +346,9 @@
     },
     {
       "Active": true,
-      "ID": 1324,
+      "ID": 5120,
       "Name": "ItemVisualizer",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -355,9 +374,9 @@
     },
     {
       "Active": false,
-      "ID": 1325,
+      "ID": 5121,
       "Name": "Visual_Ingre_Apple",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -372,9 +391,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              3.0,
+              3.0,
+              3.0
             ]
           },
           "type": "Transform"
@@ -382,7 +401,7 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\apple_before_cooking.fbx",
             "IsStatic": true
           },
           "type": "FBXData"
@@ -433,9 +452,9 @@
     },
     {
       "Active": false,
-      "ID": 1326,
+      "ID": 5122,
       "Name": "Visual_Ingre_Batter",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -450,9 +469,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              1.0,
+              1.0,
+              1.0
             ]
           },
           "type": "Transform"
@@ -460,8 +479,8 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
-            "IsStatic": true
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\leek.fbx",
+            "IsStatic": false
           },
           "type": "FBXData"
         },
@@ -511,9 +530,9 @@
     },
     {
       "Active": false,
-      "ID": 1327,
+      "ID": 5123,
       "Name": "Visual_Ingre_Donggeurangttaeng",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -528,9 +547,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              1.0,
+              1.0,
+              1.0
             ]
           },
           "type": "Transform"
@@ -538,7 +557,7 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\Before_cooking_Donggrang_Ddang.fbx",
             "IsStatic": true
           },
           "type": "FBXData"
@@ -589,9 +608,9 @@
     },
     {
       "Active": false,
-      "ID": 1328,
+      "ID": 5124,
       "Name": "Visual_Ingre_Pear",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -606,9 +625,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              3.0,
+              3.0,
+              3.0
             ]
           },
           "type": "Transform"
@@ -616,8 +635,8 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
-            "IsStatic": true
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\pear_before_cooking.fbx",
+            "IsStatic": false
           },
           "type": "FBXData"
         },
@@ -667,9 +686,9 @@
     },
     {
       "Active": false,
-      "ID": 1329,
+      "ID": 5125,
       "Name": "Visual_Ingre_Sanjeok",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -684,9 +703,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              2.5,
+              2.5,
+              2.5
             ]
           },
           "type": "Transform"
@@ -694,7 +713,7 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\Toothpick.fbx",
             "IsStatic": true
           },
           "type": "FBXData"
@@ -745,9 +764,9 @@
     },
     {
       "Active": false,
-      "ID": 1330,
+      "ID": 5126,
       "Name": "Visual_Ingre_Tofu",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -762,9 +781,9 @@
               0.0
             ],
             "Scale": [
-              0.20000000298023224,
-              0.20000000298023224,
-              0.20000000298023224
+              1.5,
+              1.5,
+              1.5
             ]
           },
           "type": "Transform"
@@ -772,7 +791,7 @@
         {
           "properties": {
             "Active": false,
-            "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\tofu_before_cooking.fbx",
             "IsStatic": true
           },
           "type": "FBXData"
@@ -823,15 +842,15 @@
     },
     {
       "Active": false,
-      "ID": 1331,
+      "ID": 5127,
       "Name": "Visual_Apple",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
             "Position": [
               -32.0,
-              -55.0,
+              -58.400001525878906,
               32.099998474121094
             ],
             "Rotation": [
@@ -901,15 +920,15 @@
     },
     {
       "Active": false,
-      "ID": 1332,
+      "ID": 5128,
       "Name": "Visual_Pear",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
             "Position": [
-              15.199999809265137,
-              -55.0,
+              17.299999237060547,
+              -61.0,
               33.099998474121094
             ],
             "Rotation": [
@@ -979,15 +998,15 @@
     },
     {
       "Active": false,
-      "ID": 1333,
+      "ID": 5129,
       "Name": "Visual_Batter",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
             "Position": [
-              7.400000095367432,
-              -61.099998474121094,
+              14.899999618530273,
+              -117.19999694824219,
               1.399999976158142
             ],
             "Rotation": [
@@ -996,9 +1015,9 @@
               0.0
             ],
             "Scale": [
-              1.5,
-              1.5,
-              1.5
+              2.5,
+              2.5,
+              2.5
             ]
           },
           "type": "Transform"
@@ -1057,15 +1076,15 @@
     },
     {
       "Active": false,
-      "ID": 1334,
+      "ID": 5130,
       "Name": "Visual_Tofu",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
             "Position": [
-              -33.29999923706055,
-              -60.900001525878906,
+              -43.70000076293945,
+              -95.30000305175781,
               -1.0
             ],
             "Rotation": [
@@ -1074,9 +1093,9 @@
               0.0
             ],
             "Scale": [
-              1.5,
-              1.5,
-              1.5
+              2.0,
+              2.0,
+              2.0
             ]
           },
           "type": "Transform"
@@ -1135,9 +1154,9 @@
     },
     {
       "Active": false,
-      "ID": 1335,
+      "ID": 5131,
       "Name": "Visual_Sanjeok",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
@@ -1213,15 +1232,15 @@
     },
     {
       "Active": false,
-      "ID": 1336,
+      "ID": 5132,
       "Name": "Visual_Donggeurangttaeng",
-      "ParentID": 1324,
+      "ParentID": 5120,
       "components": [
         {
           "properties": {
             "Position": [
-              29.0,
-              -62.20000076293945,
+              37.099998474121094,
+              -97.69999694824219,
               0.0
             ],
             "Rotation": [
@@ -1230,9 +1249,9 @@
               0.0
             ],
             "Scale": [
-              1.5,
-              1.5,
-              1.5
+              2.0,
+              2.0,
+              2.0
             ]
           },
           "type": "Transform"
@@ -1291,9 +1310,9 @@
     },
     {
       "Active": true,
-      "ID": 1337,
+      "ID": 5133,
       "Name": "AITarget",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -1348,9 +1367,9 @@
     },
     {
       "Active": true,
-      "ID": 1516,
+      "ID": 5134,
       "Name": "DialoguePoint",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -1376,9 +1395,9 @@
     },
     {
       "Active": true,
-      "ID": 1517,
+      "ID": 5135,
       "Name": "Player_FireEffect",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -1499,9 +1518,9 @@
     },
     {
       "Active": false,
-      "ID": 1518,
+      "ID": 5136,
       "Name": "Player_HitEffect",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -1527,7 +1546,7 @@
           "properties": {
             "Active": false,
             "DataPath": "..\\Assets\\Resource\\Effect\\ani_confused_mark.fbx",
-            "IsStatic": true
+            "IsStatic": false
           },
           "type": "FBXData"
         },
@@ -1583,9 +1602,9 @@
     },
     {
       "Active": true,
-      "ID": 1521,
+      "ID": 5137,
       "Name": "Player_SmokeEffect",
-      "ParentID": 1319,
+      "ParentID": 5115,
       "components": [
         {
           "properties": {
@@ -1701,6 +1720,514 @@
             "playing": false
           },
           "type": "Effect"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5553,
+      "Name": "LoseCinemachine",
+      "ParentID": 5115,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              57.2816047668457,
+              -51.8896484375
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true
+          },
+          "type": "LoseCinemachine"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5554,
+      "Name": "LoseCinemachineCamera",
+      "ParentID": 5553,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              90.6650390625,
+              -100.174072265625
+            ],
+            "Rotation": [
+              0.7710050344467163,
+              0.0,
+              0.0
+            ],
+            "Scale": [
+              1.0,
+              0.9999992251396179,
+              0.9999992251396179
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "angle": 1.5707963705062866,
+            "farDist": 1800.0,
+            "moveSpeed": 100.0,
+            "nearDist": 70.0,
+            "rotSpeed": 0.004000000189989805
+          },
+          "type": "Camera"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5808,
+      "Name": "playaer_light",
+      "ParentID": 5115,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              64.79182434082031,
+              0.0
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5809,
+      "Name": "Character_light_F1",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              18.26361083984375,
+              -23.66778564453125
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 400.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 200.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5810,
+      "Name": "Character_light_F2",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              -1.9089584350585938,
+              -14.222606658935547
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 200.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 200.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5811,
+      "Name": "Character_light_F3",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              -0.9676094055175781,
+              -44.96015167236328,
+              -9.220401763916016
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 200.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 300.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5812,
+      "Name": "Character_light_R",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              21.453731536865234,
+              23.750259399414063,
+              -5.447946548461914
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 300.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 300.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5813,
+      "Name": "Character_light_L",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              -24.16891098022461,
+              22.234779357910156,
+              -4.252866744995117
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 300.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 300.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5814,
+      "Name": "Character_light_B1",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              -1.8036384582519531,
+              17.93463897705078,
+              29.76744270324707
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              100.0,
+              100.0,
+              300.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 500.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 350.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5815,
+      "Name": "Character_light_B2",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              46.804893493652344,
+              29.929574966430664
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215245485305786,
+              0.1920415312051773,
+              1.0
+            ],
+            "Direction": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "InnerAngle": 50.0,
+            "Intensity": 400.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 100.0,
+            "Range": 500.0
+          },
+          "type": "Light"
+        }
+      ]
+    },
+    {
+      "Active": true,
+      "ID": 5877,
+      "Name": "Character_light_B3",
+      "ParentID": 5808,
+      "components": [
+        {
+          "properties": {
+            "Position": [
+              0.0,
+              -42.616554260253906,
+              19.971067428588867
+            ],
+            "Rotation": [
+              -0.0,
+              0.0,
+              -0.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "type": "Transform"
+        },
+        {
+          "properties": {
+            "Active": true,
+            "Color": [
+              0.7254902124404907,
+              0.5215686559677124,
+              0.1921568661928177,
+              1.0
+            ],
+            "Direction": [
+              0.0,
+              -0.30000001192092896,
+              1.0
+            ],
+            "InnerAngle": 15.0,
+            "Intensity": 200.0,
+            "IsSunLight": false,
+            "LightType": "Point",
+            "OuterAngle": 30.0,
+            "Range": 400.0
+          },
+          "type": "Light"
         }
       ]
     }

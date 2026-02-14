@@ -9,6 +9,7 @@
 #include "Object/GameObject.h"
 #include "Components/RectTransform.h"
 #include "Components/UI/Image.h"
+#include "../../../Ho/Sound/SoundManager.h"
 
 using std::cout;
 using std::endl;
@@ -176,11 +177,13 @@ void Game_FireControl::UpdateGauge(float delta)
     {
         isFinished = true;
         isSuccess = true;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Clear_Sound);
     }
     else if (gaugeValue <= 0.0f)
     {
         isFinished = true;
         isSuccess = false;
+        SoundManager::Instance()->PlaySFX(SFXType::Minigame_Fail_Sound);
     }
 }
 

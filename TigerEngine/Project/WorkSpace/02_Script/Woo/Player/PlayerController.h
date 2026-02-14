@@ -51,8 +51,8 @@ public:
 
 private:
     // 치트
-    Keyboard::Keys cheetKey = Keyboard::D0;;
-    bool isCheetMode = false;
+    Keyboard::Keys cheatKey = Keyboard::D0;;
+    bool isCheatMode = false;
 
 private:
     
@@ -251,7 +251,8 @@ public:
     //void SetForcedMove(const Vector3& dir, float speed);
     //void ClearForcedMove();
 
-
+    // 게임 종료(성공)시 Stop 로직
+    void GameSuceesPlayerStop();
 
     //---------------------------------------------------------------
     // friend

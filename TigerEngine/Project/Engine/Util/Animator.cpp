@@ -42,6 +42,21 @@ static Matrix ComposeTRS(const TRS& t)
 void Animator::Initialize(const SkeletonInfo* skeleton)
 {
     m_Skeleton = skeleton;
+    m_Current = nullptr;
+    m_Next = nullptr;
+    m_Time = 0.0f;
+    m_NextTime = 0.0f;
+    m_BlendTime = 0.0f;
+    m_BlendDuration = 0.0f;
+
+    if (!skeleton)
+    {
+        m_CurrentPose.clear();
+        m_NextPose.clear();
+        m_FinalPose.clear();
+        return;
+    }
+
     int count = skeleton->GetBoneCount();
     m_CurrentPose.resize(count);
     m_NextPose.resize(count);
