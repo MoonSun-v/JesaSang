@@ -119,8 +119,8 @@ private:
     float renderDirectorTimer = 0.0f;    // 플레이어 렌더 깜빡거림 지속시간 타이머
 
     // first interaction hint
-    bool isExplainedHideObject = false;      // 튜토리얼용
-    bool isExplainedSearchObject = false;    // 튜토리얼용
+    bool isExplainedHideObject = true;      // 튜토리얼용
+    bool isExplainedSearchObject = true;    // 튜토리얼용
     bool isExplainedTrapObject = false;
     bool isExplainedCookingZone = false;
 

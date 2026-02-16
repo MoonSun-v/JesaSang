@@ -5,7 +5,7 @@
 #include "EngineSystem/SceneSystem.h"
 #include "../../Woo/Player/PlayerController.h"
 #include "AdultGhostController.h"
-
+#include "../../Ho/Sound/EnemySoundSource.h"
 
 
 REGISTER_COMPONENT(GhostInteractionZone)

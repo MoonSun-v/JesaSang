@@ -2,6 +2,8 @@
 #include "Components/ScriptComponent.h"
 #include "Components/AnimationController.h"
 
+
+
 class PlayerController_Tutorial : public ScriptComponent
 {
     RTTR_ENABLE(ScriptComponent)
@@ -23,4 +25,7 @@ public:
     void MoveTo(const Vector3& target, float speed, float delta);
 
     void PlayAnimation(const std::string& animName);
+
+
+    
 };

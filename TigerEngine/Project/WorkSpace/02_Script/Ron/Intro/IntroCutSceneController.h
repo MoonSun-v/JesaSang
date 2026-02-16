@@ -23,7 +23,7 @@ public:
 
     std::string imageObjectName = "UI_Intro_Image";
     std::string frameObjectName = "UI_Intro_Frame";
-    std::string nextScenePath = "..\\Assets\\Scenes\\01_StartScene.json";
+    std::string nextScenePath = "..\\Assets\\Scenes\\03_TutorialScene.json";
 
     bool allowSkip = true;
 

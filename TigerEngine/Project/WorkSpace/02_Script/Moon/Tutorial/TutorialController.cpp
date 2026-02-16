@@ -6,6 +6,7 @@
 #include "System/InputSystem.h"
 
 #include "EngineSystem/SceneSystem.h"
+#include "../../Woo/Camera/CameraController.h"
 
 
 #include "Step/ITutorialStep.h"
@@ -55,6 +56,8 @@ void TutorialController::OnStart()
     Blink_Top = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Blink_Top"); 
     Blink_Bottom = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Blink_Bottom"); 
 
+    auto camOb = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("MainCamera");
+    if (camOb) camController = camOb->GetComponent<CameraController>();
 
 
     // -------------------------------------------------

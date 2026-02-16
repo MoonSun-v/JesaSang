@@ -11,7 +11,8 @@ enum class EnemySoundType
     Ghost_Attack_Sound,                 // 플레이어 공격
     Ghost_AttackDelay_Sound,            // ?
     BabyGhost_Move_Sound,               // 꼬마적 이동
-    BabyGhost_Playerfind_Sound          // 꼬마, 플레이어 찾음
+    BabyGhost_Playerfind_Sound,          // 꼬마, 플레이어 찾음
+    BabyGhost_Crying_Sound
 };
 
 class EnemySoundSource : public ScriptComponent

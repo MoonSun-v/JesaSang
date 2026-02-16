@@ -4,6 +4,7 @@
 #include "Components/FBXRenderer.h"
 #include "Components/FBXData.h"
 #include "../../Woo/Player/DialogueUI/DialogueUIController.h"
+class CameraController;
 
 class ITutorialStep;
 class TutorialStep_Step1;
@@ -51,6 +52,7 @@ private:
     FBXRenderer* AdultGhost_fbxRenderer = nullptr;
     FBXData* AdultGhost_fbxData = nullptr;
 
+    CameraController* camController = nullptr;
 
 public:
     void OnStart() override;

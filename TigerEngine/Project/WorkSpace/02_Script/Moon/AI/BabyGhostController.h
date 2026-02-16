@@ -7,6 +7,7 @@
 #include "Components/FBXData.h"
 #include "Components/AnimationController.h"
 
+class EnemySoundSource;
 #include "Util/CollisionLayer.h"
 
 class IBabyGhostState;
@@ -50,6 +51,7 @@ private:
     FBXRenderer* fbxRenderer = nullptr;
     FBXData* fbxData = nullptr;
     AnimationController* animController = nullptr;
+    EnemySoundSource* enemySound = nullptr;
 
     // State
     BabyGhostState state = BabyGhostState::None;

@@ -10,6 +10,7 @@
 #include "Util/CollisionLayer.h"
 
 
+class EnemySoundSource;
 class IAdultGhostState;
 class AdultGhost_Patrol;
 class AdultGhost_Chase;
@@ -60,6 +61,7 @@ private:
     FBXRenderer* fbxRenderer = nullptr;
     FBXData* fbxData = nullptr;
     AnimationController* animController = nullptr;
+    EnemySoundSource* enemySound = nullptr;
 
     // State
     AdultGhostState state = AdultGhostState::None;

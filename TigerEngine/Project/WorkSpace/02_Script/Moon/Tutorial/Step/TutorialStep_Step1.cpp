@@ -4,6 +4,7 @@
 #include "EngineSystem/SceneSystem.h"
 #include "Components/RectTransform.h"
 #include "../WorkSpace/02_Script/Woo/Player/DialogueUI/DialogueUIController.h"
+#include "../../../Woo/Camera/CameraController.h"
 
 float Lerp(float a, float b, float t)
 {
@@ -16,6 +17,8 @@ void TutorialStep_Step1::Enter()
     isDone = false;
     step1Timer = 0.0f;
     phase = Step1Phase::Blink;
+
+    tutorialController->camController->SetViewMode(CameraController::ViewMode::Front);
 
     tutorialController->Blink_Top = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Blink_Top"); // rectTransform 축 -700 
     tutorialController->Blink_Bottom = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Blink_Bottom"); // rectTransform 축 700 
@@ -134,4 +137,5 @@ void TutorialStep_Step1::Monologue()
     if (!tutorialController->dialogue) return;
 
     tutorialController->dialogue->ShowDialogueHold(L"으악.. 깜빡 잠들었나.. 지금 몇 시지?");
+    tutorialController->camController->SetViewMode(CameraController::ViewMode::Quarter);
 }

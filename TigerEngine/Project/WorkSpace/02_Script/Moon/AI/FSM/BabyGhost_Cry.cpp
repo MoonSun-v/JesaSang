@@ -1,7 +1,7 @@
 #include "BabyGhost_Cry.h"
 
 #include "EngineSystem/SceneSystem.h"
-
+#include "../../../Ho/Sound/EnemySoundSource.h"
 
 void BabyGhost_Cry::Enter()
 {
@@ -12,6 +12,8 @@ void BabyGhost_Cry::Enter()
     adultArrived = false;
 
     babyGhost->animController->ChangeState("Cry");
+    babyGhost->enemySound->PlaySound(EnemySoundType::BabyGhost_Crying_Sound);
+
 
     // 이동 완전 정지
     babyGhost->agent->externalControl = true;

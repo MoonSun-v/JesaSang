@@ -91,9 +91,15 @@ Camera* CameraSystem::GetCurrCamera()
     }
     else
     {
-        if (registered[currCameraIndex]->GetOwner()->GetName() == "FreeCamera") // 현재 카메라가 프리캠이면 다음 카메라로 실행
+        if (registered[currCameraIndex])
         {
-            NextCamera(); // ++; -> 만약 여기서도 프리캠밖에 없으면 프리캠으로 잡힐 것임.
+            if (registered[currCameraIndex]->GetOwner())
+            {
+                if (registered[currCameraIndex]->GetOwner()->GetName() == "FreeCamera") // 현재 카메라가 프리캠이면 다음 카메라로 실행
+                {
+                    NextCamera(); // ++; -> 만약 여기서도 프리캠밖에 없으면 프리캠으로 잡힐 것임.
+                }
+            }
         }
 
         return registered[currCameraIndex];

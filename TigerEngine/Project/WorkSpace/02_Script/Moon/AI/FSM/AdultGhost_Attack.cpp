@@ -2,7 +2,7 @@
 
 #include "EngineSystem/SceneSystem.h"
 #include "../../../Woo/Player/PlayerController.h"
-
+#include "../../../Ho/Sound/EnemySoundSource.h"
 
 void AdultGhost_Attack::Enter()
 {
@@ -13,6 +13,7 @@ void AdultGhost_Attack::Enter()
     isChangeAnim = false;
 
     adultGhost->animController->ChangeState("Attack");
+    adultGhost->enemySound->PlaySound(EnemySoundType::Ghost_Attack_Sound);
 
     // 이동 완전 정지
     adultGhost->agent->externalControl = true;
@@ -59,6 +60,7 @@ void AdultGhost_Attack::Update(float deltaTime)
     {
         adultGhost->animController->ChangeState("AttackDelay");
         isChangeAnim = true;
+        adultGhost->enemySound->PlaySound(EnemySoundType::Ghost_AttackDelay_Sound);
     }
 
     // 2. 데미지 타이밍 

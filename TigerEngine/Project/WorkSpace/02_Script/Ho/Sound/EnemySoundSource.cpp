@@ -64,6 +64,9 @@ void EnemySoundSource::PlaySound(EnemySoundType type, bool loop)
     case EnemySoundType::BabyGhost_Playerfind_Sound:
         id = "BabyGhost_Playerfind_Sound";
         break;
+    case EnemySoundType::BabyGhost_Crying_Sound:
+        id = "BabyGhost_Crying_Sound";
+        break;
     default:
         break;
     }
