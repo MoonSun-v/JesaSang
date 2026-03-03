@@ -49,6 +49,7 @@ void AgentComponent::OnInitialize()
 
     auto tr = GetOwner()->GetTransform();
     grid->WorldToGridFromCenter(tr->GetWorldPosition(), cx, cy);
+    grid->Occupy(cx, cy, this); // 현재 위치 점유 추가
 }
 
 void AgentComponent::OnStart()
@@ -133,6 +134,14 @@ void AgentComponent::OnFixedUpdate(float dt)
     }
 
     auto next = path.front();
+
+    // 다음 셀이 점유 중이면 미리 차단 
+    if (grid->IsOccupied(next.first, next.second))
+    {
+        path.clear(); // 경로가 막힘 -> 재탐색
+        return;
+    }
+
     Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
 
     Vector3 pos = GetOwner()->GetTransform()->GetWorldPosition();
@@ -141,11 +150,26 @@ void AgentComponent::OnFixedUpdate(float dt)
 
     if (dir.Length() < reachDist)
     {
+        // [ 이동 성공 시, 점유 갱신 ]
+        
+        // 다음 셀이 이미 점유 중이면 대기 후 재탐색
+        if (grid->IsOccupied(next.first, next.second))
+        {
+            path.clear();   // 재탐색 유도
+            return;
+        }
+
+        grid->Release(cx, cy); // 기존 셀 해제
+
         cx = next.first;
         cy = next.second;
+
+        grid->Occupy(cx, cy, this); // 새 셀 점유
+
         path.erase(path.begin());
 
-        // 경로가 다 끝나면 잠시 멈췄다가 목표 재선택
+
+        // [ 경로가 다 끝나면 잠시 멈췄다가 목표 재선택 ]
         if (path.empty())
         {
             isWaiting = true;

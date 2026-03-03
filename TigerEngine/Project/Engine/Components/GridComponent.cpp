@@ -415,6 +415,7 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
             int ny = current->y + dir.second;
 
             if (!IsWalkableFromCenter(nx, ny)) continue;
+            if (IsOccupied(nx, ny) && !(nx == endCX && ny == endCY)) continue; // 점유 셀 X 
 
             int key = hash(nx, ny);
             float gNew = current->gCost + 1;
@@ -433,4 +434,32 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
     for (auto& pair : allNodes) delete pair.second;
 
     return finalPath;
+}
+
+
+
+// [ 셀 점유 관련 ]
+
+int GridComponent::MakeKey(int cx, int cy)
+{
+    return (cy + 1000) * 2000 + (cx + 1000);
+    // 범위 충분히 크게 (width 40이면 넉넉함)
+}
+
+bool GridComponent::IsOccupied(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    return occupiedCells.find(key) != occupiedCells.end();
+}
+
+void GridComponent::Occupy(int cx, int cy, AgentComponent* agent)
+{
+    int key = MakeKey(cx, cy);
+    occupiedCells[key] = agent;
+}
+
+void GridComponent::Release(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    occupiedCells.erase(key);
 }
