@@ -76,8 +76,10 @@ public:
 
 
 
+    // ----------------------------------------------------
     // [ 셀 점유 시스템 추가 ] 
-
+    // ----------------------------------------------------
+    
     // 셀 점유 정보
     std::unordered_map<int, AgentComponent*> occupiedCells;
 
@@ -88,4 +90,6 @@ public:
     bool IsOccupied(int cx, int cy);
     void Occupy(int cx, int cy, AgentComponent* agent);
     void Release(int cx, int cy);
+    AgentComponent* GetOccupier(int cx, int cy);
+
 };

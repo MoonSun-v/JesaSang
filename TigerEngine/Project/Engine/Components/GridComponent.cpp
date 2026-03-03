@@ -437,13 +437,13 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
 }
 
 
-
+// -------------------------------------------------------------------
 // [ 셀 점유 관련 ]
+// -------------------------------------------------------------------
 
 int GridComponent::MakeKey(int cx, int cy)
 {
-    return (cy + 1000) * 2000 + (cx + 1000);
-    // 범위 충분히 크게 (width 40이면 넉넉함)
+    return (cy + 1000) * 2000 + (cx + 1000); // 범위 충분히 크게 
 }
 
 bool GridComponent::IsOccupied(int cx, int cy)
@@ -462,4 +462,13 @@ void GridComponent::Release(int cx, int cy)
 {
     int key = MakeKey(cx, cy);
     occupiedCells.erase(key);
+}
+
+AgentComponent* GridComponent::GetOccupier(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    auto it = occupiedCells.find(key);
+    if (it != occupiedCells.end())
+        return it->second;
+    return nullptr;
 }

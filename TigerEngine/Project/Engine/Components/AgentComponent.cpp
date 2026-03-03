@@ -50,6 +50,7 @@ void AgentComponent::OnInitialize()
     auto tr = GetOwner()->GetTransform();
     grid->WorldToGridFromCenter(tr->GetWorldPosition(), cx, cy);
     grid->Occupy(cx, cy, this); // 현재 위치 점유 추가
+    lastPos = tr->GetWorldPosition();
 }
 
 void AgentComponent::OnStart()
@@ -96,8 +97,37 @@ void AgentComponent::OnFixedUpdate(float dt)
     auto grid = GridSystem::Instance().GetMainGrid();
     if (!grid) return;
 
-    if (externalControl)
-        return; // FSM이 직접 path/target을 관리
+    // FSM이 직접 path/target을 관리
+    if (externalControl) return; 
+
+    // 양보 중이면 아무것도 안함
+    if (giveWayTimer > 0.f)
+    {
+        giveWayTimer -= dt;
+        return;
+    }
+
+    // 정체 감지
+    Vector3 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+
+    if ((currentPos - lastPos).Length() < 1.0f)
+    {
+        stuckTimer += dt;
+
+        if (stuckTimer > 1.0f)   // 1초 이상 못 움직이면
+        {
+            path.clear();
+            hasTarget = false;   // 강제 재탐색
+            stuckTimer = 0.f;
+        }
+    }
+    else
+    {
+        stuckTimer = 0.f;
+    }
+
+    lastPos = currentPos;
+
 
     // 대기 중이면 시간 감소 
     if (isWaiting)
@@ -135,10 +165,36 @@ void AgentComponent::OnFixedUpdate(float dt)
 
     auto next = path.front();
 
-    // 다음 셀이 점유 중이면 미리 차단 
+    // 점유자 확인
+    AgentComponent* blocker = nullptr;
     if (grid->IsOccupied(next.first, next.second))
     {
-        path.clear(); // 경로가 막힘 -> 재탐색
+        // 점유자 얻기 (Grid에 GetOccupier 함수 추가 필요)
+        blocker = grid->GetOccupier(next.first, next.second);
+    }
+
+    if (blocker && blocker != this)
+    {
+        // 스왑 상황 감지
+        if (!blocker->path.empty())
+        {
+            auto blockerNext = blocker->path.front();
+
+            if (blockerNext.first == cx && blockerNext.second == cy)
+            {
+                // 서로 자리 바꾸려는 상황
+
+                // 간단 우선순위 (포인터 주소 기준)
+                if (this < blocker)
+                {
+                    giveWayTimer = 0.5f;  // 0.5초 양보
+                    return;
+                }
+            }
+        }
+
+        // 그냥 막힌 상황이면 재탐색
+        path.clear();
         return;
     }
 
