@@ -3,7 +3,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 386,
+        "ID": 245,
         "Name": "Main Camera",
         "ParentID": -1,
         "components": [
@@ -58,7 +58,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 387,
+        "ID": 246,
         "Name": "DirectionalLight(Sun)",
         "ParentID": -1,
         "components": [
@@ -112,7 +112,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 388,
+        "ID": 247,
         "Name": "----------------------",
         "ParentID": -1,
         "components": [
@@ -143,7 +143,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 389,
+        "ID": 248,
         "Name": "Ground",
         "ParentID": -1,
         "components": [
@@ -170,7 +170,7 @@
           {
             "properties": {
               "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Ground.fbx",
+              "DataPath": "..\\Assets\\Resource\\00_Sample\\Ground.fbx",
               "IsStatic": true
             },
             "type": "FBXData"
@@ -224,7 +224,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 390,
+        "ID": 249,
         "Name": "CurScene_98_Dev_Ron",
         "ParentID": -1,
         "components": [
@@ -255,7 +255,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 391,
+        "ID": 250,
         "Name": "Audio_Mover",
         "ParentID": -1,
         "components": [
@@ -316,7 +316,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 392,
+        "ID": 251,
         "Name": "Player",
         "ParentID": -1,
         "components": [
@@ -360,7 +360,7 @@
           {
             "properties": {
               "Active": true,
-              "DataPath": "..\\Assets\\Resource\\FBX\\Player\\charcter_test.fbx",
+              "DataPath": "..\\Assets\\Resource\\Animation\\Player\\ani_idle_character.fbx",
               "IsStatic": false
             },
             "type": "FBXData"
@@ -438,7 +438,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 393,
+        "ID": 252,
         "Name": "Floor",
         "ParentID": -1,
         "components": [
@@ -465,8 +465,8 @@
           {
             "properties": {
               "Active": true,
-              "DataPath": "..\\Assets\\Resource\\FBX\\Floor\\Floor.fbx",
-              "IsStatic": true
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\floor\\Floor.fbx",
+              "IsStatic": false
             },
             "type": "FBXData"
           },
@@ -542,7 +542,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 394,
+        "ID": 253,
         "Name": "AudioManager",
         "ParentID": -1,
         "components": [
@@ -588,7 +588,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 485,
+        "ID": 254,
         "Name": "UI_MiniMap_Controller",
         "ParentID": -1,
         "components": [
@@ -664,6 +664,11 @@
               "PieceObjectName4": "UI_MiniMap_Piece_04",
               "PieceObjectName5": "UI_MiniMap_Piece_05",
               "PieceObjectName6": "UI_MiniMap_Piece_06",
+              "PieceToZoneIndex0": 0,
+              "PieceToZoneIndex1": 1,
+              "PieceToZoneIndex2": 2,
+              "PieceToZoneIndex3": 3,
+              "PieceToZoneIndex4": 4,
               "PingObjectName1": "UI_MiniMap_ItemPing_01",
               "PingObjectName2": "UI_MiniMap_ItemPing_02",
               "PingObjectName3": "UI_MiniMap_ItemPing_03",
@@ -696,9 +701,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 486,
+        "ID": 255,
         "Name": "UI_MiniMap_ItemPing_06",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -787,9 +792,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 487,
+        "ID": 256,
         "Name": "UI_MiniMap_ItemPing_05",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -878,9 +883,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 488,
+        "ID": 257,
         "Name": "UI_MiniMap_ItemPing_04",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -969,9 +974,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 489,
+        "ID": 258,
         "Name": "UI_MiniMap_ItemPing_03",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1060,9 +1065,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 490,
+        "ID": 259,
         "Name": "UI_MiniMap_ItemPing_02",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1151,9 +1156,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 491,
+        "ID": 260,
         "Name": "UI_MiniMap_ItemPing_01",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1242,9 +1247,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 492,
+        "ID": 261,
         "Name": "UI_MiniMap_MainPing",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1333,9 +1338,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 493,
+        "ID": 262,
         "Name": "UI_MiniMap_Piece_06",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1424,9 +1429,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 494,
+        "ID": 263,
         "Name": "UI_MiniMap_Piece_05",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1515,9 +1520,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 495,
+        "ID": 264,
         "Name": "UI_MiniMap_Piece_04",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1606,9 +1611,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 496,
+        "ID": 265,
         "Name": "UI_MiniMap_Piece_03",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1697,9 +1702,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 497,
+        "ID": 266,
         "Name": "UI_MiniMap_Piece_02",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1788,9 +1793,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 498,
+        "ID": 267,
         "Name": "UI_MiniMap_Piece_01",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1879,9 +1884,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 499,
+        "ID": 268,
         "Name": "UI_MiniMap_GaugeFill",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -1970,9 +1975,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 500,
+        "ID": 269,
         "Name": "UI_MiniMap_GaugeBG",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -2061,9 +2066,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 501,
+        "ID": 270,
         "Name": "UI_MiniMap_Complete",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {
@@ -2152,9 +2157,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 502,
+        "ID": 271,
         "Name": "UI_MiniMap_Base",
-        "ParentID": 485,
+        "ParentID": 254,
         "components": [
           {
             "properties": {

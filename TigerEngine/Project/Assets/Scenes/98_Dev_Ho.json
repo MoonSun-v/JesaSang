@@ -3,7 +3,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3124,
+        "ID": 330,
         "Name": "DirectionalLight(Sun)",
         "ParentID": -1,
         "components": [
@@ -57,7 +57,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3125,
+        "ID": 331,
         "Name": "Ground",
         "ParentID": -1,
         "components": [
@@ -138,7 +138,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3126,
+        "ID": 332,
         "Name": "Player",
         "ParentID": -1,
         "components": [
@@ -165,7 +165,7 @@
           {
             "properties": {
               "Active": true,
-              "DataPath": "..\\Assets\\Resource\\FBX\\00_character\\character.fbx",
+              "DataPath": "..\\Assets\\Resource\\Animation\\Player\\ani_idle_character.fbx",
               "IsStatic": false
             },
             "type": "FBXData"
@@ -219,9 +219,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3127,
+        "ID": 333,
         "Name": "NewGameObject",
-        "ParentID": 3126,
+        "ParentID": 332,
         "components": [
           {
             "properties": {
@@ -257,7 +257,7 @@
               "imageType": "Sliced",
               "isBillboard": true,
               "isMouseCheck": false,
-              "path": "..\\Assets\\Resource\\Bricks059_Specular.png",
+              "path": "..\\Assets\\Resource\\00_Sample\\RampTexture.png",
               "sliceBorderPx": [
                 81.80000305175781,
                 65.0,
@@ -310,7 +310,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3128,
+        "ID": 334,
         "Name": "WinCinemahcine",
         "ParentID": -1,
         "components": [
@@ -347,9 +347,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3129,
+        "ID": 335,
         "Name": "WinCinemachineCamera",
-        "ParentID": 3128,
+        "ParentID": 334,
         "components": [
           {
             "properties": {
@@ -388,7 +388,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3130,
+        "ID": 336,
         "Name": "WinSpotLight",
         "ParentID": -1,
         "components": [
@@ -442,7 +442,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3131,
+        "ID": 337,
         "Name": "LoseCinemahcine",
         "ParentID": -1,
         "components": [
@@ -479,9 +479,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3132,
+        "ID": 338,
         "Name": "LoseCinemachineCamera",
-        "ParentID": 3131,
+        "ParentID": 337,
         "components": [
           {
             "properties": {
@@ -520,7 +520,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3133,
+        "ID": 339,
         "Name": "ResultPanel",
         "ParentID": -1,
         "components": [
@@ -557,9 +557,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3134,
+        "ID": 340,
         "Name": "WinPanel",
-        "ParentID": 3133,
+        "ParentID": 339,
         "components": [
           {
             "properties": {
@@ -654,9 +654,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3135,
+        "ID": 341,
         "Name": "LosePanel",
-        "ParentID": 3133,
+        "ParentID": 339,
         "components": [
           {
             "properties": {
@@ -751,7 +751,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3136,
+        "ID": 342,
         "Name": "Playerasdsdfas",
         "ParentID": -1,
         "components": [
@@ -785,8 +785,14 @@
           },
           {
             "properties": {
+              "Active": true
+            },
+            "type": "PlayerSoundSource"
+          },
+          {
+            "properties": {
               "Active": true,
-              "DataPath": "..\\Assets\\Resource\\sphere.fbx",
+              "DataPath": "..\\Assets\\Resource\\00_Sample\\sphere.fbx",
               "IsStatic": true
             },
             "type": "FBXData"
@@ -832,12 +838,6 @@
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "PlayerSoundSource"
           }
         ]
       },
@@ -846,38 +846,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 3137,
-        "Name": "NewGameObject",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 3138,
+        "ID": 344,
         "Name": "SoundManager",
         "ParentID": -1,
         "components": [
