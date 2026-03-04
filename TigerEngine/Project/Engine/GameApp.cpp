@@ -105,10 +105,10 @@ bool GameApp::Initialize(UINT Width, UINT Height)
 
 	// 원하는 크기가 조정되어 리턴
 	RECT rcClient = { 0, 0, (LONG)Width, (LONG)Height };
-	AdjustWindowRect(&rcClient, WS_OVERLAPPEDWINDOW, FALSE);
+    AdjustWindowRect(&rcClient, WS_OVERLAPPEDWINDOW, FALSE);        // 테두리 포함한 창 크기 계산
 
 	//생성
-	hwnd = CreateWindowW(windowClassName, titleName, WS_POPUP | WS_VISIBLE,
+	hwnd = CreateWindowW(windowClassName, titleName, WS_OVERLAPPEDWINDOW | WS_VISIBLE,  // WS_POPUP
 		100, 100,	// 시작 위치
 		rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
 		nullptr, nullptr, hInstance, nullptr);
