@@ -177,7 +177,7 @@ void AdultGhost_Chase::FixedUpdate(float deltaTime)
                 {
                     int px, py;
                     auto player = adultGhost->GetPlayer();
-                    if (player && grid->WorldToGridFromCenter(player->GetTransform()->GetWorldPosition(), px, py))
+                    if (player && grid->WorldToGridFromCenter(player->GetTransform()->GetLocalPosition(), px, py))
                     {
                         adultGhost->agent->targetCX = px;
                         adultGhost->agent->targetCY = py;
@@ -234,19 +234,23 @@ void AdultGhost_Chase::UpdateTargetGrid()
     int px, py;
     auto wp = adultGhost->target->GetTransform()->GetLocalPosition();
     if (!grid->WorldToGridFromCenter(wp, px, py)) return;
-    cout << "[Chase Repath] Player Grid = (" << px << "," << py << ")\n";
+    cout << "[AdultGhost_Chase] Player Grid = (" << px << "," << py << ")\n";
 
     // [ AI 위치 -> Grid ] : 디버그용
     auto myPos = adultGhost->GetOwner()->GetTransform()->GetWorldPosition();
     int cx, cy;
     grid->WorldToGridFromCenter(myPos, cx, cy);
-    cout << "[Agent] Self Grid = (" << cx << "," << cy << ")\n";
+    cout << "[AdultGhost_Chase] Ghost Grid = (" << cx << "," << cy << ")\n";
+
+    cout << "[AdultGhost_Chase] Target Grid Set To = ("
+        << adultGhost->agent->targetCX << ", " << adultGhost->agent->targetCY << ")\n";
+
 
 
     // [ 어느정도 이동했을 때 경로 갱신 ]
     int dist = abs(px - adultGhost->agent->targetCX)+ abs(py - adultGhost->agent->targetCY);
 
-    const int repathThreshold = 0; // 2칸 이상 차이날 때만
+    const int repathThreshold = 2; // 2칸 이상 차이날 때만
     if (dist >= repathThreshold)
     {
         adultGhost->agent->targetCX = px;

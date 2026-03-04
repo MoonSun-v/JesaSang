@@ -98,13 +98,14 @@ void AgentComponent::OnFixedUpdate(float dt)
     if (!grid) return;
 
     // FSM이 직접 path/target을 관리
-    if (externalControl) return; 
+    if (externalControl) { std::cout << "[AgentComponent] FSM is Used path/target! \n"; return; }
 
     // 양보 중이면 아무것도 안함
     if (giveWayTimer > 0.f)
     {
         giveWayTimer -= dt;
-        return;
+        std::cout << "[AgentComponent] giveWayTimer ing \n"; 
+        return; 
     }
 
     // 정체 감지
@@ -138,6 +139,7 @@ void AgentComponent::OnFixedUpdate(float dt)
             isWaiting = false;
             PickRandomTarget(); // 다시 탐색 시작
         }
+        std::cout << "[AgentComponent] isWaiting is true \n";
         return; // 대기 중엔 이동 안함
     }
 
@@ -146,7 +148,7 @@ void AgentComponent::OnFixedUpdate(float dt)
     if (!hasTarget)
     {
         PickRandomTarget();
-        if (!hasTarget) return; // 목표 선택 실패하면 종료
+        if (!hasTarget) { std::cout << "[AgentComponent] Target is Null \n"; return; } // 목표 선택 실패하면 종료
     }
 
     // 경로 없으면 새 경로 생성
@@ -158,8 +160,12 @@ void AgentComponent::OnFixedUpdate(float dt)
             // 경로를 못찾으면 목표 재선택
             PickRandomTarget();
             path = grid->FindPath(cx, cy, targetCX, targetCY);
+
+            // 여전히 경로 없으면 이동 안함
             if (path.empty())
-                return; // 여전히 경로 없으면 이동 안함
+            {
+                std::cout << "[AgentComponent] still Target is Null \n"; return;
+            } 
         }
     }
 
@@ -194,6 +200,7 @@ void AgentComponent::OnFixedUpdate(float dt)
         }
 
         // 그냥 막힌 상황이면 재탐색
+        // std::cout << "[AgentComponent] Path is Block \n";
         path.clear();
         return;
     }
@@ -252,10 +259,10 @@ void AgentComponent::OnFixedUpdate(float dt)
         MoveAgent(finalDir, patrolSpeed, dt);
     }
 
-    //// 디버그 출력
-    //std::cout << "[AgentComponent] Current: (" << cx << "," << cy << ") "
-    //    << "Next: (" << next.first << "," << next.second << ") "
-    //    << "Path size: " << path.size() << std::endl;
+    // 디버그 출력
+    std::cout << "[AgentComponent] Current: (" << cx << "," << cy << ") "
+        << "Next: (" << next.first << "," << next.second << ") "
+        << "Path size: " << path.size() << std::endl;
 }
 
 
@@ -263,7 +270,7 @@ void AgentComponent::MoveAgent(const Vector3& dir, float speed, float dt)
 {
     if(!cct)
     {
-        std::cout << "[AgentComponent] MoveAgent에서 cct 가 NULL입니다." << std::endl;
+        std::cout << "[AgentComponent] MoveAgent, cct is NULL." << std::endl;
         return;
     }
 

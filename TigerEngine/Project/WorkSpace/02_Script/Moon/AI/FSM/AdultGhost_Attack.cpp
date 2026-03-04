@@ -41,7 +41,7 @@ void AdultGhost_Attack::ChangeStateLogic()
         if (grid)
         {
             int px, py;
-            auto wp = adultGhost->GetPlayer()->GetTransform()->GetLocalPosition();
+            auto wp = player->GetTransform()->GetLocalPosition();
             if (grid->WorldToGridFromCenter(wp, px, py))
                 adultGhost->lastPlayerGrid = { px, py, true };
         }

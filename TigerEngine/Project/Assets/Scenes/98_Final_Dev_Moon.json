@@ -12,7 +12,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 -0.0,
@@ -170,7 +170,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 -0.0,
@@ -232,7 +232,7 @@
               "Position": [
                 0.0,
                 110.0,
-                665.0
+                -115.0
               ],
               "Rotation": [
                 0.5235987901687622,
@@ -285,7 +285,7 @@
               "Position": [
                 -903.3562622070313,
                 140.65699768066406,
-                747.7579956054688
+                -32.24211883544922
               ],
               "Rotation": [
                 0.1745329201221466,
@@ -326,7 +326,7 @@
               "Position": [
                 274.7710266113281,
                 1.492921819590265e-05,
-                1212.56494140625
+                432.5048828125
               ],
               "Rotation": [
                 -0.0,
@@ -2118,7 +2118,7 @@
               "Position": [
                 153.98699951171875,
                 -6.103515625e-05,
-                1341.446044921875
+                561.4458618164063
               ],
               "Rotation": [
                 -0.0,
@@ -3068,7 +3068,7 @@
               "Position": [
                 -903.7987060546875,
                 -6.103515625e-05,
-                1031.7860107421875
+                251.78558349609375
               ],
               "Rotation": [
                 -0.0,
@@ -3243,7 +3243,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7798,
         "Name": "Alta_Apple",
         "ParentID": 7796,
@@ -3270,7 +3270,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\apple.fbx",
               "IsStatic": false
             },
@@ -3278,7 +3278,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3324,7 +3324,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7799,
         "Name": "Alta_Pear",
         "ParentID": 7796,
@@ -3351,7 +3351,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\pear.fbx",
               "IsStatic": false
             },
@@ -3359,7 +3359,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3405,7 +3405,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7800,
         "Name": "Alta_Batter",
         "ParentID": 7796,
@@ -3432,7 +3432,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\skewer_pancake.fbx",
               "IsStatic": false
             },
@@ -3440,7 +3440,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3486,7 +3486,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7801,
         "Name": "Alta_Tofu",
         "ParentID": 7796,
@@ -3513,7 +3513,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\tofu.fbx",
               "IsStatic": false
             },
@@ -3521,7 +3521,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3567,7 +3567,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7802,
         "Name": "Alta_Sanjeok",
         "ParentID": 7796,
@@ -3594,7 +3594,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\Korean_st_Pancake.fbx",
               "IsStatic": true
             },
@@ -3602,7 +3602,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3648,7 +3648,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7803,
         "Name": "Alta_Donggeurangttaeng",
         "ParentID": 7796,
@@ -3675,7 +3675,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\FBX\\New_Food\\Korean_st_meatball.fbx",
               "IsStatic": false
             },
@@ -3683,7 +3683,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3729,7 +3729,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7804,
         "Name": "Alta_Ingre_Apple",
         "ParentID": 7796,
@@ -3756,7 +3756,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\apple_before_cooking.fbx",
               "IsStatic": false
             },
@@ -3764,7 +3764,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -3810,7 +3810,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7805,
         "Name": "Alta_Ingre_Pear",
         "ParentID": 7796,
@@ -3837,7 +3837,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\pear_before_cooking.fbx",
               "IsStatic": false
             },
@@ -3845,7 +3845,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 0.9852941036224365,
@@ -3891,7 +3891,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7806,
         "Name": "Alta_Ingre_Batter",
         "ParentID": 7796,
@@ -3918,7 +3918,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\leek.fbx",
               "IsStatic": true
             },
@@ -3926,7 +3926,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 0.7022186517715454,
@@ -3972,7 +3972,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7807,
         "Name": "Alta_Ingre_Tofu",
         "ParentID": 7796,
@@ -3999,7 +3999,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\tofu_before_cooking.fbx",
               "IsStatic": true
             },
@@ -4007,7 +4007,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -4053,7 +4053,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7808,
         "Name": "Alta_Ingre_Sanjeok",
         "ParentID": 7796,
@@ -4080,7 +4080,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\Toothpick.fbx",
               "IsStatic": true
             },
@@ -4088,7 +4088,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 0.1840878427028656,
@@ -4134,7 +4134,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7809,
         "Name": "Alta_Ingre_Donggeurangttaeng",
         "ParentID": 7796,
@@ -4161,7 +4161,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_03\\Before_cooking_Donggrang_Ddang.fbx",
               "IsStatic": true
             },
@@ -4169,7 +4169,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 0.364140123128891,
@@ -4276,7 +4276,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -4367,7 +4367,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -4458,7 +4458,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -4588,7 +4588,7 @@
                   "position": [
                     -956.4979248046875,
                     88.3516845703125,
-                    1031.7860107421875
+                    251.78558349609375
                   ],
                   "sheet": {
                     "baseSizeScale": 20.0,
@@ -4671,7 +4671,7 @@
                   "position": [
                     -956.4979248046875,
                     88.3516845703125,
-                    1031.7860107421875
+                    251.78558349609375
                   ],
                   "sheet": {
                     "baseSizeScale": 20.0,
@@ -4797,7 +4797,7 @@
                   "position": [
                     -850.3726196289063,
                     88.3516845703125,
-                    1031.784912109375
+                    251.78448486328125
                   ],
                   "sheet": {
                     "baseSizeScale": 20.0,
@@ -4880,7 +4880,7 @@
                   "position": [
                     -850.3726196289063,
                     88.3516845703125,
-                    1031.784912109375
+                    251.78448486328125
                   ],
                   "sheet": {
                     "baseSizeScale": 20.0,
@@ -4916,7 +4916,7 @@
               "Position": [
                 619.8583984375,
                 7.601309334859252e-05,
-                -879.0
+                -1659.617431640625
               ],
               "Rotation": [
                 -0.0,
@@ -9999,7 +9999,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -10030,17 +10030,17 @@
               "Position": [
                 -1174.02783203125,
                 0.0,
-                99.9757080078125
+                99.4958267211914
               ],
               "Rotation": [
                 -0.0,
-                1.570796012878418,
+                1.5707963705062866,
                 -0.0
               ],
               "Scale": [
-                0.9999996423721313,
+                0.9999998211860657,
                 1.0,
-                0.9999996423721313
+                0.9999998211860657
               ]
             },
             "type": "Transform"
@@ -10130,7 +10130,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7879,
         "Name": "AltarOnWall",
         "ParentID": 7877,
@@ -10161,7 +10161,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7880,
         "Name": "wall_2",
         "ParentID": 7879,
@@ -10188,7 +10188,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_2.fbx",
               "IsStatic": true
             },
@@ -10196,7 +10196,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -10238,7 +10238,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "ColliderType": "Box",
               "PhysicsBodyType": "Static",
               "density": 10.0,
@@ -10261,7 +10261,7 @@
           },
           {
             "properties": {
-              "Active": true
+              "Active": false
             },
             "type": "OcclusionFadeObject"
           }
@@ -10271,7 +10271,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7881,
         "Name": "Door_Open",
         "ParentID": 7879,
@@ -10298,7 +10298,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\Door_Open.fbx",
               "IsStatic": true
             },
@@ -10306,7 +10306,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -10348,7 +10348,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "ColliderType": "Box",
               "PhysicsBodyType": "Static",
               "density": 10.0,
@@ -10371,7 +10371,7 @@
           },
           {
             "properties": {
-              "Active": true
+              "Active": false
             },
             "type": "OcclusionFadeObject"
           }
@@ -10381,7 +10381,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 7882,
         "Name": "wall_2",
         "ParentID": 7879,
@@ -10408,7 +10408,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_2.fbx",
               "IsStatic": true
             },
@@ -10416,7 +10416,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Alpha": 1.0,
               "Diffuse": [
                 1.0,
@@ -10458,7 +10458,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "ColliderType": "Box",
               "PhysicsBodyType": "Static",
               "density": 10.0,
@@ -10481,7 +10481,7 @@
           },
           {
             "properties": {
-              "Active": true
+              "Active": false
             },
             "type": "OcclusionFadeObject"
           }
@@ -10560,7 +10560,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -10591,7 +10591,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -10622,7 +10622,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 -0.0,
@@ -11050,12 +11050,12 @@
               "Position": [
                 0.0,
                 0.0,
-                0.0
+                -650.0
               ],
               "Rotation": [
+                -0.0,
                 0.0,
-                0.0,
-                0.0
+                -0.0
               ],
               "Scale": [
                 1.0,
@@ -11085,9 +11085,9 @@
           {
             "properties": {
               "Position": [
-                -551.3951416015625,
-                0.0005263368366286159,
-                813.0
+                -477.16796875,
+                0.000530242919921875,
+                69.51295471191406
               ],
               "Rotation": [
                 -0.0,
@@ -11165,7 +11165,7 @@
                 0.0,
                 0.0
               ],
-              "radius": 30.0
+              "radius": 20.0
             },
             "type": "CharacterControllerComponent"
           },
@@ -11239,9 +11239,9 @@
               "PhysicsBodyType": "Static",
               "density": 10.0,
               "halfExtents": [
-                40.0,
                 30.0,
-                40.0
+                30.0,
+                30.0
               ],
               "height": 10.0,
               "isTrigger": true,
@@ -11260,136 +11260,6 @@
               "Active": true
             },
             "type": "GhostInteractionZone"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 7896,
-        "Name": "Ghost_Baby",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                -251.18728637695313,
-                0.0,
-                347.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Animation\\Baby_Ghost\\ani_idle_babyghost.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "height": 50.0,
-              "isTrigger": false,
-              "jumpSpeed": 5.5,
-              "layer": "Default",
-              "moveSpeed": 2.0,
-              "offset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 30.0
-            },
-            "type": "CharacterControllerComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "VisionComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "patrolSpeed": 1.0,
-              "reachDist": 20.0
-            },
-            "type": "AgentComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AnimationController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "BabyGhostController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "EnemySoundSource"
           }
         ]
       },
@@ -31517,7 +31387,7 @@
               "Position": [
                 -176.07730102539063,
                 0.0,
-                -205.92205810546875
+                -204.21728515625
               ],
               "Rotation": [
                 -0.0,
@@ -39349,7 +39219,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -39590,7 +39460,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 -0.0,
@@ -39699,7 +39569,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8183,
         "Name": "RingEffect",
         "ParentID": 8182,
@@ -39726,7 +39596,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -39846,7 +39716,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8185,
         "Name": "RingEffect",
         "ParentID": 8184,
@@ -39873,7 +39743,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -39993,7 +39863,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8187,
         "Name": "RingEffect",
         "ParentID": 8186,
@@ -40020,7 +39890,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40140,7 +40010,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8189,
         "Name": "RingEffect",
         "ParentID": 8188,
@@ -40167,7 +40037,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40309,7 +40179,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8191,
         "Name": "RingEffect",
         "ParentID": 8190,
@@ -40336,7 +40206,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40478,7 +40348,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8193,
         "Name": "RingEffect",
         "ParentID": 8192,
@@ -40505,7 +40375,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40625,7 +40495,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8195,
         "Name": "RingEffect",
         "ParentID": 8194,
@@ -40652,7 +40522,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40794,7 +40664,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8197,
         "Name": "RingEffect",
         "ParentID": 8196,
@@ -40821,7 +40691,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -40963,7 +40833,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8199,
         "Name": "RingEffect",
         "ParentID": 8198,
@@ -40990,7 +40860,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -41110,7 +40980,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8201,
         "Name": "RingEffect",
         "ParentID": 8200,
@@ -41137,7 +41007,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -41257,7 +41127,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8203,
         "Name": "RingEffect",
         "ParentID": 8202,
@@ -41284,7 +41154,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -41404,7 +41274,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8205,
         "Name": "RingEffect",
         "ParentID": 8204,
@@ -41431,7 +41301,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "DecalType": "RingEffect",
               "IsGroundDecal": true,
               "Offset": [
@@ -41473,7 +41343,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -41613,7 +41483,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8208,
         "Name": "Image_SensorOn",
         "ParentID": 8207,
@@ -41640,7 +41510,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -41674,7 +41544,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -41704,7 +41574,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8209,
         "Name": "Image_InteractionOn",
         "ParentID": 8207,
@@ -41731,7 +41601,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -41765,7 +41635,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -41795,7 +41665,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8210,
         "Name": "Image_InteractionGauge",
         "ParentID": 8207,
@@ -41822,7 +41692,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -41856,7 +41726,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42005,7 +41875,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8212,
         "Name": "Image_SensorOn",
         "ParentID": 8211,
@@ -42032,7 +41902,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42066,7 +41936,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42096,7 +41966,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8213,
         "Name": "Image_InteractionOn",
         "ParentID": 8211,
@@ -42123,7 +41993,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42157,7 +42027,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42187,7 +42057,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8214,
         "Name": "Image_InteractionGauge",
         "ParentID": 8211,
@@ -42214,7 +42084,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42248,7 +42118,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42397,7 +42267,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8216,
         "Name": "Image_SensorOn",
         "ParentID": 8215,
@@ -42424,7 +42294,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42458,7 +42328,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42488,7 +42358,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8217,
         "Name": "Image_InteractionOn",
         "ParentID": 8215,
@@ -42515,7 +42385,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42549,7 +42419,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42579,7 +42449,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8218,
         "Name": "Image_InteractionGauge",
         "ParentID": 8215,
@@ -42606,7 +42476,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42640,7 +42510,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42789,7 +42659,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8220,
         "Name": "Image_SensorOn",
         "ParentID": 8219,
@@ -42816,7 +42686,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42850,7 +42720,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42880,7 +42750,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8221,
         "Name": "Image_InteractionOn",
         "ParentID": 8219,
@@ -42907,7 +42777,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -42941,7 +42811,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -42971,7 +42841,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8222,
         "Name": "Image_InteractionGauge",
         "ParentID": 8219,
@@ -42998,7 +42868,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43032,7 +42902,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43181,7 +43051,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8224,
         "Name": "Image_SensorOn",
         "ParentID": 8223,
@@ -43208,7 +43078,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43242,7 +43112,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43272,7 +43142,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8225,
         "Name": "Image_InteractionOn",
         "ParentID": 8223,
@@ -43299,7 +43169,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43333,7 +43203,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43363,7 +43233,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8226,
         "Name": "Image_InteractionGauge",
         "ParentID": 8223,
@@ -43390,7 +43260,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43424,7 +43294,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43573,7 +43443,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8228,
         "Name": "Image_SensorOn",
         "ParentID": 8227,
@@ -43600,7 +43470,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43634,7 +43504,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43664,7 +43534,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8229,
         "Name": "Image_InteractionOn",
         "ParentID": 8227,
@@ -43691,7 +43561,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43725,7 +43595,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43755,7 +43625,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8230,
         "Name": "Image_InteractionGauge",
         "ParentID": 8227,
@@ -43782,7 +43652,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -43816,7 +43686,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -43965,7 +43835,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8232,
         "Name": "Image_SensorOn",
         "ParentID": 8231,
@@ -43992,7 +43862,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44026,7 +43896,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44056,7 +43926,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8233,
         "Name": "Image_InteractionOn",
         "ParentID": 8231,
@@ -44083,7 +43953,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44117,7 +43987,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44147,7 +44017,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8234,
         "Name": "Image_InteractionGauge",
         "ParentID": 8231,
@@ -44174,7 +44044,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44208,7 +44078,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44357,7 +44227,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8236,
         "Name": "Image_SensorOn",
         "ParentID": 8235,
@@ -44384,7 +44254,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44418,7 +44288,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44448,7 +44318,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8237,
         "Name": "Image_InteractionOn",
         "ParentID": 8235,
@@ -44475,7 +44345,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44509,7 +44379,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44539,7 +44409,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8238,
         "Name": "Image_InteractionGauge",
         "ParentID": 8235,
@@ -44566,7 +44436,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44600,7 +44470,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44749,7 +44619,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8240,
         "Name": "Image_SensorOn",
         "ParentID": 8239,
@@ -44776,7 +44646,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44810,7 +44680,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44840,7 +44710,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8241,
         "Name": "Image_InteractionOn",
         "ParentID": 8239,
@@ -44867,7 +44737,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44901,7 +44771,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -44931,7 +44801,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8242,
         "Name": "Image_InteractionGauge",
         "ParentID": 8239,
@@ -44958,7 +44828,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -44992,7 +44862,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45141,7 +45011,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8244,
         "Name": "Image_SensorOn",
         "ParentID": 8243,
@@ -45168,7 +45038,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45202,7 +45072,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45232,7 +45102,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8245,
         "Name": "Image_InteractionOn",
         "ParentID": 8243,
@@ -45259,7 +45129,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45293,7 +45163,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45323,7 +45193,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8246,
         "Name": "Image_InteractionGauge",
         "ParentID": 8243,
@@ -45350,7 +45220,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45384,7 +45254,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45533,7 +45403,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8248,
         "Name": "Image_SensorOn",
         "ParentID": 8247,
@@ -45560,7 +45430,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45594,7 +45464,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45624,7 +45494,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8249,
         "Name": "Image_InteractionOn",
         "ParentID": 8247,
@@ -45651,7 +45521,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45685,7 +45555,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45715,7 +45585,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8250,
         "Name": "Image_InteractionGauge",
         "ParentID": 8247,
@@ -45742,7 +45612,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45776,7 +45646,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -45925,7 +45795,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8252,
         "Name": "Image_SensorOn",
         "ParentID": 8251,
@@ -45952,7 +45822,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -45986,7 +45856,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46016,7 +45886,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8253,
         "Name": "Image_InteractionOn",
         "ParentID": 8251,
@@ -46043,7 +45913,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46077,7 +45947,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46107,7 +45977,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8254,
         "Name": "Image_InteractionGauge",
         "ParentID": 8251,
@@ -46134,7 +46004,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46168,7 +46038,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46317,7 +46187,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8256,
         "Name": "Image_SensorOn",
         "ParentID": 8255,
@@ -46344,7 +46214,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46378,7 +46248,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46408,7 +46278,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8257,
         "Name": "Image_InteractionOn",
         "ParentID": 8255,
@@ -46435,7 +46305,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46469,7 +46339,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46499,7 +46369,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8258,
         "Name": "Image_InteractionGauge",
         "ParentID": 8255,
@@ -46526,7 +46396,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46560,7 +46430,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46709,7 +46579,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8260,
         "Name": "Image_SensorOn",
         "ParentID": 8259,
@@ -46736,7 +46606,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46770,7 +46640,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46800,7 +46670,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8261,
         "Name": "Image_InteractionOn",
         "ParentID": 8259,
@@ -46827,7 +46697,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46861,7 +46731,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -46891,7 +46761,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8262,
         "Name": "Image_InteractionGauge",
         "ParentID": 8259,
@@ -46918,7 +46788,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -46952,7 +46822,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47101,7 +46971,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8264,
         "Name": "Image_SensorOn",
         "ParentID": 8263,
@@ -47128,7 +46998,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47162,7 +47032,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47192,7 +47062,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8265,
         "Name": "Image_InteractionOn",
         "ParentID": 8263,
@@ -47219,7 +47089,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47253,7 +47123,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47283,7 +47153,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8266,
         "Name": "Image_InteractionGauge",
         "ParentID": 8263,
@@ -47310,7 +47180,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47344,7 +47214,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47493,7 +47363,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8268,
         "Name": "Image_SensorOn",
         "ParentID": 8267,
@@ -47520,7 +47390,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47554,7 +47424,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47584,7 +47454,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8269,
         "Name": "Image_InteractionOn",
         "ParentID": 8267,
@@ -47611,7 +47481,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47645,7 +47515,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47675,7 +47545,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8270,
         "Name": "Image_InteractionGauge",
         "ParentID": 8267,
@@ -47702,7 +47572,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47736,7 +47606,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47885,7 +47755,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8272,
         "Name": "Image_SensorOn",
         "ParentID": 8271,
@@ -47912,7 +47782,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -47946,7 +47816,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -47976,7 +47846,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8273,
         "Name": "Image_InteractionOn",
         "ParentID": 8271,
@@ -48003,7 +47873,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48037,7 +47907,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48067,7 +47937,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8274,
         "Name": "Image_InteractionGauge",
         "ParentID": 8271,
@@ -48094,7 +47964,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48128,7 +47998,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48277,7 +48147,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8276,
         "Name": "Image_SensorOn",
         "ParentID": 8275,
@@ -48304,7 +48174,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48338,7 +48208,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48368,7 +48238,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8277,
         "Name": "Image_InteractionOn",
         "ParentID": 8275,
@@ -48395,7 +48265,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48429,7 +48299,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48459,7 +48329,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8278,
         "Name": "Image_InteractionGauge",
         "ParentID": 8275,
@@ -48486,7 +48356,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48520,7 +48390,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48669,7 +48539,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8280,
         "Name": "Image_SensorOn",
         "ParentID": 8279,
@@ -48696,7 +48566,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48730,7 +48600,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48760,7 +48630,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8281,
         "Name": "Image_InteractionOn",
         "ParentID": 8279,
@@ -48787,7 +48657,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48821,7 +48691,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -48851,7 +48721,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8282,
         "Name": "Image_InteractionGauge",
         "ParentID": 8279,
@@ -48878,7 +48748,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -48912,7 +48782,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49061,7 +48931,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8284,
         "Name": "Image_SensorOn",
         "ParentID": 8283,
@@ -49088,7 +48958,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49122,7 +48992,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49152,7 +49022,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8285,
         "Name": "Image_InteractionOn",
         "ParentID": 8283,
@@ -49179,7 +49049,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49213,7 +49083,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49243,7 +49113,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8286,
         "Name": "Image_InteractionGauge",
         "ParentID": 8283,
@@ -49270,7 +49140,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49304,7 +49174,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49453,7 +49323,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8288,
         "Name": "Image_SensorOn",
         "ParentID": 8287,
@@ -49480,7 +49350,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49514,7 +49384,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49544,7 +49414,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8289,
         "Name": "Image_InteractionOn",
         "ParentID": 8287,
@@ -49571,7 +49441,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49605,7 +49475,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49635,7 +49505,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8290,
         "Name": "Image_InteractionGauge",
         "ParentID": 8287,
@@ -49662,7 +49532,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49696,7 +49566,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49845,7 +49715,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8292,
         "Name": "Image_SensorOn",
         "ParentID": 8291,
@@ -49872,7 +49742,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49906,7 +49776,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -49936,7 +49806,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8293,
         "Name": "Image_InteractionOn",
         "ParentID": 8291,
@@ -49963,7 +49833,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -49997,7 +49867,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50027,7 +49897,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8294,
         "Name": "Image_InteractionGauge",
         "ParentID": 8291,
@@ -50054,7 +49924,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50088,7 +49958,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50237,7 +50107,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8296,
         "Name": "Image_SensorOn",
         "ParentID": 8295,
@@ -50264,7 +50134,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50298,7 +50168,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50328,7 +50198,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8297,
         "Name": "Image_InteractionOn",
         "ParentID": 8295,
@@ -50355,7 +50225,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50389,7 +50259,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50419,7 +50289,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8298,
         "Name": "Image_InteractionGauge",
         "ParentID": 8295,
@@ -50446,7 +50316,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50480,7 +50350,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50629,7 +50499,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8300,
         "Name": "Image_SensorOn",
         "ParentID": 8299,
@@ -50656,7 +50526,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50690,7 +50560,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50720,7 +50590,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8301,
         "Name": "Image_InteractionOn",
         "ParentID": 8299,
@@ -50747,7 +50617,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50781,7 +50651,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -50811,7 +50681,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8302,
         "Name": "Image_InteractionGauge",
         "ParentID": 8299,
@@ -50838,7 +50708,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -50872,7 +50742,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51021,7 +50891,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8304,
         "Name": "Image_SensorOn",
         "ParentID": 8303,
@@ -51048,7 +50918,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51082,7 +50952,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51112,7 +50982,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8305,
         "Name": "Image_InteractionOn",
         "ParentID": 8303,
@@ -51139,7 +51009,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51173,7 +51043,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51203,7 +51073,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8306,
         "Name": "Image_InteractionGauge",
         "ParentID": 8303,
@@ -51230,7 +51100,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51264,7 +51134,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51413,7 +51283,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8308,
         "Name": "Image_SensorOn",
         "ParentID": 8307,
@@ -51440,7 +51310,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51474,7 +51344,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51504,7 +51374,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8309,
         "Name": "Image_InteractionOn",
         "ParentID": 8307,
@@ -51531,7 +51401,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51565,7 +51435,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51595,7 +51465,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8310,
         "Name": "Image_InteractionGauge",
         "ParentID": 8307,
@@ -51622,7 +51492,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51656,7 +51526,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51805,7 +51675,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8312,
         "Name": "Image_SensorOn",
         "ParentID": 8311,
@@ -51832,7 +51702,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51866,7 +51736,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51896,7 +51766,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8313,
         "Name": "Image_InteractionOn",
         "ParentID": 8311,
@@ -51923,7 +51793,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -51957,7 +51827,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -51987,7 +51857,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8314,
         "Name": "Image_InteractionGauge",
         "ParentID": 8311,
@@ -52014,7 +51884,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52048,7 +51918,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52197,7 +52067,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8316,
         "Name": "Image_SensorOn",
         "ParentID": 8315,
@@ -52224,7 +52094,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52258,7 +52128,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52288,7 +52158,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8317,
         "Name": "Image_InteractionOn",
         "ParentID": 8315,
@@ -52315,7 +52185,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52349,7 +52219,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52379,7 +52249,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8318,
         "Name": "Image_InteractionGauge",
         "ParentID": 8315,
@@ -52406,7 +52276,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52440,7 +52310,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52589,7 +52459,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8320,
         "Name": "Image_SensorOn",
         "ParentID": 8319,
@@ -52616,7 +52486,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52650,7 +52520,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52680,7 +52550,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8321,
         "Name": "Image_InteractionOn",
         "ParentID": 8319,
@@ -52707,7 +52577,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52741,7 +52611,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52771,7 +52641,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8322,
         "Name": "Image_InteractionGauge",
         "ParentID": 8319,
@@ -52798,7 +52668,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -52832,7 +52702,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -52981,7 +52851,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8324,
         "Name": "Image_SensorOn",
         "ParentID": 8323,
@@ -53008,7 +52878,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53042,7 +52912,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53072,7 +52942,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8325,
         "Name": "Image_InteractionOn",
         "ParentID": 8323,
@@ -53099,7 +52969,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53133,7 +53003,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53163,7 +53033,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8326,
         "Name": "Image_InteractionGauge",
         "ParentID": 8323,
@@ -53190,7 +53060,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53224,7 +53094,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53373,7 +53243,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8328,
         "Name": "Image_SensorOn",
         "ParentID": 8327,
@@ -53400,7 +53270,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53434,7 +53304,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53464,7 +53334,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8329,
         "Name": "Image_InteractionOn",
         "ParentID": 8327,
@@ -53491,7 +53361,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53525,7 +53395,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53555,7 +53425,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8330,
         "Name": "Image_InteractionGauge",
         "ParentID": 8327,
@@ -53582,7 +53452,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53616,7 +53486,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53765,7 +53635,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8332,
         "Name": "Image_SensorOn",
         "ParentID": 8331,
@@ -53792,7 +53662,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53826,7 +53696,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53856,7 +53726,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8333,
         "Name": "Image_InteractionOn",
         "ParentID": 8331,
@@ -53883,7 +53753,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -53917,7 +53787,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -53947,7 +53817,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8334,
         "Name": "Image_InteractionGauge",
         "ParentID": 8331,
@@ -53974,7 +53844,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54008,7 +53878,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54157,7 +54027,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8336,
         "Name": "Image_SensorOn",
         "ParentID": 8335,
@@ -54184,7 +54054,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54218,7 +54088,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54248,7 +54118,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8337,
         "Name": "Image_InteractionOn",
         "ParentID": 8335,
@@ -54275,7 +54145,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54309,7 +54179,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54339,7 +54209,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8338,
         "Name": "Image_InteractionGauge",
         "ParentID": 8335,
@@ -54366,7 +54236,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54400,7 +54270,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54549,7 +54419,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8340,
         "Name": "Image_SensorOn",
         "ParentID": 8339,
@@ -54576,7 +54446,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54610,7 +54480,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54640,7 +54510,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8341,
         "Name": "Image_InteractionOn",
         "ParentID": 8339,
@@ -54667,7 +54537,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54701,7 +54571,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54731,7 +54601,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8342,
         "Name": "Image_InteractionGauge",
         "ParentID": 8339,
@@ -54758,7 +54628,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -54792,7 +54662,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -54941,7 +54811,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8344,
         "Name": "Image_SensorOn",
         "ParentID": 8343,
@@ -54968,7 +54838,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -55002,7 +54872,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -55032,7 +54902,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8345,
         "Name": "Image_InteractionOn",
         "ParentID": 8343,
@@ -55059,7 +54929,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -55093,7 +54963,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -55123,7 +54993,7 @@
     },
     {
       "properties": {
-        "Active": true,
+        "Active": false,
         "ID": 8346,
         "Name": "Image_InteractionGauge",
         "ParentID": 8343,
@@ -55150,7 +55020,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "Pivot": [
                 0.5,
                 0.5
@@ -55184,7 +55054,7 @@
           },
           {
             "properties": {
-              "Active": true,
+              "Active": false,
               "color": [
                 1.0,
                 1.0,
@@ -55224,7 +55094,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -60442,7 +60312,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -60851,7 +60721,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 -0.0,
@@ -61422,7 +61292,7 @@
               "Position": [
                 -15.399999618530273,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -62210,7 +62080,7 @@
         "Active": true,
         "ID": 8442,
         "Name": "BABY_GHOST_LIGHT",
-        "ParentID": 7896,
+        "ParentID": -1,
         "components": [
           {
             "properties": {
@@ -64038,7 +63908,7 @@
               "Position": [
                 0.0,
                 0.0,
-                780.0
+                0.0
               ],
               "Rotation": [
                 0.0,
@@ -66885,711 +66755,6 @@
     {
       "properties": {
         "Active": true,
-        "ID": 8508,
-        "Name": "Ghost_Adult",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                639.249267578125,
-                6.324641435639933e-05,
-                -427.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Animation\\Adult_Ghost\\ani_idle_ghost.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "height": 50.0,
-              "isTrigger": false,
-              "jumpSpeed": 5.5,
-              "layer": "Default",
-              "moveSpeed": 2.0,
-              "offset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 30.0
-            },
-            "type": "CharacterControllerComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "VisionComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "patrolSpeed": 1.0,
-              "reachDist": 20.0
-            },
-            "type": "AgentComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AnimationController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AdultGhostController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "EnemySoundSource"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8509,
-        "Name": "GhostInteractionZone",
-        "ParentID": 8508,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "ColliderType": "Box",
-              "PhysicsBodyType": "Static",
-              "density": 10.0,
-              "halfExtents": [
-                40.0,
-                30.0,
-                40.0
-              ],
-              "height": 10.0,
-              "isTrigger": true,
-              "layer": "Default",
-              "localOffset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 50.0
-            },
-            "type": "PhysicsComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "GhostInteractionZone"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8510,
-        "Name": "GHost_LIGHT",
-        "ParentID": 8508,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8511,
-        "Name": "GHOST_LIGHT_B3",
-        "ParentID": 8510,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                12.972768783569336,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Color": [
-                0.0,
-                0.36519643664360046,
-                0.7303921580314636,
-                1.0
-              ],
-              "Direction": [
-                100.0,
-                100.0,
-                300.0
-              ],
-              "InnerAngle": 50.0,
-              "Intensity": 800.0,
-              "IsSunLight": false,
-              "LightType": "Point",
-              "OuterAngle": 100.0,
-              "Range": 400.0
-            },
-            "type": "Light"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8512,
-        "Name": "Ghost_Baby",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                -1030.391845703125,
-                0.0,
-                -646.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Animation\\Baby_Ghost\\ani_idle_babyghost.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "height": 50.0,
-              "isTrigger": false,
-              "jumpSpeed": 5.5,
-              "layer": "Default",
-              "moveSpeed": 2.0,
-              "offset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 30.0
-            },
-            "type": "CharacterControllerComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "VisionComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "patrolSpeed": 1.0,
-              "reachDist": 20.0
-            },
-            "type": "AgentComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AnimationController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "BabyGhostController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "EnemySoundSource"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8513,
-        "Name": "BABY_GHOST_LIGHT",
-        "ParentID": 8512,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8514,
-        "Name": "GHOST_LIGHT_B3",
-        "ParentID": 8513,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                14.226164817810059,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Color": [
-                0.0,
-                0.37990230321884155,
-                0.7598038911819458,
-                1.0
-              ],
-              "Direction": [
-                100.0,
-                100.0,
-                300.0
-              ],
-              "InnerAngle": 50.0,
-              "Intensity": 800.0,
-              "IsSunLight": false,
-              "LightType": "Point",
-              "OuterAngle": 100.0,
-              "Range": 500.0
-            },
-            "type": "Light"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8515,
-        "Name": "Ghost_Baby",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                -257.8653564453125,
-                0.0,
-                -173.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Animation\\Baby_Ghost\\ani_idle_babyghost.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "height": 50.0,
-              "isTrigger": false,
-              "jumpSpeed": 5.5,
-              "layer": "Default",
-              "moveSpeed": 2.0,
-              "offset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 30.0
-            },
-            "type": "CharacterControllerComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "VisionComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "patrolSpeed": 1.0,
-              "reachDist": 20.0
-            },
-            "type": "AgentComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AnimationController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "BabyGhostController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "EnemySoundSource"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8516,
-        "Name": "BABY_GHOST_LIGHT",
-        "ParentID": 8515,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8517,
-        "Name": "GHOST_LIGHT_B3",
-        "ParentID": 8516,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                14.226164817810059,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Color": [
-                0.0,
-                0.37990230321884155,
-                0.7598038911819458,
-                1.0
-              ],
-              "Direction": [
-                100.0,
-                100.0,
-                300.0
-              ],
-              "InnerAngle": 50.0,
-              "Intensity": 800.0,
-              "IsSunLight": false,
-              "LightType": "Point",
-              "OuterAngle": 100.0,
-              "Range": 500.0
-            },
-            "type": "Light"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
         "ID": 8518,
         "Name": "Ghost_Baby",
         "ParentID": -1,
@@ -67598,8 +66763,8 @@
             "properties": {
               "Position": [
                 1203.183349609375,
-                0.0,
-                -3.5999999046325684
+                -3.814697265625e-06,
+                -783.8592529296875
               ],
               "Rotation": [
                 -0.0,
@@ -67677,7 +66842,7 @@
                 0.0,
                 0.0
               ],
-              "radius": 30.0
+              "radius": 20.0
             },
             "type": "CharacterControllerComponent"
           },
@@ -67805,221 +66970,6 @@
     {
       "properties": {
         "Active": true,
-        "ID": 8521,
-        "Name": "Ghost_Baby",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                -1320.368896484375,
-                0.0,
-                1260.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\Animation\\Baby_Ghost\\ani_idle_babyghost.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "height": 50.0,
-              "isTrigger": false,
-              "jumpSpeed": 5.5,
-              "layer": "Default",
-              "moveSpeed": 2.0,
-              "offset": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "radius": 30.0
-            },
-            "type": "CharacterControllerComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "VisionComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "patrolSpeed": 1.0,
-              "reachDist": 20.0
-            },
-            "type": "AgentComponent"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "AnimationController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "BabyGhostController"
-          },
-          {
-            "properties": {
-              "Active": true
-            },
-            "type": "EnemySoundSource"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8522,
-        "Name": "BABY_GHOST_LIGHT",
-        "ParentID": 8521,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 8523,
-        "Name": "GHOST_LIGHT_B3",
-        "ParentID": 8522,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                14.226164817810059,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Color": [
-                0.0,
-                0.37990230321884155,
-                0.7598038911819458,
-                1.0
-              ],
-              "Direction": [
-                100.0,
-                100.0,
-                300.0
-              ],
-              "InnerAngle": 50.0,
-              "Intensity": 800.0,
-              "IsSunLight": false,
-              "LightType": "Point",
-              "OuterAngle": 100.0,
-              "Range": 500.0
-            },
-            "type": "Light"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
         "ID": 8524,
         "Name": "Pillar",
         "ParentID": -1,
@@ -68029,7 +66979,7 @@
               "Position": [
                 369.03656005859375,
                 0.0,
-                -736.0
+                -1516.1669921875
               ],
               "Rotation": [
                 -0.0,
@@ -68139,7 +67089,7 @@
               "Position": [
                 367.9249572753906,
                 3.0517578125e-05,
-                -872.0
+                -1652.9306640625
               ],
               "Rotation": [
                 -0.0,

@@ -688,5 +688,3 @@ void PhysicsComponent::CollectCCTActors()
         }
     }
 }
-
-
