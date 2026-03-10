@@ -286,7 +286,7 @@ bool AdultGhostController::IsPlayerInSenseRange()
     float senseRadius = playerController->GetCurSenseRadiuse();
     if (senseRadius <= 0) return false;
 
-    Vector3 pPos = playerObj->GetTransform()->GetWorldPosition();
+    Vector3 pPos = playerObj->GetTransform()->GetWorldPosition(); // playerObj->GetTransform()->GetLocalPosition();
     Vector3 gPos = this->GetOwner()->GetTransform()->GetWorldPosition();
 
     return Vector3::Distance(pPos, gPos) <= senseRadius;

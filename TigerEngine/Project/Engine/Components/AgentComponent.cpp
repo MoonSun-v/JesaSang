@@ -49,6 +49,8 @@ void AgentComponent::OnInitialize()
 
     auto tr = GetOwner()->GetTransform();
     grid->WorldToGridFromCenter(tr->GetWorldPosition(), cx, cy);
+    grid->Occupy(cx, cy, this); // 현재 위치 점유 추가
+    lastPos = tr->GetWorldPosition();
 }
 
 void AgentComponent::OnStart()
@@ -95,8 +97,38 @@ void AgentComponent::OnFixedUpdate(float dt)
     auto grid = GridSystem::Instance().GetMainGrid();
     if (!grid) return;
 
-    if (externalControl)
-        return; // FSM이 직접 path/target을 관리
+    // FSM이 직접 path/target을 관리
+    if (externalControl) { std::cout << "[AgentComponent] FSM is Used path/target! \n"; return; }
+
+    // 양보 중이면 아무것도 안함
+    if (giveWayTimer > 0.f)
+    {
+        giveWayTimer -= dt;
+        std::cout << "[AgentComponent] giveWayTimer ing \n"; 
+        return; 
+    }
+
+    // 정체 감지
+    Vector3 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+
+    if ((currentPos - lastPos).Length() < 1.0f)
+    {
+        stuckTimer += dt;
+
+        if (stuckTimer > 1.0f)   // 1초 이상 못 움직이면
+        {
+            path.clear();
+            hasTarget = false;   // 강제 재탐색
+            stuckTimer = 0.f;
+        }
+    }
+    else
+    {
+        stuckTimer = 0.f;
+    }
+
+    lastPos = currentPos;
+
 
     // 대기 중이면 시간 감소 
     if (isWaiting)
@@ -107,6 +139,7 @@ void AgentComponent::OnFixedUpdate(float dt)
             isWaiting = false;
             PickRandomTarget(); // 다시 탐색 시작
         }
+        std::cout << "[AgentComponent] isWaiting is true \n";
         return; // 대기 중엔 이동 안함
     }
 
@@ -115,7 +148,7 @@ void AgentComponent::OnFixedUpdate(float dt)
     if (!hasTarget)
     {
         PickRandomTarget();
-        if (!hasTarget) return; // 목표 선택 실패하면 종료
+        if (!hasTarget) { std::cout << "[AgentComponent] Target is Null \n"; return; } // 목표 선택 실패하면 종료
     }
 
     // 경로 없으면 새 경로 생성
@@ -127,12 +160,51 @@ void AgentComponent::OnFixedUpdate(float dt)
             // 경로를 못찾으면 목표 재선택
             PickRandomTarget();
             path = grid->FindPath(cx, cy, targetCX, targetCY);
+
+            // 여전히 경로 없으면 이동 안함
             if (path.empty())
-                return; // 여전히 경로 없으면 이동 안함
+            {
+                std::cout << "[AgentComponent] still Target is Null \n"; return;
+            } 
         }
     }
 
     auto next = path.front();
+
+    // 점유자 확인
+    AgentComponent* blocker = nullptr;
+    if (grid->IsOccupied(next.first, next.second))
+    {
+        // 점유자 얻기 (Grid에 GetOccupier 함수 추가 필요)
+        blocker = grid->GetOccupier(next.first, next.second);
+    }
+
+    if (blocker && blocker != this)
+    {
+        // 스왑 상황 감지
+        if (!blocker->path.empty())
+        {
+            auto blockerNext = blocker->path.front();
+
+            if (blockerNext.first == cx && blockerNext.second == cy)
+            {
+                // 서로 자리 바꾸려는 상황
+
+                // 간단 우선순위 (포인터 주소 기준)
+                if (this < blocker)
+                {
+                    giveWayTimer = 0.5f;  // 0.5초 양보
+                    return;
+                }
+            }
+        }
+
+        // 그냥 막힌 상황이면 재탐색
+        // std::cout << "[AgentComponent] Path is Block \n";
+        path.clear();
+        return;
+    }
+
     Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
 
     Vector3 pos = GetOwner()->GetTransform()->GetWorldPosition();
@@ -141,11 +213,26 @@ void AgentComponent::OnFixedUpdate(float dt)
 
     if (dir.Length() < reachDist)
     {
+        // [ 이동 성공 시, 점유 갱신 ]
+        
+        // 다음 셀이 이미 점유 중이면 대기 후 재탐색
+        if (grid->IsOccupied(next.first, next.second))
+        {
+            path.clear();   // 재탐색 유도
+            return;
+        }
+
+        grid->Release(cx, cy); // 기존 셀 해제
+
         cx = next.first;
         cy = next.second;
+
+        grid->Occupy(cx, cy, this); // 새 셀 점유
+
         path.erase(path.begin());
 
-        // 경로가 다 끝나면 잠시 멈췄다가 목표 재선택
+
+        // [ 경로가 다 끝나면 잠시 멈췄다가 목표 재선택 ]
         if (path.empty())
         {
             isWaiting = true;
@@ -172,10 +259,10 @@ void AgentComponent::OnFixedUpdate(float dt)
         MoveAgent(finalDir, patrolSpeed, dt);
     }
 
-    //// 디버그 출력
-    //std::cout << "[AgentComponent] Current: (" << cx << "," << cy << ") "
-    //    << "Next: (" << next.first << "," << next.second << ") "
-    //    << "Path size: " << path.size() << std::endl;
+    // 디버그 출력
+    std::cout << "[AgentComponent] Current: (" << cx << "," << cy << ") "
+        << "Next: (" << next.first << "," << next.second << ") "
+        << "Path size: " << path.size() << std::endl;
 }
 
 
@@ -183,7 +270,7 @@ void AgentComponent::MoveAgent(const Vector3& dir, float speed, float dt)
 {
     if(!cct)
     {
-        std::cout << "[AgentComponent] MoveAgent에서 cct 가 NULL입니다." << std::endl;
+        std::cout << "[AgentComponent] MoveAgent, cct is NULL." << std::endl;
         return;
     }
 

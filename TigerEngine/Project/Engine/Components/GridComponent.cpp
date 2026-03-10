@@ -23,12 +23,8 @@ void GridComponent::Deserialize(nlohmann::json data)
     JsonHelper::SetDataFromJson(this, data);
 }
 
-void DebugPrintBlock(
-    const std::string& obj,
-    int gx, int gy,
-    int cx, int cy,
-    const Vector3& worldPos,
-    ColliderType type)
+void DebugPrintBlock( const std::string& obj, int gx, int gy, int cx, int cy,
+    const Vector3& worldPos, ColliderType type)
 {
     std::cout
         << "[" << obj << "]  "
@@ -43,21 +39,18 @@ void GridComponent::OnInitialize()
     // 셀 배열 초기화 
     ResizeGrid(width, height);
 
-    // Physics 기반 자동 차단
-    // BuildBlockedFromPhysics();
     m_pendingBuild = true;
     m_lastActorCount = -1;
      
-    // 임의로 (-1,2) 그리드를 걸을 수 없게 설정
+    // 1. 임의로 그리드를 걸을 수 없게 설정 : false 
     //SetWalkableFromCenter(-1, 2, false);
 
+    // 2. 임의로 그리드를 걸을 수 있도록 설정 : true 
     SetWalkableFromCenter(0, 3, true);
     SetWalkableFromCenter(8, -11, true);
     SetWalkableFromCenter(8, -12, true);
     SetWalkableFromCenter(9, -11, true);
     SetWalkableFromCenter(9, -12, true);
-    // SetWalkableFromCenter(8, -11, true);
-
 }
 
 void GridComponent::Enable_Inner()
@@ -155,9 +148,7 @@ void GridComponent::BuildBlockedFromPhysics()
         if (!WorldToGridFromCenter(minW, minCX, minCY)) continue;
         if (!WorldToGridFromCenter(maxW, maxCX, maxCY)) continue;
 
-        std::cout << "\n[" << objName << "] "
-            << "CenterGridRange: (" << minCX << "," << minCY
-            << ") ~ (" << maxCX << "," << maxCY << ")\n";
+        std::cout << "\n[" << objName << "] " << "CenterGridRange: (" << minCX << "," << minCY << ") ~ (" << maxCX << "," << maxCY << ")\n";
 
         // -----------------------
         // 3. 중앙 기준 → 내부 인덱스 변환
@@ -291,14 +282,13 @@ void GridComponent::SetWalkableFromCenter(int cx, int cy, bool walkable)
 Vector3 GridComponent::GridToWorld(int x, int y)
 {
     auto t = GetOwner()->GetTransform();
-    // Vector3 origin = t->GetWorldPosition();
     Vector3 origin = t->GetLocalPosition();
 
     float offsetX = (width * 0.5f - 0.5f) * cellSize;
     float offsetZ = (height * 0.5f - 0.5f) * cellSize;
 
     return {
-        origin.x + (x + 0.5f) * cellSize - offsetX, // +0.5f: 셀 중앙 기준
+        origin.x + (x + 0.5f) * cellSize - offsetX, // + 0.5f: 셀 중앙 기준
         origin.y,
         origin.z + (y + 0.5f) * cellSize - offsetZ
     };
@@ -425,6 +415,7 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
             int ny = current->y + dir.second;
 
             if (!IsWalkableFromCenter(nx, ny)) continue;
+            if (IsOccupied(nx, ny) && !(nx == endCX && ny == endCY)) continue; // 점유 셀 X 
 
             int key = hash(nx, ny);
             float gNew = current->gCost + 1;
@@ -443,4 +434,41 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
     for (auto& pair : allNodes) delete pair.second;
 
     return finalPath;
+}
+
+
+// -------------------------------------------------------------------
+// [ 셀 점유 관련 ]
+// -------------------------------------------------------------------
+
+int GridComponent::MakeKey(int cx, int cy)
+{
+    return (cy + 1000) * 2000 + (cx + 1000); // 범위 충분히 크게 
+}
+
+bool GridComponent::IsOccupied(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    return occupiedCells.find(key) != occupiedCells.end();
+}
+
+void GridComponent::Occupy(int cx, int cy, AgentComponent* agent)
+{
+    int key = MakeKey(cx, cy);
+    occupiedCells[key] = agent;
+}
+
+void GridComponent::Release(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    occupiedCells.erase(key);
+}
+
+AgentComponent* GridComponent::GetOccupier(int cx, int cy)
+{
+    int key = MakeKey(cx, cy);
+    auto it = occupiedCells.find(key);
+    if (it != occupiedCells.end())
+        return it->second;
+    return nullptr;
 }

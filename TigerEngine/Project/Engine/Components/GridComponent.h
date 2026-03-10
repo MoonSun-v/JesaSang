@@ -17,7 +17,7 @@ struct WalkableOverride
     bool walkable = false;
 };
 
-
+class AgentComponent;
 class GridComponent : public Component
 {
     RTTR_ENABLE(Component)
@@ -26,8 +26,8 @@ public:
     void Deserialize(nlohmann::json data) override;
 
 public:
-    int width = 70;
-    int height = 70;
+    int width = 40;
+    int height = 40;
     float cellSize = 80.0f;
 
     std::vector<GridCell> cells;
@@ -73,4 +73,23 @@ public:
 
     // [ A* ]
     std::vector<std::pair<int, int>> FindPath(int startCX, int startCY, int endCX, int endCY);
+
+
+
+    // ----------------------------------------------------
+    // [ 셀 점유 시스템 추가 ] 
+    // ----------------------------------------------------
+    
+    // 셀 점유 정보
+    std::unordered_map<int, AgentComponent*> occupiedCells;
+
+    // 중앙 기준 좌표를 key로 변환
+    int MakeKey(int cx, int cy);
+
+    // 점유 관련 함수
+    bool IsOccupied(int cx, int cy);
+    void Occupy(int cx, int cy, AgentComponent* agent);
+    void Release(int cx, int cy);
+    AgentComponent* GetOccupier(int cx, int cy);
+
 };

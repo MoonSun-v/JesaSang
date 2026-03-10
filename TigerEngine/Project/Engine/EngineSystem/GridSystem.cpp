@@ -30,13 +30,10 @@ void GridSystem::FixedUpdate(float delta)
     {
         // Physics 안정화 → Grid 생성
         grid->BuildBlockedFromPhysics();
-
-
         grid->BuildWalkableFromCostum();
         grid->m_pendingBuild = false;
 
-        std::cout << "[GridSystem] Grid build completed. ActorCount = "
-            << actorCount << "\n";
+        std::cout << "[GridSystem] Grid build completed. ActorCount = " << actorCount << "\n";
     }
     else
     {
