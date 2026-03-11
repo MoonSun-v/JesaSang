@@ -12,6 +12,7 @@ void ForwardTransparentPass::Execute(ComPtr<ID3D11DeviceContext>& context, Rende
     // RTV, DSV
     context->RSSetViewports(1, &sm.viewport_screen);
     context->OMSetRenderTargets(1, sm.sceneHDRRTV.GetAddressOf(), sm.depthStencilView.Get());
+    
     // TODO :: depth test only, transparent queue 정렬 drawcall
     context->OMSetDepthStencilState(sm.defualtDSS.Get(), 0);        
 

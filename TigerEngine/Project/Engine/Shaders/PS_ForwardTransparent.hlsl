@@ -46,31 +46,35 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     
     // --- [ShadowMapping] ---------------------------
-    float currentShadowDepth = input.posShadow.z / input.posShadow.w;
-    float2 uv = input.posShadow.xy / input.posShadow.w;
-    uv.y = -uv.y;
-    uv = uv * 0.5 + 0.5;
-    
-    if (uv.x >= 0.0 && uv.x <= 1.0 && uv.y >= 0.0 && uv.y <= 1.0)
+    if (isSunLight)
     {
-        float2 offsets[9] =
+        float currentShadowDepth = input.posShadow.z / input.posShadow.w;
+        float2 uv = input.posShadow.xy / input.posShadow.w;
+        uv.y = -uv.y;
+        uv = uv * 0.5 + 0.5;
+    
+        if (uv.x >= 0.0 && uv.x <= 1.0 && uv.y >= 0.0 && uv.y <= 1.0)
         {
-            float2(-1, -1), float2(0, -1), float2(1, -1),
+            float2 offsets[9] =
+            {
+                float2(-1, -1), float2(0, -1), float2(1, -1),
             float2(-1, 0), float2(0, 0), float2(1, 0),
             float2(-1, 1), float2(0, 1), float2(1, 1)
-        };
-        float2 texelSize = 1.0 / shadowMapSize;
-        shadowFactor = 0.0f;
+            };
+            float2 texelSize = 1.0 / shadowMapSize;
+            shadowFactor = 0.0f;
        
        //  PCF - 9 texel 평균으로 그림자 팩터 계산
        [unroll]
-        for (int i = 0; i < 9; i++)
-        {
-            float2 sampleUV = uv + offsets[i] * texelSize;
-            shadowFactor += shadowMap.SampleCmpLevelZero(samShadow, sampleUV, currentShadowDepth - 0.001);
+            for (int i = 0; i < 9; i++)
+            {
+                float2 sampleUV = uv + offsets[i] * texelSize;
+                shadowFactor += shadowMap.SampleCmpLevelZero(samShadow, sampleUV, currentShadowDepth - 0.001);
+            }
+            shadowFactor = shadowFactor / 9.0f;
         }
-        shadowFactor = shadowFactor / 9.0f;
     }
+    
 
     
     // --- [Material]  ----------------------------------
@@ -79,8 +83,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     {
         base_color = diffuseMap.Sample(samLinear, input.texCoord).rgb;
         alpha = diffuseMap.Sample(samLinear, input.texCoord).a;
-        alpha *= alphaFactor;
     }
+    alpha *= alphaFactor;
     
     if(alpha < 0.05f)
         discard;   // alpha cutoff
@@ -264,7 +268,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     // --- [Indirect Light]  ----------------------------------
     float3 IndirectColor = { 0, 0, 0 };
-    if (useIBL)
+    if (useIBL && isSunLight)
     {
         // Diffuse Term --------------------------
         // Irradiance - diffuse BRDF 적분값
