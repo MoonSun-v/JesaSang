@@ -773,10 +773,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
@@ -854,10 +854,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
@@ -935,10 +935,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
@@ -1016,10 +1016,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
@@ -1097,10 +1097,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
@@ -1178,10 +1178,10 @@
               "RenderBlendType": "Opaque",
               "Roughness": 1.0,
               "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": true,
+              "UseDiffuseOverride": false,
               "UseEmissiveOverride": false,
-              "UseMetallicOverride": true,
-              "UseRoughnessOverride": true,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
               "isroughnessFromShininess": false
             },
             "type": "FBXRenderer"
