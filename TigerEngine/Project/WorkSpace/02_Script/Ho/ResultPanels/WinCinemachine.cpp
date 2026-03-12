@@ -6,6 +6,7 @@
 #include "../../../Engine/Util/JsonHelper.h"
 #include "../../../Base/System/InputSystem.h"
 #include "WinPanel.h"
+#include "../../Woo/Player/PlayerController.h"
 
 REGISTER_COMPONENT(WinCinemachine);
 
@@ -62,6 +63,10 @@ void WinCinemachine::OnUpdate(float dt)
 void WinCinemachine::Play()
 {
     notified = true;
+
+    auto player = SceneUtil::GetObjectByName("Player")->GetComponent<PlayerController>();
+    if(player) 
+        player->GameSuceesPlayerStop();
 
     CameraSystem::Instance().SetCurrCameraByName(camName); // 카메라 설정
 }
