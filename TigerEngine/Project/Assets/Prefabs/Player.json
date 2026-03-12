@@ -2,16 +2,16 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 5115,
+      "ID": 3569,
       "Name": "Player",
       "ParentID": -1,
       "components": [
         {
           "properties": {
             "Position": [
-              60.797306060791016,
+              274.7710266113281,
               1.492921819590265e-05,
-              29.92231559753418
+              432.5048828125
             ],
             "Rotation": [
               -0.0,
@@ -46,7 +46,7 @@
         {
           "properties": {
             "Active": true,
-            "DataPath": "..\\Assets\\Resource\\Animation\\FuckingAssimp\\ani_idle_character.fbx",
+            "DataPath": "..\\Assets\\Resource\\Animation\\Player\\ani_idle_character.fbx",
             "IsStatic": false
           },
           "type": "FBXData"
@@ -176,9 +176,9 @@
     },
     {
       "Active": true,
-      "ID": 5116,
+      "ID": 3570,
       "Name": "CameraTrackingPoint",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -204,9 +204,9 @@
     },
     {
       "Active": true,
-      "ID": 5117,
+      "ID": 3571,
       "Name": "OcclusionFadePoint",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -232,9 +232,9 @@
     },
     {
       "Active": true,
-      "ID": 5118,
+      "ID": 3572,
       "Name": "InteractionSensor",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -289,9 +289,9 @@
     },
     {
       "Active": true,
-      "ID": 5119,
+      "ID": 3573,
       "Name": "InteractZone",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -346,9 +346,9 @@
     },
     {
       "Active": true,
-      "ID": 5120,
+      "ID": 3574,
       "Name": "ItemVisualizer",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -374,9 +374,9 @@
     },
     {
       "Active": false,
-      "ID": 5121,
+      "ID": 3575,
       "Name": "Visual_Ingre_Apple",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -452,9 +452,9 @@
     },
     {
       "Active": false,
-      "ID": 5122,
+      "ID": 3576,
       "Name": "Visual_Ingre_Batter",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -530,9 +530,9 @@
     },
     {
       "Active": false,
-      "ID": 5123,
+      "ID": 3577,
       "Name": "Visual_Ingre_Donggeurangttaeng",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -608,9 +608,9 @@
     },
     {
       "Active": false,
-      "ID": 5124,
+      "ID": 3578,
       "Name": "Visual_Ingre_Pear",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -686,9 +686,9 @@
     },
     {
       "Active": false,
-      "ID": 5125,
+      "ID": 3579,
       "Name": "Visual_Ingre_Sanjeok",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -764,9 +764,9 @@
     },
     {
       "Active": false,
-      "ID": 5126,
+      "ID": 3580,
       "Name": "Visual_Ingre_Tofu",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -842,9 +842,9 @@
     },
     {
       "Active": false,
-      "ID": 5127,
+      "ID": 3581,
       "Name": "Visual_Apple",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -920,9 +920,9 @@
     },
     {
       "Active": false,
-      "ID": 5128,
+      "ID": 3582,
       "Name": "Visual_Pear",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -998,9 +998,9 @@
     },
     {
       "Active": false,
-      "ID": 5129,
+      "ID": 3583,
       "Name": "Visual_Batter",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -1076,9 +1076,9 @@
     },
     {
       "Active": false,
-      "ID": 5130,
+      "ID": 3584,
       "Name": "Visual_Tofu",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -1154,9 +1154,9 @@
     },
     {
       "Active": false,
-      "ID": 5131,
+      "ID": 3585,
       "Name": "Visual_Sanjeok",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -1232,9 +1232,9 @@
     },
     {
       "Active": false,
-      "ID": 5132,
+      "ID": 3586,
       "Name": "Visual_Donggeurangttaeng",
-      "ParentID": 5120,
+      "ParentID": 3574,
       "components": [
         {
           "properties": {
@@ -1310,9 +1310,9 @@
     },
     {
       "Active": true,
-      "ID": 5133,
+      "ID": 3587,
       "Name": "AITarget",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1367,9 +1367,9 @@
     },
     {
       "Active": true,
-      "ID": 5134,
+      "ID": 3588,
       "Name": "DialoguePoint",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1395,9 +1395,9 @@
     },
     {
       "Active": true,
-      "ID": 5135,
+      "ID": 3589,
       "Name": "Player_FireEffect",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1518,9 +1518,9 @@
     },
     {
       "Active": false,
-      "ID": 5136,
+      "ID": 3590,
       "Name": "Player_HitEffect",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1602,9 +1602,9 @@
     },
     {
       "Active": true,
-      "ID": 5137,
+      "ID": 3591,
       "Name": "Player_SmokeEffect",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1651,8 +1651,8 @@
                     0.0,
                     1.0
                   ],
-                  "lifeMax": 3.0,
-                  "lifeMin": 2.0,
+                  "lifeMax": 1.7999999523162842,
+                  "lifeMin": 1.0,
                   "rotationMax": 10.0,
                   "rotationMin": -10.0,
                   "sizeMax": [
@@ -1663,15 +1663,15 @@
                     1.0,
                     1.0
                   ],
-                  "speedMax": 30.0,
-                  "speedMin": 20.0
+                  "speedMax": 40.0,
+                  "speedMin": 30.0
                 },
                 "emitDir": [
                   0.0,
                   1.0,
                   0.0
                 ],
-                "emitRate": 20.0,
+                "emitRate": 35.0,
                 "enabled": true,
                 "filpbookPlayMode": "Loop",
                 "fixedData": {
@@ -1725,9 +1725,9 @@
     },
     {
       "Active": true,
-      "ID": 5553,
+      "ID": 3986,
       "Name": "LoseCinemachine",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1759,9 +1759,9 @@
     },
     {
       "Active": true,
-      "ID": 5554,
+      "ID": 3987,
       "Name": "LoseCinemachineCamera",
-      "ParentID": 5553,
+      "ParentID": 3986,
       "components": [
         {
           "properties": {
@@ -1796,10 +1796,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5808,
+      "Active": false,
+      "ID": 4241,
       "Name": "playaer_light",
-      "ParentID": 5115,
+      "ParentID": 3569,
       "components": [
         {
           "properties": {
@@ -1825,9 +1825,9 @@
     },
     {
       "Active": true,
-      "ID": 5809,
+      "ID": 4242,
       "Name": "Character_light_F1",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -1875,10 +1875,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5810,
+      "Active": false,
+      "ID": 4243,
       "Name": "Character_light_F2",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -1902,7 +1902,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -1926,10 +1926,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5811,
+      "Active": false,
+      "ID": 4244,
       "Name": "Character_light_F3",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -1953,7 +1953,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -1977,10 +1977,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5812,
+      "Active": false,
+      "ID": 4245,
       "Name": "Character_light_R",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -2004,7 +2004,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -2028,10 +2028,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5813,
+      "Active": false,
+      "ID": 4246,
       "Name": "Character_light_L",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -2055,7 +2055,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -2079,10 +2079,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5814,
+      "Active": false,
+      "ID": 4247,
       "Name": "Character_light_B1",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -2106,7 +2106,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -2130,10 +2130,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5815,
+      "Active": false,
+      "ID": 4248,
       "Name": "Character_light_B2",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -2157,7 +2157,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215245485305786,
@@ -2181,10 +2181,10 @@
       ]
     },
     {
-      "Active": true,
-      "ID": 5877,
+      "Active": false,
+      "ID": 4296,
       "Name": "Character_light_B3",
-      "ParentID": 5808,
+      "ParentID": 4241,
       "components": [
         {
           "properties": {
@@ -2208,7 +2208,7 @@
         },
         {
           "properties": {
-            "Active": true,
+            "Active": false,
             "Color": [
               0.7254902124404907,
               0.5215686559677124,

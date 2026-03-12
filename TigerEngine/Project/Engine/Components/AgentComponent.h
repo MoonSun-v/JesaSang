@@ -34,6 +34,11 @@ public:
     std::vector<std::pair<int, int>> path; // A* 경로 저장 (그리드 좌표)
 
 public:
+    float giveWayTimer = 0.f;   // 양보 타이머
+    float stuckTimer = 0.f;     // 정체 감지용
+    Vector3 lastPos;            // 이전 위치
+
+public:
     void OnInitialize() override;
     void OnStart() override;
     void OnFixedUpdate(float dt) override;

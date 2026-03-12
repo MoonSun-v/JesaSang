@@ -50,12 +50,12 @@ void AdultGhost_Search::Enter()
 void AdultGhost_Search::ChangeStateLogic()
 {
     // 1. 회전 중 플레이어 발견 (Search 성공)
-    if (phase == SearchPhase::RotateSearch &&  adultGhost->IsSeeing(adultGhost->GetAITarget()))
-    {
-        cout << "[AdultGhost_Search] Search Clear!! " << endl;
-        adultGhost->ChangeState(AdultGhostState::Chase);
-        return;
-    }
+    //if (phase == SearchPhase::RotateSearch &&  adultGhost->IsSeeing(adultGhost->GetAITarget()))
+    //{
+    //    cout << "[AdultGhost_Search] Search Clear!! " << endl;
+    //    adultGhost->ChangeState(AdultGhostState::Chase);
+    //    return;
+    //}
     // 2. 회전 시간 종료 (Search 실패)
     if (phase == SearchPhase::RotateSearch && rotateTimer >= rotateTime)
     {
