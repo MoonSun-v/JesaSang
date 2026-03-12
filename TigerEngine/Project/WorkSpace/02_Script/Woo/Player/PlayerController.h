@@ -243,6 +243,12 @@ public:
     float GetCurSenseRadiuse() const;    // 플레이어 현재 기척 getter
 
 
+    // Interaction State
+    bool HasFood();           // 제사상 인터랙션 UI
+    bool HasIngredient();     // 부엌 인터랙션 UI
+    bool IsInventoryFull();   // 수색, 은신 오브젝트 인터랙션 UI
+
+
     //// 선민 | 02.12 
     //bool isForcedMove = false;
     //Vector3 forcedDir;

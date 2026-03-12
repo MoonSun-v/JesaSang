@@ -61,6 +61,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         auto searchOB = other->GetOwner()->GetComponent<SearchObject>();
         if(searchOB && !searchOB->isSearched)
         {
+            if (player->IsInventoryFull()) return;
+
             player->SetCurSearchObject(searchOB);
             searchOB->UIInteractionOnOff(true);
             cout << "[InteractionZone] SearchObject In Interaction Zone" << endl;
@@ -73,6 +75,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         auto hideOB = other->GetOwner()->GetComponent<HideObject>();
         if (hideOB)
         {
+            if (player->IsInventoryFull()) return;
+
             player->SetCurHideObject(hideOB);
             hideOB->UIInteractionOnOff(true);
             cout << "[InteractionZone] HideObject In Interaction Zone" << endl;
@@ -82,6 +86,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
     // CookingZone (MiniGame)
     if (other->GetOwner()->GetName() == "CookingZone")
     {
+        if (!player->HasIngredient()) return;
+
         player->isPossibleCooking = true;
         CookingZone::Instance()->UIInteractionOnOff(true);
         cout << "[InteractionZone] CookingZone In Interaction Zone" << endl;
@@ -90,6 +96,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
     // JesaSang
     if (other->GetOwner()->GetName() == "JesaSang")
     {
+        if (!player->HasFood()) return;
+
         player->isPossiblePutFood = true;
         JesaSangManager::Instance()->UIInteractionOnOff(true);
         cout << "[InteractionZone] JesaSang In Interaction Zone" << endl;
@@ -98,6 +106,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
     // Altar
     if (other->GetOwner()->GetName() == "Altar")
     {
+        if (!AltarManager::Instance()->HasItem()) return;
+
         player->isPossibleGetFood = true;
         AltarManager::Instance()->UIInteractionOnOff(true);
         cout << "[InteractionZone] Altar In Interaction Zone" << endl;

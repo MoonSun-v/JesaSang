@@ -789,6 +789,25 @@ float PlayerController::GetCurSenseRadiuse() const
     return curSenseRadius;
 }
 
+bool PlayerController::HasFood()
+{
+    if(inventory->HasItem() && inventory->GetCurItemType() == ItemType::Food)
+        return true;
+    else return false;
+}
+
+bool PlayerController::HasIngredient()
+{
+    if (inventory->HasItem() && inventory->GetCurItemType() == ItemType::Ingredient)
+        return true;
+    else return false;
+}
+
+bool PlayerController::IsInventoryFull()
+{
+    return inventory->HasItem();
+}
+
 void PlayerController::GameSuceesPlayerStop()
 {
     isInputLocked = true;

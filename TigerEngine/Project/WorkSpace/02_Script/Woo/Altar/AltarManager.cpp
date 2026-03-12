@@ -268,6 +268,7 @@ std::unique_ptr<IItem> AltarManager::GetItem()
 void AltarManager::UISensorOnOff(bool flag)
 {
     if (!image_sensorOn) return;
+    if (flag && !HasItem()) return;
     if (flag && !isFirstReceiveItem) return;
     if (flag && isDirecting) return;
     image_sensorOn->SetActive(flag);
@@ -276,6 +277,7 @@ void AltarManager::UISensorOnOff(bool flag)
 void AltarManager::UIInteractionOnOff(bool flag)
 {
     if (!image_interactionOn) return;
+    if (flag && !HasItem()) return;
     if (flag && !isFirstReceiveItem) return;
     if (flag && isDirecting) return;
     image_interactionOn->SetActive(flag);

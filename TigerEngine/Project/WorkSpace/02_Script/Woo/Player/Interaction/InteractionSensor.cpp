@@ -55,9 +55,13 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     GameObject* object = other->GetOwner();
     if (!object) return;
 
+    PlayerController* player = GetOwner()->GetParent()->GetOwner()->GetComponent<PlayerController>();
+
     // 수색 오브젝트 감지 on
     if (object->GetName() == "SearchObject")
     {
+        if (player->IsInventoryFull()) return;
+
         auto* so = object->GetComponent<SearchObject>();
         if (so)
             so->UISensorOnOff(true);
@@ -66,6 +70,8 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     // 은신 오브젝트 감지 on
     if (object->GetName() == "HideObject")
     {
+        if (player->IsInventoryFull()) return;
+
         auto* so = object->GetComponent<HideObject>();
         if (so)
             so->UISensorOnOff(true);
@@ -74,18 +80,24 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     // 부엌 감지 on
     if (other->GetOwner()->GetName() == "CookingZone")
     {
+        if (!player->HasIngredient()) return;
+
         CookingZone::Instance()->UISensorOnOff(true);
     }
 
     // 제사상 감지 on
     if (other->GetOwner()->GetName() == "JesaSang")
     {
+        if (!player->HasFood()) return;
+
         JesaSangManager::Instance()->UISensorOnOff(true);
     }
 
     // 제단 감지 on
     if (other->GetOwner()->GetName() == "Altar")
     {
+        if (!AltarManager::Instance()->HasItem()) return;
+
         AltarManager::Instance()->UISensorOnOff(true);
     }
 
