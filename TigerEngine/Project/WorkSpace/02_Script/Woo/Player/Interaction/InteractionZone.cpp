@@ -10,6 +10,8 @@
 #include "../../Altar/AltarManager.h"
 #include "../../CookingZone/CookingZone.h"
 
+#include <Util/PhysXUtils.h>
+
 
 REGISTER_COMPONENT(InteractionZone)
 
@@ -55,8 +57,70 @@ void InteractionZone::Deserialize(nlohmann::json data)
 
 void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
 {
-    // Search Object
-    if (other->GetOwner()->GetName() == "SearchObject")
+    GameObject* hitObject = other->GetOwner();
+    string hitObjectName = hitObject->GetName();
+
+    // 수색 / 은신 중간에 막히는 오브젝트가 있다면 return 
+    if (hitObjectName == "SearchObject" || hitObjectName == "HideObject")
+    {
+        // raycast
+        Vector3 origin = GetOwner()->GetParent()->GetLocalPosition() + Vector3{ 0, 100, 0 };
+        Vector3 target = hitObject->GetTransform()->GetLocalPosition();
+        Vector3 dir = target - origin;
+        float dist = dir.Length();
+        dir.Normalize();
+
+        vector<RaycastHit> hitBuffer;
+        bool hit = PhysicsSystem::Instance().Raycast(
+            ToPx(origin),
+            ToPx(dir),
+            dist,
+            hitBuffer,
+            CollisionLayer::Default,
+            QueryTriggerInteraction::Ignore,
+            true
+        );
+
+        if (hit)
+        {
+            // sort
+            std::sort(hitBuffer.begin(), hitBuffer.end(),
+                [](const RaycastHit& a, const RaycastHit& b)
+                {
+                    return a.distance < b.distance;
+                });
+
+
+            // blocked 여부 판단
+            bool blocked = false;
+
+            for (const auto& hitInfo : hitBuffer)
+            {
+                GameObject* rayHitObject = hitInfo.component ? hitInfo.component->GetOwner() : nullptr;
+                if (!rayHitObject)
+                    continue;
+
+                // 플레이어, 인터랙션 센서, 인터랙션 존 무시
+                string rayHitObjectName = rayHitObject->GetName();
+                if (rayHitObjectName == "Player" || rayHitObjectName == "InteractionSensor" || rayHitObjectName == "InteractionZone")
+                    continue;
+
+                // 목표 오브젝트를 먼저 맞았으면 시야 확보된 것
+                if (rayHitObject == hitObject)
+                    break;
+
+                // 목표 전에 다른 뭔가를 먼저 맞았으면 막힌 것
+                blocked = true;
+                break;
+            }
+
+            if (blocked)
+                return;
+        }
+    }
+
+    // Search Object 인터랙션 가능 on
+    if (hitObjectName == "SearchObject")
     {
         auto searchOB = other->GetOwner()->GetComponent<SearchObject>();
         if(searchOB && !searchOB->isSearched)
@@ -69,8 +133,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         }
     }
 
-    // Hide Object
-    if (other->GetOwner()->GetName() == "HideObject")
+    // Hide Object 인터랙션 가능 on
+    if (hitObjectName == "HideObject")
     {
         auto hideOB = other->GetOwner()->GetComponent<HideObject>();
         if (hideOB)
@@ -81,8 +145,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         }
     }
 
-    // CookingZone (MiniGame)
-    if (other->GetOwner()->GetName() == "CookingZone")
+    // CookingZone (MiniGame) 인터랙션 가능 on
+    if (hitObjectName == "CookingZone")
     {
         if (!player->HasIngredient()) return;
 
@@ -91,8 +155,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         cout << "[InteractionZone] CookingZone In Interaction Zone" << endl;
     }
 
-    // JesaSang
-    if (other->GetOwner()->GetName() == "JesaSang")
+    // JesaSang 인터랙션 가능 on
+    if (hitObjectName == "JesaSang")
     {
         if (!player->HasFood()) return;
 
@@ -101,8 +165,8 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         cout << "[InteractionZone] JesaSang In Interaction Zone" << endl;
     }
 
-    // Altar
-    if (other->GetOwner()->GetName() == "Altar")
+    // Altar 인터랙션 가능 on
+    if (hitObjectName == "Altar")
     {
         if (!AltarManager::Instance()->HasItem()) return;
 
@@ -114,7 +178,7 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
 
 void InteractionZone::OnTriggerExit(PhysicsComponent* other)
 {
-    // Search Object
+    // Search Object 인터랙션 가능 off
     if (other->GetOwner()->GetName() == "SearchObject")
     {
         auto searchOB = other->GetOwner()->GetComponent<SearchObject>();
@@ -126,7 +190,7 @@ void InteractionZone::OnTriggerExit(PhysicsComponent* other)
         }
     }
 
-    // Hide Object
+    // Hide Object 인터랙션 가능 off
     if (other->GetOwner()->GetName() == "HideObject")
     {
         auto hideOB = other->GetOwner()->GetComponent<HideObject>();
@@ -138,7 +202,7 @@ void InteractionZone::OnTriggerExit(PhysicsComponent* other)
         }
     }
 
-    // Cooking Zone (MiniGame)
+    // Cooking Zone (MiniGame) 인터랙션 가능 off
     if (other->GetOwner()->GetName() == "CookingZone")
     {
         player->isPossibleCooking = false;
@@ -146,7 +210,7 @@ void InteractionZone::OnTriggerExit(PhysicsComponent* other)
         cout << "[InteractionZone] CookingZone Out Interaction Zone" << endl;
     }
 
-    // JesaSang
+    // JesaSang 인터랙션 가능 off
     if (other->GetOwner()->GetName() == "JesaSang")
     {
         player->isPossiblePutFood = false;
@@ -154,7 +218,7 @@ void InteractionZone::OnTriggerExit(PhysicsComponent* other)
         cout << "[InteractionZone] JesaSang Out Interaction Zone" << endl;
     }
 
-    // Altar
+    // Altar 인터랙션 가능 off
     if (other->GetOwner()->GetName() == "Altar")
     {
         player->isPossibleGetFood = false;

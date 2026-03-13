@@ -13,6 +13,9 @@
 #include "../PlayerController.h"
 #include "../DialogueUI/DialogueUIController.h"
 
+#include "EngineSystem/PhysicsSystem.h"
+#include <Util/PhysXUtils.h>
+
 REGISTER_COMPONENT(InteractionSensor)
 
 RTTR_REGISTRATION
@@ -52,31 +55,89 @@ void InteractionSensor::Deserialize(nlohmann::json data)
 
 void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
 {
-    GameObject* object = other->GetOwner();
-    if (!object) return;
-
+    GameObject* hitObject = other->GetOwner();
+    string hitObjectName = hitObject->GetName();
     PlayerController* player = GetOwner()->GetParent()->GetOwner()->GetComponent<PlayerController>();
 
+    // 수색 / 은신 중간에 막히는 오브젝트가 있다면 return 
+    if (hitObjectName == "SearchObject" || hitObjectName == "HideObject")
+    {
+        // raycast
+        Vector3 origin = GetOwner()->GetTransform()->GetLocalPosition() + Vector3{0, 100, 0};
+        Vector3 target = hitObject->GetTransform()->GetLocalPosition();
+        Vector3 dir = target - origin;
+        float dist = dir.Length();
+        dir.Normalize();
+
+        vector<RaycastHit> hitBuffer;
+        bool hit = PhysicsSystem::Instance().Raycast(
+            ToPx(origin),
+            ToPx(dir),
+            dist,
+            hitBuffer,
+            CollisionLayer::Default,
+            QueryTriggerInteraction::Ignore,
+            true
+        );
+
+        if (hit)
+        {
+            // sort
+            std::sort(hitBuffer.begin(), hitBuffer.end(),
+                [](const RaycastHit& a, const RaycastHit& b)
+                {
+                    return a.distance < b.distance;
+                });
+
+
+            // blocked 여부 판단
+            bool blocked = false;
+
+            for (const auto& hitInfo : hitBuffer)
+            {
+                GameObject* rayHitObject = hitInfo.component ? hitInfo.component->GetOwner() : nullptr;
+                if (!rayHitObject)
+                    continue;
+
+                // 플레이어, 인터랙션 센서, 인터랙션 존 무시
+                string rayHitObjectName = rayHitObject->GetName();
+                if (rayHitObjectName == "Player" || rayHitObjectName == "InteractionSensor" || rayHitObjectName == "InteractionZone")
+                    continue;
+
+                // 목표 오브젝트를 먼저 맞았으면 시야 확보된 것
+                if (rayHitObject == hitObject)
+                    break;
+                   
+                // 목표 전에 다른 뭔가를 먼저 맞았으면 막힌 것
+                blocked = true;
+                break;
+            }
+
+            if (blocked)
+                return;
+        }
+    }
+    
     // 수색 오브젝트 감지 on
-    if (object->GetName() == "SearchObject")
+    if (hitObjectName == "SearchObject")
     {
         if (player->IsInventoryFull()) return;
 
-        auto* so = object->GetComponent<SearchObject>();
+        auto* so = hitObject->GetComponent<SearchObject>();
         if (so)
             so->UISensorOnOff(true);
     }
 
     // 은신 오브젝트 감지 on
-    if (object->GetName() == "HideObject")
+    if (hitObjectName == "HideObject")
     {
-        auto* so = object->GetComponent<HideObject>();
-        if (so)
-            so->UISensorOnOff(true);
+        auto* ho = hitObject->GetComponent<HideObject>();
+        if (ho)
+            ho->UISensorOnOff(true);
     }
 
     // 부엌 감지 on
-    if (other->GetOwner()->GetName() == "CookingZone")
+    if (hitObjectName == "CookingZone")
     {
         if (!player->HasIngredient()) return;
 
@@ -84,7 +145,7 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     }
 
     // 제사상 감지 on
-    if (other->GetOwner()->GetName() == "JesaSang")
+    if (hitObjectName == "JesaSang")
     {
         if (!player->HasFood()) return;
 
@@ -92,7 +153,7 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     }
 
     // 제단 감지 on
-    if (other->GetOwner()->GetName() == "Altar")
+    if (hitObjectName == "Altar")
     {
         if (!AltarManager::Instance()->HasItem()) return;
 
