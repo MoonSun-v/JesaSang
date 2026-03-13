@@ -27,33 +27,51 @@ RTTR_REGISTRATION
 
 namespace
 {
-    int CountNonSpaceChars(const wchar_t* s)
+    float EstimateDialogueLength(const wchar_t* s)
     {
-        if (!s) return 0;
+        if (!s) return 0.0f;
 
-        int count = 0;
+        float count = 0.0f;
         for (const wchar_t* p = s; *p; ++p)
         {
-            if (!iswspace(*p)) // 공백/개행/탭 제외
-                ++count;
+            if (*p == L'\n' || *p == L'\r' || *p == L'\t')
+                continue;
+            else if (*p == L' ')
+                count += 0.0f;
+            else
+                count += 1.0f;
         }
         return count;
     }
 
 
     // 글자 수에 따른 말풍선 크기 단계 선택
-    float SelectBubbleWidthByLen(int len)
+    float SelectBubbleWidthByLen(float len)
     {
-        if (len <= 6)   return 140.0f;    // "음..."
-        if (len <= 10)  return 350.0f;    // "이정도 길이면 ?"
-        if (len <= 20)  return 650.0f;     
-        if (len <= 24)  return 1000.0f;    
-        if (len <= 28)  return 1200.0f;    
-        if (len <= 36)  return 1500.0f;
-        if (len <= 44)  return 1700.0f;
-        if (len <= 52)  return 1850.0f;
+        if (len <= 4)   return 120.0f;
+        if (len <= 6)   return 160.0f;
+        if (len <= 8)   return 240.0f;
+        if (len <= 10)  return 320.0f;
+        if (len <= 12)  return 420.0f;
+        if (len <= 14)  return 520.0f;
+        if (len <= 16)  return 620.0f;
+        if (len <= 18)  return 720.0f;
+        if (len <= 20)  return 820.0f;
+        if (len <= 22)  return 920.0f;
+        if (len <= 24)  return 1020.0f;
+        if (len <= 26)  return 1120.0f;
+        if (len <= 28)  return 1220.0f;
+        if (len <= 30)  return 1320.0f;
+        if (len <= 33)  return 1450.0f;
+        if (len <= 36)  return 1580.0f;
+        if (len <= 39)  return 1700.0f;
+        if (len <= 42)  return 1800.0f;
+        if (len <= 46)  return 1900.0f;
+        if (len <= 50)  return 2000.0f;
+        if (len <= 54)  return 2100.0f;
 
-        return 2000.0f;                   // 상한 2000
+
+        return 2200.0f;
     }
 }
 
@@ -107,21 +125,21 @@ void DialogueUIController::OnUpdate(float delta)
 
     // --- test --- 
     // TODO :: Delete
-    //if (Input::GetKeyDown(Keyboard::P))
-    //{
-    //    DialogueToggle();
-    //}
-    //
-    //if (Input::GetKeyDown(Keyboard::L))
-    //    ShowDialogueText(L"저 곳을 지나갈 때 조심하지 않으면 엄청 시끄러운 소리가 날 것 같아.");   // 0.5배 늘려
-    //if (Input::GetKeyDown(Keyboard::K))
-    //    ShowDialogueText(L"뭔가 더 으스스해진 기분인데?");   // 딱좋음
-    //if (Input::GetKeyDown(Keyboard::J))
-    //    ShowDialogueText(L"여기서 음식을 만들 수 있겠어.망치지 않게 집중해야지!");    // 0.25배 늘리기
-    //if (Input::GetKeyDown(Keyboard::H))
-    //    ShowDialogueText(L"음...");    // 1/3로 줄이기
-    //if (Input::GetKeyDown(Keyboard::G))
-    //    ShowDialogueText(L"이정도 길이면 ?");  // 2/3로 줄이기
+    if (Input::GetKeyDown(Keyboard::P))
+    {
+        DialogueToggle();
+    }
+    
+    if (Input::GetKeyDown(Keyboard::L))
+        ShowDialogueText(L"집안 어딘가에 이상한 기운이 생겼어... 확인해봐야겠어.");   
+    if (Input::GetKeyDown(Keyboard::K))
+        ShowDialogueText(L"재료를 되찾았어. 어서 요리를 하러 가야겠어");  
+    if (Input::GetKeyDown(Keyboard::J))
+        ShowDialogueText(L"완성된 음식을 무사히 되찾았어. 제사상으로 가져가자.");    
+    if (Input::GetKeyDown(Keyboard::H))
+        ShowDialogueText(L"갑자기 왜 이렇게 춥지..? 뭔가 불길해..!!");   
+    if (Input::GetKeyDown(Keyboard::G))
+        ShowDialogueText(L"일단 숨어서 상황을 지켜보자..!"); 
 }
 
 void DialogueUIController::OnDestory()
@@ -161,7 +179,7 @@ void DialogueUIController::ShowDialogueText(const wchar_t* s)
     if (!text_dialogue || !s) return;
 
     // text길이에 따른 image size 조절
-    const int len = CountNonSpaceChars(s);
+    const float len = EstimateDialogueLength(s);
     const float w = SelectBubbleWidthByLen(len);
 
     if (dialogueRect)
@@ -185,7 +203,7 @@ void DialogueUIController::ShowDialogueHold(const wchar_t* s)
 {
     if (!text_dialogue || !s) return;
 
-    const int len = CountNonSpaceChars(s);
+    const float len = EstimateDialogueLength(s);
     const float w = SelectBubbleWidthByLen(len);
 
     if (dialogueRect)
@@ -207,7 +225,7 @@ void DialogueUIController::ShowInteractionHintAndPause(const wchar_t* s)
     if (!text_dialogue || !s) return;
 
     // text길이에 따른 image size 조절
-    const int len = CountNonSpaceChars(s);
+    const float len = EstimateDialogueLength(s);
     const float w = SelectBubbleWidthByLen(len);
 
     if (dialogueRect)
