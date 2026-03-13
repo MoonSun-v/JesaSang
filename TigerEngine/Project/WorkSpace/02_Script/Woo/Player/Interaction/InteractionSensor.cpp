@@ -70,8 +70,6 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
     // 은신 오브젝트 감지 on
     if (object->GetName() == "HideObject")
     {
-        if (player->IsInventoryFull()) return;
-
         auto* so = object->GetComponent<HideObject>();
         if (so)
             so->UISensorOnOff(true);

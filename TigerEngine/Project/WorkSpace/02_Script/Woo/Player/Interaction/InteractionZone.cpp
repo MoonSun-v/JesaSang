@@ -75,8 +75,6 @@ void InteractionZone::OnTriggerEnter(PhysicsComponent* other)
         auto hideOB = other->GetOwner()->GetComponent<HideObject>();
         if (hideOB)
         {
-            if (player->IsInventoryFull()) return;
-
             player->SetCurHideObject(hideOB);
             hideOB->UIInteractionOnOff(true);
             cout << "[InteractionZone] HideObject In Interaction Zone" << endl;
