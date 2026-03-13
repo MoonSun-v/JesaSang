@@ -6,6 +6,7 @@
 #include "../../../Engine/Util/JsonHelper.h"
 #include "../../../Base/System/InputSystem.h"
 #include "LosePanel.h"
+#include "../Manager/FrozenManager.h"
 
 REGISTER_COMPONENT(LoseCinemachine);
 
@@ -51,6 +52,10 @@ void LoseCinemachine::OnUpdate(float dt)
 void LoseCinemachine::Play()
 {
     notified = true;
+
+    // Screen UI Off
+    FrozenManager* fm = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("FrozenManager")->GetComponent<FrozenManager>();
+    fm->ImageActive(false);
 
     CameraSystem::Instance().SetCurrCameraByName(camName); // 카메라 설정
 }

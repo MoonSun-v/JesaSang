@@ -7,6 +7,7 @@
 #include "../../../Base/System/InputSystem.h"
 #include "WinPanel.h"
 #include "../../Woo/Player/PlayerController.h"
+#include "../Manager/FrozenManager.h"
 
 REGISTER_COMPONENT(WinCinemachine);
 
@@ -67,6 +68,10 @@ void WinCinemachine::Play()
     auto player = SceneUtil::GetObjectByName("Player")->GetComponent<PlayerController>();
     if(player) 
         player->GameSuceesPlayerStop();
+
+    // Screen UI Off
+    FrozenManager* fm = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("FrozenManager")->GetComponent<FrozenManager>();
+    fm->ImageActive(false);
 
     CameraSystem::Instance().SetCurrCameraByName(camName); // 카메라 설정
 }

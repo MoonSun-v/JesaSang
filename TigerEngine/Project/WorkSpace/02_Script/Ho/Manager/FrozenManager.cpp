@@ -52,6 +52,7 @@ void FrozenManager::OnStart()
 
 void FrozenManager::OnUpdate(float dt)
 {
+    if (isGameDirecting) return;
     if (enemies.empty()) return;
     if (!pc) return;
     if (!frozenVignetteImage) return;

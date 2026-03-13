@@ -54,4 +54,14 @@ private:
 
     float GetLengthFromNearestEnemy();
     void SetImageByDistance(float dt);
+
+public:
+    // 게임 연출중 OFF
+    bool isGameDirecting = false;
+    void ImageActive(bool flag)
+    {
+        if (!frozenVignetteImage) return;
+        isGameDirecting = !flag;
+        frozenVignetteImage->SetActive(flag);
+    }
 };

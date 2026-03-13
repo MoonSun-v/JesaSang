@@ -125,21 +125,21 @@ void DialogueUIController::OnUpdate(float delta)
 
     // --- test --- 
     // TODO :: Delete
-    if (Input::GetKeyDown(Keyboard::P))
-    {
-        DialogueToggle();
-    }
-    
-    if (Input::GetKeyDown(Keyboard::L))
-        ShowDialogueText(L"집안 어딘가에 이상한 기운이 생겼어... 확인해봐야겠어.");   
-    if (Input::GetKeyDown(Keyboard::K))
-        ShowDialogueText(L"재료를 되찾았어. 어서 요리를 하러 가야겠어");  
-    if (Input::GetKeyDown(Keyboard::J))
-        ShowDialogueText(L"완성된 음식을 무사히 되찾았어. 제사상으로 가져가자.");    
-    if (Input::GetKeyDown(Keyboard::H))
-        ShowDialogueText(L"갑자기 왜 이렇게 춥지..? 뭔가 불길해..!!");   
-    if (Input::GetKeyDown(Keyboard::G))
-        ShowDialogueText(L"일단 숨어서 상황을 지켜보자..!"); 
+    //if (Input::GetKeyDown(Keyboard::P))
+    //{
+    //    DialogueToggle();
+    //}
+    //
+    //if (Input::GetKeyDown(Keyboard::L))
+    //    ShowDialogueText(L"집안 어딘가에 이상한 기운이 생겼어... 확인해봐야겠어.");   
+    //if (Input::GetKeyDown(Keyboard::K))
+    //    ShowDialogueText(L"재료를 되찾았어. 어서 요리를 하러 가야겠어");  
+    //if (Input::GetKeyDown(Keyboard::J))
+    //    ShowDialogueText(L"완성된 음식을 무사히 되찾았어. 제사상으로 가져가자.");    
+    //if (Input::GetKeyDown(Keyboard::H))
+    //    ShowDialogueText(L"갑자기 왜 이렇게 춥지..? 뭔가 불길해..!!");   
+    //if (Input::GetKeyDown(Keyboard::G))
+    //    ShowDialogueText(L"일단 숨어서 상황을 지켜보자..!"); 
 }
 
 void DialogueUIController::OnDestory()
