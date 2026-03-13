@@ -28,6 +28,9 @@ private:
     RectTransform* stopPoint;       // 맞춰야하는 부분(영역)
     RectTransform* knife;           // 움직이는 슬라이더 (space key down시 정지)
 
+    RectTransform* feedback_good;   // 텀 피드백
+    RectTransform* feedback_bad;    // 텀 피드백
+
     GameObject* spacebarHold = nullptr;
 
     // game data
@@ -49,7 +52,17 @@ private:
     bool  isStopped = false;         // 멈춘 상태인지
     float stopTimer = 0.0f;          // 멈춘 뒤 경과시간
     bool  consumedThisStop = false;  // 멈춘 상태에서 판정 1회
-    
+
+    // 텀 피드백 연출
+    bool isFeedbackPlaying = false;
+    RectTransform* currentFeedback = nullptr;
+
+    float feedbackTimer = 0.0f;
+    float feedbackDuration = 0.25f;
+
+    float feedbackStartY = -150.0f;
+    float feedbackEndY = -200.0f;
+
 
     // funcs..
     float GetUIPosX(RectTransform* rt) const;
@@ -57,10 +70,13 @@ private:
     float GetUIWidth(RectTransform* rt) const;
 
     bool  IsSpaceDownOnce() const; 
-    void  EvaluateOnce();          
+    void  EvaluateOnce();         
+
+    void ShowFeedback(bool isGood);
 
     Image* animImage{};
     void SetAnimPathes();
+
 public:
     Game_Cutting() = default;
     ~Game_Cutting() override = default;

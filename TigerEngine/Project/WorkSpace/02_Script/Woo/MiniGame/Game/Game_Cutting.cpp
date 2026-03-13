@@ -51,6 +51,7 @@ void Game_Cutting::EvaluateOnce()
   
     const bool hit = (barCenter >= stopLeft && barCenter <= stopRight);
 
+    // 텀 피드백
     if (hit)
     {
         curSuccessCount++;
@@ -63,6 +64,8 @@ void Game_Cutting::EvaluateOnce()
         SoundManager::Instance()->PlaySFX(SFXType::Minigame_Wrong_Sound);
         cout << "[MiniGame Cutting] FAIL! (" << curFailCount << "/3)" << endl;
     }
+
+    ShowFeedback(hit);
 
     // 성공/실패 체크
     if (curSuccessCount >= 5)
@@ -79,15 +82,44 @@ void Game_Cutting::EvaluateOnce()
     }
 }
 
+void Game_Cutting::ShowFeedback(bool isGood)
+{
+    // 활성화 된애는 y = 500 -> 450으로 move후 알아서 비활성화.
+    currentFeedback = isGood ? feedback_good : feedback_bad;
+    RectTransform* otherFeedback = isGood ? feedback_bad : feedback_good;
+
+    if (!currentFeedback) return;
+
+    // 반대쪽은 꺼두기
+    if (otherFeedback)
+        otherFeedback->GetOwner()->SetActive(false);
+
+    // 현재 피드백 활성화
+    currentFeedback->GetOwner()->SetActive(true);
+
+    // 시작 위치로 리셋
+    Vector3 pos = currentFeedback->GetPos();
+    pos.y = feedbackStartY;
+    currentFeedback->SetPos(pos);
+
+    // 연출 시작
+    feedbackTimer = 0.0f;
+    isFeedbackPlaying = true;
+}
+
 void Game_Cutting::StartGame()
 {
     stopPoint = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("1_Image_StopPoint")->GetComponent<RectTransform>();
     knife = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("1_Image_Knife")->GetComponent<RectTransform>();
+    
+    feedback_good = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Image_Feedback_Good")->GetComponent<RectTransform>();
+    feedback_bad = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Image_Feedback_Bad")->GetComponent<RectTransform>();
+    
     animImage = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("1_Image_CutAnimation")->GetComponent<Image>();
-
+    
     spacebarHold = SceneSystem::Instance().GetCurrentScene()->GetGameObjectByName("Image_SpaceBarHold");
 
-    if (!stopPoint || !knife || !spacebarHold)
+    if (!stopPoint || !knife || !spacebarHold || !feedback_good || !feedback_bad)
     {
         cout << "[MiniGame 1] Missing ui objects!" << endl;
         return;
@@ -109,7 +141,9 @@ void Game_Cutting::StartGame()
     // anim image set
     SetAnimPathes();
 
-    // hold ui off
+    // ui off
+    feedback_bad->GetOwner()->SetActive(false);
+    feedback_good->GetOwner()->SetActive(false);
     spacebarHold->SetActive(false);
 
     std::cout << "[MiniGame 1] : Game_Cutting Start!" << std::endl;
@@ -118,6 +152,27 @@ void Game_Cutting::StartGame()
 void Game_Cutting::UpdateGame(float delta)
 {
     if (isFinished) return;
+
+    // 피드백 연출 업데이트
+    if (isFeedbackPlaying && currentFeedback)
+    {
+        feedbackTimer += delta;
+
+        float t = feedbackTimer / feedbackDuration;
+        t = std::clamp(t, 0.0f, 1.0f);
+
+        Vector3 pos = currentFeedback->GetPos();
+        pos.y = feedbackStartY + (feedbackEndY - feedbackStartY) * t;
+        currentFeedback->SetPos(pos);
+
+        if (t >= 1.0f)
+        {
+            currentFeedback->GetOwner()->SetActive(false);
+            currentFeedback = nullptr;
+            isFeedbackPlaying = false;
+            feedbackTimer = 0.0f;
+        }
+    }
 
     // 홀딩 UI
     if (Input::GetKeyDown(spaceKey))
@@ -175,6 +230,9 @@ void Game_Cutting::UpdateGame(float delta)
 
 void Game_Cutting::EndGame()
 {
+    feedback_good->GetOwner()->SetActive(false);
+    feedback_good->GetOwner()->SetActive(false);
+
     std::cout << "[MiniGame 1] : Game_Cutting End!" << std::endl;
 }
 
