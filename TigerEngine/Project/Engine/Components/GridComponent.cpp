@@ -43,14 +43,14 @@ void GridComponent::OnInitialize()
     m_lastActorCount = -1;
      
     // 1. 임의로 그리드를 걸을 수 없게 설정 : false 
-    //SetWalkableFromCenter(-1, 2, false);
+    // SetWalkableFromCenter(0, 18, false);
 
     // 2. 임의로 그리드를 걸을 수 있도록 설정 : true 
-    SetWalkableFromCenter(0, 3, true);
-    SetWalkableFromCenter(8, -11, true);
-    SetWalkableFromCenter(8, -12, true);
-    SetWalkableFromCenter(9, -11, true);
-    SetWalkableFromCenter(9, -12, true);
+    //SetWalkableFromCenter(0, 3, true);
+    //SetWalkableFromCenter(8, -11, true);
+    //SetWalkableFromCenter(8, -12, true);
+    //SetWalkableFromCenter(9, -11, true);
+    //SetWalkableFromCenter(9, -12, true);
 }
 
 void GridComponent::Enable_Inner()

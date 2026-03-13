@@ -98,13 +98,13 @@ void AgentComponent::OnFixedUpdate(float dt)
     if (!grid) return;
 
     // FSM이 직접 path/target을 관리
-    if (externalControl) { std::cout << "[AgentComponent] FSM is Used path/target! \n"; return; }
+    if (externalControl) { /*std::cout << "[AgentComponent] FSM is Used path/target! \n";*/ return; }
 
     // 양보 중이면 아무것도 안함
     if (giveWayTimer > 0.f)
     {
         giveWayTimer -= dt;
-        std::cout << "[AgentComponent] giveWayTimer ing \n"; 
+        // std::cout << "[AgentComponent] giveWayTimer ing \n"; 
         return; 
     }
 
