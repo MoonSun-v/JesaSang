@@ -32,6 +32,7 @@
           directxtex.lib;
           imguid.lib;
           assimp-vc143-mtd.lib;
+          pugixml.lib;
           rttr_core_d.lib;
           PhysX_64.lib;
           PhysXCommon_64.lib;
@@ -66,6 +67,7 @@
           directxtex.lib;
           imgui.lib;
           assimp-vc143-mt.lib;
+          pugixml.lib;
           rttr_core.lib;
           PhysX_64.lib;
           PhysXCommon_64.lib;
