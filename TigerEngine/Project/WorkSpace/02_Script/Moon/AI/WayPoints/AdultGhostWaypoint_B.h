@@ -1,0 +1,14 @@
+#pragma once
+#include "Components/ScriptComponent.h"
+
+class AdultGhostWaypoint_B : public ScriptComponent
+{
+    RTTR_ENABLE(ScriptComponent)
+
+private:
+    nlohmann::json Serialize();
+    void Deserialize(nlohmann::json data);
+
+public:
+    void OnStart() override;
+};
