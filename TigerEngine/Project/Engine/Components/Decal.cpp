@@ -84,10 +84,11 @@ void Decal::Disable_Inner()
     OnDisable();
 }
 
-void Decal::StartRingEffect(float startTime, float duration, float speed)
+void Decal::StartRingEffect(float maxRadiusRate, float startTime, float duration, float speed)
 {
     if (type == DecalType::TextureMap) return;
 
+    ringMaxRadius = std::clamp(maxRadiusRate, 0.0f, 1.0f);
     ringStartTime = startTime;
     ringDuration = duration;
     ringSpeed = speed;

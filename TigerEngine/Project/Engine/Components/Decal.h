@@ -60,7 +60,7 @@ public:
     void Disable_Inner() override;
 
     // ring effect func
-    void StartRingEffect(float startTime, float duration = 10.0f , float speed = 0.3f);
+    void StartRingEffect(float maxRadiusRate, float startTime, float duration = 10.0f , float speed = 0.3f);
 };
 
 // util

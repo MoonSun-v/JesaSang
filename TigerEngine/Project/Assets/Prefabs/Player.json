@@ -2,7 +2,7 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 3569,
+      "ID": 4872,
       "Name": "Player",
       "ParentID": -1,
       "components": [
@@ -176,9 +176,9 @@
     },
     {
       "Active": true,
-      "ID": 3570,
+      "ID": 4873,
       "Name": "CameraTrackingPoint",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -204,9 +204,9 @@
     },
     {
       "Active": true,
-      "ID": 3571,
+      "ID": 4874,
       "Name": "OcclusionFadePoint",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -232,9 +232,9 @@
     },
     {
       "Active": true,
-      "ID": 3572,
+      "ID": 4875,
       "Name": "InteractionSensor",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -289,9 +289,9 @@
     },
     {
       "Active": true,
-      "ID": 3573,
+      "ID": 4876,
       "Name": "InteractZone",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -346,9 +346,9 @@
     },
     {
       "Active": true,
-      "ID": 3574,
+      "ID": 4877,
       "Name": "ItemVisualizer",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -374,9 +374,9 @@
     },
     {
       "Active": false,
-      "ID": 3575,
+      "ID": 4878,
       "Name": "Visual_Ingre_Apple",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -440,10 +440,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -452,9 +452,9 @@
     },
     {
       "Active": false,
-      "ID": 3576,
+      "ID": 4879,
       "Name": "Visual_Ingre_Batter",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -518,10 +518,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -530,9 +530,9 @@
     },
     {
       "Active": false,
-      "ID": 3577,
+      "ID": 4880,
       "Name": "Visual_Ingre_Donggeurangttaeng",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -596,10 +596,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -608,9 +608,9 @@
     },
     {
       "Active": false,
-      "ID": 3578,
+      "ID": 4881,
       "Name": "Visual_Ingre_Pear",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -674,10 +674,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -686,9 +686,9 @@
     },
     {
       "Active": false,
-      "ID": 3579,
+      "ID": 4882,
       "Name": "Visual_Ingre_Sanjeok",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -752,10 +752,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -764,9 +764,9 @@
     },
     {
       "Active": false,
-      "ID": 3580,
+      "ID": 4883,
       "Name": "Visual_Ingre_Tofu",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -830,10 +830,10 @@
             "RenderBlendType": "Opaque",
             "Roughness": 1.0,
             "RoughnessOverride": 1.0,
-            "UseDiffuseOverride": true,
+            "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
-            "UseMetallicOverride": true,
-            "UseRoughnessOverride": true,
+            "UseMetallicOverride": false,
+            "UseRoughnessOverride": false,
             "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
@@ -842,9 +842,9 @@
     },
     {
       "Active": false,
-      "ID": 3581,
+      "ID": 4884,
       "Name": "Visual_Apple",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -920,9 +920,9 @@
     },
     {
       "Active": false,
-      "ID": 3582,
+      "ID": 4885,
       "Name": "Visual_Pear",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -998,9 +998,9 @@
     },
     {
       "Active": false,
-      "ID": 3583,
+      "ID": 4886,
       "Name": "Visual_Batter",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -1076,9 +1076,9 @@
     },
     {
       "Active": false,
-      "ID": 3584,
+      "ID": 4887,
       "Name": "Visual_Tofu",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -1154,9 +1154,9 @@
     },
     {
       "Active": false,
-      "ID": 3585,
+      "ID": 4888,
       "Name": "Visual_Sanjeok",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -1232,9 +1232,9 @@
     },
     {
       "Active": false,
-      "ID": 3586,
+      "ID": 4889,
       "Name": "Visual_Donggeurangttaeng",
-      "ParentID": 3574,
+      "ParentID": 4877,
       "components": [
         {
           "properties": {
@@ -1310,9 +1310,9 @@
     },
     {
       "Active": true,
-      "ID": 3587,
+      "ID": 4890,
       "Name": "AITarget",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1367,9 +1367,9 @@
     },
     {
       "Active": true,
-      "ID": 3588,
+      "ID": 4891,
       "Name": "DialoguePoint",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1395,9 +1395,9 @@
     },
     {
       "Active": true,
-      "ID": 3589,
+      "ID": 4892,
       "Name": "Player_FireEffect",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1518,9 +1518,9 @@
     },
     {
       "Active": false,
-      "ID": 3590,
+      "ID": 4893,
       "Name": "Player_HitEffect",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1602,9 +1602,9 @@
     },
     {
       "Active": true,
-      "ID": 3591,
+      "ID": 4894,
       "Name": "Player_SmokeEffect",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1725,9 +1725,9 @@
     },
     {
       "Active": true,
-      "ID": 3986,
+      "ID": 5286,
       "Name": "LoseCinemachine",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1759,9 +1759,9 @@
     },
     {
       "Active": true,
-      "ID": 3987,
+      "ID": 5287,
       "Name": "LoseCinemachineCamera",
-      "ParentID": 3986,
+      "ParentID": 5286,
       "components": [
         {
           "properties": {
@@ -1797,9 +1797,9 @@
     },
     {
       "Active": false,
-      "ID": 4241,
+      "ID": 5541,
       "Name": "playaer_light",
-      "ParentID": 3569,
+      "ParentID": 4872,
       "components": [
         {
           "properties": {
@@ -1825,9 +1825,9 @@
     },
     {
       "Active": true,
-      "ID": 4242,
+      "ID": 5542,
       "Name": "Character_light_F1",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -1876,9 +1876,9 @@
     },
     {
       "Active": false,
-      "ID": 4243,
+      "ID": 5543,
       "Name": "Character_light_F2",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -1927,9 +1927,9 @@
     },
     {
       "Active": false,
-      "ID": 4244,
+      "ID": 5544,
       "Name": "Character_light_F3",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -1978,9 +1978,9 @@
     },
     {
       "Active": false,
-      "ID": 4245,
+      "ID": 5545,
       "Name": "Character_light_R",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -2029,9 +2029,9 @@
     },
     {
       "Active": false,
-      "ID": 4246,
+      "ID": 5546,
       "Name": "Character_light_L",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -2080,9 +2080,9 @@
     },
     {
       "Active": false,
-      "ID": 4247,
+      "ID": 5547,
       "Name": "Character_light_B1",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -2131,9 +2131,9 @@
     },
     {
       "Active": false,
-      "ID": 4248,
+      "ID": 5548,
       "Name": "Character_light_B2",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {
@@ -2182,9 +2182,9 @@
     },
     {
       "Active": false,
-      "ID": 4296,
+      "ID": 5596,
       "Name": "Character_light_B3",
-      "ParentID": 4241,
+      "ParentID": 5541,
       "components": [
         {
           "properties": {

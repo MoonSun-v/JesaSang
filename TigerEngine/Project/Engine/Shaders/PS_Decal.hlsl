@@ -23,21 +23,32 @@ float RingMask(float2 uv, float t01)
 {
     // uv: [0,1], center: (0.5,0.5)
     float2 p = (uv - 0.5f) * 2.0f; // [-1,1]
-    float r = length(p); // 0~sqrt(2)
+    float r = length(p); // 0 ~ sqrt(2)
 
-    // 반경은 0~ringMaxRadius 로
-    float radius = t01 * ringMaxRadius;
+    // 박스 중심 -> 코너까지의 최대 원형 반경
+    const float maxBoxRadius = 1.41421356f; // sqrt(2)
 
-    // 링 마스크: abs(r - radius) < thickness
+    // ringMaxRadius를 "비율"로 해석
+    // 1.0 = 박스 끝(코너)까지
+    // 0.5 = 그 절반까지만
+    float radiusLimit = ringMaxRadius * maxBoxRadius;
+
+    // 현재 링 반경
+    float radius = t01 * radiusLimit;
+
+    // 링 마스크
     float d = abs(r - radius);
     float ring = 1.0f - smoothstep(ringThickness, ringThickness + ringFeather, d);
 
-    // 바깥쪽으로 갈수록 약간 페이드
-    float outer = 1.0f - smoothstep(ringMaxRadius, ringMaxRadius + ringFeather, r);
+    // 최대 진행 가능 반경 바깥은 페이드
+    float outer = 1.0f - smoothstep(radiusLimit, radiusLimit + ringFeather, r);
 
-    // t01이 1에 가까워질수록 0으로 떨어지게
-    // endFadeStart01 ~ 1.0 구간에서 서서히 사라짐
-    float endFade = 1.0f - smoothstep(endFadeStart01, endFadeStart01 + endFadeFeather01, t01);
+    // 링 진행이 끝에 가까워질수록 페이드
+    float endFade = 1.0f - smoothstep(
+        endFadeStart01,
+        endFadeStart01 + endFadeFeather01,
+        t01
+    );
 
     return ring * outer * endFade;
 }
@@ -45,7 +56,11 @@ float RingMask(float2 uv, float t01)
 float RingMaskContinuous(float2 uv, float base01)
 {
     // 링 개수
-    const int RING_COUNT = 5;
+    int RING_COUNT = 5;
+    if (ringMaxRadius <= 0.6)
+    {
+        RING_COUNT = 3;
+    }
     float m = 0.0f;
 
     [unroll]
@@ -60,7 +75,12 @@ float RingMaskContinuous(float2 uv, float base01)
 
 float RingMaskContinuous_SpawnLimited(float2 uv, float tRaw)
 {
-    const int RING_COUNT = 5;
+    // 링 개수
+    int RING_COUNT = 5;
+    if (ringMaxRadius <= 0.6)
+    {
+        RING_COUNT = 3;
+    }
     float m = 0.0f;
 
     float maxR = max(ringMaxRadius, 0.0001f);

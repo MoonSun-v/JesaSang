@@ -90,7 +90,7 @@ void CookingZone::StartTriggerWave()
 {
     // 링 파동 이펙트
     auto curTime = GameTimer::Instance().TotalTime();
-    ringEffect->StartRingEffect(curTime);
+    ringEffect->StartRingEffect(1,curTime);
 
     // AI
     NotifyAIInRange();

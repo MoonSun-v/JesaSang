@@ -20,17 +20,29 @@ class TrapObject : public ScriptComponent
 {
     RTTR_ENABLE(ScriptComponent)
 
+public:
+    bool isTable = false;
+
 private:
     // component
     Decal* ringEffect = nullptr;;
 
     // cur
     float curWaveRadius = 0.0f;
+    float curWaveSpeed = 0.3f;
+    float curAiRange = 0.0f;
 
     // data
-    float walkWaveRadius = 200.0f;
-    float runWaveRadius = 500.0f;
+    float walkWaveRadius = 0.45f;
+    float walkWaveSpeed = 0.2f;
+    float runWaveRadius = 1;
+    float runWaveSpeed = 0.35f;
     float coolTime = 5.0f;
+
+    float walkAiRange_decal = 400.0f;
+    float runAiRange_decal = 800.0f;
+    float walkAiRange_table = 600.0f;
+    float runAiRange_table = 1000.0f;
 
     // rewave cool time
     bool isPossibleWave = true;

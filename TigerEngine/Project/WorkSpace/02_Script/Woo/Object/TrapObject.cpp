@@ -18,7 +18,8 @@ RTTR_REGISTRATION
 {
     rttr::registration::class_<TrapObject>("TrapObject")
     .constructor<>()
-    (rttr::policy::ctor::as_std_shared_ptr);
+    (rttr::policy::ctor::as_std_shared_ptr)
+    .property("isTable", &TrapObject::isTable);
 }
 
 void TrapObject::OnStart()
@@ -74,11 +75,19 @@ void TrapObject::OnCCTTriggerEnter(CharacterControllerComponent* other)
     {
     case PlayerState::Walk:
         curWaveRadius = walkWaveRadius;
+        curWaveSpeed = walkWaveSpeed;
+        if(isTable) curAiRange = walkAiRange_table;
+        else curAiRange = walkAiRange_decal;
         break;
+
     case PlayerState::Run:
     case PlayerState::Hit:
         curWaveRadius = runWaveRadius;
+        curWaveSpeed = runWaveSpeed;
+        if (isTable) curAiRange = runAiRange_table;
+        else curAiRange = runAiRange_decal;
         break;
+
     default:
         return; // 파장 발생 안 함
     }
@@ -92,7 +101,7 @@ void TrapObject::StartTriggerWave()
 {
     // 링 파동 이펙트
     auto curTime = GameTimer::Instance().TotalTime();
-    ringEffect->StartRingEffect(curTime);
+    ringEffect->StartRingEffect(curWaveRadius, curTime, 8, curWaveSpeed);
 
     // AI
     NotifyAIInRange();
@@ -128,7 +137,7 @@ void TrapObject::NotifyAIInRange()
             float dist = Vector3::Distance(originPos, targetPos);
 
             // 파동 범위 안에 AI가 있다면 호출
-            if (dist <= curWaveRadius)
+            if (dist <= curAiRange)
             {
                 ag->GetComponent<AdultGhostController>()->OnPlayerNoise(originPos);
             }
