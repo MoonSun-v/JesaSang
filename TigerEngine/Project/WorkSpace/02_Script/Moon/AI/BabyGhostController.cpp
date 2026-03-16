@@ -290,3 +290,31 @@ void BabyGhostController::OnPlayerNoise(const Vector3& noiseWorldPos)
 
     ChangeState(BabyGhostState::Search);
 }
+
+
+
+// -------------------------------------------------
+// WayPoint 관련 
+// -------------------------------------------------
+
+void BabyGhostController::SetNextPatrolTarget()
+{
+    if (patrolPointCount <= 0)
+        return;
+
+    auto& p = patrolPoints[patrolIndex];
+
+    agent->targetCX = p.x;
+    agent->targetCY = p.y;
+
+    agent->hasTarget = true;
+    agent->path.clear();
+
+    patrolIndex++;
+
+    if (patrolIndex >= patrolPointCount)
+        patrolIndex = 0;
+
+    std::cout << "[Baby Patrol] Next Waypoint: "
+        << p.x << "," << p.y << std::endl;
+}

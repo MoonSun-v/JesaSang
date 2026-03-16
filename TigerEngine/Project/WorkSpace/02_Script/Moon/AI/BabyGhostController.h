@@ -27,6 +27,10 @@ struct GridPos_Baby
     int x = -1;
     int y = -1;
     bool valid = false;
+
+    GridPos_Baby() = default;
+    GridPos_Baby(int x_, int y_) : x(x_), y(y_), valid(true) {}
+    GridPos_Baby(int x_, int y_, bool v_) : x(x_), y(y_), valid(v_) {}
 };
 
 // Search 상태의 진입 경로 
@@ -100,8 +104,23 @@ public:
     GridPos_Baby lastPlayerGrid;
 
 
+public: // Patrol Waypoints
+    static const int MAX_PATROL_POINTS = 20;
+
+    GridPos_Baby patrolPoints[MAX_PATROL_POINTS];
+    int patrolPointCount = 0;
+
+private:
+    int patrolIndex = 0;
+    
+
     // 상태의 진입 경로 (어떤 이유로 들어왔는가)
     SearchReason_Baby searchReason = SearchReason_Baby::None;
+
+
+public:
+    // WayPoint 관련
+    void SetNextPatrolTarget();
 
 
 public:

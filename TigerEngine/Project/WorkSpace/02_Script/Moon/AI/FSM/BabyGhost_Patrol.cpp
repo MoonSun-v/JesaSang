@@ -12,6 +12,7 @@ void BabyGhost_Patrol::Enter()
 
     agent = babyGhost->agent;
 
+    agent->externalControl = true;
     agent->patrolSpeed = 0.8f;  // Patrol 속도 
     agent->SetWaitTime(3.0f);   // 목표 지점에서 대기 시간 
 
@@ -20,6 +21,12 @@ void BabyGhost_Patrol::Enter()
     //// 아직 이동 중이 아니라면 랜덤 목표 설정
     //if (!agent->hasTarget && !agent->isWaiting)
     //    agent->PickRandomTarget();
+
+    if (!agent->hasTarget)
+    {
+        babyGhost->SetNextPatrolTarget();
+    }
+
 }
 
 void BabyGhost_Patrol::ChangeStateLogic()
@@ -61,6 +68,27 @@ void BabyGhost_Patrol::Update(float deltaTime)
 
 void BabyGhost_Patrol::FixedUpdate(float deltaTime)
 {
+    if (!agent) return;
+
+    bool reached = babyGhost->MoveToTarget(deltaTime);
+
+    if (reached)
+    {
+        agent->isWaiting = true;
+        agent->waitTimer = agent->waitDuration;
+        agent->hasTarget = false;
+    }
+
+    if (agent->isWaiting)
+    {
+        agent->waitTimer -= deltaTime;
+
+        if (agent->waitTimer <= 0.0f)
+        {
+            agent->isWaiting = false;
+            babyGhost->SetNextPatrolTarget();
+        }
+    }
 }
 
 void BabyGhost_Patrol::Exit()

@@ -91,7 +91,7 @@ public:
     Vector3 initialPosition;
 
     
-public: // Patrol Waypoints (Editor 설정)
+public: // Patrol Waypoints
     static const int MAX_PATROL_POINTS = 16;
 
     GridPos patrolPoints[MAX_PATROL_POINTS];
