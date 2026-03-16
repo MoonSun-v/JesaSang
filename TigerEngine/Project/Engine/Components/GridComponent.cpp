@@ -49,8 +49,8 @@ void GridComponent::OnInitialize()
     //SetWalkableFromCenter(0, 3, true);
     //SetWalkableFromCenter(8, -11, true);
     //SetWalkableFromCenter(8, -12, true);
-    //SetWalkableFromCenter(9, -11, true);
-    //SetWalkableFromCenter(9, -12, true);
+    SetWalkableFromCenter(-8, -13, true);
+    SetWalkableFromCenter(-9, -13, true);
 }
 
 void GridComponent::Enable_Inner()
@@ -119,7 +119,6 @@ void GridComponent::BuildBlockedFromPhysics()
             std::cout << "\n[" << objName << "] PxBounds\n";
             std::cout << "  min = (" << b.minimum.x * 100 << ", " << b.minimum.y * 100 << ", " << b.minimum.z * 100 << ")\n";
             std::cout << "  max = (" << b.maximum.x * 100 << ", " << b.maximum.y * 100 << ", " << b.maximum.z * 100 << ")\n";
-
             std::cout << "  TransformPos = (" << pos.x << ", " << pos.y << ", " << pos.z << ")\n";
 
             minW = { b.minimum.x * 100, 0, b.minimum.z * 100 };
@@ -139,25 +138,32 @@ void GridComponent::BuildBlockedFromPhysics()
             maxW = { pos.x + r, 0, pos.z + r };
         }
 
-        // -----------------------
+        //----------------------------------
         // 2. AABB → 중앙 기준 Grid
-        // -----------------------
-        int minCX, minCY;
-        int maxCX, maxCY;
+        //----------------------------------
+        int minCX = 0, minCY = 0;
+        int maxCX = 0, maxCY = 0;
 
-        if (!WorldToGridFromCenter(minW, minCX, minCY)) continue;
-        if (!WorldToGridFromCenter(maxW, maxCX, maxCY)) continue;
+        WorldToGridFromCenter(minW, minCX, minCY);
+        WorldToGridFromCenter(maxW, maxCX, maxCY);
 
-        std::cout << "\n[" << objName << "] " << "CenterGridRange: (" << minCX << "," << minCY << ") ~ (" << maxCX << "," << maxCY << ")\n";
+        std::cout << "\n[" << objName << "] CenterGridRange: ("
+            << minCX << "," << minCY << ") ~ ("
+            << maxCX << "," << maxCY << ")\n";
 
-        // -----------------------
-        // 3. 중앙 기준 → 내부 인덱스 변환
-        // -----------------------
-        int minX = centerX + minCX;
-        int minY = centerY + minCY;
-        int maxX = centerX + maxCX;
-        int maxY = centerY + maxCY;
 
+        //----------------------------------
+        // 3. 내부 Grid index로 변환 + Clamp
+        //----------------------------------
+        int minX = std::clamp(centerX + minCX, 0, width - 1);
+        int minY = std::clamp(centerY + minCY, 0, height - 1);
+        int maxX = std::clamp(centerX + maxCX, 0, width - 1);
+        int maxY = std::clamp(centerY + maxCY, 0, height - 1);
+
+
+        //----------------------------------
+        // 4. Grid Cell overlap 검사
+        //----------------------------------
         for (int y = minY; y <= maxY; ++y)
         {
             for (int x = minX; x <= maxX; ++x)
