@@ -210,6 +210,8 @@
     <ClInclude Include="02_Script\Ron\UI\Button_OpenPausePannel.h" />
     <ClInclude Include="02_Script\Woo\CookingZone\CookingZone.h" />
     <ClInclude Include="02_Script\Woo\Player\DialogueUI\DialogueUIController.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_A.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_B.h" />
     <ClInclude Include="EngineApp.h" />
     <ClInclude Include="02_Script\\Ron\\MiniMapTest\MiniMapTestScript.h" />
     <ClInclude Include="02_Script\\Ron\\MiniMapTest\MiniMapManager.h" />
@@ -308,6 +310,8 @@
     <ClCompile Include="02_Script\Ron\UI\Button_OpenPausePannel.cpp" />
     <ClCompile Include="02_Script\Woo\CookingZone\CookingZone.cpp" />
     <ClCompile Include="02_Script\Woo\Player\DialogueUI\DialogueUIController.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_A.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_B.cpp" />
     <ClCompile Include="EngineApp.cpp" />
     <ClCompile Include="02_Script\\Ron\\MiniMapTest\MiniMapTestScript.cpp" />
     <ClCompile Include="02_Script\\Ron\\MiniMapTest\MiniMapManager.cpp" />

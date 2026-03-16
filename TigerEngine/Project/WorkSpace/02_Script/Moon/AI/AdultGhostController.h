@@ -26,9 +26,14 @@ enum class AdultGhostState
 
 struct GridPos
 {
+public:
     int x = -1;
     int y = -1;
     bool valid = false;
+
+    GridPos() = default;
+    GridPos(int x_, int y_) : x(x_), y(y_), valid(true) {}
+    GridPos(int x_, int y_, bool v_) : x(x_), y(y_), valid(v_) {}
 };
 
 // Search 상태의 진입 경로 
@@ -75,14 +80,26 @@ private:
     bool hideLookRegistered = false;
 
 
-    // AI가 처음 배치된 좌표 (웨이 포인트)
-    Vector3 initialPosition;
-
-
     // Post BabyCare용
     float postCareTimer = 0.0f;
     bool postCareActive = false;
     Vector3 forcedTargetPos;
+
+
+public:
+    // AI가 처음 배치된 좌표 (추후 웨이 포인트)
+    Vector3 initialPosition;
+
+    
+public: // Patrol Waypoints (Editor 설정)
+    static const int MAX_PATROL_POINTS = 16;
+
+    GridPos patrolPoints[MAX_PATROL_POINTS];
+    int patrolPointCount = 0; // 실제 사용되는 개수 
+
+private:
+    int patrolIndex = 0;
+    int lastVisitedWaypoint = -1;
 
 
 private:
@@ -152,6 +169,10 @@ public:
 
     // 외부에서 타겟 확인
     GameObject* GetTarget() const { return target; }
+
+    // WayPoint 관련
+    void SetNextPatrolTarget();
+    void SetReturnToLastWaypoint();
 
 public:
     // friend

@@ -55,7 +55,7 @@ bool VisionComponent::CheckVision(GameObject* target, float fov, float maxDistan
     Vector3 origin = selfTr->GetWorldPosition();
     origin.y += eyeHigh;
 
-    // target pos는 "local이 맞다" 했으니 그대로 사용
+    // target pos는 "local" 
     Vector3 targetPos = targetTr->GetLocalPosition();
 
     // 3D 방향/거리 (Raycast용)
@@ -123,22 +123,22 @@ bool VisionComponent::CheckVision(GameObject* target, float fov, float maxDistan
         if (!PhysicsLayerMatrix::CanCollide(CollisionLayer::Default, hit.component->GetLayer()))
             continue;
 
-        std::cout << "  Object: " << hit.component->GetOwner()->GetName()
-            << " | Layer: " << (uint32_t)hit.component->GetLayer()
-            << " | Distance: " << hit.distance
-            << std::endl;
+        //std::cout << "  Object: " << hit.component->GetOwner()->GetName()
+        //    << " | Layer: " << (uint32_t)hit.component->GetLayer()
+        //    << " | Distance: " << hit.distance
+        //    << std::endl;
 
         firstComp = hit.component;
         break;
     }
 
-    if (firstComp)
-    {
-        auto* obj = firstComp->GetOwner();
-        std::cout << "[Vision] Ray hit -> Object: " << obj->GetName()
-            << " | Layer: " << (uint32_t)firstComp->GetLayer()
-            << std::endl;
-    }
+    //if (firstComp)
+    //{
+    //    auto* obj = firstComp->GetOwner();
+    //    std::cout << "[Vision] Ray hit -> Object: " << obj->GetName()
+    //        << " | Layer: " << (uint32_t)firstComp->GetLayer()
+    //        << std::endl;
+    //}
 
     return firstComp && firstComp->GetOwner() == target;
 }

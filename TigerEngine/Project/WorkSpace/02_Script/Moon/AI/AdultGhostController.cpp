@@ -26,6 +26,8 @@ RTTR_REGISTRATION
         (rttr::policy::ctor::as_std_shared_ptr);
 }
 
+
+
 nlohmann::json AdultGhostController::Serialize()
 {
     return JsonHelper::MakeSaveData(this);
@@ -342,4 +344,49 @@ void AdultGhostController::OnAttackHit()
     {
         ChangeState(AdultGhostState::Attack);
     }
+}
+
+
+
+// -------------------------------------------------
+// WayPoint 관련 
+// -------------------------------------------------
+
+void AdultGhostController::SetNextPatrolTarget()
+{
+    if (patrolPointCount <= 0)
+        return;
+
+    GridPos& p = patrolPoints[patrolIndex];
+
+    agent->targetCX = p.x;
+    agent->targetCY = p.y;
+
+    agent->hasTarget = true;
+    agent->path.clear();
+
+    lastVisitedWaypoint = patrolIndex;
+
+    patrolIndex++;
+
+    if (patrolIndex >= patrolPointCount)
+        patrolIndex = 0;
+
+    std::cout << "[Patrol] Next Waypoint: "
+        << patrolIndex
+        << " (" << p.x << "," << p.y << ")\n";
+}
+
+void AdultGhostController::SetReturnToLastWaypoint()
+{
+    if (lastVisitedWaypoint < 0)
+        return;
+
+    GridPos& p = patrolPoints[lastVisitedWaypoint];
+
+    agent->targetCX = p.x;
+    agent->targetCY = p.y;
+
+    agent->hasTarget = true;
+    agent->path.clear();
 }
