@@ -11190,7 +11190,7 @@
               "Position": [
                 -239.97694396972656,
                 -0.5194432139396667,
-                -412.098876953125
+                -565.0116577148438
               ],
               "Rotation": [
                 -0.0,
@@ -67170,9 +67170,9 @@
           {
             "properties": {
               "Position": [
-                -1030.391845703125,
+                -1025.912109375,
                 0.0,
-                -1426.47705078125
+                -1317.5250244140625
               ],
               "Rotation": [
                 -0.0,
@@ -67285,6 +67285,12 @@
               "Active": true
             },
             "type": "EnemySoundSource"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "BabyGhostWayPoint_A"
           }
         ]
       },
@@ -67386,7 +67392,7 @@
             "properties": {
               "Position": [
                 -242.58541870117188,
-                -1.8929202951767365e-06,
+                -1.9073486328125e-06,
                 -967.7763671875
               ],
               "Rotation": [
@@ -67500,6 +67506,12 @@
               "Active": true
             },
             "type": "EnemySoundSource"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "BabyGhostWayPoint_B"
           }
         ]
       },
@@ -67600,9 +67612,9 @@
           {
             "properties": {
               "Position": [
-                1203.183349609375,
+                1138.83447265625,
                 0.0,
-                -783.8592529296875
+                -892.136962890625
               ],
               "Rotation": [
                 -0.0,
@@ -67715,6 +67727,12 @@
               "Active": true
             },
             "type": "EnemySoundSource"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "BabyGhostWayPoint_D"
           }
         ]
       },
@@ -67815,7 +67833,7 @@
           {
             "properties": {
               "Position": [
-                -1320.368896484375,
+                -400.53253173828125,
                 0.0,
                 480.0121154785156
               ],
@@ -67930,6 +67948,12 @@
               "Active": true
             },
             "type": "EnemySoundSource"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "BabyGhostWayPoint_E"
           }
         ]
       },

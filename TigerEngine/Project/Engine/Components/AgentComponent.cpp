@@ -120,6 +120,7 @@ void AgentComponent::OnFixedUpdate(float dt)
             path.clear();
             hasTarget = false;   // 강제 재탐색
             stuckTimer = 0.f;
+            cout << "[AgentComponent] Stuck detected, clearing path and forcing new target selection.\n";
         }
     }
     else
@@ -175,35 +176,55 @@ void AgentComponent::OnFixedUpdate(float dt)
     AgentComponent* blocker = nullptr;
     if (grid->IsOccupied(next.first, next.second))
     {
-        // 점유자 얻기 (Grid에 GetOccupier 함수 추가 필요)
+        // 점유자 얻기
         blocker = grid->GetOccupier(next.first, next.second);
     }
 
     if (blocker && blocker != this)
     {
-        // 스왑 상황 감지
+        // swap
         if (!blocker->path.empty())
         {
             auto blockerNext = blocker->path.front();
 
             if (blockerNext.first == cx && blockerNext.second == cy)
             {
-                // 서로 자리 바꾸려는 상황
+                grid->Release(cx, cy);
+                grid->Release(blocker->cx, blocker->cy);
 
-                // 간단 우선순위 (포인터 주소 기준)
-                if (this < blocker)
-                {
-                    giveWayTimer = 0.5f;  // 0.5초 양보
-                    return;
-                }
+                int myOldX = cx;
+                int myOldY = cy;
+
+                cx = blocker->cx;
+                cy = blocker->cy;
+
+                blocker->cx = myOldX;
+                blocker->cy = myOldY;
+
+                grid->Occupy(cx, cy, this);
+                grid->Occupy(blocker->cx, blocker->cy, blocker);
+
+                path.erase(path.begin());
+                blocker->path.erase(blocker->path.begin());
+
+                return;
             }
         }
 
-        // 그냥 막힌 상황이면 재탐색
-        // std::cout << "[AgentComponent] Path is Block \n";
-        path.clear();
+        // priority
+        if (this < blocker)
+        {
+            giveWayTimer = 0.25f;
+        }
+        else
+        {
+            path.clear();
+            hasTarget = false;
+        }
+
         return;
     }
+
 
     Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
 

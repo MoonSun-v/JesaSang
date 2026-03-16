@@ -40,5 +40,5 @@ void BabyGhostWayPoint_A::OnStart()
     controller->patrolPoints[4] = { -12,-10,true };
     controller->patrolPoints[5] = { -12,-13,true };
     controller->patrolPoints[6] = { -14,-13,true };
-    controller->patrolPoints[7] = { -15,-8,true };
+    controller->patrolPoints[7] = { -14,-8,true };
 }
