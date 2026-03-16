@@ -29,7 +29,7 @@ private:
 
     // ring effect
     Decal* ringEffect = nullptr;;
-    float radius = 1000.0f;
+    float radius = 1200.0f;
 
 
 public:

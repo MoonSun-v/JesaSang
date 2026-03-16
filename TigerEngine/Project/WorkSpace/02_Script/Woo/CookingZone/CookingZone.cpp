@@ -98,22 +98,38 @@ void CookingZone::StartTriggerWave()
 
 void CookingZone::NotifyAIInRange()
 {
-    // 어른 유령 호출  // TODO :: 1마리만!!
+    // 어른 유령 호출
     auto adultGhosts = SceneSystem::Instance().GetCurrentScene()->GetGameObjectsByName("Ghost_Adult");
-    if (!adultGhosts.empty())
+    if (adultGhosts.empty())
+        return;
+
+    Vector3 originPos = this->GetOwner()->GetTransform()->GetWorldPosition();
+
+    GameObject* closestGhost = nullptr;
+    float closestDist = radius;
+
+    for (auto ag : adultGhosts)
     {
-        for (auto ag : adultGhosts)
+        if (!ag) continue;
+
+        Vector3 targetPos = ag->GetTransform()->GetWorldPosition();
+        float dist = Vector3::Distance(originPos, targetPos);
+
+        // radius 이내이면서 가장 가까운 AI만 선택
+        if (dist <= radius && (!closestGhost || dist < closestDist))
         {
-            Vector3 originPos = this->GetOwner()->GetTransform()->GetWorldPosition();
-            Vector3 targetPos = ag->GetTransform()->GetWorldPosition();
+            closestGhost = ag;
+            closestDist = dist;
+        }
+    }
 
-            float dist = Vector3::Distance(originPos, targetPos);
-
-            // 파동 범위 안에 AI가 있다면 호출
-            if (dist <= radius)
-            {
-                ag->GetComponent<AdultGhostController>()->OnPlayerNoise(originPos);
-            }
+    // 가장 가까운 1마리만 호출
+    if (closestGhost)
+    {
+        auto controller = closestGhost->GetComponent<AdultGhostController>();
+        if (controller)
+        {
+            controller->OnPlayerNoise(originPos);
         }
     }
 }
