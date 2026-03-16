@@ -371,6 +371,10 @@ void AdultGhostController::SetNextPatrolTarget()
 
     if (patrolIndex >= patrolPointCount)
         patrolIndex = 0;
+
+    std::cout << "[Patrol] Next Waypoint: "
+        << patrolIndex
+        << " (" << p.x << "," << p.y << ")\n";
 }
 
 void AdultGhostController::SetReturnToLastWaypoint()
