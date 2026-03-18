@@ -35,27 +35,27 @@ void AdultGhost_Search::Enter()
         adultGhost->lastPlayerGrid.valid = false; // 1회성
     }
 
-    // MoveToPoint인데 타겟이 없으면 바로 실패 처리
+    // MoveToPoint인데 타겟이 없으면
     if (phase == SearchPhase::MoveToPoint && !adultGhost->agent->hasTarget)
     {
-        adultGhost->ChangeState(AdultGhostState::Return);
-        return;
+        phase = SearchPhase::RotateSearch;
     }
 
-    cout << "[Search] phase=" << (int)phase
-        << " hasTarget=" << adultGhost->agent->hasTarget
-        << " reason=" << (int)adultGhost->searchReason << endl;
+    //cout << "[Search] phase=" << (int)phase
+    //    << " hasTarget=" << adultGhost->agent->hasTarget
+    //    << " reason=" << (int)adultGhost->searchReason << endl;
 }
 
 void AdultGhost_Search::ChangeStateLogic()
 {
     // 1. 회전 중 플레이어 발견 (Search 성공)
-    //if (phase == SearchPhase::RotateSearch &&  adultGhost->IsSeeing(adultGhost->GetAITarget()))
-    //{
-    //    cout << "[AdultGhost_Search] Search Clear!! " << endl;
-    //    adultGhost->ChangeState(AdultGhostState::Chase);
-    //    return;
-    //}
+    if (phase == SearchPhase::RotateSearch &&  adultGhost->IsSeeing(adultGhost->GetAITarget()))
+    {
+        cout << "[AdultGhost_Search] Search Clear!! " << endl;
+        adultGhost->ChangeState(AdultGhostState::Chase);
+        return;
+    }
+
     // 2. 회전 시간 종료 (Search 실패)
     if (phase == SearchPhase::RotateSearch && rotateTimer >= rotateTime)
     {
@@ -96,41 +96,15 @@ void AdultGhost_Search::Update(float deltaTime)
         }
     }
 
-    //// 항상 플레이어 감지 체크
-    //if (adultGhost->IsSeeing(adultGhost->GetAITarget()))
-    //{
-    //    cout << "[AdultGhost_Search] Player spotted during Search -> Chase!" << endl;
-    //    adultGhost->ChangeState(AdultGhostState::Chase);
-    //    return;
-    //}
-
-    //waitTimer += deltaTime;
-
-    //if (phase == SearchPhase::WaitBeforeMove)
-    //{
-    //    if (waitTimer >= waitTime)
-    //    {
-    //        if (!adultGhost->agent->hasTarget)
-    //        {
-    //            cout << "[Search] Wait done but no target -> Return" << endl;
-    //            adultGhost->ChangeState(AdultGhostState::Return);
-    //            return;
-    //        }
-    //        phase = SearchPhase::MoveToPoint;
-    //    }
-    //}
+    // 4. RotateSearch (타이머 증가 담당)
+    else if (phase == SearchPhase::RotateSearch)
+    {
+        rotateTimer += deltaTime;
+    }
 }
 
 void AdultGhost_Search::FixedUpdate(float deltaTime)
 {
-    //if (phase == SearchPhase::MoveToPoint && !adultGhost->agent->hasTarget)
-    //{
-    //    cout << "[Search] Target lost during Move -> RotateSearch" << endl;
-    //    phase = SearchPhase::RotateSearch;
-    //    rotateTimer = 0.0f;
-    //    return;
-    //}
-
     if (phase == SearchPhase::MoveToPoint && !arrived)
     {
         bool done = adultGhost->MoveToTarget(deltaTime);
@@ -154,18 +128,10 @@ void AdultGhost_Search::FixedUpdate(float deltaTime)
     }
     else if (phase == SearchPhase::RotateSearch)
     {
-        rotateTimer += deltaTime;
-
         auto tr = adultGhost->GetOwner()->GetTransform();
         float newYaw = tr->GetYaw() + XMConvertToRadians(90.f) * deltaTime;
 
         tr->SetEuler(Vector3(0.f, newYaw, 0.f));
-
-        // 회전 완료 후 Return
-        if (rotateTimer >= rotateTime)
-        {
-            adultGhost->ChangeState(AdultGhostState::Return);
-        }
     }
 }
 
