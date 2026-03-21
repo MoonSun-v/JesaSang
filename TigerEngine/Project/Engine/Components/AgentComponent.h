@@ -16,27 +16,37 @@ public:
     ~AgentComponent() = default;
 
 public:
-    bool externalControl = false; // FSM이 제어중인가? 
-
     CharacterControllerComponent* cct = nullptr;
 
-    int cx = 0, cy = 0;             // 현재 위치 (중앙 기준)
-    int targetCX = 0, targetCY = 0; // 목표 위치 (중앙 기준)
+    // 현재 위치 (중앙 기준)
+    int cx = 0, cy = 0;             
+
+    // 이동 
+    float reachDist = 20.0f;  // 목표와의 거리 
+    float moveSpeed = 1.0f;
+
+private:
+    // 목표 위치 (중앙 기준)
+    int targetCX = 0, targetCY = 0; 
     bool hasTarget = false;
 
-    float reachDist = 20.0f;  // 목표와의 거리 
-    float patrolSpeed = 1.0f; // 상태마다 변경될 예정 
+    // A* 경로 저장 (그리드 좌표)
+    std::vector<std::pair<int, int>> path; 
 
-    bool isWaiting = false;   // 현재 대기 중인지
-    float waitTimer = 0.0f;    // 남은 대기 시간
-    float waitDuration = 0.0f; // 기본 대기 시간 (초) 
+    //bool isWaiting = false;   // 현재 대기 중인지
+    //float waitTimer = 0.0f;    // 남은 대기 시간
+    //float waitDuration = 0.0f; // 기본 대기 시간 (초) 
 
-    std::vector<std::pair<int, int>> path; // A* 경로 저장 (그리드 좌표)
+    // 정체 감지
+    float stuckTimer = 0.0f;     
+    Vector3 lastPos;            // 이전 위치
+
+    // 상태
+    bool arrived = false;
 
 public:
-    float giveWayTimer = 0.f;   // 양보 타이머
-    float stuckTimer = 0.f;     // 정체 감지용
-    Vector3 lastPos;            // 이전 위치
+    // float giveWayTimer = 0.f;   // 양보 타이머
+   
 
 public:
     void OnInitialize() override;
@@ -47,9 +57,25 @@ public:
     void Enable_Inner() override;
     void Disable_Inner() override;
 
-    void PickRandomTarget();
+    // FSM 인터페이스-
+    void SetTarget(int x, int y);
+    void ClearTarget();
+
+    bool HasTarget() const { return hasTarget; }
+    bool IsArrived() const { return arrived; }
+    bool IsStuck() const { return stuckTimer > 1.0f; }
+
+    void SetSpeed(float s) { moveSpeed = s; }
+
+private:
+    void UpdatePath();
+    void MoveAlongPath(float dt);
+    void DetectStuck(float dt);
+    
     void MoveAgent(const Vector3& dir, float speed, float dt);
 
-    void SetWaitTime(float seconds);
-    Vector3 ComputeSeparationForce(const Vector3& moveDir);
+    // void PickRandomTarget();
+
+    //void SetWaitTime(float seconds);
+    //Vector3 ComputeSeparationForce(const Vector3& moveDir);
 };
