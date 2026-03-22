@@ -22,7 +22,7 @@ void BabyGhostWayPoint_D::Deserialize(nlohmann::json data)
 }
 
 
-void BabyGhostWayPoint_D::OnStart()
+void BabyGhostWayPoint_D::OnInitialize()
 {
     auto controller = GetOwner()->GetComponent<BabyGhostController>();
     if (!controller)

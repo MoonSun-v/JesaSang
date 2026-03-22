@@ -22,7 +22,7 @@ void AdultGhostWaypoint_A::Deserialize(nlohmann::json data)
 }
 
 
-void AdultGhostWaypoint_A::OnStart()
+void AdultGhostWaypoint_A::OnInitialize()
 {
     auto controller = GetOwner()->GetComponent<AdultGhostController>();
     if (!controller)

@@ -11,6 +11,6 @@ private:
     void Deserialize(nlohmann::json data);
 
 public:
-    void OnStart() override;
+    void OnInitialize() override;
 };
 
