@@ -16,8 +16,7 @@ void AdultGhost_Attack::Enter()
     adultGhost->enemySound->PlaySound(EnemySoundType::Ghost_Attack_Sound);
 
     // 이동 완전 정지
-    adultGhost->agent->externalControl = true;
-    adultGhost->agent->path.clear();
+    adultGhost->agent->ClearTarget();
 }
 
 void AdultGhost_Attack::ChangeStateLogic()
@@ -36,13 +35,11 @@ void AdultGhost_Attack::ChangeStateLogic()
     else
     {
         cout << "[AdultGhost_Attack] Lost player -> Search\n";
-
         auto grid = GridSystem::Instance().GetMainGrid();
         if (grid)
         {
             int px, py;
-            auto wp = player->GetTransform()->GetLocalPosition();
-            if (grid->WorldToGridFromCenter(wp, px, py))
+            if (grid->WorldToGridFromCenter(player->GetTransform()->GetLocalPosition(), px, py))
                 adultGhost->lastPlayerGrid = { px, py, true };
         }
 
@@ -80,6 +77,4 @@ void AdultGhost_Attack::FixedUpdate(float deltaTime)
 
 void AdultGhost_Attack::Exit()
 {
-    attackTimer = 0.0f;
-    adultGhost->agent->externalControl = false;
 }

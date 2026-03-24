@@ -12,21 +12,13 @@ void BabyGhost_Patrol::Enter()
 
     agent = babyGhost->agent;
 
-    agent->externalControl = true;
-    agent->patrolSpeed = 0.8f;  // Patrol 속도 
-    agent->SetWaitTime(3.0f);   // 목표 지점에서 대기 시간 
-
+    babyGhost->ResetAgentForMove(0.8f);
     babyGhost->animController->ChangeState("Idle");
 
-    //// 아직 이동 중이 아니라면 랜덤 목표 설정
-    //if (!agent->hasTarget && !agent->isWaiting)
-    //    agent->PickRandomTarget();
-
-    if (!agent->hasTarget)
+    if (!agent->HasTarget())
     {
         babyGhost->SetNextPatrolTarget();
     }
-
 }
 
 void BabyGhost_Patrol::ChangeStateLogic()
@@ -70,24 +62,9 @@ void BabyGhost_Patrol::FixedUpdate(float deltaTime)
 {
     if (!agent) return;
 
-    bool reached = babyGhost->MoveToTarget(deltaTime);
-
-    if (reached)
+    if (agent->IsArrived())
     {
-        agent->isWaiting = true;
-        agent->waitTimer = agent->waitDuration;
-        agent->hasTarget = false;
-    }
-
-    if (agent->isWaiting)
-    {
-        agent->waitTimer -= deltaTime;
-
-        if (agent->waitTimer <= 0.0f)
-        {
-            agent->isWaiting = false;
-            babyGhost->SetNextPatrolTarget();
-        }
+        babyGhost->SetNextPatrolTarget();
     }
 }
 
@@ -101,9 +78,8 @@ void BabyGhost_Patrol::Exit()
     babyGhost->curSeeingHideObject = nullptr;
     babyGhost->hideLookRegistered = false;
 
-    agent->hasTarget = false;
-    agent->path.clear();
-    agent->isWaiting = false;
+    if (agent)
+        agent->ClearTarget();
 }
 
 

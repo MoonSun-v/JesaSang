@@ -26,17 +26,15 @@ void AdultGhost_Search::Enter()
     if (adultGhost->lastPlayerGrid.valid)
     {
         auto& p = adultGhost->lastPlayerGrid;
-        std::cout << "[Search] Use Last Grid = (" << p.x << ", " << p.y << ")" << std::endl;
+        // std::cout << "[Adult Search] Use Last Grid = (" << p.x << ", " << p.y << ")" << std::endl;
 
-        adultGhost->agent->targetCX = p.x;
-        adultGhost->agent->targetCY = p.y;
-        adultGhost->agent->hasTarget = true;
+        adultGhost->agent->SetTarget(p.x, p.y);
 
         adultGhost->lastPlayerGrid.valid = false; // 1회성
     }
 
-    // MoveToPoint인데 타겟이 없으면
-    if (phase == SearchPhase::MoveToPoint && !adultGhost->agent->hasTarget)
+    // MoveToPoint인데 타겟이 없으면 TODO: Check 확인해보기 
+    if (phase == SearchPhase::MoveToPoint && !adultGhost->agent->HasTarget())
     {
         phase = SearchPhase::RotateSearch;
     }
@@ -49,7 +47,7 @@ void AdultGhost_Search::Enter()
 void AdultGhost_Search::ChangeStateLogic()
 {
     // 1. 회전 중 플레이어 발견 (Search 성공)
-    if (phase == SearchPhase::RotateSearch &&  adultGhost->IsSeeing(adultGhost->GetAITarget()))
+    if (/*phase == SearchPhase::RotateSearch &&  */adultGhost->IsSeeing(adultGhost->GetAITarget()))
     {
         cout << "[AdultGhost_Search] Search Clear!! " << endl;
         adultGhost->ChangeState(AdultGhostState::Chase);
@@ -79,7 +77,7 @@ void AdultGhost_Search::Update(float deltaTime)
         waitTimer += deltaTime;
         if (waitTimer >= waitTime)
         {
-            if (adultGhost->agent->hasTarget)
+            if (adultGhost->agent->HasTarget())
                 phase = SearchPhase::MoveToPoint;
             else
                 phase = SearchPhase::RotateSearch; // 타겟 없으면 바로 회전
@@ -89,7 +87,7 @@ void AdultGhost_Search::Update(float deltaTime)
     // 3. MoveToPoint 단계
     else if (phase == SearchPhase::MoveToPoint)
     {
-        if (!adultGhost->agent->hasTarget)
+        if (adultGhost->agent->IsArrived())
         {
             phase = SearchPhase::RotateSearch;
             rotateTimer = 0.0f;
@@ -105,41 +103,16 @@ void AdultGhost_Search::Update(float deltaTime)
 
 void AdultGhost_Search::FixedUpdate(float deltaTime)
 {
-    if (phase == SearchPhase::MoveToPoint && !arrived)
-    {
-        bool done = adultGhost->MoveToTarget(deltaTime);
-        if (done)
-        {
-            arrived = true;
-            phase = SearchPhase::RotateSearch;
-            rotateTimer = 0.0f;
-
-            // 도착 즉시 목표 정리
-            adultGhost->agent->externalControl = true;
-            adultGhost->agent->path.clear();
-            adultGhost->agent->hasTarget = false;
-
-            auto tr = adultGhost->GetOwner()->GetTransform();
-            baseYaw = tr->GetYaw();
-            targetYaw = baseYaw + XMConvertToRadians(360.f);
-
-            adultGhost->agent->externalControl = true;
-        }
-    }
-    else if (phase == SearchPhase::RotateSearch)
+    if (phase == SearchPhase::RotateSearch)
     {
         auto tr = adultGhost->GetOwner()->GetTransform();
         float newYaw = tr->GetYaw() + XMConvertToRadians(90.f) * deltaTime;
-
         tr->SetEuler(Vector3(0.f, newYaw, 0.f));
     }
 }
 
 void AdultGhost_Search::Exit()
 {
-    arrived = false;
-
-    adultGhost->agent->externalControl = false;
-    adultGhost->agent->path.clear();
-    adultGhost->agent->hasTarget = false;
+    //if (adultGhost->agent)
+    //    adultGhost->agent->ClearTarget();
 }

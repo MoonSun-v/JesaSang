@@ -12,23 +12,17 @@ void AdultGhost_Patrol::Enter()
 
     agent = adultGhost->agent;
 
-    // FSM이 이동 제어
-    agent->externalControl = true;
-
-    agent->patrolSpeed = 0.8f;  // Patrol 속도 
-    agent->SetWaitTime(3.0f);   // 목표 지점에서 대기 시간 
-
+    adultGhost->ResetAgentForMove(0.8f);
     adultGhost->animController->ChangeState("Idle");
 
-    // 첫 웨이포인트 설정
-    if (!agent->hasTarget)
-    {
-        adultGhost->SetNextPatrolTarget();
-    }
+    // 무조건 웨이포인트 설정 
+    adultGhost->SetNextPatrolTarget();
 
-    //// 아직 이동 중이 아니라면 목표 설정
-    //if (!agent->hasTarget && !agent->isWaiting)
-    //    adultGhost->SetNextPatrolTarget(); // agent->PickRandomTarget();
+    // 첫 웨이포인트 설정
+    //if (!agent->HasTarget())
+    //{
+    //    adultGhost->SetNextPatrolTarget();
+    //}
 }
 
 void AdultGhost_Patrol::ChangeStateLogic()
@@ -53,7 +47,7 @@ void AdultGhost_Patrol::ChangeStateLogic()
             if (playerObj && grid->WorldToGridFromCenter(playerObj->GetTransform()->GetLocalPosition(), px, py))
             {
                 adultGhost->lastPlayerGrid = { px, py, true };
-                std::cout << "[Patrol → Search] Save Sense/Grid = (" << px << "," << py << ")\n";
+                // std::cout << "[Patrol → Search] Save Sense/Grid = (" << px << "," << py << ")\n";
             }
         }
         adultGhost->searchReason = SearchReason::FromPatrol;
@@ -73,29 +67,9 @@ void AdultGhost_Patrol::FixedUpdate(float deltaTime)
 {
     if (!agent) return;
 
-    // 현재 타겟으로 이동
-    bool reached = adultGhost->MoveToTarget(deltaTime);
-
-    // 웨이포인트 도착 
-    if (reached)
+    if (agent->IsArrived())
     {
-        agent->isWaiting = true;
-        agent->waitTimer = agent->waitDuration;
-        agent->hasTarget = false;
-    }
-
-    // 대기 처리
-    if (agent->isWaiting)
-    {
-        agent->waitTimer -= deltaTime;
-
-        if (agent->waitTimer <= 0.0f)
-        {
-            agent->isWaiting = false;
-
-            // 다음 웨이포인트
-            adultGhost->SetNextPatrolTarget();
-        }
+        adultGhost->SetNextPatrolTarget();
     }
 }
 
@@ -110,11 +84,8 @@ void AdultGhost_Patrol::Exit()
     adultGhost->curSeeingHideObject = nullptr;
     adultGhost->hideLookRegistered = false;
 
-    agent->externalControl = false;
-
-    agent->hasTarget = false;
-    agent->path.clear();
-    agent->isWaiting = false;
+    if (agent)
+        agent->ClearTarget();
 }
 
 

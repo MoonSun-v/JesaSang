@@ -41,6 +41,9 @@ private:
     float stuckTimer = 0.0f;     
     Vector3 lastPos;            // 이전 위치
 
+    int prevCX = 0;
+    int prevCY = 0;
+
     // 상태
     bool arrived = false;
 

@@ -158,65 +158,6 @@ void BabyGhostController::LoadAnimation()
     animController->AddState(std::make_unique<AnimationState>("Cry", cryClip, animController));
 }
 
-// -------------------------------------------------
-// Movement
-// -------------------------------------------------
-bool BabyGhostController::MoveToTarget(float delta)
-{
-    if (!agent || !agent->hasTarget) return false;
-
-    auto grid = GridSystem::Instance().GetMainGrid();
-    if (!grid) return false;
-
-    // 경로 없으면 생성
-    if (agent->path.empty())
-    {
-        agent->path = grid->FindPath(agent->cx, agent->cy, agent->targetCX, agent->targetCY);
-        if (agent->path.empty()) return false;
-    }
-
-    // 다음 칸 이동 
-    auto next = agent->path.front();
-    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
-
-    Vector3 pos = agent->GetOwner()->GetTransform()->GetWorldPosition();
-    Vector3 dir = targetPos - pos;
-    dir.y = 0;
-
-    // 해당 칸 도착 
-    if (dir.Length() < agent->reachDist)
-    {
-        agent->cx = next.first;
-        agent->cy = next.second;
-        agent->path.erase(agent->path.begin());
-        return agent->path.empty(); // 이 칸은 끝까지 가도록 
-    }
-
-    dir.Normalize();
-    agent->MoveAgent(dir, agent->patrolSpeed, delta);
-    RotateByDirection(dir, delta);
-
-    return false;
-}
-
-void BabyGhostController::RotateByDirection(const Vector3& moveDir, float delta)
-{
-    if (moveDir.LengthSquared() <= 0.0001f)
-        return;
-
-    auto tr = GetOwner()->GetTransform();
-
-    Vector3 dir = -moveDir; // 모델 반전 보정
-    float targetYaw = atan2f(dir.x, dir.z);
-    float currentYaw = tr->GetYaw();
-
-    float deltaYaw = _WrapAngleRad(targetYaw - currentYaw);
-
-    float turnSpeed = 6.0f; // 플레이어보다 느리게
-    float newYaw = currentYaw + deltaYaw * turnSpeed * delta;
-
-    tr->SetEuler(Vector3(0.f, newYaw, 0.f));
-}
 
 
 // -------------------------------------------------
@@ -225,15 +166,13 @@ void BabyGhostController::RotateByDirection(const Vector3& moveDir, float delta)
 
 void BabyGhostController::ResetAgentForMove(float speed)
 {
-    agent->patrolSpeed = speed;
-    agent->externalControl = true;
-    agent->hasTarget = false;
-    agent->path.clear();
-    agent->isWaiting = false;
+    if (!agent) return;
+
+    agent->SetSpeed(speed);
+    agent->ClearTarget();
 }
 
 // Ai가 Target을 보고 있는가? // TODO : FOV, Dist 값 매개변수로 받기 
-// TODO : 플레이어가 Hide 상태이면, Target을 못봐야 함
 bool BabyGhostController::IsSeeing(GameObject* target) const
 {
     return target && vision->CheckVision(target, 30, 400);
@@ -304,17 +243,83 @@ void BabyGhostController::SetNextPatrolTarget()
 
     auto& p = patrolPoints[patrolIndex];
 
-    agent->targetCX = p.x;
-    agent->targetCY = p.y;
-
-    agent->hasTarget = true;
-    agent->path.clear();
+    agent->SetTarget(p.x, p.y);
 
     patrolIndex++;
-
     if (patrolIndex >= patrolPointCount)
         patrolIndex = 0;
 
     std::cout << "[Baby Patrol] Next Waypoint: "
-        << p.x << "," << p.y << std::endl;
+        << patrolIndex << " (" << p.x << "," << p.y << ")\n";
 }
+
+//void BabyGhostController::SetReturnToLastWaypoint()
+//{
+//    if (lastVisitedWaypoint < 0 || !agent)
+//        return;
+//
+//    GridPos& p = patrolPoints[lastVisitedWaypoint];
+//
+//    agent->SetTarget(p.x, p.y);
+//}
+
+
+// -------------------------------------------------
+// Movement
+// -------------------------------------------------
+//bool BabyGhostController::MoveToTarget(float delta)
+//{
+//    if (!agent || !agent->hasTarget) return false;
+//
+//    auto grid = GridSystem::Instance().GetMainGrid();
+//    if (!grid) return false;
+//
+//    // 경로 없으면 생성
+//    if (agent->path.empty())
+//    {
+//        agent->path = grid->FindPath(agent->cx, agent->cy, agent->targetCX, agent->targetCY);
+//        if (agent->path.empty()) return false;
+//    }
+//
+//    // 다음 칸 이동 
+//    auto next = agent->path.front();
+//    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
+//
+//    Vector3 pos = agent->GetOwner()->GetTransform()->GetWorldPosition();
+//    Vector3 dir = targetPos - pos;
+//    dir.y = 0;
+//
+//    // 해당 칸 도착 
+//    if (dir.Length() < agent->reachDist)
+//    {
+//        agent->cx = next.first;
+//        agent->cy = next.second;
+//        agent->path.erase(agent->path.begin());
+//        return agent->path.empty(); // 이 칸은 끝까지 가도록 
+//    }
+//
+//    dir.Normalize();
+//    agent->MoveAgent(dir, agent->patrolSpeed, delta);
+//    RotateByDirection(dir, delta);
+//
+//    return false;
+//}
+//
+//void BabyGhostController::RotateByDirection(const Vector3& moveDir, float delta)
+//{
+//    if (moveDir.LengthSquared() <= 0.0001f)
+//        return;
+//
+//    auto tr = GetOwner()->GetTransform();
+//
+//    Vector3 dir = -moveDir; // 모델 반전 보정
+//    float targetYaw = atan2f(dir.x, dir.z);
+//    float currentYaw = tr->GetYaw();
+//
+//    float deltaYaw = _WrapAngleRad(targetYaw - currentYaw);
+//
+//    float turnSpeed = 6.0f; // 플레이어보다 느리게
+//    float newYaw = currentYaw + deltaYaw * turnSpeed * delta;
+//
+//    tr->SetEuler(Vector3(0.f, newYaw, 0.f));
+//}

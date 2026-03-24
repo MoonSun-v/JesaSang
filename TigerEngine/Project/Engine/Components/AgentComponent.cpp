@@ -51,6 +51,9 @@ void AgentComponent::OnInitialize()
     grid->WorldToGridFromCenter(tr->GetWorldPosition(), cx, cy);
     grid->Occupy(cx, cy, this); // 현재 위치 점유 추가
 
+    prevCX = cx;
+    prevCY = cy;
+
     lastPos = tr->GetWorldPosition();
 }
 
@@ -88,6 +91,13 @@ void AgentComponent::OnFixedUpdate(float dt)
 
 void AgentComponent::SetTarget(int x, int y)
 {
+    // 같은 타겟이면 무시
+    if (hasTarget && targetCX == x && targetCY == y)
+    {
+        std::cout << "[SetTarget] SAME TARGET IGNORE\n";
+        return;
+    }
+
     targetCX = x;
     targetCY = y;
 
@@ -111,22 +121,107 @@ void AgentComponent::UpdatePath()
     path = grid->FindPath(cx, cy, targetCX, targetCY);
 }
 
+//void AgentComponent::MoveAlongPath(float dt)
+//{
+//    // std::cout << "[Move] path size: " << path.size() << "\n";
+//
+//    auto grid = GridSystem::Instance().GetMainGrid();
+//    if (!grid || path.empty()) return;
+//
+//    auto next = path.front();
+//
+//    std::cout << "[Next Tile] "
+//        << next.first << "," << next.second
+//        << "\n";
+//
+//    bool occupied = grid->IsOccupied(next.first, next.second);
+//
+//    std::cout << "[Occupied?] " << occupied << "\n";
+//
+//    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
+//    Vector3 pos = GetOwner()->GetTransform()->GetWorldPosition();
+//
+//    Vector3 dir = targetPos - pos;
+//    dir.y = 0;
+//
+//    if (dir.Length() < reachDist)
+//    {
+//        // 도착 → 그리드 갱신
+//        grid->Release(cx, cy);
+//
+//        cx = next.first;
+//        cy = next.second;
+//
+//        grid->Occupy(cx, cy, this);
+//
+//        path.erase(path.begin());
+//
+//        if (path.empty())
+//        {
+//            if (cx == targetCX && cy == targetCY)
+//            {
+//                arrived = true;
+//                hasTarget = false;
+//            }
+//        }
+//
+//        return;
+//    }
+//
+//    Vector3 before = pos;
+//
+//    dir.Normalize();
+//    MoveAgent(dir, moveSpeed, dt);
+//
+//    Vector3 after = GetOwner()->GetTransform()->GetWorldPosition();
+//
+//    float moveDelta = (after - before).Length();
+//
+//    std::cout << "[MoveDelta] " << moveDelta << "\n";
+//
+//    // 이동 후 위치로 동기화
+//    Vector3 newPos = GetOwner()->GetTransform()->GetWorldPosition();
+//
+//    int newCX, newCY;
+//    grid->WorldToGridFromCenter(newPos, newCX, newCY);
+//
+//    if (newCX != cx || newCY != cy)
+//    {
+//        grid->Release(cx, cy);
+//
+//        cx = newCX;
+//        cy = newCY;
+//
+//        grid->Occupy(cx, cy, this);
+//
+//        // std::cout << "[Sync] corrected grid to " << cx << "," << cy << "\n";
+//    }
+//}
+
 void AgentComponent::MoveAlongPath(float dt)
 {
     auto grid = GridSystem::Instance().GetMainGrid();
-    if (!grid || path.empty()) return;
+    if (!grid || path.empty())
+        return;
 
     auto next = path.front();
 
-    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
     Vector3 pos = GetOwner()->GetTransform()->GetWorldPosition();
+
+    // 다음 타일 점유 여부
+    bool occupied = grid->IsOccupied(next.first, next.second);
+
+    // 타겟 위치 계산
+    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
 
     Vector3 dir = targetPos - pos;
     dir.y = 0;
 
-    if (dir.Length() < reachDist)
+    float dist = dir.Length();
+
+    // 도착 처리
+    if (dist < reachDist)
     {
-        // 도착 → 그리드 갱신
         grid->Release(cx, cy);
 
         cx = next.first;
@@ -138,16 +233,82 @@ void AgentComponent::MoveAlongPath(float dt)
 
         if (path.empty())
         {
-            arrived = true;
-            hasTarget = false;
+            if (cx == targetCX && cy == targetCY)
+            {
+                arrived = true;
+                hasTarget = false;
+            }
         }
 
         return;
     }
 
+    // 이동 전 위치 저장
+    Vector3 before = pos;
+
+    // 이동
     dir.Normalize();
     MoveAgent(dir, moveSpeed, dt);
+
+    // 이동 후 위치
+    Vector3 after = GetOwner()->GetTransform()->GetWorldPosition();
+
+    float moveDelta = (after - before).Length();
+
+    // Grid 동기화
+    int newCX, newCY;
+    grid->WorldToGridFromCenter(after, newCX, newCY);
+
+    if (newCX != cx || newCY != cy)
+    {
+        grid->Release(cx, cy);
+
+        cx = newCX;
+        cy = newCY;
+
+        grid->Occupy(cx, cy, this);
+    }
+
+    // =========================
+    // STUCK 상황에서만 디버그 출력
+    // =========================
+    if (stuckTimer > 1.5f)
+    {
+        std::cout << "\n===== STUCK DEBUG =====\n";
+
+        std::cout << "[Current Tile] "
+            << cx << "," << cy << "\n";
+
+        std::cout << "[Next Tile] "
+            << next.first << "," << next.second << "\n";
+
+        std::cout << "[Target Tile] "
+            << targetCX << "," << targetCY << "\n";
+
+        std::cout << "[Occupied?] "
+            << occupied << "\n";
+
+        std::cout << "[MoveDelta] "
+            << moveDelta << "\n";
+
+        std::cout << "[Path Size] "
+            << path.size() << "\n";
+
+        static int lastNextX = -9999;
+        static int lastNextY = -9999;
+
+        if (lastNextX == next.first && lastNextY == next.second)
+        {
+            std::cout << "[Same Next Tile 반복 중]\n";
+        }
+
+        lastNextX = next.first;
+        lastNextY = next.second;
+
+        std::cout << "========================\n";
+    }
 }
+
 
 void AgentComponent::MoveAgent(const Vector3& dir, float speed, float dt)
 {
@@ -171,17 +332,48 @@ void AgentComponent::MoveAgent(const Vector3& dir, float speed, float dt)
     }
 }
 
+//void AgentComponent::DetectStuck(float dt)
+//{
+//    Vector3 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+//
+//    if ((currentPos - lastPos).Length() < 0.01f)
+//    {
+//        stuckTimer += dt;
+//
+//        if (stuckTimer > 1.0f && hasTarget && !path.empty())
+//        {
+//            std::cout << "[Stuck] Repath!\n";
+//            path.clear(); // 재탐색 유도
+//        }
+//
+//        //if (stuckTimer > 2.0f)
+//        //{
+//        //    std::cout << "[Stuck] Give up target\n";
+//        //    ClearTarget();
+//        //    return;
+//        //}
+//    }
+//    else
+//    {
+//        stuckTimer = 0.f;
+//    }
+//
+//    lastPos = currentPos;
+//}
+
 void AgentComponent::DetectStuck(float dt)
 {
-    Vector3 currentPos = GetOwner()->GetTransform()->GetWorldPosition();
+    int curCX = cx;
+    int curCY = cy;
 
-    if ((currentPos - lastPos).Length() < 1.0f)
+    if (curCX == prevCX && curCY == prevCY)
     {
         stuckTimer += dt;
 
-        if (stuckTimer > 1.0f)
+        if (stuckTimer > 5.0f && hasTarget)
         {
-            path.clear(); // 재탐색 유도
+            std::cout << "[Stuck REAL] Repath!\n";
+            path.clear();
         }
     }
     else
@@ -189,9 +381,9 @@ void AgentComponent::DetectStuck(float dt)
         stuckTimer = 0.f;
     }
 
-    lastPos = currentPos;
+    prevCX = curCX;
+    prevCY = curCY;
 }
-
 
 // --------------------------------------------------------------
 

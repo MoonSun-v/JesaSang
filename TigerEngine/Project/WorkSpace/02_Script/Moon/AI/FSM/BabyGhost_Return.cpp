@@ -15,13 +15,9 @@ void BabyGhost_Return::Enter()
     if (grid)
     {
         int wx, wy;
-        auto wp = babyGhost->initialPosition; // 웨이 포인트 = AI가 처음 배치된 위치
-        if (grid->WorldToGridFromCenter(wp, wx, wy))
+        if (grid->WorldToGridFromCenter(babyGhost->initialPosition, wx, wy)) // 웨이 포인트 = AI가 처음 배치된 위치
         {
-            babyGhost->agent->targetCX = wx;
-            babyGhost->agent->targetCY = wy;
-            babyGhost->agent->hasTarget = true;
-            babyGhost->agent->path.clear();
+            babyGhost->agent->SetTarget(wx, wy);
         }
     }
 }
@@ -40,16 +36,22 @@ void BabyGhost_Return::ChangeStateLogic()
         }
     }
 
-    // 복귀 완료 : 현재 위치와 initialPosition 비교
-    auto tr = babyGhost->GetOwner()->GetTransform();
-    float distSqr = (tr->GetWorldPosition() - babyGhost->initialPosition).LengthSquared();
-    const float arrivalThreshold = 150.0f; // 거의 도착했으면
-    if (distSqr <= arrivalThreshold * arrivalThreshold)
+    // 2. 도착 체크 : IsArrived()로 체크 (웨이포인트 좌표로 이동 완료 여부)
+    if (babyGhost->agent->IsArrived())
     {
-        cout << "[BabyGhost_Return] Reached waypoint -> Patrol" << endl;
         babyGhost->ChangeState(BabyGhostState::Patrol);
-        return;
     }
+
+    //// 복귀 완료 : 현재 위치와 initialPosition 비교
+    //auto tr = babyGhost->GetOwner()->GetTransform();
+    //float distSqr = (tr->GetWorldPosition() - babyGhost->initialPosition).LengthSquared();
+    //const float arrivalThreshold = 150.0f; // 거의 도착했으면
+    //if (distSqr <= arrivalThreshold * arrivalThreshold)
+    //{
+    //    cout << "[BabyGhost_Return] Reached waypoint -> Patrol" << endl;
+    //    babyGhost->ChangeState(BabyGhostState::Patrol);
+    //    return;
+    //}
 }
 
 void BabyGhost_Return::Update(float deltaTime)
@@ -58,12 +60,9 @@ void BabyGhost_Return::Update(float deltaTime)
 
 void BabyGhost_Return::FixedUpdate(float deltaTime)
 {
-    babyGhost->MoveToTarget(deltaTime);
 }
 
 void BabyGhost_Return::Exit()
 {
-    babyGhost->agent->externalControl = false;
-    babyGhost->agent->path.clear();
-    babyGhost->agent->hasTarget = false;
+    babyGhost->agent->ClearTarget();
 }
