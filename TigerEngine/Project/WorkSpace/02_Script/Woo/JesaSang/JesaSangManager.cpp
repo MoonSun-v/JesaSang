@@ -8,6 +8,7 @@
 #include "../Item/Item.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/QuestManager.h"
+#include "../Manager/GamePhaseManager.h"
 
 
 REGISTER_COMPONENT(JesaSangManager)
@@ -140,6 +141,12 @@ void JesaSangManager::ReceiveFood(std::unique_ptr<IItem> food)
 
     // 퀘스트 4 : [완성] 제사상 완성 : 제사상에 올라온 음식 카운팅 (1/6)
     QuestManager::Instance()->StepComplete(4);
+
+    // 4개의 음식이 모였을때
+    if(hasFoodCount == 4)
+    {
+        // TODO :: GamePhaseManager 연출 호출
+    }
 
     // 제사상에 음식이 다 올라오면 성공
     if(HasAllFood())
