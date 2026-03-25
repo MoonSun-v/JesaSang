@@ -1,7 +1,8 @@
 #pragma once
 #include "Components/ScriptComponent.h"
+#include "../BabyGhostController.h"
 
-class AdultGhostWaypoint_B : public ScriptComponent
+class BabyGhostWayPoint_E : public ScriptComponent
 {
     RTTR_ENABLE(ScriptComponent)
 

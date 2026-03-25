@@ -16,8 +16,7 @@ void BabyGhost_Cry::Enter()
 
 
     // 이동 완전 정지
-    babyGhost->agent->externalControl = true;
-    babyGhost->agent->path.clear();
+    babyGhost->agent->ClearTarget();
 }
 
 void BabyGhost_Cry::ChangeStateLogic()
@@ -101,7 +100,6 @@ void BabyGhost_Cry::FixedUpdate(float deltaTime)
 void BabyGhost_Cry::Exit()
 {
     careTimer = 0.0f;
-    babyGhost->agent->externalControl = false;
 
     // 돌봐주던 유령 초기화
     if (caringAdult)

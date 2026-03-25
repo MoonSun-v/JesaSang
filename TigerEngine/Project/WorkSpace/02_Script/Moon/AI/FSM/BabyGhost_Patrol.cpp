@@ -12,44 +12,43 @@ void BabyGhost_Patrol::Enter()
 
     agent = babyGhost->agent;
 
-    agent->patrolSpeed = 0.8f;  // Patrol 속도 
-    agent->SetWaitTime(3.0f);   // 목표 지점에서 대기 시간 
-
+    babyGhost->ResetAgentForMove(0.8f);
     babyGhost->animController->ChangeState("Idle");
 
-    //// 아직 이동 중이 아니라면 랜덤 목표 설정
-    //if (!agent->hasTarget && !agent->isWaiting)
-    //    agent->PickRandomTarget();
+    if (!agent->HasTarget())
+    {
+        babyGhost->SetNextPatrolTarget();
+    }
 }
 
 void BabyGhost_Patrol::ChangeStateLogic()
 {
-    //// 1. 시야 감지 : 플레이어 가 범위 내에 진입 
-    //if (babyGhost->IsSeeing(babyGhost->GetAITarget()))
-    //{
-    //    std::cout << "[BabyGhost_Patrol] Ghost is Seeing PLAYER !" << std::endl;
-    //    babyGhost->ChangeState(BabyGhostState::Cry);
-    //    return;
-    //}
+    // 1. 시야 감지 : 플레이어 가 범위 내에 진입 
+    if (babyGhost->IsSeeing(babyGhost->GetAITarget()))
+    {
+        std::cout << "[BabyGhost_Patrol] Ghost is Seeing PLAYER !" << std::endl;
+        babyGhost->ChangeState(BabyGhostState::Cry);
+        return;
+    }
 
-    //// 2. 기척 or 함정 감지 : 시야 밖에서 감지 
-    //if (babyGhost->IsPlayerInSenseRange())
-    //{
-    //    std::cout << "[BabyGhost_Patrol] PLAYER FOUND (Sense)!" << std::endl;
-    //    auto grid = GridSystem::Instance().GetMainGrid();
-    //    if (grid)
-    //    {
-    //        int px, py;
-    //        auto playerObj = babyGhost->GetPlayer();
-    //        if (playerObj && grid->WorldToGridFromCenter(playerObj->GetTransform()->GetLocalPosition(), px, py))
-    //        {
-    //            babyGhost->lastPlayerGrid = { px, py, true };
-    //        }
-    //    }
-    //    babyGhost->searchReason = SearchReason_Baby::FromPatrol;
-    //    babyGhost->ChangeState(BabyGhostState::Search);
-    //    return;
-    //}
+    // 2. 기척 or 함정 감지 : 시야 밖에서 감지 
+    if (babyGhost->IsPlayerInSenseRange())
+    {
+        std::cout << "[BabyGhost_Patrol] PLAYER FOUND (Sense)!" << std::endl;
+        auto grid = GridSystem::Instance().GetMainGrid();
+        if (grid)
+        {
+            int px, py;
+            auto playerObj = babyGhost->GetPlayer();
+            if (playerObj && grid->WorldToGridFromCenter(playerObj->GetTransform()->GetLocalPosition(), px, py))
+            {
+                babyGhost->lastPlayerGrid = { px, py, true };
+            }
+        }
+        babyGhost->searchReason = SearchReason_Baby::FromPatrol;
+        babyGhost->ChangeState(BabyGhostState::Search);
+        return;
+    }
 
     // Hide Object가 시야 내에 있는지 (플레이어 은신 불가능 해짐)
     UpdateHideObjectVision();
@@ -61,6 +60,12 @@ void BabyGhost_Patrol::Update(float deltaTime)
 
 void BabyGhost_Patrol::FixedUpdate(float deltaTime)
 {
+    if (!agent) return;
+
+    if (agent->IsArrived())
+    {
+        babyGhost->SetNextPatrolTarget();
+    }
 }
 
 void BabyGhost_Patrol::Exit()
@@ -73,9 +78,8 @@ void BabyGhost_Patrol::Exit()
     babyGhost->curSeeingHideObject = nullptr;
     babyGhost->hideLookRegistered = false;
 
-    agent->hasTarget = false;
-    agent->path.clear();
-    agent->isWaiting = false;
+    if (agent)
+        agent->ClearTarget();
 }
 
 

@@ -11,23 +11,18 @@ void BabyGhost_Search::Enter()
     rotateTimer = 0.0f;
 
     babyGhost->ResetAgentForMove(3.5f);
-
     babyGhost->animController->ChangeState("Idle");
 
     phase = SearchPhase::WaitBeforeMove;
 
     // 마지막 플레이어 위치 있으면 사용 
     if (babyGhost->lastPlayerGrid.valid /*&&
-        (babyGhost->searchReason == SearchReason::FromChase ||
-            babyGhost->searchReason == SearchReason::FromAttack)*/)
+        (babyGhost->searchReason == SearchReason::FromChase || babyGhost->searchReason == SearchReason::FromAttack)*/)
     {
         auto& p = babyGhost->lastPlayerGrid;
-        // std::cout << "[Search] Use Last Grid = (" << p.x << ", " << p.y << ")" << std::endl;
+        // std::cout << "[Baby Search] Use Last Grid = (" << p.x << ", " << p.y << ")" << std::endl;
 
-        babyGhost->agent->targetCX = p.x;
-        babyGhost->agent->targetCY = p.y;
-        babyGhost->agent->hasTarget = true;
-
+        babyGhost->agent->SetTarget(p.x, p.y);
         babyGhost->lastPlayerGrid.valid = false; // 1회성
     }
 }
@@ -63,23 +58,7 @@ void BabyGhost_Search::Update(float deltaTime)
 
 void BabyGhost_Search::FixedUpdate(float deltaTime)
 {
-    if (phase == SearchPhase::MoveToPoint && !arrived)
-    {
-        bool done = babyGhost->MoveToTarget(deltaTime);
-        if (done)
-        {
-            arrived = true;
-            phase = SearchPhase::RotateSearch;
-            rotateTimer = 0.0f;
-
-            auto tr = babyGhost->GetOwner()->GetTransform();
-            baseYaw = tr->GetYaw();
-            targetYaw = baseYaw + XMConvertToRadians(360.f);
-
-            babyGhost->agent->externalControl = true;
-        }
-    }
-    else if (phase == SearchPhase::RotateSearch)
+    if (phase == SearchPhase::RotateSearch)
     {
         rotateTimer += deltaTime;
 
@@ -92,9 +71,6 @@ void BabyGhost_Search::FixedUpdate(float deltaTime)
 
 void BabyGhost_Search::Exit()
 {
-    arrived = false;
-
-    babyGhost->agent->externalControl = false;
-    babyGhost->agent->path.clear();
-    babyGhost->agent->hasTarget = false;
+    if (babyGhost->agent)
+        babyGhost->agent->ClearTarget();
 }

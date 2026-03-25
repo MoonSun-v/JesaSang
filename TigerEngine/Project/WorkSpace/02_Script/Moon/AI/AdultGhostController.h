@@ -91,7 +91,7 @@ public:
     Vector3 initialPosition;
 
     
-public: // Patrol Waypoints (Editor 설정)
+public: // Patrol Waypoints
     static const int MAX_PATROL_POINTS = 16;
 
     GridPos patrolPoints[MAX_PATROL_POINTS];
@@ -110,9 +110,10 @@ private:
     // Animation
     void LoadAnimation();
 
-    // Movement (공통)
-    bool MoveToTarget(float delta);
-    void RotateByDirection(const Vector3& moveDir, float delta);
+    //// Movement (공통)
+    //bool MoveToTarget(float delta);
+    //void RotateByDirection(const Vector3& moveDir, float delta);
+
 
 public:
     void OnStart() override;
@@ -127,6 +128,7 @@ public:
     // Helper
     void ResetAgentForMove(float speed);
     // void SetAITarget(GameObject* newTarget);
+    bool IsArrived() const;
     bool IsSeeing(GameObject* target) const;
     bool IsPlayerInSenseRange();
     void StartPostBabyCare();
@@ -158,14 +160,7 @@ public:
     }
 
     // 외부에서 AdultGhost 타겟 지정
-    void SetAITarget(GameObject* newTarget)
-    {
-        if (!agent) return;
-
-        target = newTarget;    
-        agent->path.clear();
-        agent->hasTarget = true;
-    }
+    void SetAITarget(GameObject* newTarget); 
 
     // 외부에서 타겟 확인
     GameObject* GetTarget() const { return target; }

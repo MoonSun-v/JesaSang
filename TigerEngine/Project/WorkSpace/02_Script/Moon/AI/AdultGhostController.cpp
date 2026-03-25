@@ -82,10 +82,11 @@ void AdultGhostController::OnUpdate(float delta)
     if (!currentState) return;
 
     currentState->ChangeStateLogic();
+    currentState->Update(delta);
 
-    // 상태가 바뀌었으면 Update 실행하지 않음
-    if (currentState == fsmStates[(int)state])
-        currentState->Update(delta);
+    //// 상태가 바뀌었으면 Update 실행하지 않음
+    //if (currentState == fsmStates[(int)state])
+    //    currentState->Update(delta);
 }
 
 void AdultGhostController::OnFixedUpdate(float dt)
@@ -168,79 +169,16 @@ void AdultGhostController::LoadAnimation()
 }
 
 
-
-// -------------------------------------------------
-// Movement
-// -------------------------------------------------
-bool AdultGhostController::MoveToTarget(float delta)
-{
-    if (!agent || !agent->hasTarget) return false;
-
-    auto grid = GridSystem::Instance().GetMainGrid();
-    if (!grid) return false;
-
-    // 경로 없으면 생성
-    if (agent->path.empty())
-    {
-        agent->path = grid->FindPath(agent->cx, agent->cy, agent->targetCX, agent->targetCY);
-        if (agent->path.empty()) return false;
-    }
-
-    // 다음 칸 이동 
-    auto next = agent->path.front();
-    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
-
-    Vector3 pos = agent->GetOwner()->GetTransform()->GetWorldPosition();
-    Vector3 dir = targetPos - pos;
-    dir.y = 0;
-
-    // 해당 칸 도착 
-    if (dir.Length() < agent->reachDist)
-    {
-        agent->cx = next.first;
-        agent->cy = next.second;
-        agent->path.erase(agent->path.begin());
-        return agent->path.empty(); // 이 칸은 끝까지 가도록 
-    }
-
-    dir.Normalize();
-    agent->MoveAgent(dir, agent->patrolSpeed, delta);
-    RotateByDirection(dir, delta);
-
-    return false;
-}
-
-void AdultGhostController::RotateByDirection(const Vector3& moveDir, float delta)
-{
-    if (moveDir.LengthSquared() <= 0.0001f)
-        return;
-
-    auto tr = GetOwner()->GetTransform();
-
-    Vector3 dir = -moveDir; // 모델 반전 보정
-    float targetYaw = atan2f(dir.x, dir.z);
-    float currentYaw = tr->GetYaw();
-
-    float deltaYaw = WrapAngleRad(targetYaw - currentYaw);
-
-    float turnSpeed = 6.0f; // 플레이어보다 느리게
-    float newYaw = currentYaw + deltaYaw * turnSpeed * delta;
-
-    tr->SetEuler(Vector3(0.f, newYaw, 0.f));
-}
-
-
 // -------------------------------------------------
 // Helper
 // -------------------------------------------------
 
 void AdultGhostController::ResetAgentForMove(float speed)
 {
-    agent->patrolSpeed = speed;
-    agent->externalControl = true;
-    agent->hasTarget = false;
-    agent->path.clear();
-    agent->isWaiting = false;
+    if (!agent) return;
+
+    agent->SetSpeed(speed);
+    agent->ClearTarget();
 }
 
 
@@ -305,8 +243,9 @@ void AdultGhostController::StartPostBabyCare()
 
     // PostBabyCare 동안 기존 target 제거
     target = nullptr;
-    agent->hasTarget = false;
-    agent->path.clear();
+
+    if (agent)
+        agent->ClearTarget();
 }
 
 // -------------------------------------------------
@@ -334,17 +273,30 @@ void AdultGhostController::OnPlayerNoise(const Vector3& noiseWorldPos)
 
 void AdultGhostController::OnAttackHit()
 {
-    //if (state == AdultGhostState::Chase)
-    //{
-    //    std::cout << "[FSM] Chase -> Attack (Collision)\n";
-    //    ChangeState(AdultGhostState::Attack);
-    //}
-
-    if (state == AdultGhostState::Chase /*state != AdultGhostState::Attack*/)
+    if (state == AdultGhostState::Chase)
     {
         ChangeState(AdultGhostState::Attack);
     }
 }
+
+void AdultGhostController::SetAITarget(GameObject* newTarget)
+{
+    if (!agent) return;
+
+    target = newTarget;
+
+    if (!target) return;
+
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid) return;
+
+    int tx, ty;
+    if (grid->WorldToGridFromCenter(target->GetTransform()->GetWorldPosition(), tx, ty))
+    {
+        agent->SetTarget(tx, ty);
+    }
+}
+
 
 
 
@@ -354,39 +306,29 @@ void AdultGhostController::OnAttackHit()
 
 void AdultGhostController::SetNextPatrolTarget()
 {
-    if (patrolPointCount <= 0)
+    if (patrolPointCount <= 0 || !agent)
         return;
 
     GridPos& p = patrolPoints[patrolIndex];
 
-    agent->targetCX = p.x;
-    agent->targetCY = p.y;
-
-    agent->hasTarget = true;
-    agent->path.clear();
+    agent->SetTarget(p.x, p.y);
 
     lastVisitedWaypoint = patrolIndex;
 
     patrolIndex++;
-
     if (patrolIndex >= patrolPointCount)
         patrolIndex = 0;
 
-    std::cout << "[Patrol] Next Waypoint: "
-        << patrolIndex
-        << " (" << p.x << "," << p.y << ")\n";
+    std::cout << "[Adult Patrol] Next Waypoint: "
+        << patrolIndex << " (" << p.x << "," << p.y << ")\n";
 }
 
 void AdultGhostController::SetReturnToLastWaypoint()
 {
-    if (lastVisitedWaypoint < 0)
+    if (lastVisitedWaypoint < 0 || !agent)
         return;
 
     GridPos& p = patrolPoints[lastVisitedWaypoint];
 
-    agent->targetCX = p.x;
-    agent->targetCY = p.y;
-
-    agent->hasTarget = true;
-    agent->path.clear();
+    agent->SetTarget(p.x, p.y);
 }

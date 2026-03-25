@@ -212,6 +212,11 @@
     <ClInclude Include="02_Script\Woo\Player\DialogueUI\DialogueUIController.h" />
     <ClInclude Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_A.h" />
     <ClInclude Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_B.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_A.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_B.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_C.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_D.h" />
+    <ClInclude Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_E.h" />
     <ClInclude Include="EngineApp.h" />
     <ClInclude Include="02_Script\\Ron\\MiniMapTest\MiniMapTestScript.h" />
     <ClInclude Include="02_Script\\Ron\\MiniMapTest\MiniMapManager.h" />
@@ -312,6 +317,11 @@
     <ClCompile Include="02_Script\Woo\Player\DialogueUI\DialogueUIController.cpp" />
     <ClCompile Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_A.cpp" />
     <ClCompile Include="02_Script\Moon\AI\WayPoints\AdultGhostWaypoint_B.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_A.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_B.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_C.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_D.cpp" />
+    <ClCompile Include="02_Script\Moon\AI\WayPoints\BabyGhostWayPoint_E.cpp" />
     <ClCompile Include="EngineApp.cpp" />
     <ClCompile Include="02_Script\\Ron\\MiniMapTest\MiniMapTestScript.cpp" />
     <ClCompile Include="02_Script\\Ron\\MiniMapTest\MiniMapManager.cpp" />
