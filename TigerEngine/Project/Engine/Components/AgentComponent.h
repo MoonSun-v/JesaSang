@@ -2,7 +2,19 @@
 #include "../Object/Component.h"
 #include "../EngineSystem/GridSystem.h"
 
+#include "../Util/GridTypes.h"
+
 class CharacterControllerComponent;
+
+// -------------------------------------------------------------
+// [ AgentComponent ]
+// 
+// - Grid 위에서 이동하는 AI 에이전트
+// - 목표 좌표 설정
+// - A* 경로 생성
+// - 경로 추종 이동
+// - 정체(stuck) / 차단(blocked) 처리
+// -------------------------------------------------------------
 
 class AgentComponent : public Component
 {
@@ -16,55 +28,47 @@ public:
     ~AgentComponent() = default;
 
 public:
+    // [ External Movement Dependency ]
     CharacterControllerComponent* cct = nullptr;
 
-    // 현재 위치 (중앙 기준)
-    int cx = 0, cy = 0;             
 
-    // 이동 
-    float reachDist = 20.0f;  // 목표와의 거리 
+    // [ Current Grid Position ]
+    int cx = 0;
+    int cy = 0;
+
+
+    // [ Movement Settings ]
+    float reachDist = 20.0f;  // 다음 셀 중심에 도달했다고 보는 거리
     float moveSpeed = 1.0f;
 
+
 private:
-    // 목표 위치 (중앙 기준)
-    int targetCX = 0, targetCY = 0; 
+    // [ Target State ]
+    int targetCX = 0;
+    int targetCY = 0;
     bool hasTarget = false;
-
-    // A* 경로 저장 (그리드 좌표)
-    std::vector<std::pair<int, int>> path; 
-
-    //bool isWaiting = false;   // 현재 대기 중인지
-    //float waitTimer = 0.0f;    // 남은 대기 시간
-    //float waitDuration = 0.0f; // 기본 대기 시간 (초) 
-
-    //// 정체 감지
-    //float stuckTimer = 0.0f;     
-    //Vector3 lastPos;            // 이전 위치
-
-    //int prevCX = 0;
-    //int prevCY = 0;
-
-    float stuckTimer = 0.0f;
-    float blockedTimer = 0.0f;
-    Vector3 lastWorldPos;
-
-    // 상태
     bool arrived = false;
 
-public:
-    // float giveWayTimer = 0.f;   // 양보 타이머
-   
+
+    // [ (A*) Path Data ] : 중앙 기준 그리드 좌표 
+    std::vector<GridCoord> path;
+
+    // [ Runtime Timer ]
+    float stuckTimer = 0.0f;     // 거의 이동하지 못한 시간 누적
+    float blockedTimer = 0.0f;   // 다음 셀이 점유되어 대기한 시간
+    Vector3 lastWorldPos;        // 이전 프레임 world position
+
 
 public:
     void OnInitialize() override;
     void OnStart() override;
     void OnFixedUpdate(float dt) override;
 
-    // register enable
     void Enable_Inner() override;
     void Disable_Inner() override;
 
-    // FSM 인터페이스-
+public:
+    // [ External Control API (FSM에서 호출) ]
     void SetTarget(int x, int y);
     void ClearTarget();
 
@@ -74,15 +78,11 @@ public:
 
     void SetSpeed(float s) { moveSpeed = s; }
 
+
 private:
+    // [ Internal Update Flow ]
     void UpdatePath();
     void MoveAlongPath(float dt);
     void DetectStuck(float dt);
-    
     void MoveAgent(const Vector3& dir, float speed, float dt);
-
-    // void PickRandomTarget();
-
-    //void SetWaitTime(float seconds);
-    //Vector3 ComputeSeparationForce(const Vector3& moveDir);
 };
