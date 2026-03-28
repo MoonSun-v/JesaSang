@@ -112,8 +112,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\Externals\AudioModule_FMOD\fmod\lib\x64;$(SolutionDir)\ThirdParty\PhysX_5\lib\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmodL_vc.lib;PhysX_64.lib;
+PhysXCommon_64.lib;
+PhysXFoundation_64.lib
+;PhysXExtensions_static_64.lib;
+PhysXPvdSDK_static_64.lib;
+PhysXCharacterKinematic_static_64.lib;
+PhysXCooking_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>

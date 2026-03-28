@@ -23,22 +23,32 @@ void GridComponent::Deserialize(nlohmann::json data)
     JsonHelper::SetDataFromJson(this, data);
 }
 
-void DebugPrintBlock( const std::string& obj, int gx, int gy, int cx, int cy,
-    const Vector3& worldPos, ColliderType type)
+// [ Debug Helper ] Physics → Grid 매핑 디버그 출력
+namespace
 {
-    std::cout
-        << "[" << obj << "]  "
-        << "Grid(" << gx << "," << gy << ")  "
-        << "Center(" << cx << "," << cy << ")  "
-        << "World(" << worldPos.x << "," << worldPos.z << ")  "
-        << "Type(" << (int)type << ")\n";
+    void DebugPrintBlockedCell(
+        const std::string& objectName,
+        int gridX, int gridY,
+        int centerX, int centerY,
+        const Vector3& worldPos,
+        ColliderType type)
+    {
+        std::cout
+            << "[" << objectName << "]  "
+            << "Grid(" << gridX << "," << gridY << ")  "
+            << "Center(" << centerX << "," << centerY << ")  "
+            << "World(" << worldPos.x << "," << worldPos.z << ")  "
+            << "Type(" << static_cast<int>(type) << ")\n";
+    }
 }
+
 
 void GridComponent::OnInitialize()
 {
-    // 셀 배열 초기화 
+    // Grid 셀 배열 초기화
     ResizeGrid(width, height);
 
+    // Physics 상태를 보고 나중에 다시 build 할 수 있도록 플래그 초기화
     m_pendingBuild = true;
     m_lastActorCount = -1;
      
@@ -61,8 +71,7 @@ void GridComponent::OnStart()
 }
 
 void GridComponent::OnDestory()
-{
-    
+{    
 }
 
 void GridComponent::Disable_Inner()
@@ -71,123 +80,147 @@ void GridComponent::Disable_Inner()
     OnDisable();
 }
 
+// -------------------------------------------------------------
+
+
+// [ Grid Build ] 
+// - Physics Actor 기반으로 Grid 차단 정보 생성
 void GridComponent::BuildBlockedFromPhysics()
 {
+    // 1. 우선 모든 셀을 walkable 상태로 초기화
     for (auto& c : cells)
         c.walkable = true;
 
-    auto& map = PhysicsSystem::Instance().m_ActorMap;
+    auto& actorMap = PhysicsSystem::Instance().m_ActorMap;
 
     std::cout << "\n==== Physics → Grid Mapping (AABB based, Center Origin) ====\n";
 
-    int centerX = (width - 1) / 2;
-    int centerY = (height - 1) / 2;
+    const int centerGridX = (width - 1) / 2;
+    const int centerGridY = (height - 1) / 2;
 
-    std::unordered_set<GameObject*> visited;
+    // 같은 GameObject가 여러 PhysicsComponent를 갖는 경우 중복 처리 방지
+    std::unordered_set<GameObject*> visitedOwners;
 
-    for (auto& pair : map)
+    for (auto& pair : actorMap)
     {
         PhysicsComponent* phys = pair.first;
         if (!phys || !phys->m_Actor) continue;
         if (phys->IsTrigger()) continue;
         if (phys->GetLayer() & CollisionLayer::Ground) continue;
 
-        auto owner = phys->GetOwner();
+        GameObject* owner = phys->GetOwner();
+        if (!owner) continue;
+
+        if (visitedOwners.count(owner)) 
+            continue;
+        visitedOwners.insert(owner);
+
+        Transform* transform = phys->transform;
+        if (!transform)
+            continue;
+
+        Vector3 objectPos = transform->GetLocalPosition();
+
         std::string objName = owner ? owner->GetName() : "Unknown";
 
-        // 중복 PhysicsComponent 방어
-        if (visited.count(owner)) continue;
-        visited.insert(owner);
+        // ----------------------------------------------------
+        // 1. Collider world bounds 계산
+        // ----------------------------------------------------
 
-        Transform* tr = phys->transform;
-        if (!tr) continue;
-
-        Vector3 pos = tr->GetLocalPosition();
-
-        // -----------------------
-        // 1. 월드 AABB
-        // -----------------------
-        Vector3 minW, maxW;
+        Vector3 minWorld;
+        Vector3 maxWorld;
 
         if (phys->m_ColliderType == ColliderType::Box)
         {
-            PxBounds3 b = phys->m_Actor->getWorldBounds();
+            PxBounds3 bounds = phys->m_Actor->getWorldBounds();
 
             std::cout << "\n[" << objName << "] PxBounds\n";
-            std::cout << "  min = (" << b.minimum.x * 100 << ", " << b.minimum.y * 100 << ", " << b.minimum.z * 100 << ")\n";
-            std::cout << "  max = (" << b.maximum.x * 100 << ", " << b.maximum.y * 100 << ", " << b.maximum.z * 100 << ")\n";
-            std::cout << "  TransformPos = (" << pos.x << ", " << pos.y << ", " << pos.z << ")\n";
+            std::cout << "  min = (" << bounds.minimum.x * 100 << ", " << bounds.minimum.y * 100 << ", " << bounds.minimum.z * 100 << ")\n";
+            std::cout << "  max = (" << bounds.maximum.x * 100 << ", " << bounds.maximum.y * 100 << ", " << bounds.maximum.z * 100 << ")\n";
+            std::cout << "  TransformPos = (" << objectPos.x << ", " << objectPos.y << ", " << objectPos.z << ")\n";
 
-            minW = { b.minimum.x * 100, 0, b.minimum.z * 100 };
-            maxW = { b.maximum.x * 100, 0, b.maximum.z * 100 };
+            minWorld = { bounds.minimum.x * 100.0f, 0.0f, bounds.minimum.z * 100.0f };
+            maxWorld = { bounds.maximum.x * 100.0f, 0.0f, bounds.maximum.z * 100.0f };
         }
         else
         {
-            float r = 0.0f;
+            float radius = 0.0f;
+
             switch (phys->m_ColliderType)
             {
-            case ColliderType::Sphere:  r = phys->m_Radius; break;
-            case ColliderType::Capsule: r = phys->m_Radius; break;
-            default: r = phys->m_HalfExtents.x; break;
+            case ColliderType::Sphere:
+                radius = phys->m_Radius;
+                break;
+            case ColliderType::Capsule:
+                radius = phys->m_Radius;
+                break;
+            default:
+                radius = phys->m_HalfExtents.x;
+                break;
             }
 
-            minW = { pos.x - r, 0, pos.z - r };
-            maxW = { pos.x + r, 0, pos.z + r };
+            minWorld = { objectPos.x - radius, 0.0f, objectPos.z - radius };
+            maxWorld = { objectPos.x + radius, 0.0f, objectPos.z + radius };
         }
 
-        //----------------------------------
-        // 2. AABB → 중앙 기준 Grid
-        //----------------------------------
+        // ----------------------------------------------------
+        // 2. World bounds -> 중앙 기준 grid bounds
+        // ----------------------------------------------------
         int minCX = 0, minCY = 0;
         int maxCX = 0, maxCY = 0;
 
-        WorldToGridFromCenter(minW, minCX, minCY);
-        WorldToGridFromCenter(maxW, maxCX, maxCY);
+        WorldToGridFromCenter(minWorld, minCX, minCY);
+        WorldToGridFromCenter(maxWorld, maxCX, maxCY);
 
         std::cout << "\n[" << objName << "] CenterGridRange: ("
-            << minCX << "," << minCY << ") ~ ("
-            << maxCX << "," << maxCY << ")\n";
+            << minCX << "," << minCY << ") ~ (" << maxCX << "," << maxCY << ")\n";
 
 
-        //----------------------------------
-        // 3. 내부 Grid index로 변환 + Clamp
-        //----------------------------------
-        int minX = std::clamp(centerX + minCX, 0, width - 1);
-        int minY = std::clamp(centerY + minCY, 0, height - 1);
-        int maxX = std::clamp(centerX + maxCX, 0, width - 1);
-        int maxY = std::clamp(centerY + maxCY, 0, height - 1);
+        // ----------------------------------------------------
+        // 3. center-based -> internal grid index + clamp
+        // ----------------------------------------------------
+        int minX = std::clamp(centerGridX + minCX, 0, width - 1);
+        int minY = std::clamp(centerGridY + minCY, 0, height - 1);
+        int maxX = std::clamp(centerGridX + maxCX, 0, width - 1);
+        int maxY = std::clamp(centerGridY + maxCY, 0, height - 1);
 
 
-        //----------------------------------
-        // 4. Grid Cell overlap 검사
-        //----------------------------------
+        // ----------------------------------------------------
+        // 4. 실제 셀 overlap 검사 후 blocked 처리
+        // ----------------------------------------------------
         for (int y = minY; y <= maxY; ++y)
         {
             for (int x = minX; x <= maxX; ++x)
             {
-                if (auto* cell = GetCell(x, y))
+                GridCell* cell = GetCell(x, y);
+                if (!cell)
+                    continue;
+
+                Vector3 cellCenter = GridToWorld(x, y);
+                Vector3 cellMin = cellCenter - Vector3(cellSize * 0.5f, 0.0f, cellSize * 0.5f);
+                Vector3 cellMax = cellCenter + Vector3(cellSize * 0.5f, 0.0f, cellSize * 0.5f);
+
+                float overlapX = std::max(0.0f, std::min(cellMax.x, maxWorld.x) - std::max(cellMin.x, minWorld.x));
+                float overlapZ = std::max(0.0f, std::min(cellMax.z, maxWorld.z) - std::max(cellMin.z, minWorld.z));
+
+                float overlapArea = overlapX * overlapZ;
+                float cellArea = cellSize * cellSize;
+
+                // 셀 면적의 5% 이상 겹치면 blocked
+                if (overlapArea > cellArea * 0.05f)
                 {
-                    Vector3 cellCenter = GridToWorld(x, y);
-                    Vector3 cellMin = cellCenter - Vector3(cellSize * 0.5f, 0, cellSize * 0.5f);
-                    Vector3 cellMax = cellCenter + Vector3(cellSize * 0.5f, 0, cellSize * 0.5f);
+                    cell->walkable = false;
 
-                    float overlapX = std::max(0.f, std::min(cellMax.x, maxW.x) - std::max(cellMin.x, minW.x));
-                    float overlapZ = std::max(0.f, std::min(cellMax.z, maxW.z) - std::max(cellMin.z, minW.z));
+                    int cx = x - centerGridX;
+                    int cy = y - centerGridY;
+                    Vector3 cellWorld = GridToWorld(x, y);
 
-                    float overlapArea = overlapX * overlapZ;
-                    float cellArea = cellSize * cellSize;
-
-                    // 5% 이상 겹칠 때만 막기
-                    if (overlapArea > cellArea * 0.05f)
-                    {
-                        cell->walkable = false;
-
-                        int cx = x - centerX;
-                        int cy = y - centerY;
-                        Vector3 cellWorld = GridToWorld(x, y);
-
-                        DebugPrintBlock(objName, x, y, cx, cy, cellWorld, phys->m_ColliderType);
-                    }
+                    DebugPrintBlockedCell(
+                        objName,
+                        x, y,
+                        cx, cy,
+                        cellWorld,
+                        phys->m_ColliderType);
                 }
             }
         }
@@ -196,18 +229,20 @@ void GridComponent::BuildBlockedFromPhysics()
     std::cout << "===========================================\n";
 }
 
+// [ 에디터/데이터에서 지정한 override를 다시 적용 ]
 void GridComponent::BuildWalkableFromCostum()
 {
-    for (auto& ovr : walkableOverrides)
+    for (auto& overrideData : walkableOverrides)
     {
-        SetWalkableFromCenter(ovr.cx, ovr.cy, ovr.walkable);
+        SetWalkableFromCenter(overrideData.cx, overrideData.cy, overrideData.walkable);
+
         std::cout << "[GridComponent] Override applied: ("
-            << ovr.cx << "," << ovr.cy << ") walkable="
-            << ovr.walkable << "\n";
+            << overrideData.cx << "," << overrideData.cy << ") walkable="
+            << overrideData.walkable << "\n";
     }
 }
 
-// Width 와 Height에 의해 재설정되는 그리드 cell 
+// [ Width 와 Height에 의해 재설정되는 그리드 cell ]
 void GridComponent::ResizeGrid(int newWidth, int newHeight)
 {
     width = newWidth;
@@ -220,17 +255,17 @@ void GridComponent::ResizeGrid(int newWidth, int newHeight)
     {
         for (int x = 0; x < width; ++x)
         {
-            auto& c = cells[y * width + x];
-            c.x = x;
-            c.y = y;
-            c.walkable = true;
+            GridCell& cell = cells[y * width + x];
+            cell.x = x;
+            cell.y = y;
+            cell.walkable = true;
         }
     }
 }
 
 
 //----------------------------------------
-// 셀 접근 / 조회
+// Cell 접근 / 조회
 //----------------------------------------
 
 GridCell* GridComponent::GetCell(int x, int y)
@@ -247,6 +282,7 @@ bool GridComponent::IsWalkable(int x, int y)
     return cell ? cell->walkable : false;
 }
 
+
 //----------------------------------------
 // 중앙 기준 좌표 접근
 //----------------------------------------
@@ -255,10 +291,10 @@ GridCell* GridComponent::GetCellFromCenter(int cx, int cy)
     int centerX = (width - 1) / 2;
     int centerY = (height - 1) / 2;
 
-    int ix = centerX + cx; // 중앙 기준 → 내부 배열 인덱스
-    int iy = centerY + cy;
+    int gridX = centerX + cx; // 중앙 기준 → 내부 배열 인덱스
+    int gridY = centerY + cy;
 
-    return GetCell(ix, iy);
+    return GetCell(gridX, gridY);
 }
 
 bool GridComponent::IsWalkableFromCenter(int cx, int cy)
@@ -277,15 +313,16 @@ void GridComponent::SetWalkableFromCenter(int cx, int cy, bool walkable)
         cell->walkable = walkable;
 }
 
+
 //----------------------------------------
 // Grid <-> World 변환
 //----------------------------------------
 
-// 0,0이 좌측 하단 기준
+// (0,0)은 좌측 하단 셀
 Vector3 GridComponent::GridToWorld(int x, int y)
 {
-    auto t = GetOwner()->GetTransform();
-    Vector3 origin = t->GetLocalPosition();
+    auto transform = GetOwner()->GetTransform();
+    Vector3 origin = transform->GetLocalPosition();
 
     float offsetX = (width * 0.5f - 0.5f) * cellSize;
     float offsetZ = (height * 0.5f - 0.5f) * cellSize;
@@ -297,11 +334,11 @@ Vector3 GridComponent::GridToWorld(int x, int y)
     };
 }
 
-// World -> Grid
+// [ World -> Grid ]
 bool GridComponent::WorldToGrid(const Vector3& pos, int& outX, int& outY)
 {
     auto t = GetOwner()->GetTransform();
-    Vector3 origin = t->GetLocalPosition(); // 그리드 중심
+    Vector3 origin = t->GetLocalPosition(); 
 
     float offsetX = (width * 0.5f - 0.5f) * cellSize;
     float offsetZ = (height * 0.5f - 0.5f) * cellSize;
@@ -309,26 +346,22 @@ bool GridComponent::WorldToGrid(const Vector3& pos, int& outX, int& outY)
     float localX = pos.x - origin.x + offsetX;
     float localZ = pos.z - origin.z + offsetZ;
 
-    outX = (int)floor(localX / cellSize);
-    outY = (int)floor(localZ / cellSize);
+    outX = static_cast<int>(floor(localX / cellSize));
+    outY = static_cast<int>(floor(localZ / cellSize));
 
     return !(outX < 0 || outY < 0 || outX >= width || outY >= height);
 }
 
-// 중앙 기준 좌표 -> World
+// [ 중앙 기준 좌표 Grid -> World ]
 Vector3 GridComponent::GridToWorldFromCenter(int cx, int cy)
 {
-    auto t = GetOwner()->GetTransform();
-    Vector3 origin = t->GetWorldPosition(); // 오브젝트 위치 = 그리드 중앙
-
-    // cx, cy: 중앙 기준 좌표 (-center ~ +center)
-    float offsetX = cx * cellSize;
-    float offsetZ = cy * cellSize;
+    auto transform = GetOwner()->GetTransform();
+    Vector3 origin = transform->GetWorldPosition();
 
     return {
-        origin.x + offsetX,
+        origin.x + cx * cellSize,
         origin.y,
-        origin.z + offsetZ
+        origin.z + cy * cellSize
     };
 }
 
@@ -340,8 +373,8 @@ bool GridComponent::WorldToGridFromCenter(const Vector3& pos, int& outCX, int& o
     float localX = pos.x - origin.x;
     float localZ = pos.z - origin.z;
 
-    outCX = (int)floor(localX / cellSize + 0.5f);
-    outCY = (int)floor(localZ / cellSize + 0.5f);
+    outCX = static_cast<int>(floor(localX / cellSize + 0.5f));
+    outCY = static_cast<int>(floor(localZ / cellSize + 0.5f));
 
     int centerX = (width - 1) / 2;
     int centerY = (height - 1) / 2;
@@ -357,75 +390,169 @@ bool GridComponent::WorldToGridFromCenter(const Vector3& pos, int& outCX, int& o
 // A* (에이스타) 길찾기 
 // ================================================================
 
-// 중앙 기준 좌표로 시작/목표 받아 -> walkable 한 칸씩 이동하는 경로를 반환
-std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startCY, int endCX, int endCY)
+// 중심 좌표를 하나의 정수 key로 변환
+// - allNodes / closedSet에서 동일 좌표를 빠르게 찾기 위해 사용
+// - width/height 기반 offset을 사용해 음수 좌표도 다룰 수 있게 함
+namespace
 {
-    std::vector<std::pair<int, int>> finalPath;
+    inline int MakePathKey(int cx, int cy, int width, int height)
+    {
+        const int offsetX = width / 2;
+        const int offsetY = height / 2;
+        return (cy + offsetY) * width + (cx + offsetX);
+    }
 
-    auto cmp = [](Node* a, Node* b) { return a->fCost() > b->fCost(); };
-    std::priority_queue<Node*, std::vector<Node*>, NodeCmp> openSet;
-    std::unordered_map<int, Node*> allNodes;
+    inline float HeuristicManhattan(int fromCX, int fromCY, int toCX, int toCY)
+    {
+        return static_cast<float>(abs(toCX - fromCX) + abs(toCY - fromCY));
+    }
+}
 
-    auto hash = [this](int x, int y)
+std::vector<GridCoord> GridComponent::FindPath(int startCX, int startCY, int endCX, int endCY)
+{
+    std::vector<GridCoord> finalPath;
+
+    // --------------------------------------------------------
+    // 0. 사전 검사
+    // --------------------------------------------------------
+    // 시작점/목표점 중 하나라도 이동 불가면 경로 없음
+    if (!IsWalkableFromCenter(startCX, startCY))    return finalPath;
+    if (!IsWalkableFromCenter(endCX, endCY))        return finalPath;
+
+    // --------------------------------------------------------
+    // 1. A* 탐색용 자료구조
+    // --------------------------------------------------------
+    // openSet   : 아직 탐색 후보인 노드들 (FCost가 가장 작은 노드 우선)
+    // nodeLookup : 좌표 key → 노드 포인터 (openSet 내에서 해당 좌표 노드 존재 여부 및 빠른 접근용)
+    // closedSet : 이미 확정적으로 방문한 좌표
+    // ownedNodes : 탐색 과정에서 생성된 노드들의 소유권 관리 (메모리 해제 용이)
+    std::priority_queue<PathNode*, std::vector<PathNode*>, PathNodeCompare> openSet;
+    std::unordered_map<int, PathNode*> nodeLookup;
+    std::unordered_set<int> closedSet;
+    std::vector<std::unique_ptr<PathNode>> ownedNodes;
+
+    auto createNode = [&](int cx, int cy, float gCost, float hCost, PathNode* parent) -> PathNode*
         {
-            int offsetX = width / 2;
-            int offsetY = height / 2;
-            return (y + offsetY) * width + (x + offsetX);
+            ownedNodes.push_back(std::make_unique<PathNode>(PathNode{ cx, cy, gCost, hCost, parent }));
+            return ownedNodes.back().get();
         };
 
-    Node* start = new Node{ startCX, startCY, 0, float(abs(endCX - startCX) + abs(endCY - startCY)), nullptr };
-    openSet.push(start);
-    allNodes[hash(startCX, startCY)] = start;
+    // 상하좌우 4방향 이동
+    const std::vector<GridCoord> directions =
+    {
+        { 1, 0 },
+        { -1, 0 },
+        { 0, 1 },
+        { 0, -1 }
+    };
 
-    std::vector<std::pair<int, int>> directions = { {1,0},{-1,0},{0,1},{0,-1} };
+    // --------------------------------------------------------
+    // 2. 시작 노드 등록
+    // --------------------------------------------------------
+    PathNode* startNode = createNode(
+        startCX,
+        startCY,
+        0.0f,
+        HeuristicManhattan(startCX, startCY, endCX, endCY),
+        nullptr
+    );
 
+    openSet.push(startNode);
+    nodeLookup[MakePathKey(startCX, startCY, width, height)] = startNode;
+
+    // --------------------------------------------------------
+    // 3. 메인 탐색 루프
+    // --------------------------------------------------------
     while (!openSet.empty())
     {
-        Node* current = openSet.top();
+        PathNode* current = openSet.top();
         openSet.pop();
 
-        if (current->x == endCX && current->y == endCY)
+        int currentKey = MakePathKey(current->cx, current->cy, width, height);
+
+        // 이미 더 좋은 경로로 확정된 노드면 스킵
+        if (closedSet.count(currentKey))
+            continue;
+
+        closedSet.insert(currentKey);
+
+        // 목표 도착 시 경로 복원
+        if (current->cx == endCX && current->cy == endCY)
         {
-            // 경로 역추적
-            while (current)
+            while (current != nullptr)
             {
-                finalPath.push_back({ current->x, current->y });
+                finalPath.push_back({ current->cx, current->cy });
                 current = current->parent;
             }
+
             std::reverse(finalPath.begin(), finalPath.end());
-            break;
+            return finalPath;
         }
 
-        for (auto& dir : directions)
+        // ----------------------------------------------------
+        // 4. 인접 노드 탐색
+        // ----------------------------------------------------
+        for (const auto& dir : directions)
         {
-            int nx = current->x + dir.first;
-            int ny = current->y + dir.second;
+            int nextCX = current->cx + dir.cx;
+            int nextCY = current->cy + dir.cy;
 
-            if (!IsWalkableFromCenter(nx, ny)) continue;
-            if (IsOccupied(nx, ny) && !(nx == endCX && ny == endCY)) continue; // 점유 셀 X 
+            // 이동 불가 셀은 스킵
+            if (!IsWalkableFromCenter(nextCX, nextCY))
+                continue;
 
-            int key = hash(nx, ny);
-            float gNew = current->gCost + 1;
+            // 목표 셀이 아닌 점유 셀은 스킵
+            if (IsOccupied(nextCX, nextCY) && !(nextCX == endCX && nextCY == endCY))
+                continue;
 
-            if (allNodes.find(key) == allNodes.end() || gNew < allNodes[key]->gCost)
+            int nextKey = MakePathKey(nextCX, nextCY, width, height);
+
+            // 이미 방문 확정된 셀은 스킵
+            if (closedSet.count(nextKey))
+                continue;
+
+            float newGCost = current->gCost + 1.0f;
+            float newHCost = HeuristicManhattan(nextCX, nextCY, endCX, endCY);
+
+            auto found = nodeLookup.find(nextKey);
+
+            // 아직 생성되지 않은 좌표면 새 노드 생성
+            if (found == nodeLookup.end())
             {
-                float h = float(abs(endCX - nx) + abs(endCY - ny));
-                Node* neighbor = new Node{ nx, ny, gNew, h, current };
-                openSet.push(neighbor);
-                allNodes[key] = neighbor;
+                PathNode* nextNode = createNode(
+                    nextCX,
+                    nextCY,
+                    newGCost,
+                    newHCost,
+                    current
+                );
+
+                nodeLookup[nextKey] = nextNode;
+                openSet.push(nextNode);
+                continue;
+            }
+
+            // 이미 생성된 노드인데 더 좋은 경로를 찾은 경우 갱신
+            PathNode* nextNode = found->second;
+            if (newGCost < nextNode->gCost)
+            {
+                nextNode->gCost = newGCost;
+                nextNode->hCost = newHCost;
+                nextNode->parent = current;
+
+                // priority_queue는 내부 우선순위 갱신이 없으므로 다시 push
+                openSet.push(nextNode);
             }
         }
     }
 
-    // 동적할당 해제
-    for (auto& pair : allNodes) delete pair.second;
-
+    // 목표 도달 실패
     return finalPath;
 }
 
 
 // -------------------------------------------------------------------
-// [ 셀 점유 관련 ]
+// [ Occupancy ]
 // -------------------------------------------------------------------
 
 int GridComponent::MakeKey(int cx, int cy)
