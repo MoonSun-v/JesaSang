@@ -46,9 +46,6 @@ void GridComponent::OnInitialize()
     // SetWalkableFromCenter(0, 18, false);
 
     // 2. 임의로 그리드를 걸을 수 있도록 설정 : true 
-    //SetWalkableFromCenter(0, 3, true);
-    //SetWalkableFromCenter(8, -11, true);
-    //SetWalkableFromCenter(8, -12, true);
     SetWalkableFromCenter(-8, -13, true);
     SetWalkableFromCenter(-9, -13, true);
 }
@@ -360,27 +357,6 @@ bool GridComponent::WorldToGridFromCenter(const Vector3& pos, int& outCX, int& o
 // A* (에이스타) 길찾기 
 // ================================================================
 
-#include <queue>
-#include <unordered_map>
-#include <functional>
-
-struct Node
-{
-    int x, y;
-    float gCost, hCost;
-    Node* parent = nullptr;
-
-    float fCost() const { return gCost + hCost; }
-};
-
-struct NodeCmp
-{
-    bool operator()(const Node* a, const Node* b) const
-    {
-        return a->fCost() > b->fCost(); // min-heap
-    }
-};
-
 // 중앙 기준 좌표로 시작/목표 받아 -> walkable 한 칸씩 이동하는 경로를 반환
 std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startCY, int endCX, int endCY)
 {
@@ -390,7 +366,12 @@ std::vector<std::pair<int, int>> GridComponent::FindPath(int startCX, int startC
     std::priority_queue<Node*, std::vector<Node*>, NodeCmp> openSet;
     std::unordered_map<int, Node*> allNodes;
 
-    auto hash = [this](int x, int y) { return (y + (width / 2)) * width + (x + (width / 2)); };
+    auto hash = [this](int x, int y)
+        {
+            int offsetX = width / 2;
+            int offsetY = height / 2;
+            return (y + offsetY) * width + (x + offsetX);
+        };
 
     Node* start = new Node{ startCX, startCY, 0, float(abs(endCX - startCX) + abs(endCY - startCY)), nullptr };
     openSet.push(start);

@@ -37,12 +37,16 @@ private:
     //float waitTimer = 0.0f;    // 남은 대기 시간
     //float waitDuration = 0.0f; // 기본 대기 시간 (초) 
 
-    // 정체 감지
-    float stuckTimer = 0.0f;     
-    Vector3 lastPos;            // 이전 위치
+    //// 정체 감지
+    //float stuckTimer = 0.0f;     
+    //Vector3 lastPos;            // 이전 위치
 
-    int prevCX = 0;
-    int prevCY = 0;
+    //int prevCX = 0;
+    //int prevCY = 0;
+
+    float stuckTimer = 0.0f;
+    float blockedTimer = 0.0f;
+    Vector3 lastWorldPos;
 
     // 상태
     bool arrived = false;

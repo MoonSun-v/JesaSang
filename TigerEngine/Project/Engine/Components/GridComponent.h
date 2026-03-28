@@ -2,6 +2,10 @@
 #include "pch.h"
 #include "../Object/Component.h"
 
+#include <queue>
+#include <unordered_map>
+#include <functional>
+
 struct GridCell
 {
     bool walkable = true;
@@ -17,6 +21,24 @@ struct WalkableOverride
     bool walkable = false;
 };
 
+struct Node
+{
+    int x, y;
+    float gCost, hCost;
+    Node* parent = nullptr;
+
+    float fCost() const { return gCost + hCost; }
+};
+
+struct NodeCmp
+{
+    bool operator()(const Node* a, const Node* b) const
+    {
+        return a->fCost() > b->fCost(); // min-heap
+    }
+};
+
+
 class AgentComponent;
 class GridComponent : public Component
 {
@@ -26,6 +48,7 @@ public:
     void Deserialize(nlohmann::json data) override;
 
 public:
+    // TODO : Editor에서 조정 가능하도록 변경
     int width = 40;
     int height = 40;
     float cellSize = 80.0f;
