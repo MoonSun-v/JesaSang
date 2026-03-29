@@ -325,10 +325,19 @@ void AdultGhostController::SetNextPatrolTarget()
 
 void AdultGhostController::SetReturnToLastWaypoint()
 {
-    if (lastVisitedWaypoint < 0 || !agent)
+    if (!agent) return;
+
+    if (lastVisitedWaypoint >= 0)
+    {
+        GridPos& p = patrolPoints[lastVisitedWaypoint];
+        agent->SetTarget(p.x, p.y);
         return;
+    }
 
-    GridPos& p = patrolPoints[lastVisitedWaypoint];
-
-    agent->SetTarget(p.x, p.y);
+    // 마지막으로 방문한 웨이포인트가 없으면 처음 웨이포인트로 설정
+    if (patrolPointCount > 0)
+    {
+        GridPos& p = patrolPoints[0];
+        agent->SetTarget(p.x, p.y);
+    }
 }

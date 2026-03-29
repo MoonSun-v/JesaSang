@@ -8,16 +8,18 @@ void AdultGhost_Return::Enter()
 
     adultGhost->animController->ChangeState("Idle");
 
-    // 웨이포인트 좌표
-    auto grid = GridSystem::Instance().GetMainGrid();
-    if (grid)
-    {
-        int tx, ty;
-        if (grid->WorldToGridFromCenter(adultGhost->initialPosition, tx, ty)) // 웨이 포인트 = AI가 처음 배치된 위치가 아니라 마지막에 이동중이던 웨이포인트로 변경
-        {
-            adultGhost->agent->SetTarget(tx, ty);
-        }
-    }
+    // 최근 웨이 포인트로 이동
+    adultGhost->SetReturnToLastWaypoint();
+
+    //auto grid = GridSystem::Instance().GetMainGrid();
+    //if (grid)
+    //{
+    //    int tx, ty;
+    //    if (grid->WorldToGridFromCenter(adultGhost->initialPosition, tx, ty)) // 웨이 포인트 = AI가 처음 배치된 위치가 아니라 마지막에 이동중이던 웨이포인트로 변경
+    //    {
+    //        adultGhost->agent->SetTarget(tx, ty);
+    //    }
+    //}
 }
 
 void AdultGhost_Return::ChangeStateLogic()
