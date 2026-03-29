@@ -45,11 +45,31 @@ void AdultGhost_Chase::Enter()
 void AdultGhost_Chase::ChangeStateLogic()
 {
     if (!adultGhost->target) return;
+
+
+    // 1. Hide 상태면 공격 안 함
+    //if (adultGhost->IsPlayerHidden())
+    //{
+    //    adultGhost->ChangeState(AdultGhostState::Return);
+    //    return;
+    //}
+    if (adultGhost->IsPlayerHidden())
+    {
+        adultGhost->searchReason = SearchReason::FromChase;
+        adultGhost->ChangeState(AdultGhostState::Search);
+        return;
+    }
+
+    // 2. 충돌이 아니어도 공격 가능 거리면 Attack
+    if (adultGhost->CanAttackPlayer())
+    {
+        cout << "[AdultGhost_Chase] In attack range -> Attack\n";
+        adultGhost->ChangeState(AdultGhostState::Attack);
+        return;
+    }
+
     if (adultGhost->state == AdultGhostState::Attack) return;
     if (adultGhost->postCareActive) return; // PostBabyCare 중이면 포기 금지 (Chase 유지)
-
-    if (adultGhost->IsPlayerHidden())
-        adultGhost->ChangeState(AdultGhostState::Return);
 
     if (mode == ChaseMode::Normal)
     {

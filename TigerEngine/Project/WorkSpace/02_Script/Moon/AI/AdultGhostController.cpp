@@ -254,7 +254,7 @@ bool AdultGhostController::IsPlayerInSenseRange()
     return Vector3::Distance(pPos, gPos) <= senseRadius;
 }
 
-bool AdultGhostController::IsPlayerHidden()
+bool AdultGhostController::IsPlayerHidden() const
 {
     auto* player = GetPlayer();
     if (!player) return false;
@@ -263,6 +263,38 @@ bool AdultGhostController::IsPlayerHidden()
     if (!pc) return false;
 
     return pc->GetPlayerState() == PlayerState::Hide;
+}
+
+bool AdultGhostController::CanAttackPlayer() 
+{
+    if (IsPlayerHidden())
+        return false;
+
+    auto* aiTr = GetOwner()->GetTransform();
+    auto* attackTarget = GetAITarget();
+    if (!aiTr || !attackTarget)
+        return false;
+
+    // 시야 안에 있어야 공격 허용
+    if (!IsSeeing(attackTarget))
+        return false;
+
+    Vector3 myPos = aiTr->GetWorldPosition();
+    Vector3 targetPos = GetPlayer()->GetTransform()->GetWorldPosition();
+
+    float attackRange = 120;
+
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (grid)
+        attackRange = grid->cellSize * 2.5f;
+
+    float dx = myPos.x - targetPos.x;
+    float dz = myPos.z - targetPos.z;
+    float range = sqrtf(dx * dx + dz * dz);
+
+    cout << "[AdultGhostController] Checking Attack Range: " << range << " (Threshold: " << attackRange << ")\n";
+
+    return range <= attackRange;
 }
 
 void AdultGhostController::StartPostBabyCare()

@@ -14,9 +14,9 @@ void AdultGhost_Return::Enter()
 
 void AdultGhost_Return::ChangeStateLogic()
 {
-    // 1. 시야에 플레이어가 들어오면 Chase
+    // 1. 시야에 플레이어가 들어오고, Hide 상태가 아니면 Chase
     auto* player = adultGhost->GetAITarget();
-    if (player && adultGhost->CanDetectPlayer() /*adultGhost->IsSeeing(player)*/)
+    if (player && !adultGhost->IsPlayerHidden() && adultGhost->CanDetectPlayer() /*adultGhost->IsSeeing(player)*/)
     {
         cout << "[AdultGhost_Return] Player detected -> Chase" << endl;
         adultGhost->ChangeState(AdultGhostState::Chase);
