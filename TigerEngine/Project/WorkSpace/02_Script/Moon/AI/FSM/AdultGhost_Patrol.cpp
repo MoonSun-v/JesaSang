@@ -17,12 +17,6 @@ void AdultGhost_Patrol::Enter()
 
     // 무조건 웨이포인트 설정 
     adultGhost->SetNextPatrolTarget();
-
-    // 첫 웨이포인트 설정
-    //if (!agent->HasTarget())
-    //{
-    //    adultGhost->SetNextPatrolTarget();
-    //}
 }
 
 void AdultGhost_Patrol::ChangeStateLogic()
@@ -47,7 +41,6 @@ void AdultGhost_Patrol::ChangeStateLogic()
             if (playerObj && grid->WorldToGridFromCenter(playerObj->GetTransform()->GetLocalPosition(), px, py))
             {
                 adultGhost->lastPlayerGrid = { px, py, true };
-                // std::cout << "[Patrol → Search] Save Sense/Grid = (" << px << "," << py << ")\n";
             }
         }
         adultGhost->searchReason = SearchReason::FromPatrol;

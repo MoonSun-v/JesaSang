@@ -22,9 +22,10 @@
 
 enum class ChaseMode
 {
-    Normal,     // 일반 추격 (플레이어 추적)
-    BabyCry,     // BabyCry로 진입한 경우 (울었던 위치 -> 회전 -> 플레이어 추격)
-    MoveToLastSeen
+    Normal, // 일반 추격 (플레이어 추적)
+    BabyCry_MoveToCryPoint,
+    BabyCry_RotateWait,
+    BabyCry_ForceMoveToPlayer
 };
 
 class AdultGhost_Chase : public IAdultGhostState
@@ -39,11 +40,7 @@ private:
     float repathTimer = 0.0f;
     float repathInterval = 0.3f;  // 목표 갱신 주기
 
-    
-    // BabyCry 전용
     ChaseMode mode = ChaseMode::Normal;
-    bool reachedCryPoint = false;
-    float careTime = 5.0f;
 
     float waitRotateTimer = 0.0f;
     float waitMoveTimer = 0.0f;
@@ -54,6 +51,7 @@ private:
 private:
     void UpdateTargetGrid();
     bool CanGiveUpChase() const;
+    void SaveLastPlayerGrid();
 
 public:
     AdultGhost_Chase(AdultGhostController* _adultGhost) : IAdultGhostState(_adultGhost, AdultGhostState::Chase) {}

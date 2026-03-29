@@ -21,31 +21,31 @@ void AdultGhost_Attack::Enter()
 
 void AdultGhost_Attack::ChangeStateLogic()
 {
-    // 딜레이 이후 전환 로직 실행 ㄱㄱ
-    if (attackTimer < attackAnimTime + attackDelayTime)
+    if (attackTimer < totalTime)
         return;
 
     auto* player = adultGhost->GetPlayer();
-
-    if (player && adultGhost->IsSeeing(player))
+    if (player && adultGhost->CanDetectPlayer() /*adultGhost->IsSeeing(player)*/)
     {
         cout << "[AdultGhost_Attack] Player still in sight -> Chase\n";
         adultGhost->ChangeState(AdultGhostState::Chase);
+        return;
     }
-    else
+
+    if (player)
     {
-        cout << "[AdultGhost_Attack] Lost player -> Search\n";
         auto grid = GridSystem::Instance().GetMainGrid();
         if (grid)
         {
             int px, py;
-            if (grid->WorldToGridFromCenter(player->GetTransform()->GetLocalPosition(), px, py))
+            if (grid->WorldToGridFromCenter(player->GetTransform()->GetWorldPosition(), px, py))
                 adultGhost->lastPlayerGrid = { px, py, true };
         }
-
-        adultGhost->searchReason = SearchReason::FromAttack;
-        adultGhost->ChangeState(AdultGhostState::Search);
     }
+
+    cout << "[AdultGhost_Attack] Lost player -> Search\n";
+    adultGhost->searchReason = SearchReason::FromAttack;
+    adultGhost->ChangeState(AdultGhostState::Search);
 }
 
 void AdultGhost_Attack::Update(float deltaTime)

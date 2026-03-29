@@ -93,7 +93,6 @@ public:
     
 public: // Patrol Waypoints
     static const int MAX_PATROL_POINTS = 16;
-
     GridPos patrolPoints[MAX_PATROL_POINTS];
     int patrolPointCount = 0; // 실제 사용되는 개수 
 
@@ -101,19 +100,11 @@ private:
     int patrolIndex = 0;
     int lastVisitedWaypoint = -1;
 
-
 private:
     // FSM
     void InitFSMStates();
     void ChangeState(AdultGhostState state);
-
-    // Animation
     void LoadAnimation();
-
-    //// Movement (공통)
-    //bool MoveToTarget(float delta);
-    //void RotateByDirection(const Vector3& moveDir, float delta);
-
 
 public:
     void OnStart() override;
@@ -123,28 +114,27 @@ public:
 
     // Interaction
     void OnPlayerNoise(const Vector3& noiseWorldPos); // 플레이어에서 호출 
+    void OnBabyCry(const Vector3& cryWorldPos);
     void OnAttackHit(); // 유령 충돌 오브젝트에서 호출
 
     // Helper
     void ResetAgentForMove(float speed);
-    // void SetAITarget(GameObject* newTarget);
     bool IsArrived() const;
     bool IsSeeing(GameObject* target) const;
     bool IsPlayerInSenseRange();
+    bool CanDetectPlayer() const;
+    bool CanKeepChase();
     void StartPostBabyCare();
 
     GameObject* GetAITarget() const;
     GameObject* GetPlayer() const;
 
-
     // 플레이어 발견 마지막 위치 (그리드 좌표) 
     GridPos lastPlayerGrid;
-
 
     // 상태의 진입 경로 (어떤 이유로 들어왔는가)
     SearchReason searchReason = SearchReason::None;
     ChaseReason  chaseReason = ChaseReason::None;
-
 
 private:
     GameObject* target = nullptr;
@@ -159,11 +149,8 @@ public:
         ChangeState(nextState);
     }
 
-    // 외부에서 AdultGhost 타겟 지정
-    void SetAITarget(GameObject* newTarget); 
-
-    // 외부에서 타겟 확인
-    GameObject* GetTarget() const { return target; }
+    void SetAITarget(GameObject* newTarget);  // 외부에서 AdultGhost 타겟 지정
+    GameObject* GetTarget() const { return target; } // 외부에서 타겟 확인
 
     // WayPoint 관련
     void SetNextPatrolTarget();

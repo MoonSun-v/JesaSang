@@ -83,10 +83,6 @@ void AdultGhostController::OnUpdate(float delta)
 
     currentState->ChangeStateLogic();
     currentState->Update(delta);
-
-    //// 상태가 바뀌었으면 Update 실행하지 않음
-    //if (currentState == fsmStates[(int)state])
-    //    currentState->Update(delta);
 }
 
 void AdultGhostController::OnFixedUpdate(float dt)
@@ -204,6 +200,29 @@ bool AdultGhostController::IsSeeing(GameObject* target) const
     return vision->CheckVision(target, 30, 400);
 }
 
+bool AdultGhostController::CanDetectPlayer() const
+{
+    auto* player = GetAITarget();
+    return IsSeeing(player);
+}
+
+// 시야에 안 보여도 소실 거리 안이면 계속 추격 가능하게
+bool AdultGhostController::CanKeepChase()
+{
+    auto* player = GetPlayer();
+    if (!player) return false;
+
+    auto* playerController = player->GetComponent<PlayerController>();
+    if (playerController && playerController->GetPlayerState() == PlayerState::Hide)
+        return false;
+
+    Vector3 myPos = GetOwner()->GetTransform()->GetWorldPosition();
+    Vector3 playerPos = player->GetTransform()->GetWorldPosition();
+
+    const float loseDistance = 500.0f;
+    return Vector3::Distance(myPos, playerPos) <= loseDistance;
+}
+
 // Object Getter 
 GameObject* AdultGhostController::GetAITarget() const // Raycast 전용 (IsSeeing()에서 사용)
 {
@@ -226,7 +245,7 @@ bool AdultGhostController::IsPlayerInSenseRange()
     float senseRadius = playerController->GetCurSenseRadiuse();
     if (senseRadius <= 0) return false;
 
-    Vector3 pPos = playerObj->GetTransform()->GetWorldPosition(); // playerObj->GetTransform()->GetLocalPosition();
+    Vector3 pPos = playerObj->GetTransform()->GetWorldPosition();
     Vector3 gPos = this->GetOwner()->GetTransform()->GetWorldPosition();
 
     return Vector3::Distance(pPos, gPos) <= senseRadius;
@@ -238,7 +257,8 @@ void AdultGhostController::StartPostBabyCare()
     postCareActive = true;
     if (target)
     {
-        forcedTargetPos = target->GetTransform()->GetLocalPosition(); // 플레이어 위치 저장
+        // forcedTargetPos = target->GetTransform()->GetLocalPosition(); // 플레이어 위치 저장
+        forcedTargetPos = target->GetTransform()->GetWorldPosition();
     }
 
     // PostBabyCare 동안 기존 target 제거
@@ -247,6 +267,7 @@ void AdultGhostController::StartPostBabyCare()
     if (agent)
         agent->ClearTarget();
 }
+
 
 // -------------------------------------------------
 // Interaction
@@ -268,7 +289,17 @@ void AdultGhostController::OnPlayerNoise(const Vector3& noiseWorldPos)
     // Search 상태로 전환 + 목표 좌표 설정 
     lastPlayerGrid = { cx, cy, true };
 
+    searchReason = SearchReason::FromPatrol;
     ChangeState(AdultGhostState::Search);
+}
+
+void AdultGhostController::OnBabyCry(const Vector3& cryWorldPos)
+{
+    if (state != AdultGhostState::Patrol) return;
+
+    forcedTargetPos = cryWorldPos;
+    chaseReason = ChaseReason::FromBabyCry;
+    ChangeState(AdultGhostState::Chase);
 }
 
 void AdultGhostController::OnAttackHit()
@@ -284,20 +315,18 @@ void AdultGhostController::SetAITarget(GameObject* newTarget)
     if (!agent) return;
 
     target = newTarget;
-
     if (!target) return;
 
     auto grid = GridSystem::Instance().GetMainGrid();
     if (!grid) return;
 
     int tx, ty;
-    if (grid->WorldToGridFromCenter(target->GetTransform()->GetWorldPosition(), tx, ty))
+    // if (grid->WorldToGridFromCenter(target->GetTransform()->GetWorldPosition(), tx, ty))
+    if (grid->WorldToGridFromCenter(target->GetTransform()->GetLocalPosition(), tx, ty))
     {
         agent->SetTarget(tx, ty);
     }
 }
-
-
 
 
 // -------------------------------------------------
@@ -310,7 +339,6 @@ void AdultGhostController::SetNextPatrolTarget()
         return;
 
     GridPos& p = patrolPoints[patrolIndex];
-
     agent->SetTarget(p.x, p.y);
 
     lastVisitedWaypoint = patrolIndex;
@@ -339,5 +367,13 @@ void AdultGhostController::SetReturnToLastWaypoint()
     {
         GridPos& p = patrolPoints[0];
         agent->SetTarget(p.x, p.y);
+        return;
     }
+
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid) return;
+
+    int tx, ty;
+    if (grid->WorldToGridFromCenter(initialPosition, tx, ty))
+        agent->SetTarget(tx, ty);
 }
