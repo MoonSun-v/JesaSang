@@ -14,8 +14,7 @@ void BabyGhost_Cry::Enter()
     babyGhost->animController->ChangeState("Cry");
     babyGhost->enemySound->PlaySound(EnemySoundType::BabyGhost_Crying_Sound);
 
-
-    // 이동 완전 정지
+    // 이동 멈추기
     babyGhost->agent->ClearTarget();
 }
 
@@ -24,17 +23,18 @@ void BabyGhost_Cry::ChangeStateLogic()
     // 돌봐주는 유령이 3초 이상 돌봐주면 복귀
     if (careTimer >= careDelay)
     {
-        cout << "[BabyGhost_Cry] Care completed, returning to Patrol" << endl;
-        
-        // 아기 유령 복귀 
-        babyGhost->ChangeState(BabyGhostState::Return);
+        cout << "[BabyGhost_Cry] Care completed -> Patrol" << endl;
 
-        // 돌봐주는 유령 후속 행동 시작
+        // 1. 먼저 Adult 후처리
         if (caringAdult)
         {
             caringAdult->StartPostBabyCare();
             caringAdult = nullptr;
         }
+
+        // 2. 그 다음 Baby 상태 전환
+        babyGhost->ChangeState(BabyGhostState::Patrol);
+        return;
     }
 }
 
@@ -42,7 +42,7 @@ void BabyGhost_Cry::Update(float deltaTime)
 {
     auto cryPos = babyGhost->GetOwner()->GetTransform()->GetWorldPosition();
 
-    // 돌봐주는 유령이 없으면 주변 Patrol 상태 어른 유령 찾기
+    // 돌봐주는 Adult 유령이 없으면 주변 Patrol 상태 어른 유령 찾기
     if (!caringAdult)
     {
         auto adultGhosts = SceneSystem::Instance().GetCurrentScene()->GetGameObjectsByName("Ghost_Adult");
@@ -65,11 +65,10 @@ void BabyGhost_Cry::Update(float deltaTime)
 
         if (closestPatrolGhost)
         {
-            closestPatrolGhost->SetAITarget(babyGhost->GetOwner());
-            closestPatrolGhost->chaseReason = ChaseReason::FromBabyCry;
-            closestPatrolGhost->ChangeStateTo(AdultGhostState::Chase);
+            closestPatrolGhost->StartBabyCryChase(babyGhost->GetOwner());
             caringAdult = closestPatrolGhost;
 
+            caringAdult = closestPatrolGhost;
             cout << "[BabyGhost_Cry] Sending cry signal to one Patrol AdultGhost" << endl;
         }
     }
@@ -78,16 +77,18 @@ void BabyGhost_Cry::Update(float deltaTime)
     if (caringAdult)
     {
         float dist = (cryPos - caringAdult->GetOwner()->GetTransform()->GetWorldPosition()).Length();
-        const float arriveThreshold = 200.0f; // 근접 기준
+        const float arriveThreshold = 250.0f; // 근접 기준
         if (dist <= arriveThreshold)
         {
             adultArrived = true;
-        }
-
-        if (adultArrived)
-        {
             careTimer += deltaTime;
-            cout << "[BabyGhost_Cry] Caring . . . " << careTimer << endl;
+            cout << "[BabyGhost_Cry] Caring... " << careTimer << endl;
+        }
+        else
+        {
+            // 멀어지면 다시 대기
+            adultArrived = false;
+            careTimer = 0.0f;
         }
     }
 }
@@ -100,11 +101,9 @@ void BabyGhost_Cry::FixedUpdate(float deltaTime)
 void BabyGhost_Cry::Exit()
 {
     careTimer = 0.0f;
+    adultArrived = false;
 
-    // 돌봐주던 유령 초기화
-    if (caringAdult)
-    {
-        caringAdult->SetAITarget(nullptr);
-        caringAdult = nullptr;
-    }
+    // Exit에서는 Adult 상태를 건드리지 않음
+    // caringAdult 정리는 ChangeStateLogic()에서 완료 시점에 처리
+    caringAdult = nullptr;
 }

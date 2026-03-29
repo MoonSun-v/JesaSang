@@ -23,10 +23,19 @@ void AdultGhost_Return::ChangeStateLogic()
         return;
     }
 
-    // 2. 도착 체크 : IsArrived()로 체크 (웨이포인트 좌표로 이동 완료 여부)
+    // 2. 도착 체크
     if (adultGhost->agent->IsArrived())
     {
+        // 복귀한 waypoint는 이미 도착했으니 다음 patrol point부터 시작
+        if (adultGhost->patrolPointCount > 0)
+        {
+            adultGhost->patrolIndex++;
+            if (adultGhost->patrolIndex >= adultGhost->patrolPointCount)
+                adultGhost->patrolIndex = 0;
+        }
+
         adultGhost->ChangeState(AdultGhostState::Patrol);
+        return;
     }
 }
 

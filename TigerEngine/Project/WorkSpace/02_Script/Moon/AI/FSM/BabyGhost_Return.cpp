@@ -4,22 +4,12 @@ void BabyGhost_Return::Enter()
 {
     cout << "[BabyGhost_Return] Enter Return State" << endl;
 
-    babyGhost->ResetAgentForMove(3.0f); // Return 속도 
-
+    babyGhost->ResetAgentForMove(6.0f); // Return 속도 
     visionTimer = 0.0f;
-
     babyGhost->animController->ChangeState("Idle");
 
-    // 웨이포인트 좌표
-    auto grid = GridSystem::Instance().GetMainGrid();
-    if (grid)
-    {
-        int wx, wy;
-        if (grid->WorldToGridFromCenter(babyGhost->initialPosition, wx, wy)) // 웨이 포인트 = AI가 처음 배치된 위치
-        {
-            babyGhost->agent->SetTarget(wx, wy);
-        }
-    }
+    // 가장 가까운 순찰 포인트로 복귀
+    babyGhost->SetReturnToNearestPatrolTarget();
 }
 
 void BabyGhost_Return::ChangeStateLogic()
@@ -39,23 +29,23 @@ void BabyGhost_Return::ChangeStateLogic()
     // 2. 도착 체크 : IsArrived()로 체크 (웨이포인트 좌표로 이동 완료 여부)
     if (babyGhost->agent->IsArrived())
     {
-        babyGhost->ChangeState(BabyGhostState::Patrol);
-    }
+        // Return으로 도착한 현재 waypoint는 이미 밟았으니
+        // Patrol은 다음 waypoint부터 시작하게 넘김
+        if (babyGhost->patrolPointCount > 0)
+        {
+            babyGhost->patrolIndex++;
+            if (babyGhost->patrolIndex >= babyGhost->patrolPointCount)
+                babyGhost->patrolIndex = 0;
+        }
 
-    //// 복귀 완료 : 현재 위치와 initialPosition 비교
-    //auto tr = babyGhost->GetOwner()->GetTransform();
-    //float distSqr = (tr->GetWorldPosition() - babyGhost->initialPosition).LengthSquared();
-    //const float arrivalThreshold = 150.0f; // 거의 도착했으면
-    //if (distSqr <= arrivalThreshold * arrivalThreshold)
-    //{
-    //    cout << "[BabyGhost_Return] Reached waypoint -> Patrol" << endl;
-    //    babyGhost->ChangeState(BabyGhostState::Patrol);
-    //    return;
-    //}
+        babyGhost->ChangeState(BabyGhostState::Patrol);
+        return;
+    }
 }
 
 void BabyGhost_Return::Update(float deltaTime)
 {
+    visionTimer += deltaTime;
 }
 
 void BabyGhost_Return::FixedUpdate(float deltaTime)

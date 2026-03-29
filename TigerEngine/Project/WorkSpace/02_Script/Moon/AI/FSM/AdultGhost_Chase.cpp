@@ -25,14 +25,24 @@ void AdultGhost_Chase::Enter()
     {
         mode = ChaseMode::BabyCry_MoveToCryPoint;
 
-        // 울었던 위치로 이동
         auto grid = GridSystem::Instance().GetMainGrid();
         if (grid)
         {
+            Vector3 cryPos = adultGhost->forcedTargetPos;
+
+            // forcedTargetPos가 제대로 안 들어왔으면 target 위치로 fallback
+            if (adultGhost->target)
+                cryPos = adultGhost->target->GetTransform()->GetWorldPosition();
+
             int tx, ty;
-            if (grid->WorldToGridFromCenter(adultGhost->forcedTargetPos, tx, ty))
+            if (grid->WorldToGridFromCenter(cryPos, tx, ty))
             {
                 adultGhost->agent->SetTarget(tx, ty);
+                cout << "[AdultGhost_Chase] BabyCry target = (" << tx << ", " << ty << ")\n";
+            }
+            else
+            {
+                cout << "[AdultGhost_Chase] BabyCry target invalid\n";
             }
         }
     }
@@ -40,6 +50,8 @@ void AdultGhost_Chase::Enter()
     {
         mode = ChaseMode::Normal;
     }
+
+    cout << "[AdultGhost_Chase] chaseReason = " << (int)adultGhost->chaseReason << endl;
 }
 
 void AdultGhost_Chase::ChangeStateLogic()

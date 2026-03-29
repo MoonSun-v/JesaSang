@@ -75,13 +75,7 @@ private:
     // FSM
     void InitFSMStates();
     void ChangeState(BabyGhostState state);
-
-    // Animation
     void LoadAnimation();
-
-    // Movement (공통)
-    /*bool MoveToTarget(float delta);
-    void RotateByDirection(const Vector3& moveDir, float delta);*/
 
 public:
     void OnStart() override;
@@ -96,10 +90,10 @@ public:
     void ResetAgentForMove(float speed);
     bool IsSeeing(GameObject* target) const;
     bool IsPlayerInSenseRange();
+    bool IsPlayerHidden() const;
 
     GameObject* GetAITarget() const;
     GameObject* GetPlayer() const;
-
 
     // 플레이어 발견 마지막 위치 (그리드 좌표) 
     GridPos_Baby lastPlayerGrid;
@@ -114,7 +108,6 @@ public: // Patrol Waypoints
 private:
     int patrolIndex = 0;
     
-
     // 상태의 진입 경로 (어떤 이유로 들어왔는가)
     SearchReason_Baby searchReason = SearchReason_Baby::None;
 
@@ -122,7 +115,7 @@ private:
 public:
     // WayPoint 관련
     void SetNextPatrolTarget();
-    void SetReturnToLastWaypoint();
+    void SetReturnToNearestPatrolTarget();
 
 public:
     // friend

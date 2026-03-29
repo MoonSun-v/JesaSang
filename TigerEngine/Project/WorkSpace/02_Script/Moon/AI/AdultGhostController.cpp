@@ -286,7 +286,7 @@ bool AdultGhostController::CanAttackPlayer()
 
     auto grid = GridSystem::Instance().GetMainGrid();
     if (grid)
-        attackRange = grid->cellSize * 2.5f;
+        attackRange = grid->cellSize * 2.0f;
 
     float dx = myPos.x - targetPos.x;
     float dz = myPos.z - targetPos.z;
@@ -300,20 +300,37 @@ bool AdultGhostController::CanAttackPlayer()
 void AdultGhostController::StartPostBabyCare()
 {
     postCareTimer = 0.0f;
-    postCareActive = true;
-    if (target)
-    {
-        // forcedTargetPos = target->GetTransform()->GetLocalPosition(); // 플레이어 위치 저장
-        forcedTargetPos = target->GetTransform()->GetWorldPosition();
-    }
+    postCareActive = false;      // 더 이상 Chase에 묶어둘 필요 없음
+    chaseReason = ChaseReason::None;
+    searchReason = SearchReason::None;
 
-    // PostBabyCare 동안 기존 target 제거
     target = nullptr;
-
     if (agent)
         agent->ClearTarget();
+
+    // 달래기 끝났으면 순찰 경로로 복귀
+    ChangeState(AdultGhostState::Return);
 }
 
+void AdultGhostController::StartBabyCryChase(GameObject* babyGhostObj)
+{
+    if (!babyGhostObj) return;
+
+    // Adult가 참고할 타겟 저장
+    target = babyGhostObj;
+
+    // Baby가 울고 있는 현재 위치 저장
+    forcedTargetPos = babyGhostObj->GetTransform()->GetWorldPosition();
+
+    // BabyCry 전용 추격 이유 설정
+    chaseReason = ChaseReason::FromBabyCry;
+
+    cout << "[AdultGhostController] StartBabyCryChase cryPos = ("
+        << forcedTargetPos.x << ", " << forcedTargetPos.y << ", " << forcedTargetPos.z << ")\n";
+
+    // Chase로 전환
+    ChangeState(AdultGhostState::Chase);
+}
 
 // -------------------------------------------------
 // Interaction
@@ -389,17 +406,41 @@ void AdultGhostController::SetNextPatrolTarget()
     if (patrolPointCount <= 0 || !agent)
         return;
 
-    GridPos& p = patrolPoints[patrolIndex];
-    agent->SetTarget(p.x, p.y);
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid)
+        return;
 
-    lastVisitedWaypoint = patrolIndex;
+    int myX, myY;
+    if (!grid->WorldToGridFromCenter(GetOwner()->GetTransform()->GetWorldPosition(), myX, myY))
+        return;
 
-    patrolIndex++;
-    if (patrolIndex >= patrolPointCount)
-        patrolIndex = 0;
+    for (int i = 0; i < patrolPointCount; ++i)
+    {
+        GridPos& p = patrolPoints[patrolIndex];
 
-    std::cout << "[Adult Patrol] Next Waypoint: "
-        << patrolIndex << " (" << p.x << "," << p.y << ")\n";
+        // 현재 위치와 같은 waypoint는 건너뜀
+        if (p.x != myX || p.y != myY)
+        {
+            agent->SetTarget(p.x, p.y);
+
+            lastVisitedWaypoint = patrolIndex;
+
+            std::cout << "[Adult Patrol] Next Waypoint: "
+                << patrolIndex << " (" << p.x << "," << p.y << ")\n";
+
+            patrolIndex++;
+            if (patrolIndex >= patrolPointCount)
+                patrolIndex = 0;
+
+            return;
+        }
+
+        patrolIndex++;
+        if (patrolIndex >= patrolPointCount)
+            patrolIndex = 0;
+    }
+
+    std::cout << "[Adult Patrol] No valid next waypoint found.\n";
 }
 
 void AdultGhostController::SetReturnToLastWaypoint()

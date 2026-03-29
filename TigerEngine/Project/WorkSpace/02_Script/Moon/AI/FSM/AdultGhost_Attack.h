@@ -13,7 +13,7 @@ class AdultGhost_Attack : public IAdultGhostState
 {
 private:
     float attackTimer = 0.0f;
-    float attackAnimTime = 1.5f;   // 실제 공격 모션
+    float attackAnimTime = 1.8f;   // 실제 공격 모션
     float attackDelayTime = 3.0f; // 후딜
     float totalTime = attackAnimTime + attackDelayTime;
 

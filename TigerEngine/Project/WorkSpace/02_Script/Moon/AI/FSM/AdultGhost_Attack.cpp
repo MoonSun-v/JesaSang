@@ -64,7 +64,7 @@ void AdultGhost_Attack::Update(float deltaTime)
     if (!didDamage && attackTimer >= 0.5f)
     {
         auto* player = adultGhost->GetPlayer();
-        if (player && adultGhost->CanAttackPlayer())
+        if (player/* && adultGhost->CanAttackPlayer()*/)
         {
             player->GetComponent<PlayerController>()->TakeAttack();
         }

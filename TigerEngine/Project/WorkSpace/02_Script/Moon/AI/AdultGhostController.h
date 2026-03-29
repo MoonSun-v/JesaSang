@@ -128,6 +128,8 @@ public:
     bool CanKeepChase();
     void StartPostBabyCare();
 
+    void StartBabyCryChase(GameObject* babyGhostObj);
+
     GameObject* GetAITarget() const;
     GameObject* GetPlayer() const;
 

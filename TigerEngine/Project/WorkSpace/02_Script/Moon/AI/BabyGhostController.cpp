@@ -172,10 +172,17 @@ void BabyGhostController::ResetAgentForMove(float speed)
     agent->ClearTarget();
 }
 
-// Ai가 Target을 보고 있는가? // TODO : FOV, Dist 값 매개변수로 받기 
+// Ai가 Target을 보고 있는가? - Hide 상태면 시야 감지하지 않음
 bool BabyGhostController::IsSeeing(GameObject* target) const
 {
-    return target && vision->CheckVision(target, 30, 400);
+    if (!target)
+        return false;
+
+    auto* playerController = target->GetComponent<PlayerController>();
+    if (playerController && playerController->GetPlayerState() == PlayerState::Hide)
+        return false;
+
+    return vision->CheckVision(target, 30, 400);
 }
 
 // Object Getter 
@@ -197,15 +204,17 @@ bool BabyGhostController::IsPlayerInSenseRange()
     auto* playerController = playerObj->GetComponent<PlayerController>();
     if (!playerController) return false;
 
+    if (playerController->GetPlayerState() == PlayerState::Hide)
+        return false;
+
     float senseRadius = playerController->GetCurSenseRadiuse();
     if (senseRadius <= 0) return false;
 
     Vector3 pPos = playerObj->GetTransform()->GetWorldPosition();
-    Vector3 gPos = this->GetOwner()->GetTransform()->GetWorldPosition();
+    Vector3 gPos = GetOwner()->GetTransform()->GetWorldPosition();
 
     return Vector3::Distance(pPos, gPos) <= senseRadius;
 }
-
 
 // -------------------------------------------------
 // Interaction
@@ -226,10 +235,9 @@ void BabyGhostController::OnPlayerNoise(const Vector3& noiseWorldPos)
 
     // Search 상태로 전환 + 목표 좌표 설정 
     lastPlayerGrid = { cx, cy, true };
-
+    searchReason = SearchReason_Baby::FromPatrol;
     ChangeState(BabyGhostState::Search);
 }
-
 
 
 // -------------------------------------------------
@@ -238,88 +246,84 @@ void BabyGhostController::OnPlayerNoise(const Vector3& noiseWorldPos)
 
 void BabyGhostController::SetNextPatrolTarget()
 {
-    if (patrolPointCount <= 0)
+    if (patrolPointCount <= 0 || !agent)
         return;
 
-    auto& p = patrolPoints[patrolIndex];
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid)
+        return;
 
-    agent->SetTarget(p.x, p.y);
+    int myX, myY;
+    if (!grid->WorldToGridFromCenter(GetOwner()->GetTransform()->GetWorldPosition(), myX, myY))
+        return;
 
-    patrolIndex++;
-    if (patrolIndex >= patrolPointCount)
-        patrolIndex = 0;
+    // 현재 위치와 같은 waypoint는 건너뛰기
+    for (int i = 0; i < patrolPointCount; ++i)
+    {
+        GridPos_Baby& p = patrolPoints[patrolIndex];
 
-    std::cout << "[Baby Patrol] Next Waypoint: "
-        << patrolIndex << " (" << p.x << "," << p.y << ")\n";
+        if (p.x != myX || p.y != myY)
+        {
+            agent->SetTarget(p.x, p.y);
+
+            std::cout << "[Baby Patrol] Next Waypoint: "
+                << patrolIndex << " (" << p.x << "," << p.y << ")\n";
+
+            patrolIndex++;
+            if (patrolIndex >= patrolPointCount)
+                patrolIndex = 0;
+
+            return;
+        }
+
+        patrolIndex++;
+        if (patrolIndex >= patrolPointCount)
+            patrolIndex = 0;
+    }
+
+    // 전부 현재 칸이면 아무 것도 안 함
+    // std::cout << "[Baby Patrol] No valid next waypoint found.\n";
 }
 
-//void BabyGhostController::SetReturnToLastWaypoint()
-//{
-//    if (lastVisitedWaypoint < 0 || !agent)
-//        return;
-//
-//    GridPos& p = patrolPoints[lastVisitedWaypoint];
-//
-//    agent->SetTarget(p.x, p.y);
-//}
+bool BabyGhostController::IsPlayerHidden() const
+{
+    auto* playerObj = GetPlayer();
+    if (!playerObj) return false;
+
+    auto* playerController = playerObj->GetComponent<PlayerController>();
+    if (!playerController) return false;
+
+    return playerController->GetPlayerState() == PlayerState::Hide;
+}
 
 
-// -------------------------------------------------
-// Movement
-// -------------------------------------------------
-//bool BabyGhostController::MoveToTarget(float delta)
-//{
-//    if (!agent || !agent->hasTarget) return false;
-//
-//    auto grid = GridSystem::Instance().GetMainGrid();
-//    if (!grid) return false;
-//
-//    // 경로 없으면 생성
-//    if (agent->path.empty())
-//    {
-//        agent->path = grid->FindPath(agent->cx, agent->cy, agent->targetCX, agent->targetCY);
-//        if (agent->path.empty()) return false;
-//    }
-//
-//    // 다음 칸 이동 
-//    auto next = agent->path.front();
-//    Vector3 targetPos = grid->GridToWorldFromCenter(next.first, next.second);
-//
-//    Vector3 pos = agent->GetOwner()->GetTransform()->GetWorldPosition();
-//    Vector3 dir = targetPos - pos;
-//    dir.y = 0;
-//
-//    // 해당 칸 도착 
-//    if (dir.Length() < agent->reachDist)
-//    {
-//        agent->cx = next.first;
-//        agent->cy = next.second;
-//        agent->path.erase(agent->path.begin());
-//        return agent->path.empty(); // 이 칸은 끝까지 가도록 
-//    }
-//
-//    dir.Normalize();
-//    agent->MoveAgent(dir, agent->patrolSpeed, delta);
-//    RotateByDirection(dir, delta);
-//
-//    return false;
-//}
-//
-//void BabyGhostController::RotateByDirection(const Vector3& moveDir, float delta)
-//{
-//    if (moveDir.LengthSquared() <= 0.0001f)
-//        return;
-//
-//    auto tr = GetOwner()->GetTransform();
-//
-//    Vector3 dir = -moveDir; // 모델 반전 보정
-//    float targetYaw = atan2f(dir.x, dir.z);
-//    float currentYaw = tr->GetYaw();
-//
-//    float deltaYaw = _WrapAngleRad(targetYaw - currentYaw);
-//
-//    float turnSpeed = 6.0f; // 플레이어보다 느리게
-//    float newYaw = currentYaw + deltaYaw * turnSpeed * delta;
-//
-//    tr->SetEuler(Vector3(0.f, newYaw, 0.f));
-//}
+
+// 현재 위치에서 가장 가까운 순찰 포인트로 복귀
+void BabyGhostController::SetReturnToNearestPatrolTarget()
+{
+    if (!agent || patrolPointCount <= 0)
+        return;
+
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid) return;
+
+    int myX, myY;
+    if (!grid->WorldToGridFromCenter(GetOwner()->GetTransform()->GetWorldPosition(), myX, myY))
+        return;
+
+    int bestIndex = 0;
+    int bestDist = INT_MAX;
+
+    for (int i = 0; i < patrolPointCount; ++i)
+    {
+        int dist = abs(patrolPoints[i].x - myX) + abs(patrolPoints[i].y - myY);
+        if (dist < bestDist)
+        {
+            bestDist = dist;
+            bestIndex = i;
+        }
+    }
+
+    patrolIndex = bestIndex; // 다음 Patrol이 자연스럽게 이어지도록
+    agent->SetTarget(patrolPoints[bestIndex].x, patrolPoints[bestIndex].y);
+}
