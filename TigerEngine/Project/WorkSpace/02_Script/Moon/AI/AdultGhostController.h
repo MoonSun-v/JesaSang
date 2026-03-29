@@ -122,6 +122,7 @@ public:
     bool IsArrived() const;
     bool IsSeeing(GameObject* target) const;
     bool IsPlayerInSenseRange();
+    bool IsPlayerHidden();
     bool CanDetectPlayer() const;
     bool CanKeepChase();
     void StartPostBabyCare();

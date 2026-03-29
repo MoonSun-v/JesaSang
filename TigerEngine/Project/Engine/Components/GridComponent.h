@@ -25,14 +25,6 @@ struct WalkableOverride
     int cy = 0; // 중앙 기준 Y
 };
 
-// 중앙 기준 좌표계용 좌표 타입 (FindPath()에서 사용)
-// - (0,0)은 Grid 중앙
-//struct GridCoord
-//{
-//    int cx = 0;
-//    int cy = 0;
-//};
-
 // [ A* Node ]
 // - 중앙 기준 좌표를 사용하는 길찾기 노드
 struct PathNode

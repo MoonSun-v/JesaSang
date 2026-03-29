@@ -242,6 +242,9 @@ bool AdultGhostController::IsPlayerInSenseRange()
     auto* playerController = playerObj->GetComponent<PlayerController>();
     if (!playerController) return false;
 
+    if (playerController->GetPlayerState() == PlayerState::Hide)
+        return false;
+
     float senseRadius = playerController->GetCurSenseRadiuse();
     if (senseRadius <= 0) return false;
 
@@ -249,6 +252,17 @@ bool AdultGhostController::IsPlayerInSenseRange()
     Vector3 gPos = this->GetOwner()->GetTransform()->GetWorldPosition();
 
     return Vector3::Distance(pPos, gPos) <= senseRadius;
+}
+
+bool AdultGhostController::IsPlayerHidden()
+{
+    auto* player = GetPlayer();
+    if (!player) return false;
+
+    auto* pc = player->GetComponent<PlayerController>();
+    if (!pc) return false;
+
+    return pc->GetPlayerState() == PlayerState::Hide;
 }
 
 void AdultGhostController::StartPostBabyCare()
@@ -321,11 +335,16 @@ void AdultGhostController::SetAITarget(GameObject* newTarget)
     if (!grid) return;
 
     int tx, ty;
-    // if (grid->WorldToGridFromCenter(target->GetTransform()->GetWorldPosition(), tx, ty))
-    if (grid->WorldToGridFromCenter(target->GetTransform()->GetLocalPosition(), tx, ty))
+    if (grid->WorldToGridFromCenter(target->GetTransform()->GetLocalPosition(), tx, ty)) // GetWorldPosition
     {
         agent->SetTarget(tx, ty);
     }
+
+    //if (!grid->WorldToGridFromCenter(target->GetTransform()->GetLocalPosition(), tx, ty))
+    //    return;
+    // 여기선 일단 막힌 칸이면 그냥 타겟만 저장하고 이동은 보류
+    // 실제 Chase에서 UpdateTargetGrid()가 보정해서 잡게 둠
+    // agent->SetTarget(tx, ty);
 }
 
 

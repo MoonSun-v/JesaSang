@@ -53,6 +53,8 @@ private:
     bool CanGiveUpChase() const;
     void SaveLastPlayerGrid();
 
+    bool FindNearestWalkableCell(int targetX, int targetY, int& outX, int& outY);
+
 public:
     AdultGhost_Chase(AdultGhostController* _adultGhost) : IAdultGhostState(_adultGhost, AdultGhostState::Chase) {}
     ~AdultGhost_Chase() = default;

@@ -6,6 +6,13 @@ void AdultGhost_Search::Enter()
 {
     cout << "[AdultGhost_Search] Enter Search State" << endl;
 
+    if(adultGhost->IsPlayerHidden())
+    {
+        cout << "[AdultGhost_Search] Player hidden → Return\n";
+        adultGhost->ChangeState(AdultGhostState::Return);
+        return;
+    }
+
     arrived = false;
     waitTimer = 0.0f;
     rotateTimer = 0.0f;
@@ -57,6 +64,12 @@ void AdultGhost_Search::ChangeStateLogic()
 
 void AdultGhost_Search::Update(float deltaTime)
 {
+    if (adultGhost->IsPlayerHidden())
+    {
+        adultGhost->ChangeState(AdultGhostState::Return);
+        return;
+    }
+
     // 1. 어느 단계든 플레이어 감지
     if (adultGhost->CanDetectPlayer())
     {

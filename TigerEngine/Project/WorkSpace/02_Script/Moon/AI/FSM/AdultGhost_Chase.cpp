@@ -48,6 +48,9 @@ void AdultGhost_Chase::ChangeStateLogic()
     if (adultGhost->state == AdultGhostState::Attack) return;
     if (adultGhost->postCareActive) return; // PostBabyCare 중이면 포기 금지 (Chase 유지)
 
+    if (adultGhost->IsPlayerHidden())
+        adultGhost->ChangeState(AdultGhostState::Return);
+
     if (mode == ChaseMode::Normal)
     {
         if (sightCheckTimer >= sightCheckInterval)
@@ -177,9 +180,21 @@ void AdultGhost_Chase::UpdateTargetGrid()
     int px, py;
     auto wp = adultGhost->target->GetTransform()->GetLocalPosition();
     if (!grid->WorldToGridFromCenter(wp, px, py)) return;
-    // cout << "[AdultGhost_Chase] Player Grid = (" << px << "," << py << ")\n";
 
-    adultGhost->agent->SetTarget(px, py);
+    int tx = px;
+    int ty = py;
+
+    if (!FindNearestWalkableCell(px, py, tx, ty))
+    {
+        cout << "[AdultGhost_Chase] No walkable cell near target ("
+            << px << ", " << py << ")\n";
+        return;
+    }
+
+    adultGhost->agent->SetTarget(tx, ty);
+
+    cout << "[AdultGhost_Chase] ChaseTarget=("
+        << tx << "," << ty << "), PlayerCell=(" << px << "," << py << ")\n";
 }
 
 
@@ -208,4 +223,70 @@ void AdultGhost_Chase::SaveLastPlayerGrid()
     {
         adultGhost->lastPlayerGrid = { px, py, true };
     }
+}
+
+bool AdultGhost_Chase::FindNearestWalkableCell(int targetX, int targetY, int& outX, int& outY)
+{
+    auto grid = GridSystem::Instance().GetMainGrid();
+    if (!grid) return false;
+
+    // 1. 목표 칸 자체가 안 막혀 있으면 그대로 사용
+    if (grid->IsWalkableFromCenter(targetX, targetY))
+    {
+        outX = targetX;
+        outY = targetY;
+        return true;
+    }
+
+    // 2. AI 현재 위치 구하기
+    int myX, myY;
+    auto myPos = adultGhost->GetOwner()->GetTransform()->GetWorldPosition();
+    if (!grid->WorldToGridFromCenter(myPos, myX, myY))
+        return false;
+
+    // 3. 목표 칸 주변 반경 탐색
+    // 반경 1 -> 2 -> 3 순서로 넓혀가면서, 이동 가능한 칸 중 AI와 가장 가까운 칸 선택
+    for (int r = 1; r <= 3; ++r)
+    {
+        bool found = false;
+        float bestScore = FLT_MAX;
+        int bestX = -1;
+        int bestY = -1;
+
+        for (int y = targetY - r; y <= targetY + r; ++y)
+        {
+            for (int x = targetX - r; x <= targetX + r; ++x)
+            {
+                // 현재 반경의 테두리만 검사
+                if (abs(x - targetX) != r && abs(y - targetY) != r)
+                    continue;
+
+                if (!grid->IsWalkableFromCenter(x, y))
+                    continue;
+
+                if (grid->IsOccupied(x, y))
+                    continue;
+
+                // AI 기준으로 가까운 칸 우선
+                float score = float(abs(x - myX) + abs(y - myY));
+
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    bestX = x;
+                    bestY = y;
+                    found = true;
+                }
+            }
+        }
+
+        if (found)
+        {
+            outX = bestX;
+            outY = bestY;
+            return true;
+        }
+    }
+
+    return false;
 }

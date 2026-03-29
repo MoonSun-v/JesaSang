@@ -30,7 +30,7 @@ void AdultGhost_Patrol::ChangeStateLogic()
     }
 
     // 2. 기척 or 함정 감지 : 시야 밖에서 감지 
-    if (adultGhost->IsPlayerInSenseRange())
+    if (!adultGhost->IsPlayerHidden() && adultGhost->IsPlayerInSenseRange())
     {
         std::cout << "[AdultGhost_Patrol] PLAYER FOUND (Sense)!" << std::endl;
         auto grid = GridSystem::Instance().GetMainGrid();
