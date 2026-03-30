@@ -65,11 +65,9 @@ void TutorialStep_Step8::Exit()
 
 void TutorialStep_Step8::FreePlay()
 {
-    //      FŰ   ȣ ۿ     ؼ   Ϸ  ϸ , Monologue    Ѿ   
     if (!basket || basket->isCompleted)
         return;
 
-    //  Ÿ  üũ
     Vector3 playerPos = tutorialController->player_Obj->GetTransform()->GetWorldPosition();
     Vector3 basketPos = basket->GetOwner()->GetTransform()->GetWorldPosition();
 
@@ -93,9 +91,7 @@ void TutorialStep_Step8::FreePlay()
 
 void TutorialStep_Step8::Monologue()
 {
-    static const wchar_t* line = L"     ٱ  Ͽ             ?";
-
-    tutorialController->dialogue->ShowDialogueHold(line);
+    tutorialController->dialogue->ShowDialogueHold(L"지도 조각을 얻었다!");
 
     if (Input::GetKeyDown(Keyboard::F) ||
         Input::GetKeyDown(Keyboard::Space) ||

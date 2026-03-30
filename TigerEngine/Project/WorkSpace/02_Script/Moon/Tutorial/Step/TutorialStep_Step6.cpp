@@ -115,7 +115,7 @@ void TutorialStep_Step6::WaitInput1()
 void TutorialStep_Step6::Monologue2()
 {
     if (tutorialController->dialogue)
-        tutorialController->dialogue->ShowDialogueHold(L"엄청 화나보였어. 배가 고프다 했는데..");
+        tutorialController->dialogue->ShowDialogueHold(L"엄청 화나보였어 배가 고프다 했는데.");
 
     phase = Step6Phase::WaitInput2;
 }

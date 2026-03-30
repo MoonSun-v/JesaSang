@@ -199,7 +199,7 @@ void TutorialStep_Step5::WaitInput1()
 void TutorialStep_Step5::Monologue2()
 {
     if (tutorialController->dialogue)
-        tutorialController->dialogue->ShowDialogueHold(L"아무것도 없네, 배고파서 헛 냄새를 맡았나..");
+        tutorialController->dialogue->ShowDialogueHold(L"아무것도 없네, 배고파서 헛 냄새를 맡았나");
 
     phase = Step5Phase::WaitInput2;
 }

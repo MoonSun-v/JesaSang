@@ -136,6 +136,6 @@ void TutorialStep_Step1::Monologue()
 {
     if (!tutorialController->dialogue) return;
 
-    tutorialController->dialogue->ShowDialogueHold(L"으악.. 깜빡 잠들었나.. 지금 몇 시지?");
+    tutorialController->dialogue->ShowDialogueHold(L"으악, 깜빡 잠들었나. 지금 몇 시지?");
     tutorialController->camController->SetViewMode(CameraController::ViewMode::Quarter);
 }

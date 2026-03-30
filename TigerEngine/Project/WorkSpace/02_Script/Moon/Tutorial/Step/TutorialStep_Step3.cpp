@@ -245,13 +245,13 @@ void TutorialStep_Step3::Frozen()
     // 3초 후 대사 출력
     if (!dialogueShown && frozenPhaseTimer >= 3.0f)
     {
-        tutorialController->dialogue->ShowDialogueText(L"갑자기 왜 이렇게 춥지..? 뭔가 불길해..!!");
+        tutorialController->dialogue->ShowDialogueText(L"갑자기 왜 이렇게 춥지? 뭔가 불길해!!");
         dialogueShown = true;
     }
 
     if (dialogueShown && !secondDialogueShown && frozenPhaseTimer >= 5.0f)
     {
-        tutorialController->dialogue->ShowDialogueText( L"일단 숨어서 상황을 지켜보자..!");
+        tutorialController->dialogue->ShowDialogueText( L"일단 숨어서 상황을 지켜보자!");
         secondDialogueShown = true;
     }
 

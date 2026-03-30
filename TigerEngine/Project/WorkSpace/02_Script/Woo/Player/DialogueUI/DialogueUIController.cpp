@@ -37,7 +37,7 @@ namespace
             if (*p == L'\n' || *p == L'\r' || *p == L'\t')
                 continue;
             else if (*p == L' ')
-                count += 0.0f;
+                count += 0.5f;
             else
                 count += 1.0f;
         }
