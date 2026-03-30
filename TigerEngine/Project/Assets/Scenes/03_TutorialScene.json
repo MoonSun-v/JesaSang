@@ -3,7 +3,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1426,
+        "ID": 829,
         "Name": "----------------------",
         "ParentID": -1,
         "components": [
@@ -34,16 +34,16 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1427,
+        "ID": 830,
         "Name": "Ground",
         "ParentID": -1,
         "components": [
           {
             "properties": {
               "Position": [
-                0.0,
-                -10.0,
-                -12.190818786621094
+                -166.94552612304688,
+                -9.437420845031738,
+                -449.5540771484375
               ],
               "Rotation": [
                 -0.0,
@@ -51,9 +51,9 @@
                 -0.0
               ],
               "Scale": [
-                20.0,
-                0.05000000074505806,
-                20.0
+                1.0,
+                1.0,
+                1.0
               ]
             },
             "type": "Transform"
@@ -138,7 +138,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1428,
+        "ID": 831,
         "Name": "CurScene_03_TutorialScene",
         "ParentID": -1,
         "components": [
@@ -169,7 +169,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1429,
+        "ID": 832,
         "Name": "SceneFlowManager",
         "ParentID": -1,
         "components": [
@@ -212,7 +212,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1430,
+        "ID": 833,
         "Name": "----------------------",
         "ParentID": -1,
         "components": [
@@ -243,7 +243,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1431,
+        "ID": 834,
         "Name": "TutorialController",
         "ParentID": -1,
         "components": [
@@ -280,7 +280,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1432,
+        "ID": 835,
         "Name": "----------------------",
         "ParentID": -1,
         "components": [
@@ -311,7 +311,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1433,
+        "ID": 836,
         "Name": "UI_Screen_Blink",
         "ParentID": -1,
         "components": [
@@ -376,9 +376,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1434,
+        "ID": 837,
         "Name": "Blink_Top",
-        "ParentID": 1433,
+        "ParentID": 836,
         "components": [
           {
             "properties": {
@@ -467,9 +467,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1435,
+        "ID": 838,
         "Name": "Blink_Bottom",
-        "ParentID": 1433,
+        "ParentID": 836,
         "components": [
           {
             "properties": {
@@ -558,7 +558,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1436,
+        "ID": 839,
         "Name": "Ghost_Baby_Tutorial",
         "ParentID": -1,
         "components": [
@@ -645,7 +645,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1437,
+        "ID": 840,
         "Name": "Player_HitEffect",
         "ParentID": -1,
         "components": [
@@ -732,7 +732,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1438,
+        "ID": 841,
         "Name": "Ghost_Adult_Tutorial",
         "ParentID": -1,
         "components": [
@@ -819,7 +819,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1439,
+        "ID": 842,
         "Name": "----------------------",
         "ParentID": -1,
         "components": [
@@ -850,7 +850,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1440,
+        "ID": 843,
         "Name": "Baby_Target_A",
         "ParentID": -1,
         "components": [
@@ -881,7 +881,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1441,
+        "ID": 844,
         "Name": "Baby_Target_B",
         "ParentID": -1,
         "components": [
@@ -912,9 +912,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1442,
+        "ID": 845,
         "Name": "FX_Exclamation",
-        "ParentID": 1436,
+        "ParentID": 839,
         "components": [
           {
             "properties": {
@@ -999,7 +999,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1443,
+        "ID": 846,
         "Name": "Image_SensorOn",
         "ParentID": -1,
         "components": [
@@ -1090,7 +1090,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1444,
+        "ID": 847,
         "Name": "Image_InteractionOn",
         "ParentID": -1,
         "components": [
@@ -1181,7 +1181,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1445,
+        "ID": 848,
         "Name": "Image_InteractionGauge",
         "ParentID": -1,
         "components": [
@@ -1272,7 +1272,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1446,
+        "ID": 849,
         "Name": "MainCamera",
         "ParentID": -1,
         "components": [
@@ -1319,7 +1319,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1447,
+        "ID": 850,
         "Name": "PausePannel",
         "ParentID": -1,
         "components": [
@@ -1410,9 +1410,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1448,
+        "ID": 851,
         "Name": "Button_StopNo",
-        "ParentID": 1447,
+        "ParentID": 850,
         "components": [
           {
             "properties": {
@@ -1509,9 +1509,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1449,
+        "ID": 852,
         "Name": "Button_StopYes",
-        "ParentID": 1447,
+        "ParentID": 850,
         "components": [
           {
             "properties": {
@@ -1609,9 +1609,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1450,
+        "ID": 853,
         "Name": "Text_Stop",
-        "ParentID": 1447,
+        "ParentID": 850,
         "components": [
           {
             "properties": {
@@ -1696,7 +1696,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1451,
+        "ID": 854,
         "Name": "Quest",
         "ParentID": -1,
         "components": [
@@ -1761,9 +1761,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1452,
+        "ID": 855,
         "Name": "Image_QuestBackground",
-        "ParentID": 1451,
+        "ParentID": 854,
         "components": [
           {
             "properties": {
@@ -1852,9 +1852,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1453,
+        "ID": 856,
         "Name": "Text_QuestTitle",
-        "ParentID": 1451,
+        "ParentID": 854,
         "components": [
           {
             "properties": {
@@ -1939,9 +1939,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1454,
+        "ID": 857,
         "Name": "Text_QuestLabel",
-        "ParentID": 1451,
+        "ParentID": 854,
         "components": [
           {
             "properties": {
@@ -2026,9 +2026,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1455,
+        "ID": 858,
         "Name": "Image_QuestCheckbox",
-        "ParentID": 1451,
+        "ParentID": 854,
         "components": [
           {
             "properties": {
@@ -2117,9 +2117,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1456,
+        "ID": 859,
         "Name": "Image_QuestLine",
-        "ParentID": 1451,
+        "ParentID": 854,
         "components": [
           {
             "properties": {
@@ -2208,7 +2208,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1457,
+        "ID": 860,
         "Name": "Adult_Target_A",
         "ParentID": -1,
         "components": [
@@ -2239,7 +2239,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1458,
+        "ID": 861,
         "Name": "Adult_Target_B",
         "ParentID": -1,
         "components": [
@@ -2270,7 +2270,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1459,
+        "ID": 862,
         "Name": "FrozenManager",
         "ParentID": -1,
         "components": [
@@ -2361,7 +2361,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1460,
+        "ID": 863,
         "Name": "MainGameUIManager",
         "ParentID": -1,
         "components": [
@@ -2400,9 +2400,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1461,
+        "ID": 864,
         "Name": "Ghost_DialoguePoint",
-        "ParentID": 1438,
+        "ParentID": 841,
         "components": [
           {
             "properties": {
@@ -2431,7 +2431,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1462,
+        "ID": 865,
         "Name": "Adult_Target_C",
         "ParentID": -1,
         "components": [
@@ -2462,7 +2462,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1463,
+        "ID": 866,
         "Name": "---------------------",
         "ParentID": -1,
         "components": [
@@ -2493,7 +2493,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1464,
+        "ID": 867,
         "Name": "Room_Table_of_memorial_ceremony",
         "ParentID": -1,
         "components": [
@@ -2597,7 +2597,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1465,
+        "ID": 868,
         "Name": "JesaSang_Tutorial",
         "ParentID": -1,
         "components": [
@@ -2701,9 +2701,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1466,
+        "ID": 869,
         "Name": "baseFood",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -2782,9 +2782,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1467,
+        "ID": 870,
         "Name": "Apple",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -2863,9 +2863,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1468,
+        "ID": 871,
         "Name": "Pear",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -2944,9 +2944,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1469,
+        "ID": 872,
         "Name": "Batter",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -3025,9 +3025,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1470,
+        "ID": 873,
         "Name": "Tofu",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -3106,9 +3106,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1471,
+        "ID": 874,
         "Name": "Sanjeok",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -3187,9 +3187,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1472,
+        "ID": 875,
         "Name": "Donggeurangttaeng",
-        "ParentID": 1465,
+        "ParentID": 868,
         "components": [
           {
             "properties": {
@@ -3268,16 +3268,16 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1473,
+        "ID": 876,
         "Name": "wall_8",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
               "Position": [
-                0.0,
-                0.0,
-                208.04107666015625
+                -140.58486938476563,
+                5.518392572412267e-05,
+                -570.52294921875
               ],
               "Rotation": [
                 -0.0,
@@ -3378,9 +3378,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1474,
+        "ID": 877,
         "Name": "wall_4",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -3488,9 +3488,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1475,
+        "ID": 878,
         "Name": "wall_4",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -3598,9 +3598,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1476,
+        "ID": 879,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -3708,9 +3708,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1477,
+        "ID": 880,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -3818,9 +3818,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1478,
+        "ID": 881,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -3928,9 +3928,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1479,
+        "ID": 882,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4038,9 +4038,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1480,
+        "ID": 883,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4148,9 +4148,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1481,
+        "ID": 884,
         "Name": "Pillar",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4258,9 +4258,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1482,
+        "ID": 885,
         "Name": "wall_8",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4368,9 +4368,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1483,
+        "ID": 886,
         "Name": "wall_8",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4478,9 +4478,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1484,
+        "ID": 887,
         "Name": "wall_4",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4588,9 +4588,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1485,
+        "ID": 888,
         "Name": "wall_4",
-        "ParentID": 1498,
+        "ParentID": 900,
         "components": [
           {
             "properties": {
@@ -4698,7 +4698,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1486,
+        "ID": 889,
         "Name": "SearchObject_Tutorial",
         "ParentID": -1,
         "components": [
@@ -4823,9 +4823,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1487,
+        "ID": 890,
         "Name": "Image_SensorOn",
-        "ParentID": 1486,
+        "ParentID": 889,
         "components": [
           {
             "properties": {
@@ -4914,9 +4914,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1488,
+        "ID": 891,
         "Name": "Image_InteractionOn",
-        "ParentID": 1486,
+        "ParentID": 889,
         "components": [
           {
             "properties": {
@@ -5005,9 +5005,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1489,
+        "ID": 892,
         "Name": "Image_InteractionGauge",
-        "ParentID": 1486,
+        "ParentID": 889,
         "components": [
           {
             "properties": {
@@ -5096,7 +5096,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1490,
+        "ID": 893,
         "Name": "BoxObject",
         "ParentID": -1,
         "components": [
@@ -5215,126 +5215,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1491,
-        "Name": "Object",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                331.072021484375,
-                0.0,
-                141.70938110351563
-              ],
-              "Rotation": [
-                -0.0,
-                0.007638138718903065,
-                -0.0
-              ],
-              "Scale": [
-                0.9999966025352478,
-                0.999996542930603,
-                0.9999966025352478
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "DataPath": "..\\Assets\\Resource\\FBX\\Jagaejang\\cabinet.fbx",
-              "IsStatic": false
-            },
-            "type": "FBXData"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Alpha": 1.0,
-              "Diffuse": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "DiffuseOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Emissive": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "EmissiveOverride": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "IsGround": false,
-              "Metalic": 1.0,
-              "MetallicOverride": 1.0,
-              "RenderBlendType": "Opaque",
-              "Roughness": 1.0,
-              "RoughnessOverride": 1.0,
-              "UseDiffuseOverride": false,
-              "UseEmissiveOverride": false,
-              "UseMetallicOverride": false,
-              "UseRoughnessOverride": false,
-              "isroughnessFromShininess": false
-            },
-            "type": "FBXRenderer"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "ColliderType": "Box",
-              "PhysicsBodyType": "Static",
-              "density": 10.0,
-              "halfExtents": [
-                50.0,
-                100.0,
-                50.0
-              ],
-              "height": 10.0,
-              "isTrigger": false,
-              "layer": "Default",
-              "localOffset": [
-                0.0,
-                100.0,
-                0.0
-              ],
-              "radius": 50.0
-            },
-            "type": "PhysicsComponent"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "hasItem": true,
-              "interactionDiffuse": [
-                0.23529411852359772,
-                0.23529411852359772,
-                0.23529411852359772,
-                1.0
-              ],
-              "itemID": "Ingredient_Apple",
-              "itemType": "Ingredient"
-            },
-            "type": "SearchObject"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 1492,
+        "ID": 894,
         "Name": "--------------------",
         "ParentID": -1,
         "components": [
@@ -5365,7 +5246,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1493,
+        "ID": 895,
         "Name": "StartCam_Jesa",
         "ParentID": -1,
         "components": [
@@ -5396,7 +5277,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1494,
+        "ID": 896,
         "Name": "EndCam_Jesa",
         "ParentID": -1,
         "components": [
@@ -5427,7 +5308,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1495,
+        "ID": 897,
         "Name": "StartCam_Fruit",
         "ParentID": -1,
         "components": [
@@ -5458,7 +5339,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1496,
+        "ID": 898,
         "Name": "EndCam_Fruit",
         "ParentID": -1,
         "components": [
@@ -5489,7 +5370,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1497,
+        "ID": 899,
         "Name": "Barricade",
         "ParentID": -1,
         "components": [
@@ -5543,7 +5424,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1498,
+        "ID": 900,
         "Name": "Wall",
         "ParentID": -1,
         "components": [
@@ -5574,7 +5455,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1499,
+        "ID": 901,
         "Name": "Visual_Ingre_Apple",
         "ParentID": -1,
         "components": [
@@ -5655,7 +5536,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1500,
+        "ID": 902,
         "Name": "Visual_Ingre_Batter",
         "ParentID": -1,
         "components": [
@@ -5736,7 +5617,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1501,
+        "ID": 903,
         "Name": "Visual_Ingre_Donggeurangttaeng",
         "ParentID": -1,
         "components": [
@@ -5817,7 +5698,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1502,
+        "ID": 904,
         "Name": "Visual_Ingre_Pear",
         "ParentID": -1,
         "components": [
@@ -5898,7 +5779,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1503,
+        "ID": 905,
         "Name": "Visual_Ingre_Sanjeok",
         "ParentID": -1,
         "components": [
@@ -5979,7 +5860,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1504,
+        "ID": 906,
         "Name": "Visual_Ingre_Tofu",
         "ParentID": -1,
         "components": [
@@ -6060,7 +5941,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1505,
+        "ID": 907,
         "Name": "Visual_Apple",
         "ParentID": -1,
         "components": [
@@ -6141,7 +6022,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1506,
+        "ID": 908,
         "Name": "Visual_Pear",
         "ParentID": -1,
         "components": [
@@ -6222,7 +6103,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1507,
+        "ID": 909,
         "Name": "Visual_Batter",
         "ParentID": -1,
         "components": [
@@ -6303,7 +6184,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1508,
+        "ID": 910,
         "Name": "Visual_Tofu",
         "ParentID": -1,
         "components": [
@@ -6384,7 +6265,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1509,
+        "ID": 911,
         "Name": "Visual_Sanjeok",
         "ParentID": -1,
         "components": [
@@ -6465,7 +6346,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1510,
+        "ID": 912,
         "Name": "Visual_Donggeurangttaeng",
         "ParentID": -1,
         "components": [
@@ -6546,7 +6427,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1511,
+        "ID": 913,
         "Name": "Player_HitEffect",
         "ParentID": -1,
         "components": [
@@ -6633,7 +6514,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1512,
+        "ID": 914,
         "Name": "LoseCinemachine",
         "ParentID": -1,
         "components": [
@@ -6670,9 +6551,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1513,
+        "ID": 915,
         "Name": "LoseCinemachineCamera",
-        "ParentID": 1512,
+        "ParentID": 914,
         "components": [
           {
             "properties": {
@@ -6711,7 +6592,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1514,
+        "ID": 916,
         "Name": "playaer_light",
         "ParentID": -1,
         "components": [
@@ -6742,9 +6623,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1515,
+        "ID": 917,
         "Name": "Character_light_F1",
-        "ParentID": 1514,
+        "ParentID": 916,
         "components": [
           {
             "properties": {
@@ -6796,9 +6677,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1516,
+        "ID": 918,
         "Name": "Character_light_F2",
-        "ParentID": 1514,
+        "ParentID": 916,
         "components": [
           {
             "properties": {
@@ -6850,7 +6731,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1517,
+        "ID": 919,
         "Name": "HideObject",
         "ParentID": -1,
         "components": [
@@ -6960,9 +6841,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1518,
+        "ID": 920,
         "Name": "Image_SensorOn",
-        "ParentID": 1517,
+        "ParentID": 919,
         "components": [
           {
             "properties": {
@@ -7051,9 +6932,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1519,
+        "ID": 921,
         "Name": "Image_InteractionOn",
-        "ParentID": 1517,
+        "ParentID": 919,
         "components": [
           {
             "properties": {
@@ -7142,250 +7023,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1520,
-        "Name": "UI_PlayerDialogue",
-        "ParentID": -1,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                51.306976318359375,
-                126.62967681884766,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                -0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Pivot": [
-                0.0,
-                0.0
-              ],
-              "Pos": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Size": [
-                0.0,
-                0.0
-              ]
-            },
-            "type": "RectTransform"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 1521,
-        "Name": "Image_Dialogue",
-        "ParentID": 1520,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                3.1415927410125732,
-                3.1415927410125732
-              ],
-              "Scale": [
-                0.25,
-                0.25,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Pivot": [
-                0.0,
-                0.4000000059604645
-              ],
-              "Pos": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ],
-              "Size": [
-                250.0,
-                150.0
-              ]
-            },
-            "type": "RectTransform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "color": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-              ],
-              "drawSpacetype": "World",
-              "fillAmount": 1.0,
-              "imageType": "Sliced",
-              "isBillboard": true,
-              "isMouseCheck": false,
-              "path": "..\\Assets\\Resource\\UI\\Player\\Dialogue.png",
-              "sliceBorderPx": [
-                80.0,
-                65.0,
-                40.0,
-                40.0
-              ],
-              "type": "Sliced",
-              "zOrder": -4
-            },
-            "type": "Image"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 1522,
-        "Name": "Text_Dialoaue",
-        "ParentID": 1520,
-        "components": [
-          {
-            "properties": {
-              "Position": [
-                7.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                -0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                1.0,
-                1.0
-              ]
-            },
-            "type": "Transform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "Pivot": [
-                0.0,
-                0.5
-              ],
-              "Pos": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Position": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Rotation": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "Scale": [
-                1.0,
-                0.0,
-                1.0
-              ],
-              "Size": [
-                1.0,
-                1.0
-              ]
-            },
-            "type": "RectTransform"
-          },
-          {
-            "properties": {
-              "Active": true,
-              "alignType": "Center",
-              "atlasH": 2048,
-              "atlasW": 2048,
-              "color": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-              ],
-              "drawSpacetype": "World",
-              "fontPath": "../Assets/Resource/font/rotteMedium.ttf",
-              "fontSize": 10,
-              "isBillboard": true,
-              "paddingPx": 1,
-              "text": "why not korean?",
-              "zOrder": -3
-            },
-            "type": "TextUI"
-          }
-        ]
-      },
-      "type": "GameObject"
-    },
-    {
-      "properties": {
-        "Active": true,
-        "ID": 1523,
+        "ID": 922,
         "Name": "SoundManager",
         "ParentID": -1,
         "components": [
@@ -7500,7 +7138,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1524,
+        "ID": 923,
         "Name": "DirectionalLight",
         "ParentID": -1,
         "components": [
@@ -7554,7 +7192,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1525,
+        "ID": 924,
         "Name": "Apple",
         "ParentID": -1,
         "components": [
@@ -7635,7 +7273,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1526,
+        "ID": 925,
         "Name": "Pear",
         "ParentID": -1,
         "components": [
@@ -7716,7 +7354,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1527,
+        "ID": 926,
         "Name": "Batter",
         "ParentID": -1,
         "components": [
@@ -7797,7 +7435,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1528,
+        "ID": 927,
         "Name": "Tofu",
         "ParentID": -1,
         "components": [
@@ -7878,7 +7516,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1529,
+        "ID": 928,
         "Name": "Sanjeok",
         "ParentID": -1,
         "components": [
@@ -7959,7 +7597,7 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1530,
+        "ID": 929,
         "Name": "Donggeurangttaeng",
         "ParentID": -1,
         "components": [
@@ -8040,7 +7678,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1531,
+        "ID": 930,
         "Name": "JESA_MOOD_LIGHT",
         "ParentID": -1,
         "components": [
@@ -8071,9 +7709,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1532,
+        "ID": 931,
         "Name": "JESA_MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8125,9 +7763,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1533,
+        "ID": 932,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8179,9 +7817,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1534,
+        "ID": 933,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8233,9 +7871,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1535,
+        "ID": 934,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8287,9 +7925,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1536,
+        "ID": 935,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8341,9 +7979,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1537,
+        "ID": 936,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8395,9 +8033,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1538,
+        "ID": 937,
         "Name": "MOOD_LIGHT",
-        "ParentID": 1531,
+        "ParentID": 930,
         "components": [
           {
             "properties": {
@@ -8449,7 +8087,7 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1539,
+        "ID": 938,
         "Name": "Player",
         "ParentID": -1,
         "components": [
@@ -8626,9 +8264,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1540,
+        "ID": 939,
         "Name": "CameraTrackingPoint",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -8657,9 +8295,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1541,
+        "ID": 940,
         "Name": "OcclusionFadePoint",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -8688,9 +8326,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1542,
+        "ID": 941,
         "Name": "InteractionSensor",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -8748,9 +8386,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1543,
+        "ID": 942,
         "Name": "InteractZone",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -8808,9 +8446,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1544,
+        "ID": 943,
         "Name": "ItemVisualizer",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -8839,9 +8477,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1545,
+        "ID": 944,
         "Name": "Visual_Ingre_Apple",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -8920,9 +8558,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1546,
+        "ID": 945,
         "Name": "Visual_Ingre_Batter",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9001,9 +8639,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1547,
+        "ID": 946,
         "Name": "Visual_Ingre_Donggeurangttaeng",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9082,9 +8720,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1548,
+        "ID": 947,
         "Name": "Visual_Ingre_Pear",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9163,9 +8801,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1549,
+        "ID": 948,
         "Name": "Visual_Ingre_Sanjeok",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9244,9 +8882,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1550,
+        "ID": 949,
         "Name": "Visual_Ingre_Tofu",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9325,9 +8963,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1551,
+        "ID": 950,
         "Name": "Visual_Apple",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9406,9 +9044,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1552,
+        "ID": 951,
         "Name": "Visual_Pear",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9487,9 +9125,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1553,
+        "ID": 952,
         "Name": "Visual_Batter",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9568,9 +9206,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1554,
+        "ID": 953,
         "Name": "Visual_Tofu",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9649,9 +9287,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1555,
+        "ID": 954,
         "Name": "Visual_Sanjeok",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9730,9 +9368,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1556,
+        "ID": 955,
         "Name": "Visual_Donggeurangttaeng",
-        "ParentID": 1544,
+        "ParentID": 943,
         "components": [
           {
             "properties": {
@@ -9811,9 +9449,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1557,
+        "ID": 956,
         "Name": "AITarget",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -9871,9 +9509,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1558,
+        "ID": 957,
         "Name": "DialoguePoint",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -9902,9 +9540,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1559,
+        "ID": 958,
         "Name": "Player_FireEffect",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -10028,9 +9666,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1560,
+        "ID": 959,
         "Name": "Player_HitEffect",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -10115,9 +9753,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1561,
+        "ID": 960,
         "Name": "Player_SmokeEffect",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -10241,9 +9879,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1562,
+        "ID": 961,
         "Name": "LoseCinemachine",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -10278,9 +9916,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1563,
+        "ID": 962,
         "Name": "LoseCinemachineCamera",
-        "ParentID": 1562,
+        "ParentID": 961,
         "components": [
           {
             "properties": {
@@ -10319,9 +9957,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1564,
+        "ID": 963,
         "Name": "playaer_light",
-        "ParentID": 1539,
+        "ParentID": 938,
         "components": [
           {
             "properties": {
@@ -10350,9 +9988,9 @@
     {
       "properties": {
         "Active": true,
-        "ID": 1565,
+        "ID": 964,
         "Name": "Character_light_F1",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10404,9 +10042,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1566,
+        "ID": 965,
         "Name": "Character_light_F2",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10458,9 +10096,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1567,
+        "ID": 966,
         "Name": "Character_light_F3",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10512,9 +10150,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1568,
+        "ID": 967,
         "Name": "Character_light_R",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10566,9 +10204,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1569,
+        "ID": 968,
         "Name": "Character_light_L",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10620,9 +10258,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1570,
+        "ID": 969,
         "Name": "Character_light_B1",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10674,9 +10312,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1571,
+        "ID": 970,
         "Name": "Character_light_B2",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10728,9 +10366,9 @@
     {
       "properties": {
         "Active": false,
-        "ID": 1572,
+        "ID": 971,
         "Name": "Character_light_B3",
-        "ParentID": 1564,
+        "ParentID": 963,
         "components": [
           {
             "properties": {
@@ -10774,6 +10412,2715 @@
               "Range": 400.0
             },
             "type": "Light"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 972,
+        "Name": "Room_Ground",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 973,
+        "Name": "Room_",
+        "ParentID": 972,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -157.12841796875,
+                0.0,
+                -934.0701293945313
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Room\\Room_.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                421.70001220703125,
+                1.899999976158142,
+                344.6000061035156
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                -1.7999999523162842,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 974,
+        "Name": "Room_a_love_room",
+        "ParentID": 972,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -365.59271240234375,
+                0.0,
+                -1946.8118896484375
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Room\\Room_a_love_room.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                323.20001220703125,
+                2.200000047683716,
+                375.3999938964844
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                -1.899999976158142,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 975,
+        "Name": "Room_main_room",
+        "ParentID": 972,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                526.5418090820313,
+                0.0,
+                -1069.639892578125
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Room\\Room_main_room.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                265.8999938964844,
+                1.7999999523162842,
+                323.20001220703125
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                -1.7999999523162842,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 976,
+        "Name": "Room_saibi",
+        "ParentID": 972,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -1055.54150390625,
+                0.0,
+                -333.4134826660156
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Room\\Room_saibi.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                267.29998779296875,
+                1.7999999523162842,
+                247.1999969482422
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                -1.7999999523162842,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 977,
+        "Name": "wall_5",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -795.4853515625,
+                5.248280649539083e-05,
+                -334.45428466796875
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999998211860657,
+                1.0,
+                0.9999998211860657
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_5.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                250.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 978,
+        "Name": "wall_5",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -1061.411376953125,
+                0.0,
+                -92.9115982055664
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_5.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                250.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 979,
+        "Name": "wall_5",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -1057.142333984375,
+                -4.29355823143851e-05,
+                -575.7314453125
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_5.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                250.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 980,
+        "Name": "wall_5",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -1306.556396484375,
+                6.103515625e-05,
+                -330.0361328125
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999998211860657,
+                1.0,
+                0.9999998211860657
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_5.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                250.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 981,
+        "Name": "wall_4",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -1408.4056396484375,
+                -6.27758345217444e-05,
+                204.69029235839844
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_4.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                200.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                98.80000305175781,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 982,
+        "Name": "wall_2",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -708.1940307617188,
+                -0.00011814561003120616,
+                -241.60885620117188
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_2.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                100.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                98.5,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 983,
+        "Name": "wall_6",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                757.302734375,
+                4.990700108464807e-05,
+                -294.0501403808594
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999998211860657,
+                1.0,
+                0.9999998211860657
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_6.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                300.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 984,
+        "Name": "wall_6",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                1017.615478515625,
+                -6.9405577960424125e-06,
+                -289.2975769042969
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999998211860657,
+                1.0,
+                0.9999998211860657
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_6.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                300.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 985,
+        "Name": "wall_3",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                879.4393920898438,
+                6.098774974816479e-05,
+                -4.626502990722656
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                0.800000011920929,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_3.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                150.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                99.19999694824219,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 986,
+        "Name": "wall_3",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                882.8905639648438,
+                -7.432492566294968e-05,
+                -580.4505004882813
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                0.800000011920929,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_3.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                150.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                99.19999694824219,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 987,
+        "Name": "wall_8",
+        "ParentID": 900,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                206.1672821044922
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\Wall_Door\\wall_8.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                400.0,
+                100.0,
+                10.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                100.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          },
+          {
+            "properties": {
+              "Active": true
+            },
+            "type": "OcclusionFadeObject"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 988,
+        "Name": "screen",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                9.554603576660156,
+                0.0,
+                129.24310302734375
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\FBX\\Table\\folding_screen.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 989,
+        "Name": "cabinet",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                367.11505126953125,
+                0.0,
+                28.516437530517578
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999995231628418,
+                1.0,
+                0.9999995231628418
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\JageaJang\\cabinet.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                50.0,
+                90.0,
+                50.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                90.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 990,
+        "Name": "cabinet",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -360.8551025390625,
+                -3.0517578125e-05,
+                122.09175109863281
+              ],
+              "Rotation": [
+                -0.0,
+                -1.570796012878418,
+                0.0
+              ],
+              "Scale": [
+                0.9999997019767761,
+                1.0,
+                0.9999997019767761
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\JageaJang\\cabinet.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                50.0,
+                90.0,
+                50.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                90.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 991,
+        "Name": "cabinet_open",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                365.16412353515625,
+                0.0,
+                127.98294830322266
+              ],
+              "Rotation": [
+                -0.0,
+                1.570796012878418,
+                -0.0
+              ],
+              "Scale": [
+                0.9999998211860657,
+                1.0,
+                0.9999998211860657
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\JageaJang\\cabinet_open.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                50.0,
+                90.0,
+                50.0
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                92.30000305175781,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 992,
+        "Name": "Lantern",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                118.75464630126953,
+                1.8321499824523926,
+                -279.7356872558594
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_01\\Lantern.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                14.899999618530273,
+                38.29999923706055,
+                13.600000381469727
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                38.599998474121094,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 993,
+        "Name": "Lantern",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -117.50738525390625,
+                1.8321502208709717,
+                -275.55657958984375
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_01\\Lantern.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                14.899999618530273,
+                38.29999923706055,
+                13.600000381469727
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                38.599998474121094,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 994,
+        "Name": "Onggi_platform",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -352.7061462402344,
+                0.0,
+                -188.15426635742188
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_01\\Onggi_platform.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                33.5,
+                35.20000076293945,
+                27.200000762939453
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                37.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 995,
+        "Name": "Onggi_platform",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                -290.1446533203125,
+                0.0,
+                -190.50491333007813
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                0.699999988079071,
+                0.699999988079071,
+                0.699999988079071
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_01\\Onggi_platform.fbx",
+              "IsStatic": true
+            },
+            "type": "FBXData"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Alpha": 1.0,
+              "Diffuse": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "DiffuseOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Emissive": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "EmissiveOverride": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "IsGround": false,
+              "Metalic": 1.0,
+              "MetallicOverride": 1.0,
+              "RenderBlendType": "Opaque",
+              "Roughness": 1.0,
+              "RoughnessOverride": 1.0,
+              "UseDiffuseOverride": false,
+              "UseEmissiveOverride": false,
+              "UseMetallicOverride": false,
+              "UseRoughnessOverride": false,
+              "isroughnessFromShininess": false
+            },
+            "type": "FBXRenderer"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "ColliderType": "Box",
+              "PhysicsBodyType": "Static",
+              "density": 10.0,
+              "halfExtents": [
+                33.5,
+                35.20000076293945,
+                27.200000762939453
+              ],
+              "height": 10.0,
+              "isTrigger": false,
+              "layer": "Default",
+              "localOffset": [
+                0.0,
+                37.0,
+                0.0
+              ],
+              "radius": 50.0
+            },
+            "type": "PhysicsComponent"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 1010,
+        "Name": "UI_PlayerDialogue",
+        "ParentID": -1,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                51.306976318359375,
+                126.62967681884766,
+                0.0
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                -0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Pivot": [
+                0.0,
+                0.0
+              ],
+              "Pos": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Size": [
+                0.0,
+                0.0
+              ]
+            },
+            "type": "RectTransform"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 1011,
+        "Name": "Image_Dialogue",
+        "ParentID": 1010,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                3.1415927410125732,
+                3.1415927410125732
+              ],
+              "Scale": [
+                0.25,
+                0.25,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Pivot": [
+                0.0,
+                0.4000000059604645
+              ],
+              "Pos": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "Size": [
+                250.0,
+                150.0
+              ]
+            },
+            "type": "RectTransform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "drawSpacetype": "World",
+              "fillAmount": 1.0,
+              "imageType": "Sliced",
+              "isBillboard": true,
+              "isMouseCheck": false,
+              "path": "..\\Assets\\Resource\\UI\\Player\\Dialogue.png",
+              "sliceBorderPx": [
+                80.0,
+                65.0,
+                40.0,
+                40.0
+              ],
+              "type": "Sliced",
+              "zOrder": 5
+            },
+            "type": "Image"
+          }
+        ]
+      },
+      "type": "GameObject"
+    },
+    {
+      "properties": {
+        "Active": true,
+        "ID": 1012,
+        "Name": "Text_Dialoaue",
+        "ParentID": 1010,
+        "components": [
+          {
+            "properties": {
+              "Position": [
+                15.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                -0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "type": "Transform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "Pivot": [
+                0.0,
+                0.5
+              ],
+              "Pos": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Rotation": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "Scale": [
+                1.0,
+                0.0,
+                1.0
+              ],
+              "Size": [
+                1.0,
+                1.0
+              ]
+            },
+            "type": "RectTransform"
+          },
+          {
+            "properties": {
+              "Active": true,
+              "alignType": "Center",
+              "atlasH": 2048,
+              "atlasW": 2048,
+              "color": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "drawSpacetype": "World",
+              "fontPath": "../Assets/Resource/font/rotteMedium.ttf",
+              "fontSize": 10,
+              "isBillboard": true,
+              "paddingPx": 1,
+              "text": "why not korean?",
+              "zOrder": 6
+            },
+            "type": "TextUI"
           }
         ]
       },

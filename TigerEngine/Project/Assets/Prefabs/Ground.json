@@ -2,16 +2,16 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 3922,
-      "Name": "Onggi_platform",
-      "ParentID": 3921,
+      "ID": 5030,
+      "Name": "Ground",
+      "ParentID": -1,
       "components": [
         {
           "properties": {
             "Position": [
-              80.0,
               0.0,
-              -1940.0
+              0.0,
+              0.0
             ],
             "Rotation": [
               -0.0,
@@ -29,7 +29,7 @@
         {
           "properties": {
             "Active": true,
-            "DataPath": "..\\Assets\\Resource\\ArtModel\\esset_01\\Onggi_platform.fbx",
+            "DataPath": "..\\Assets\\Resource\\ArtModel\\floor\\Floor.fbx",
             "IsStatic": true
           },
           "type": "FBXData"
@@ -62,7 +62,7 @@
               1.0,
               1.0
             ],
-            "IsGround": false,
+            "IsGround": true,
             "Metalic": 1.0,
             "MetallicOverride": 1.0,
             "RenderBlendType": "Opaque",
@@ -83,16 +83,16 @@
             "PhysicsBodyType": "Static",
             "density": 10.0,
             "halfExtents": [
-              33.5,
-              35.20000076293945,
-              27.200000762939453
+              4000.0,
+              10.0,
+              4000.0
             ],
             "height": 10.0,
             "isTrigger": false,
-            "layer": "Default",
+            "layer": "Ground",
             "localOffset": [
               0.0,
-              37.0,
+              0.0,
               0.0
             ],
             "radius": 50.0

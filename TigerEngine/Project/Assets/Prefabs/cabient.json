@@ -2,26 +2,26 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 55,
+      "ID": 4824,
       "Name": "cabinet",
-      "ParentID": -1,
+      "ParentID": 4818,
       "components": [
         {
           "properties": {
             "Position": [
+              -207.75997924804688,
               0.0,
-              0.0,
-              0.0
+              550.374267578125
             ],
             "Rotation": [
               -0.0,
-              0.0,
+              -1.570796012878418,
               0.0
             ],
             "Scale": [
+              0.9999997615814209,
               1.0,
-              1.0,
-              1.0
+              0.9999997615814209
             ]
           },
           "type": "Transform"
@@ -71,7 +71,8 @@
             "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
             "UseMetallicOverride": false,
-            "UseRoughnessOverride": false
+            "UseRoughnessOverride": false,
+            "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
         },

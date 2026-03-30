@@ -2,21 +2,21 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 164,
+      "ID": 4701,
       "Name": "Lantern",
-      "ParentID": -1,
+      "ParentID": 4687,
       "components": [
         {
           "properties": {
             "Position": [
-              0.0,
-              0.0,
-              0.0
+              799.840087890625,
+              1.8321456909179688,
+              -925.54443359375
             ],
             "Rotation": [
               -0.0,
               0.0,
-              0.0
+              -0.0
             ],
             "Scale": [
               1.0,
@@ -71,7 +71,8 @@
             "UseDiffuseOverride": false,
             "UseEmissiveOverride": false,
             "UseMetallicOverride": false,
-            "UseRoughnessOverride": false
+            "UseRoughnessOverride": false,
+            "isroughnessFromShininess": false
           },
           "type": "FBXRenderer"
         },

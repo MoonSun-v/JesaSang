@@ -2,7 +2,7 @@
   "prefab": [
     {
       "Active": true,
-      "ID": 8475,
+      "ID": 3663,
       "Name": "UI_PlayerDialogue",
       "ParentID": -1,
       "components": [
@@ -64,9 +64,9 @@
     },
     {
       "Active": true,
-      "ID": 8474,
+      "ID": 3664,
       "Name": "Image_Dialogue",
-      "ParentID": 8475,
+      "ParentID": 3663,
       "components": [
         {
           "properties": {
@@ -144,7 +144,7 @@
               40.0
             ],
             "type": "Sliced",
-            "zOrder": -4
+            "zOrder": 5
           },
           "type": "Image"
         }
@@ -152,14 +152,14 @@
     },
     {
       "Active": true,
-      "ID": 8476,
+      "ID": 3665,
       "Name": "Text_Dialoaue",
-      "ParentID": 8475,
+      "ParentID": 3663,
       "components": [
         {
           "properties": {
             "Position": [
-              7.0,
+              15.0,
               0.0,
               0.0
             ],
@@ -228,7 +228,7 @@
             "isBillboard": true,
             "paddingPx": 1,
             "text": "why not korean?",
-            "zOrder": -3
+            "zOrder": 6
           },
           "type": "TextUI"
         }
