@@ -3,6 +3,7 @@
 #include <task/PxCpuDispatcher.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <DirectXMath.h>
 
 #include "../Util/PhysicsFilterShader.h"
 #include "../Util/RaycastHit.h"
@@ -174,9 +175,10 @@ private:
 
 public:
     // Raycast 단일 레이어 
+    // 입력과 출력은 모두 엔진 좌표 및 단위(cm)를 사용
     bool Raycast(
-        const PxVec3& origin,
-        const PxVec3& direction,
+        const DirectX::XMFLOAT3& origin,
+        const DirectX::XMFLOAT3& direction,
         float maxDistance,
         std::vector<RaycastHit>& outHits,
         CollisionLayer layer,
@@ -184,8 +186,8 @@ public:
         bool bAllHits);
 
     bool RaycastVision(
-        const PxVec3& origin,
-        const PxVec3& direction,
+        const DirectX::XMFLOAT3& origin,
+        const DirectX::XMFLOAT3& direction,
         float maxDistance,
         RaycastHit& outHit,
         QueryTriggerInteraction triggerInteraction);

@@ -71,8 +71,8 @@ void InteractionSensor::OnTriggerEnter(PhysicsComponent* other)
 
         vector<RaycastHit> hitBuffer;
         bool hit = PhysicsSystem::Instance().Raycast(
-            ToPx(origin),
-            ToPx(dir),
+            origin,
+            dir,
             dist,
             hitBuffer,
             CollisionLayer::Default,
