@@ -11,8 +11,7 @@ PxFilterFlags PhysicsFilterShader(
         PxFilterObjectIsTrigger(attr1);
 
     // 1) Layer mask 검사
-    if (!((data0.word0 & data1.word1) &&
-        (data1.word0 & data0.word1)))
+    if (!((data0.word0 & data1.word1) && (data1.word0 & data0.word1)))
         return PxFilterFlag::eSUPPRESS;
 
     // 2) Trigger ↔ Anything

@@ -11,5 +11,7 @@ public:
     static CollisionMask GetMask(CollisionLayer layer);
 
 private:
-    static CollisionMask s_Matrix[32]; // Layer당 하나의 mask
+    static void DisableCollision(CollisionLayer a, CollisionLayer b);
+
+    static CollisionMask s_Matrix[32]; // Layer당 하나의 mask 저장 
 };
