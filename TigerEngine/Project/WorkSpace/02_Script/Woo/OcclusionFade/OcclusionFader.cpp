@@ -52,13 +52,11 @@ void OcclusionFader::OnUpdate(float delta)
     dir.Normalize();
 
     // raycast
-    PxVec3 originPx = ToPx(origin);
-    PxVec3 dirPx = ToPx(dir);
     QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction::Ignore;
 
     bool hit = PhysicsSystem::Instance().Raycast(
-        originPx,
-        dirPx,
+        origin,
+        dir,
         dist,
         hitBuffer,
         CollisionLayer::Default,
@@ -126,7 +124,11 @@ OcclusionFadeObject* OcclusionFader::FindFadeObjectFromHit(const RaycastHit& hit
     Vector3 targetPos = targetTr->GetWorldPosition();
 
     float targetDist = (targetPos - origin).Length();
-    Vector3 hitPos = ToDXVec3(hit.point);
+    Vector3 hitPos(
+        hit.point.x,
+        hit.point.y,
+        hit.point.z
+    );
     float hitDist = (hitPos - origin).Length();
 
     if (hitDist > targetDist)

@@ -371,8 +371,8 @@ void SimulationEventCallback::onTrigger(PxTriggerPair* pairs, PxU32 nbPairs)
 // ----------------------------------------------------
 
 bool PhysicsSystem::Raycast(
-    const PxVec3& origin,
-    const PxVec3& direction,
+    const XMFLOAT3& origin,
+    const XMFLOAT3& direction,
     float maxDistance,
     std::vector<RaycastHit>& outHits,
     CollisionLayer layer,
@@ -380,7 +380,21 @@ bool PhysicsSystem::Raycast(
     bool bAllHits)
 {
     outHits.clear();
-    if (!m_Scene) return false;
+    
+    if (!m_Scene || maxDistance <= 0.0f)
+    {
+        return false;
+    }
+
+    // Raycast 경계에서 엔진 데이터(cm)를 PhysX 데이터(m)로 변환
+    const PxVec3 originPx = ToPx(origin);
+    const PxVec3 directionPx = ToPxDirection(direction);
+    const float maxDistancePx = ToPxLength(maxDistance);
+
+    if (directionPx.magnitudeSquared() <= 0.000001f)
+    {
+        return false;
+    }
 
     // 최대 히트 수 지정
     const PxU32 maxHits = 128;
@@ -398,10 +412,10 @@ bool PhysicsSystem::Raycast(
     // MeshMultiple 플래그로 모든 히트를 한 번에 수집
     PxHitFlags hitFlags = PxHitFlag::eDEFAULT | PxHitFlag::eMESH_MULTIPLE;
 
-    bool bHit = m_Scene->raycast(
-        origin,
-        direction.getNormalized(),
-        maxDistance,
+    const bool bHit = m_Scene->raycast(
+        originPx,
+        directionPx.getNormalized(),
+        maxDistancePx,
         hitBuffer,
         hitFlags,
         filterData,
@@ -417,28 +431,54 @@ bool PhysicsSystem::Raycast(
         {
             PxShape* shape = pxHit.shape;
             PxRigidActor* actor = pxHit.actor;
-            if (!actor || !shape) return;
 
-            if (hitActors.find(actor) != hitActors.end()) return; // 이미 처리됨
+            if (!actor || !shape)
+            {
+                return;
+            }
+
+            if (hitActors.find(actor) != hitActors.end())
+            {
+                return;
+            }
+
             hitActors.insert(actor);
 
-            PhysicsComponent* comp = GetComponent(pxHit.actor);
-            if (!comp) return;
+            PhysicsComponent* component = GetComponent(actor);
 
-            bool isTrigger = shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE;
-            if (isTrigger && triggerInteraction == QueryTriggerInteraction::Ignore)
+            if (!component)
+            {
                 return;
+            }
 
-            if (!PhysicsLayerMatrix::CanCollide(layer, comp->GetLayer()))
+            const bool isTrigger =
+                (shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE) != 0;
+
+            if (isTrigger &&
+                triggerInteraction == QueryTriggerInteraction::Ignore)
+            {
                 return;
+            }
+
+            if (!PhysicsLayerMatrix::CanCollide(
+                layer,
+                component->GetLayer()))
+            {
+                return;
+            }
 
             RaycastHit hitInfo;
-            hitInfo.component = comp;
-            hitInfo.point = pxHit.position;
-            hitInfo.normal = pxHit.normal;
-            hitInfo.distance = pxHit.distance;
+
+            hitInfo.component = component;
+
+            // PhysX 결과(m)를 엔진 결과(cm)로 변환한다.
+            hitInfo.point = ToDX(pxHit.position);
+            hitInfo.normal = ToDXDirection(pxHit.normal);
+            hitInfo.distance = ToDXLength(pxHit.distance);
+
+            // 디버깅 및 확장용 원본 PhysX 객체
             hitInfo.shape = shape;
-            hitInfo.actor = pxHit.actor;
+            hitInfo.actor = actor;
 
             outHits.push_back(hitInfo);
         };
@@ -464,13 +504,25 @@ bool PhysicsSystem::Raycast(
 }
 
 bool PhysicsSystem::RaycastVision(
-    const PxVec3& origin,
-    const PxVec3& direction,
+    const XMFLOAT3& origin,
+    const XMFLOAT3& direction,
     float maxDistance,
-    RaycastHit& outHit,                  
+    RaycastHit& outHit,
     QueryTriggerInteraction triggerInteraction)
 {
-    if (!m_Scene) return false;
+    if (!m_Scene || maxDistance <= 0.0f)
+    {
+        return false;
+    }
+
+    const PxVec3 originPx = ToPx(origin);
+    const PxVec3 directionPx = ToPxDirection(direction);
+    const float maxDistancePx = ToPxLength(maxDistance);
+
+    if (directionPx.magnitudeSquared() <= 0.000001f)
+    {
+        return false;
+    }
 
     PxRaycastHit hit;
     PxRaycastBuffer hitBuffer(&hit, 1);
@@ -492,14 +544,15 @@ bool PhysicsSystem::RaycastVision(
 
     PxHitFlags hitFlags = PxHitFlag::eDEFAULT;
 
-    bool bHit = m_Scene->raycast(
-        origin,
-        direction.getNormalized(),
-        maxDistance,
+    const bool bHit = m_Scene->raycast(
+        originPx,
+        directionPx.getNormalized(),
+        maxDistancePx,
         hitBuffer,
         hitFlags,
         filterData,
-        &filterCallback);
+        &filterCallback
+    );
 
     if (!bHit || !hitBuffer.hasBlock)
         return false;
@@ -510,17 +563,17 @@ bool PhysicsSystem::RaycastVision(
     PxRigidActor* actor = pxHit.actor;
     if (!shape || !actor) return false;
 
-    PhysicsComponent* comp = GetComponent(actor);
-    if (!comp) return false;
+    PhysicsComponent* component = GetComponent(actor);
+    if (!component) return false;
 
     bool isTrigger = shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE;
     if (isTrigger && triggerInteraction == QueryTriggerInteraction::Ignore)
         return false;
 
-    outHit.component = comp;
-    outHit.point = pxHit.position;
-    outHit.normal = pxHit.normal;
-    outHit.distance = pxHit.distance;
+    outHit.component = component;
+    outHit.point = ToDX(pxHit.position);
+    outHit.normal = ToDXDirection(pxHit.normal);
+    outHit.distance = ToDXLength(pxHit.distance);
     outHit.shape = shape;
     outHit.actor = actor;
 

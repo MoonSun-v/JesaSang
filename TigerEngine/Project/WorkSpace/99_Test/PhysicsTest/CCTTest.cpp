@@ -167,23 +167,23 @@ void CCTTest::CCTMoveExample(float dt)
 // - 레이캐스트가 충돌한 객체의 이름 디버그 출력 
 void CCTTest::RaycastExample()
 {
-    Vector3 offset(0, 60.0f, 0);
-    PxVec3 originPx = ToPx(GetOwner()->GetTransform()->GetLocalPosition() + offset);
+    const Vector3 offset(0.0f, 60.0f, 0.0f);
 
-    // 아래 방향
-    PxVec3 downPx(0, -1, 0);
+    const Vector3 origin =
+        GetOwner()->GetTransform()->GetLocalPosition() + offset;
 
-    QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction::Ignore;
+    const Vector3 direction(0.0f, -1.0f, 0.0f);
 
     std::vector<RaycastHit> hits;
-    bool bHit = PhysicsSystem::Instance().Raycast(
-        originPx,
-        downPx,
-        200.0f,
+
+    const bool bHit = PhysicsSystem::Instance().Raycast(
+        origin,
+        direction,
+        200.0f, // cm
         hits,
         CollisionLayer::Player,
-        triggerInteraction,
-        false   // 첫 번째만
+        QueryTriggerInteraction::Ignore,
+        false
     );
 
     if (!bHit || hits.empty())
@@ -192,28 +192,49 @@ void CCTTest::RaycastExample()
         return;
     }
 
-    // 첫 번째 히트
-    RaycastHit& hit = hits[0];
-    PxVec3 endPx = hit.point;
+    const RaycastHit& hit = hits[0];
 
-    // 디버그 레이 그리기 (빨간색)
+    const XMVECTOR startDX = XMVectorSet(
+        origin.x,
+        origin.y,
+        origin.z,
+        1.0f
+    );
+
+    const XMVECTOR endDX = XMVectorSet(
+        hit.point.x,
+        hit.point.y,
+        hit.point.z,
+        1.0f
+    );
+
     DebugDraw::DrawRayDebug(
-        nullptr, // batch 안 쓰면 내부에서 처리하거나 전역 batch 사용
-        ToDXVec3(originPx),
-        ToDXVec3(endPx - originPx),
-        XMVectorSet(1, 0, 0, 1),
+        nullptr,
+        startDX,
+        XMVectorSubtract(endDX, startDX),
+        XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f),
         false
     );
 
-    // 이름 출력
     std::wstring hitName = L"Unknown";
+
     if (hit.component && hit.component->GetOwner())
     {
-        std::string name = hit.component->GetOwner()->GetName();
+        const std::string name =
+            hit.component->GetOwner()->GetName();
+
         hitName = std::wstring(name.begin(), name.end());
     }
 
-    wchar_t buf[256];
-    swprintf(buf, 256, L"[CCTTest] Hit: %s at distance %.2f\n", hitName.c_str(), hit.distance);
-    OutputDebugStringW(buf);
+    wchar_t buffer[256];
+
+    swprintf(
+        buffer,
+        256,
+        L"[CCTTest] Hit: %s at distance %.2f cm\n",
+        hitName.c_str(),
+        hit.distance
+    );
+
+    OutputDebugStringW(buffer);
 }

@@ -88,15 +88,12 @@ bool VisionComponent::CheckVision(GameObject* target, float fov, float maxDistan
     }
 
     // PhysX Raycast: 타겟까지 거리만 쏘는 게 일반적으로 더 정확
-    PxVec3 originPx = ToPx(origin);
-    PxVec3 dirPx(dir3D.x, dir3D.y, dir3D.z);
-    float maxDistPx = dist3D; // <= 핵심 변경
 
     std::vector<RaycastHit> hits;
     if (!PhysicsSystem::Instance().Raycast(
-        originPx,
-        dirPx,
-        maxDistPx,
+        origin,
+        dir3D,
+        dist3D,
         hits,
         CollisionLayer::Default,
         QueryTriggerInteraction::Ignore,
@@ -155,10 +152,6 @@ void VisionComponent::DrawDebugVision()
     Vector3 forward = - tr->GetForward();
     Vector3 right = tr->GetRight();
 
-    // PhysX 변환
-    PxVec3 originPx = ToPx(origin);
-    float maxDistPx = m_LastDebug.dist;
-
     const int SEGMENTS = 32; // 시야 원 분할 수
     float halfRad = Deg2Rad(m_LastDebug.fov * 0.5f);
 
@@ -173,22 +166,19 @@ void VisionComponent::DrawDebugVision()
         dir.y = 0;              // FOV 평면 기준
         dir.Normalize();
 
-        PxVec3 dirPx(dir.x, dir.y, dir.z);
-
         std::vector<RaycastHit> hits;
         float drawDist = m_LastDebug.dist;
 
         if (PhysicsSystem::Instance().Raycast(
-            originPx,
-            dirPx,
-            maxDistPx,
+            origin,
+            dir,
+            m_LastDebug.dist,
             hits,
             CollisionLayer::Default,
             QueryTriggerInteraction::Ignore,
-            false // BLOCK 하나
-        ))
+            false))
         {
-            // 길이 조절
+            // RaycastHit::distance가 cm이므로 디버그 렌더링에 바로 사용 가능
             drawDist = hits[0].distance;
         }
 
