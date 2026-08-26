@@ -32,7 +32,13 @@
           directxtex.lib;
           imguid.lib;
           assimp-vc143-mtd.lib;
+          poly2tri.lib;
+          draco.lib;
+          polyclipping.lib;
           pugixml.lib;
+          minizip.lib;
+          kubazip.lib;
+          zlibd.lib;
           rttr_core_d.lib;
           PhysX_64.lib;
           PhysXCommon_64.lib;
@@ -67,7 +73,13 @@
           directxtex.lib;
           imgui.lib;
           assimp-vc143-mt.lib;
+          poly2tri.lib;
+          draco.lib;
+          polyclipping.lib;
           pugixml.lib;
+          minizip.lib;
+          kubazip.lib;
+          zlib.lib;
           rttr_core.lib;
           PhysX_64.lib;
           PhysXCommon_64.lib;

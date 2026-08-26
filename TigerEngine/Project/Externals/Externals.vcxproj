@@ -175,10 +175,6 @@
     <None Include="AudioModule_FMOD\fmod\inc\fmod_dsp.cs" />
     <None Include="AudioModule_FMOD\fmod\inc\fmod_errors.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="AudioModule_FMOD\fmod\lib\x64\fmodL_vc.lib" />
-    <Library Include="AudioModule_FMOD\fmod\lib\x64\fmod_vc.lib" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

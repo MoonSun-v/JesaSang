@@ -452,7 +452,7 @@ bool PhysicsSystem::Raycast(
             }
 
             const bool isTrigger =
-                (shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE) != 0;
+                shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE;
 
             if (isTrigger &&
                 triggerInteraction == QueryTriggerInteraction::Ignore)
