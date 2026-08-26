@@ -369,6 +369,7 @@ void CharacterControllerComponent::ResolveTriggers()
         }
     }
 
+    // 현재 결과를 다음 Fixed Step의 비교 기준으로 저장
     m_CCTPrevTriggers = std::move(m_CCTCurrTriggers);
     m_CCTCurrTriggers.clear();
 }
@@ -411,7 +412,6 @@ void CharacterControllerComponent::CheckTriggers()
     qfd.flags = PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC;
 
     scene->overlap(capsule, pose, hit, qfd, &filter);
-
 
     // -------------------------------------------------
     // 4. Trigger 수집

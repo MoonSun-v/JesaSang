@@ -348,9 +348,12 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
         break;
 
     case ColliderType::Capsule:
+        // 원기둥 부분 길이 = 2 * halfHeight
+        // Capsule 전체 높이 = d.height + (2 * d.radius)
         m_Shape = px->createShape(PxCapsuleGeometry(d.radius * WORLD_TO_PHYSX, (d.height * 0.5f) * WORLD_TO_PHYSX), *mat, true);
 
-        PxQuat capsuleRot(PxHalfPi, PxVec3(0, 0, 1));// X축 캡슐 → Y축 캡슐로 회전 // Z축 +90도
+        // X축 캡슐 → Y축 캡슐로 회전 // Z축 +90도
+        PxQuat capsuleRot(PxHalfPi, PxVec3(0, 0, 1));
         localPose.q = capsuleRot * localPose.q;
         break;
     }
@@ -380,7 +383,7 @@ void PhysicsComponent::CreateCollider(ColliderType collider, PhysicsBodyType bod
     // ----------------------
     if (d.isTrigger)
     {
-        // Trigger는 반드시 Kinematic Dynamic
+        // Trigger의 위치를 직접 제어하기 위해 Kinematic Actor로 생성
         PxRigidDynamic* dyn = px->createRigidDynamic(PxTransform(PxIdentity));
         dyn->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
         m_Actor = dyn;
@@ -570,7 +573,7 @@ void PhysicsComponent::DrawPhysXShape(PxShape* shape, const PxTransform& actorPo
 
     switch (geo.getType())
     {
-        // BOX
+    // BOX
     case PxGeometryType::eBOX:
     {
         const PxBoxGeometry& box = geo.box();
@@ -578,7 +581,9 @@ void PhysicsComponent::DrawPhysXShape(PxShape* shape, const PxTransform& actorPo
         DirectX::BoundingOrientedBox obb;
         obb.Center = ToDX(worldPose.p);   // m -> cm
         obb.Extents = { PxToDX(box.halfExtents.x),PxToDX(box.halfExtents.y),PxToDX(box.halfExtents.z) };
+        // obb.Extents = { ToDXLength(box.halfExtents.x),ToDXLength(box.halfExtents.y),ToDXLength(box.halfExtents.z) };
         obb.Orientation = { worldPose.q.x,worldPose.q.y,worldPose.q.z,worldPose.q.w };
+        // obb.Orientation = ToDXQuatF4(worldPose.q);
 
         DebugDraw::Draw(DebugDraw::g_Batch.get(), obb, color, isTrigger);
         break;
