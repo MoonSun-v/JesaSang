@@ -94,6 +94,7 @@ private:
     // flags
     bool isDiretionalLightDebugOpen = false;
     bool isWorldSettingOpen = false;
+    bool isGameObjectAABBDebugOpen = false;
     bool isPhysicsDebugOpen = true;
 
     std::string currScenePath{};

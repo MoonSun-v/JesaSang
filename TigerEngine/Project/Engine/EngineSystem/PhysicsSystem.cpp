@@ -584,10 +584,11 @@ bool PhysicsSystem::RaycastVision(
 
 void PhysicsSystem::DrawPhysXActors()
 {
-    //for (auto& it : m_ActorMap)
-    //{
-    //    PhysicsComponent* comp = it.first;
-    //    if (comp)
-    //        comp->DrawPhysXActors();
-    //}
+    // PhysicsComponent::DrawPhysXActors()는 현재 PhysX Scene 전체와
+    // Character Controller를 한 번에 그리므로 대표 컴포넌트 하나만 호출한다.
+    if (m_ActorMap.empty()) return;
+
+    PhysicsComponent* debugRenderer = m_ActorMap.begin()->first;
+    if (debugRenderer)
+        debugRenderer->DrawPhysXActors();
 }

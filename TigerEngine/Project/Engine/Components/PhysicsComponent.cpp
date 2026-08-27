@@ -523,6 +523,9 @@ void PhysicsComponent::DrawPhysXActors()
     PxScene* scene = PhysicsSystem::Instance().GetScene();
     if (!scene) return;
 
+    // CCT가 소유한 PhysX Actor는 아래의 CCT 전용 디버그 렌더링에서 그린다.
+    CollectCCTActors();
+
     PxU32 actorCount = scene->getNbActors(
         PxActorTypeFlag::eRIGID_STATIC | PxActorTypeFlag::eRIGID_DYNAMIC
     );
@@ -538,7 +541,7 @@ void PhysicsComponent::DrawPhysXActors()
     for (PxActor* actor : actors)
     {
         PxRigidActor* rigid = actor->is<PxRigidActor>();
-        if (!rigid) return;
+        if (!rigid) continue;
 
         // CCT가 소유한 Actor는 제외 
         if (m_CCTActors.find(rigid) != m_CCTActors.end()) // if (m_CCTActors.contains(rigid)) 없음 

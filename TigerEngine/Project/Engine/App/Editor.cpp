@@ -187,6 +187,10 @@ void Editor::RenderMenuBar(HWND& hwnd)
             {
                 isDiretionalLightDebugOpen = !isDiretionalLightDebugOpen;
             }
+            if (ImGui::MenuItem("Game Object AABB"))
+            {
+                isGameObjectAABBDebugOpen = !isGameObjectAABBDebugOpen;
+            }
             if (ImGui::MenuItem("Physics Collider"))
             {
                 isPhysicsDebugOpen = !isPhysicsDebugOpen;
@@ -1891,16 +1895,19 @@ void Editor::RenderDebugAABBDraw()
     // ===============================
     DebugDraw::g_Batch->Begin();
 
-    // AABB
-    SceneSystem::Instance().GetCurrentScene()->ForEachGameObject([&](GameObject* gameObject)
-        {
-            if (gameObject->IsDestory()) return;
-            if (gameObject->GetComponent<FBXRenderer>() != nullptr) return;
+    // GameObject AABB
+    if (isGameObjectAABBDebugOpen)
+    {
+        SceneSystem::Instance().GetCurrentScene()->ForEachGameObject([&](GameObject* gameObject)
+            {
+                if (gameObject->IsDestory()) return;
+                if (gameObject->GetComponent<FBXRenderer>() != nullptr) return;
 
-            XMVECTOR color = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-            BoundingBox box = gameObject->GetAABB();
-            DebugDraw::Draw(DebugDraw::g_Batch.get(), box, color);
-        });
+                XMVECTOR color = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+                BoundingBox box = gameObject->GetAABB();
+                DebugDraw::Draw(DebugDraw::g_Batch.get(), box, color);
+            });
+    }
 
     // Grid 
     RenderDebugGrid();
