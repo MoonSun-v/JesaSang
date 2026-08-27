@@ -262,10 +262,10 @@ void BabyGhostController::SetNextPatrolTarget()
     {
         GridPos_Baby& p = patrolPoints[patrolIndex];
 
-        if (p.x != myX || p.y != myY)
+        if ((p.x != myX || p.y != myY) &&
+            grid->IsWalkableFromCenter(p.x, p.y) &&
+            agent->SetTarget(p.x, p.y))
         {
-            agent->SetTarget(p.x, p.y);
-
             std::cout << "[Baby Patrol] Next Waypoint: "
                 << patrolIndex << " (" << p.x << "," << p.y << ")\n";
 
@@ -311,11 +311,15 @@ void BabyGhostController::SetReturnToNearestPatrolTarget()
     if (!grid->WorldToGridFromCenter(GetOwner()->GetTransform()->GetWorldPosition(), myX, myY))
         return;
 
-    int bestIndex = 0;
+    int bestIndex = -1;
     int bestDist = INT_MAX;
 
     for (int i = 0; i < patrolPointCount; ++i)
     {
+        // 이동할 수 없는 순찰 지점은 복귀 후보에서 제외한다.
+        if (!grid->IsWalkableFromCenter(patrolPoints[i].x, patrolPoints[i].y))
+            continue;
+
         int dist = abs(patrolPoints[i].x - myX) + abs(patrolPoints[i].y - myY);
         if (dist < bestDist)
         {
@@ -323,6 +327,9 @@ void BabyGhostController::SetReturnToNearestPatrolTarget()
             bestIndex = i;
         }
     }
+
+    if (bestIndex < 0)
+        return;
 
     patrolIndex = bestIndex; // 다음 Patrol이 자연스럽게 이어지도록
     agent->SetTarget(patrolPoints[bestIndex].x, patrolPoints[bestIndex].y);

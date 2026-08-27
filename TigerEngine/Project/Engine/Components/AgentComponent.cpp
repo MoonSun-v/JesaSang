@@ -120,23 +120,24 @@ void AgentComponent::OnFixedUpdate(float dt)
 // External Control API(FSM에서 호출)
 // ------------------------------------------------------
 
-void AgentComponent::SetTarget(int x, int y)
+bool AgentComponent::SetTarget(int x, int y)
 {
     auto grid = GridSystem::Instance().GetMainGrid();
-    if (!grid) return;
+    if (!grid)
+        return false;
 
     // 목표 셀이 막혀 있으면 타겟 설정하지 않음
     if (!grid->IsWalkableFromCenter(x, y))
     {
         std::cout << "[AgentComponent::SetTarget] Target blocked: (" << x << ", " << y << ")\n";
-        return;
+        return false;
     }
 
     // 같은 타겟이면 무시
     if (hasTarget && targetCX == x && targetCY == y)
     {
         std::cout << "[AgentComponent::SetTarget] Same target ignored.\n";
-        return;
+        return true;
     }
 
 
@@ -151,6 +152,8 @@ void AgentComponent::SetTarget(int x, int y)
     stuckTimer = 0.0f;
     pathRetryTimer = 0.0f;
     ClearPath();
+
+    return true;
 }
 
 void AgentComponent::ClearTarget()

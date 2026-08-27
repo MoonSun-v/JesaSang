@@ -60,7 +60,8 @@ void AdultGhost_Patrol::FixedUpdate(float deltaTime)
 {
     if (!agent) return;
 
-    if (agent->IsArrived())
+    // 목표 설정에 실패했거나 도착했다면 다음 순찰 지점을 찾는다.
+    if (!agent->HasTarget() || agent->IsArrived())
     {
         adultGhost->SetNextPatrolTarget();
     }

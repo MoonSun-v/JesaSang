@@ -14,6 +14,13 @@ void BabyGhost_Return::Enter()
 
 void BabyGhost_Return::ChangeStateLogic()
 { 
+    // 복귀 목표를 설정하지 못했다면 Patrol에서 다음 지점을 다시 찾는다.
+    if (!babyGhost->agent->HasTarget() && !babyGhost->agent->IsArrived())
+    {
+        babyGhost->ChangeState(BabyGhostState::Patrol);
+        return;
+    }
+
     // 3초 후 부터 시야에 플레이어 감지 (바로 감지하는거 방지하기 위해)
     if (visionTimer >= visionDelay)
     {

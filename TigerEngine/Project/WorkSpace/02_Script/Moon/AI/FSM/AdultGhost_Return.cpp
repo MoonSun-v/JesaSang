@@ -14,6 +14,13 @@ void AdultGhost_Return::Enter()
 
 void AdultGhost_Return::ChangeStateLogic()
 {
+    // 복귀 목표를 설정하지 못했다면 Patrol에서 다음 지점을 다시 찾는다.
+    if (!adultGhost->agent->HasTarget() && !adultGhost->agent->IsArrived())
+    {
+        adultGhost->ChangeState(AdultGhostState::Patrol);
+        return;
+    }
+
     // 1. 시야에 플레이어가 들어오고, Hide 상태가 아니면 Chase
     auto* player = adultGhost->GetAITarget();
     if (player && !adultGhost->IsPlayerHidden() && adultGhost->CanDetectPlayer() /*adultGhost->IsSeeing(player)*/)

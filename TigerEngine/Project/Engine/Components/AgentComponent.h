@@ -74,7 +74,8 @@ public:
 
 public:
     // [ External Control API (FSM에서 호출) ]
-    void SetTarget(int x, int y);
+    // 이동 가능한 목표를 설정했으면 true를 반환
+    bool SetTarget(int x, int y);
     void ClearTarget();
 
     bool HasTarget() const { return hasTarget; }

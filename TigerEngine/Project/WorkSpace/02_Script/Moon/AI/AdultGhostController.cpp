@@ -419,10 +419,10 @@ void AdultGhostController::SetNextPatrolTarget()
         GridPos& p = patrolPoints[patrolIndex];
 
         // 현재 위치와 같은 waypoint는 건너뜀
-        if (p.x != myX || p.y != myY)
+        if ((p.x != myX || p.y != myY) &&
+            grid->IsWalkableFromCenter(p.x, p.y) &&
+            agent->SetTarget(p.x, p.y))
         {
-            agent->SetTarget(p.x, p.y);
-
             lastVisitedWaypoint = patrolIndex;
 
             std::cout << "[Adult Patrol] Next Waypoint: "
@@ -447,19 +447,22 @@ void AdultGhostController::SetReturnToLastWaypoint()
 {
     if (!agent) return;
 
-    if (lastVisitedWaypoint >= 0)
+    if (lastVisitedWaypoint >= 0 && lastVisitedWaypoint < patrolPointCount)
     {
         GridPos& p = patrolPoints[lastVisitedWaypoint];
-        agent->SetTarget(p.x, p.y);
-        return;
+        if (agent->SetTarget(p.x, p.y))
+            return;
     }
 
-    // 마지막으로 방문한 웨이포인트가 없으면 처음 웨이포인트로 설정
-    if (patrolPointCount > 0)
+    // 마지막 지점이 막혀 있으면 이동 가능한 다른 순찰 지점을 찾는다.
+    for (int i = 0; i < patrolPointCount; ++i)
     {
-        GridPos& p = patrolPoints[0];
-        agent->SetTarget(p.x, p.y);
-        return;
+        GridPos& p = patrolPoints[i];
+        if (agent->SetTarget(p.x, p.y))
+        {
+            lastVisitedWaypoint = i;
+            return;
+        }
     }
 
     auto grid = GridSystem::Instance().GetMainGrid();
