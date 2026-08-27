@@ -52,10 +52,15 @@ private:
 
     // [ (A*) Path Data ] : 중앙 기준 그리드 좌표 
     std::vector<GridCoord> path;
+    std::size_t pathIndex = 0;
+
+    // [ Grid Occupancy State ]
+    bool hasOccupiedCell = false;
 
     // [ Runtime Timer ]
     float stuckTimer = 0.0f;     // 거의 이동하지 못한 시간 누적
     float blockedTimer = 0.0f;   // 다음 셀이 점유되어 대기한 시간
+    float pathRetryTimer = 0.0f; // 경로 탐색 실패 후 재시도까지 남은 시간
     Vector3 lastWorldPos;        // 이전 프레임 world position
 
 
@@ -85,4 +90,14 @@ private:
     void MoveAlongPath(float dt);
     void DetectStuck(float dt);
     void MoveAgent(const Vector3& dir, float speed, float dt);
+
+    bool HasRemainingPath() const { return pathIndex < path.size(); }
+    void ClearPath()
+    {
+        path.clear();
+        pathIndex = 0;
+    }
+
+    void OccupyCurrentCell();
+    void ReleaseOccupiedCell();
 };

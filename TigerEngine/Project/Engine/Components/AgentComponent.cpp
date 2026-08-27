@@ -31,10 +31,12 @@ void AgentComponent::Deserialize(nlohmann::json data)
 void AgentComponent::Enable_Inner()
 {
     AgentSystem::Instance().Register(this);
+    OccupyCurrentCell();
 }
 
 void AgentComponent::Disable_Inner()
 {
+    ReleaseOccupiedCell();
     AgentSystem::Instance().UnRegister(this);
 }
 
@@ -49,21 +51,11 @@ void AgentComponent::OnInitialize()
     auto grid = GridSystem::Instance().GetMainGrid();
     if (!grid) return;
 
-    Transform* transform = GetOwner()->GetTransform();
-    Vector3 worldPos = transform->GetWorldPosition();
-
-    // 시작 위치를 중앙 기준 grid 좌표로 변환
-    if (!grid->WorldToGridFromCenter(worldPos, cx, cy))
-    {
-        std::cout << "[AgentComponent] Failed to convert world position to grid coord.\n";
+    OccupyCurrentCell();
+    if (!hasOccupiedCell)
         return;
-    }
 
-    // 시작 셀 점유 등록
-    grid->Occupy(cx, cy, this);
-
-    // stuck 판정용 이전 위치 저장
-    lastWorldPos = worldPos;
+    Vector3 worldPos = GetOwner()->GetTransform()->GetWorldPosition();
 
     std::cout << "\n=== AgentComponent Initialize ===\n";
     std::cout << "Start Grid Coord : (" << cx << ", " << cy << ")\n";
@@ -86,17 +78,35 @@ void AgentComponent::OnFixedUpdate(float dt)
         return;
 
     // path가 비어 있으면 새 경로를 생성
-    if (path.empty())
+    if (!HasRemainingPath())
     {
-        UpdatePath();
-
-        // 경로 생성 실패 시 타겟 해제
-        if (path.empty())
+        // 현재 셀이 목표 셀이면 빈 경로도 정상 도착으로 처리
+        if (cx == targetCX && cy == targetCY)
         {
-            std::cout << "[AgentComponent] Path not found.\n";
+            arrived = true;
             hasTarget = false;
+            pathRetryTimer = 0.0f;
             return;
         }
+
+        // 일시적인 점유로 경로를 찾지 못한 경우 일정 시간 후 다시 탐색
+        if (pathRetryTimer > 0.0f)
+        {
+            pathRetryTimer = std::max(0.0f, pathRetryTimer - dt);
+            return;
+        }
+
+        UpdatePath();
+
+        // 경로 탐색에 실패해도 목표는 유지해 순찰 Agent가 영구 정지하지 않게 한다.
+        if (!HasRemainingPath())
+        {
+            std::cout << "[AgentComponent] Path not found. Retry later.\n";
+            pathRetryTimer = 0.3f;
+            return;
+        }
+
+        pathRetryTimer = 0.0f;
     }
 
     // 경로 따라 이동
@@ -139,17 +149,19 @@ void AgentComponent::SetTarget(int x, int y)
     // 새 타겟이 들어오면 상태를 초기화하고 경로를 다시 계산하도록 비움
     blockedTimer = 0.0f;
     stuckTimer = 0.0f;
-    path.clear();
+    pathRetryTimer = 0.0f;
+    ClearPath();
 }
 
 void AgentComponent::ClearTarget()
 {
     hasTarget = false;
     arrived = false;
-    path.clear();
+    ClearPath();
 
     blockedTimer = 0.0f;
     stuckTimer = 0.0f;
+    pathRetryTimer = 0.0f;
 }
 
 
@@ -163,21 +175,20 @@ void AgentComponent::UpdatePath()
 
     // 현재 위치 -> 목표 위치 경로 생성
     path = grid->FindPath(cx, cy, targetCX, targetCY);
+    pathIndex = 0;
 
-    // 경로 첫 번째가 현재 셀이면 제거
-    if (!path.empty() && path.front().cx == cx && path.front().cy == cy)
-    {
-        path.erase(path.begin());
-    }
+    // 경로 첫 번째가 현재 셀이면 삭제하지 않고 다음 인덱스부터 사용
+    if (HasRemainingPath() && path[pathIndex].cx == cx && path[pathIndex].cy == cy)
+        ++pathIndex;
 
     std::cout << "\n=== Path Generated ===\n";
     std::cout << "Start      : (" << cx << ", " << cy << ")\n";
     std::cout << "Target     : (" << targetCX << ", " << targetCY << ")\n";
-    std::cout << "Path Count : " << path.size() << "\n";
+    std::cout << "Path Count : " << (path.size() - pathIndex) << "\n";
 
-    if (!path.empty())
+    if (HasRemainingPath())
     {
-        std::cout << "Next Step  : (" << path.front().cx << ", " << path.front().cy << ")\n";
+        std::cout << "Next Step  : (" << path[pathIndex].cx << ", " << path[pathIndex].cy << ")\n";
     }
     else
     {
@@ -193,10 +204,10 @@ void AgentComponent::UpdatePath()
 void AgentComponent::MoveAlongPath(float dt)
 {
     auto grid = GridSystem::Instance().GetMainGrid();
-    if (!grid || path.empty())
+    if (!grid || !HasRemainingPath())
         return;
 
-    const GridCoord nextCoord = path.front();
+    const GridCoord nextCoord = path[pathIndex];
 
     // 다음 셀을 이미 다른 agent가 점유하고 있는지 확인
     AgentComponent* occupier = grid->GetOccupier(nextCoord.cx, nextCoord.cy);
@@ -210,7 +221,7 @@ void AgentComponent::MoveAlongPath(float dt)
         if (blockedTimer > 0.3f)
         {
             std::cout << "[AgentComponent::MoveAlongPath] Next cell blocked. Request repath.\n";
-            path.clear();
+            ClearPath();
             blockedTimer = 0.0f;
         }
         return;
@@ -229,16 +240,17 @@ void AgentComponent::MoveAlongPath(float dt)
     // 다음 셀 중심에 충분히 가까우면 해당 셀에 도착한 것으로 처리
     if (distanceToNext < reachDist)
     {
-        grid->Release(cx, cy);
+        ReleaseOccupiedCell();
 
         cx = nextCoord.cx;
         cy = nextCoord.cy;
 
         grid->Occupy(cx, cy, this);
-        path.erase(path.begin());
+        hasOccupiedCell = true;
+        ++pathIndex;
 
         // 경로 소진 + 목표 셀 도착이면 이동 완료
-        if (path.empty() && cx == targetCX && cy == targetCY)
+        if (!HasRemainingPath() && cx == targetCX && cy == targetCY)
         {
             arrived = true;
             hasTarget = false;
@@ -266,10 +278,11 @@ void AgentComponent::MoveAlongPath(float dt)
     {
         if (newCX != cx || newCY != cy)
         {
-            grid->Release(cx, cy);
+            ReleaseOccupiedCell();
             cx = newCX;
             cy = newCY;
             grid->Occupy(cx, cy, this);
+            hasOccupiedCell = true;
         }
     }
 }
@@ -323,7 +336,7 @@ void AgentComponent::DetectStuck(float dt)
         if (stuckTimer > 1.0f)
         {
             std::cout << "[AgentComponent::DetectStuck] Repath triggered.\n";
-            path.clear();
+            ClearPath();
             stuckTimer = 0.0f;
         }
     }
@@ -333,4 +346,51 @@ void AgentComponent::DetectStuck(float dt)
     }
 
     lastWorldPos = currentPos;
+}
+
+
+// ------------------------------------------------------
+// Grid Occupancy
+// ------------------------------------------------------
+void AgentComponent::OccupyCurrentCell()
+{
+    GridComponent* grid = GridSystem::Instance().GetMainGrid();
+    if (!grid || !GetOwner() || !GetOwner()->GetTransform())
+        return;
+
+    Vector3 worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+
+    int currentCX = 0;
+    int currentCY = 0;
+    if (!grid->WorldToGridFromCenter(worldPos, currentCX, currentCY))
+    {
+        std::cout << "[AgentComponent] Failed to convert world position to grid coord.\n";
+        return;
+    }
+
+    // 이미 다른 Agent가 점유한 셀을 덮어쓰지 않는다.
+    AgentComponent* occupier = grid->GetOccupier(currentCX, currentCY);
+    if (occupier && occupier != this)
+    {
+        std::cout << "[AgentComponent] Current grid cell is already occupied.\n";
+        return;
+    }
+
+    cx = currentCX;
+    cy = currentCY;
+    grid->Occupy(cx, cy, this);
+    hasOccupiedCell = true;
+    lastWorldPos = worldPos;
+}
+
+void AgentComponent::ReleaseOccupiedCell()
+{
+    if (!hasOccupiedCell)
+        return;
+
+    GridComponent* grid = GridSystem::Instance().GetMainGrid();
+    if (grid && grid->GetOccupier(cx, cy) == this)
+        grid->Release(cx, cy);
+
+    hasOccupiedCell = false;
 }
