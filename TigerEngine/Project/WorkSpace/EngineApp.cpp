@@ -228,7 +228,12 @@ void EngineApp::OnRender()
     dxRenderer->ProcessScene(*renderQueue, *effectPass, curCam);    // note : 26.02.09 파티클 패스
     dxRenderer->ProcessScene(*renderQueue, *bloomPass, curCam);
     dxRenderer->ProcessScene(*renderQueue, *postProcessPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *uiPass, curCam);
+    bool shouldRenderGameUI = true;
+#if _DEBUG
+    shouldRenderGameUI = editor->IsGameUIVisible();
+#endif
+    if (shouldRenderGameUI)
+        dxRenderer->ProcessScene(*renderQueue, *uiPass, curCam);
 
 
 #if _DEBUG

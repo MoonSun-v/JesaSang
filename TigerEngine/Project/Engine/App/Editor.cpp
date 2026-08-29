@@ -195,6 +195,10 @@ void Editor::RenderMenuBar(HWND& hwnd)
             {
                 isPhysicsDebugOpen = !isPhysicsDebugOpen;
             }
+            if (ImGui::MenuItem("Game UI", nullptr, isGameUIVisible))
+            {
+                isGameUIVisible = !isGameUIVisible;
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("World Setting"))

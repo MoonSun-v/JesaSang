@@ -31,6 +31,8 @@ public:
     void ReleaseBackBufferResources();
     void CreatePickingStagingTex();
 
+    bool IsGameUIVisible() const { return isGameUIVisible; }
+
 private:
     // Menu bar
     void RenderMenuBar(HWND& hwnd);
@@ -96,6 +98,7 @@ private:
     bool isWorldSettingOpen = false;
     bool isGameObjectAABBDebugOpen = false;
     bool isPhysicsDebugOpen = true;
+    bool isGameUIVisible = true;
 
     std::string currScenePath{};
 
