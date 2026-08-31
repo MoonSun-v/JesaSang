@@ -104,7 +104,11 @@ PxQueryHitType::Enum TriggerFilter::preFilter(
     const PxRigidActor* actor,
     PxHitFlags&)
 {
-    //  Trigger Shape만 허용
+    // Owner 또는 Controller가 유효하지 않으면 Query 대상을 허용하지 않는다.
+    if (!owner || !owner->m_Controller)
+        return PxQueryHitType::eNONE;
+
+    // Trigger Shape만 허용
     if (!(shape->getFlags() & PxShapeFlag::eTRIGGER_SHAPE))
         return PxQueryHitType::eNONE;
 

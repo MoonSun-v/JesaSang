@@ -32,7 +32,7 @@ public:
 class TriggerFilter : public PxQueryFilterCallback
 {
 public:
-    CharacterControllerComponent* owner;
+    CharacterControllerComponent* owner = nullptr;
     TriggerFilter(CharacterControllerComponent* c) : owner(c) {}
 
     // Trigger Overlap Query 전용 필터

@@ -398,18 +398,29 @@ void CharacterControllerComponent::CheckTriggers()
     // 2. CCT 위치 (PhysX 기준)
     // -------------------------------------------------
     PxExtendedVec3 p = m_Controller->getPosition();
-    PxTransform pose(PxVec3((float)p.x, (float)p.y, (float)p.z));
+
+    // PxCapsuleGeometry는 로컬 X축을 길이축으로 사용한다.
+    // CCT의 기본 Up Direction인 Y축과 일치하도록 Z축을 기준으로 90도 회전한다.
+    const PxQuat capsuleRotation(PxHalfPi, PxVec3(0.0f, 0.0f, 1.0f));
+    PxTransform pose(
+        PxVec3((float)p.x, (float)p.y, (float)p.z),
+        capsuleRotation
+    );
 
 
     // -------------------------------------------------
     // 3. Overlap Query용 필터
     // -------------------------------------------------
-    TriggerFilter filter(nullptr); 
+    // 자기 자신을 제외하고 Layer와 Mask를 검사할 수 있도록 현재 Component를 전달한다.
+    TriggerFilter filter(this);
 
     PxOverlapBufferN<64> hit;
     PxQueryFilterData qfd;
     qfd.data = m_FilterData;
-    qfd.flags = PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC;
+    // ePREFILTER가 있어야 Overlap Query 과정에서 TriggerFilter::preFilter()가 호출된다.
+    qfd.flags = PxQueryFlag::eSTATIC |
+                PxQueryFlag::eDYNAMIC |
+                PxQueryFlag::ePREFILTER;
 
     scene->overlap(capsule, pose, hit, qfd, &filter);
 
