@@ -98,6 +98,7 @@ private:
     bool isWorldSettingOpen = false;
     bool isGameObjectAABBDebugOpen = false;
     bool isPhysicsDebugOpen = true;
+    bool isGridDebugOpen = true;
     bool isGameUIVisible = true;
 
     std::string currScenePath{};

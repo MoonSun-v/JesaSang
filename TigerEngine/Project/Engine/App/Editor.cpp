@@ -195,6 +195,10 @@ void Editor::RenderMenuBar(HWND& hwnd)
             {
                 isPhysicsDebugOpen = !isPhysicsDebugOpen;
             }
+            if (ImGui::MenuItem("Grid Debug"))
+            {
+                isGridDebugOpen = !isGridDebugOpen;
+            }
             if (ImGui::MenuItem("Game UI", nullptr, isGameUIVisible))
             {
                 isGameUIVisible = !isGameUIVisible;
@@ -1913,8 +1917,11 @@ void Editor::RenderDebugAABBDraw()
             });
     }
 
-    // Grid 
-    RenderDebugGrid();
+    // Grid
+    if (isGridDebugOpen)
+    {
+        RenderDebugGrid();
+    }
 
     // Vision Ray
     RenderDebugVision();
