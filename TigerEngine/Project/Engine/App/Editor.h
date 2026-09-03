@@ -64,6 +64,7 @@ private:
     void RenderDebugAABBDraw();
     void RenderDebugGrid();
     void RenderDebugVision();
+    void RenderDebugAgentPath();
 
     // Reender RTTR
     template<typename T>
@@ -100,6 +101,7 @@ private:
     bool isPhysicsDebugOpen = true;
     bool isGridDebugOpen = true;
     bool isVisionDebugOpen = true;
+    bool isAgentPathDebugOpen = true;
     bool isGameUIVisible = true;
 
     std::string currScenePath{};

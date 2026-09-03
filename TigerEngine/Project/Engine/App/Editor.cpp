@@ -20,6 +20,8 @@
 #include "../EngineSystem/GridSystem.h"
 #include "../Components/CharacterControllerComponent.h"
 #include "../Components/GridComponent.h"
+#include "../Components/AgentComponent.h"
+#include "../EngineSystem/AgentSystem.h"
 
 #include "Datas/ReflectionMedtaDatas.hpp"
 
@@ -202,6 +204,10 @@ void Editor::RenderMenuBar(HWND& hwnd)
             if (ImGui::MenuItem("Vision Debug"))
             {
                 isVisionDebugOpen = !isVisionDebugOpen;
+            }
+            if (ImGui::MenuItem("Agent Path Debug"))
+            {
+                isAgentPathDebugOpen = !isAgentPathDebugOpen;
             }
             if (ImGui::MenuItem("Game UI", nullptr, isGameUIVisible))
             {
@@ -1927,6 +1933,12 @@ void Editor::RenderDebugAABBDraw()
         RenderDebugGrid();
     }
 
+    // Agent Path
+    if (isAgentPathDebugOpen)
+    {
+        RenderDebugAgentPath();
+    }
+
     // Vision Ray
     if (isVisionDebugOpen)
     {
@@ -1993,6 +2005,49 @@ void Editor::RenderDebugGrid()
 
             // Draw: drawCross가 true면 X 표시 포함
             DebugDraw::Draw(DebugDraw::g_Batch.get(), box, color, drawCross);
+        }
+    }
+}
+
+
+void Editor::RenderDebugAgentPath()
+{
+    GridComponent* grid = GridSystem::Instance().GetMainGrid();
+    if (!grid) return;
+
+    XMVECTOR color = XMVectorSet(1.0f, 0.6f, 0.0f, 1.0f); // 주황색 이동 경로
+    const float lineHeight = 5.0f; // Grid 디버그 라인과 겹치지 않도록 살짝 띄움
+
+    for (AgentComponent* agent : AgentSystem::Instance().GetAgents())
+    {
+        if (!agent || !agent->HasTarget())
+            continue;
+
+        const std::vector<GridCoord>& path = agent->GetPath();
+        std::size_t pathIndex = agent->GetPathIndex();
+        if (pathIndex >= path.size())
+            continue;
+
+        GameObject* owner = agent->GetOwner();
+        if (!owner)
+            continue;
+
+        // 시작점: Agent의 현재 위치에서 남은 경로의 첫 그리드 중점까지 이어서 그린다
+        Vector3 prevWorld = owner->GetTransform()->GetWorldPosition();
+        prevWorld.y += lineHeight;
+
+        for (std::size_t i = pathIndex; i < path.size(); ++i)
+        {
+            Vector3 nextWorld = grid->GridToWorldFromCenter(path[i].cx, path[i].cy);
+            nextWorld.y += lineHeight;
+
+            XMVECTOR start = XMVectorSet(prevWorld.x, prevWorld.y, prevWorld.z, 1.0f);
+            XMVECTOR end = XMVectorSet(nextWorld.x, nextWorld.y, nextWorld.z, 1.0f);
+
+            // 다음 그리드 중점까지 선분으로 연결 (경로 진행 순서대로)
+            DebugDraw::DrawRayDebug(DebugDraw::g_Batch.get(), start, end - start, color, false);
+
+            prevWorld = nextWorld;
         }
     }
 }

@@ -84,6 +84,10 @@ public:
 
     void SetSpeed(float s) { moveSpeed = s; }
 
+    // [ Debug ] 남은 경로 조회 (디버그 드로우용)
+    const std::vector<GridCoord>& GetPath() const { return path; }
+    std::size_t GetPathIndex() const { return pathIndex; }
+
 
 private:
     // [ Internal Update Flow ]
