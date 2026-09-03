@@ -199,6 +199,10 @@ void Editor::RenderMenuBar(HWND& hwnd)
             {
                 isGridDebugOpen = !isGridDebugOpen;
             }
+            if (ImGui::MenuItem("Vision Debug"))
+            {
+                isVisionDebugOpen = !isVisionDebugOpen;
+            }
             if (ImGui::MenuItem("Game UI", nullptr, isGameUIVisible))
             {
                 isGameUIVisible = !isGameUIVisible;
@@ -1924,7 +1928,10 @@ void Editor::RenderDebugAABBDraw()
     }
 
     // Vision Ray
-    RenderDebugVision();
+    if (isVisionDebugOpen)
+    {
+        RenderDebugVision();
+    }
 
     // PhysX
     if (isPhysicsDebugOpen)
