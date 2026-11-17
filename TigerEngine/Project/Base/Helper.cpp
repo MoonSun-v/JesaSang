@@ -48,7 +48,9 @@ HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCS
 	dwShaderFlags |= D3DCOMPILE_DEBUG;
 
 	// Disable optimizations to further improve shader debugging
-	dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+	// --gpu-profiler / --gpu-bench 실행 시에는 최적화를 유지해 GPU 측정값이 Release 셰이더와 같도록 한다
+	if (!wcsstr(GetCommandLineW(), L"--gpu-"))
+		dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
 	ID3DBlob* pErrorBlob = nullptr;

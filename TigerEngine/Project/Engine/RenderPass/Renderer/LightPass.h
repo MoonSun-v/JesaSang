@@ -53,6 +53,11 @@ private:
     float clearColor[4] = { 0,0,0,1 };
 
 public:
+    // [ GPU 프로파일링용 ] true면 Point/Spot도 Full Screen으로 처리 (Light Volume 효과 비교)
+    bool forceFullScreen = false;
+    int volumeLightCount = 0;       // 이번 프레임 Light Volume으로 그린 Point/Spot 수
+    int fullScreenLightCount = 0;   // 이번 프레임 Full Screen으로 그린 Point/Spot 수 (카메라 Inside 포함)
+
     ~LightPass() override;
 
     void Init(const ComPtr<ID3D11Device>& device);

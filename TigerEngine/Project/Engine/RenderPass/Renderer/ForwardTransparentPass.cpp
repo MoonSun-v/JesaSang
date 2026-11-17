@@ -41,8 +41,9 @@ void ForwardTransparentPass::Execute(ComPtr<ID3D11DeviceContext>& context, Rende
     context->UpdateSubresource(sm.transformCB.Get(), 0, nullptr, &sm.transformCBData, 0, 0);
 
     // Render
-    auto& transparentQueue = queue.GetTransparentQueue();
-    for (auto& transparentItem : transparentQueue)
+    auto drawItems = [&](const std::vector<RenderItem>& items)
+    {
+    for (auto& transparentItem : items)
     {
         // CB - Transform
         if (transparentItem.modelType == ModelType::Rigid) sm.transformCBData.model = transparentItem.model.Transpose();
@@ -100,6 +101,10 @@ void ForwardTransparentPass::Execute(ComPtr<ID3D11DeviceContext>& context, Rende
             transparentItem.mesh->Draw(context);
         }
     }
+    };
+
+    if (drawOpaque) drawItems(queue.GetOpaqueQueue());
+    drawItems(queue.GetTransparentQueue());
 
     // clean up
     context->OMSetRenderTargets(0, nullptr, nullptr);

@@ -79,6 +79,64 @@ private:
 
     void LoadSavedFirstScene();
 
+    // [ GPU Profiler ] ------------------------------------
+    // 렌더 패스별 GPU 시간을 Timestamp Query로 측정하고, 라이팅 방식 3단계를 비교한다.
+    enum class LightingMode { ForwardOnly, DeferredFullScreen, DeferredLightVolume, Count };
+    enum GpuPass { GP_Shadow, GP_Geometry, GP_Decal, GP_Light, GP_Skybox, GP_Forward,
+                   GP_Effect, GP_Bloom, GP_PostProcess, GP_UI, GP_Count };
+    LightingMode lightingMode = LightingMode::DeferredLightVolume;
+
+    void RunPass(IRenderPass& pass, GpuPass id, Camera* cam);
+
+#if _DEBUG
+    static constexpr int kQueryLatency = 4;     // 결과를 4프레임 뒤에 읽어 GPU 대기(stall) 방지
+    static constexpr int kAverageFrames = 120;  // 120프레임 평균으로 표시
+
+    struct GpuFrameQuery
+    {
+        ComPtr<ID3D11Query> disjoint;
+        ComPtr<ID3D11Query> start;
+        ComPtr<ID3D11Query> stamps[GP_Count];
+        int ids[GP_Count] = {};
+        int count = 0;
+        LightingMode mode = LightingMode::DeferredLightVolume;
+        bool issued = false;
+    };
+    GpuFrameQuery gpuQueries[kQueryLatency];
+    int gpuFrameIndex = 0;
+
+    // 누적 (현재 모드)
+    LightingMode accumMode = LightingMode::DeferredLightVolume;
+    double accumPassMs[GP_Count] = {};
+    bool accumPassUsed[GP_Count] = {};
+    double accumFrameMs = 0.0;
+    int accumFrames = 0;
+
+    // 모드별 마지막 평균 결과
+    struct GpuModeResult
+    {
+        bool valid = false;
+        float frameMs = 0.0f;
+        float passMs[GP_Count] = {};
+        bool passUsed[GP_Count] = {};
+        int volumeLights = 0;
+        int fullScreenLights = 0;
+    };
+    GpuModeResult gpuResults[(int)LightingMode::Count];
+
+    // --gpu-bench : 세 모드를 자동으로 돌며 측정 -> gpu_bench.txt 저장 후 종료
+    bool gpuProfilerEnabled = false;    // --gpu-profiler 또는 --gpu-bench 실행 시에만 true
+    bool gpuBench = false;
+    int benchPublishes = 0;     // 현재 모드에서 평균이 나온 횟수 (첫 평균은 워밍업으로 버림)
+    int benchExitFrames = -1;   // 저장 후 종료까지 남은 프레임 (캡처할 시간)
+    void GpuBenchStep();
+    void GpuBenchWrite();
+
+    void GpuProfileBegin();
+    void GpuProfileEnd();
+    void RenderGpuProfiler();
+#endif
+
     // resize
     void ResizeScreen(int width, int height);
     void ResizeResource();

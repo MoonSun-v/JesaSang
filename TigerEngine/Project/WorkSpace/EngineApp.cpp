@@ -98,6 +98,18 @@ bool EngineApp::OnInitialize()
 
 #if _DEBUG
     auto freeCamHandle = CameraSystem::Instance().CreateFreeCamera(clientWidth, clientHeight, SceneSystem::Instance().GetCurrentScene().get());
+
+    // --cam=x,y,z,pitchDeg,yawDeg : 프리 카메라 시작 위치 (GPU 벤치마크를 같은 시점에서 반복하기 위함)
+    if (const wchar_t* arg = wcsstr(GetCommandLineW(), L"--cam="))
+    {
+        float v[5] = {};
+        if (swscanf_s(arg + 6, L"%f,%f,%f,%f,%f", &v[0], &v[1], &v[2], &v[3], &v[4]) == 5)
+        {
+            auto* t = CameraSystem::Instance().GetFreeCamera()->GetOwner()->GetTransform();
+            t->SetPosition({ v[0], v[1], v[2] });
+            t->SetEuler({ XMConvertToRadians(v[3]), XMConvertToRadians(v[4]), 0.0f });
+        }
+    }
 #endif
 
 
@@ -133,6 +145,12 @@ bool EngineApp::OnInitialize()
 
 
 #if _DEBUG
+    // GPU Profiler는 실행 인자로 켤 때만 동작 (평소 에디터/게임에는 영향 없음)
+    //  --gpu-profiler : Profiler 창 + 라이팅 모드 수동 전환
+    //  --gpu-bench    : 세 모드 자동 측정 -> WorkSpace/gpu_bench.txt 저장 후 종료
+    gpuBench = wcsstr(GetCommandLineW(), L"--gpu-bench") != nullptr;
+    gpuProfilerEnabled = gpuBench || wcsstr(GetCommandLineW(), L"--gpu-profiler") != nullptr;
+    if (gpuBench) lightingMode = LightingMode::ForwardOnly;
 #else
     PlayModeSystem::Instance().SetPlayMode(PlayModeState::Playing);
 #endif
@@ -218,27 +236,274 @@ void EngineApp::OnRender()
         renderQueue->Clear();
     }
 
+    // lighting mode (GPU Profiler 비교용, 기본값은 DeferredLightVolume)
+    const bool forwardOnly = lightingMode == LightingMode::ForwardOnly;
+    lightPass->forceFullScreen = lightingMode == LightingMode::DeferredFullScreen;
+    forwardTransparentPass->drawOpaque = forwardOnly;
+
     // render pass
-    dxRenderer->ProcessScene(*renderQueue, *shadowPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *geometryPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *decalPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *lightPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *skyboxPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *forwardTransparentPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *effectPass, curCam);    // note : 26.02.09 파티클 패스
-    dxRenderer->ProcessScene(*renderQueue, *bloomPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *postProcessPass, curCam);
-    dxRenderer->ProcessScene(*renderQueue, *uiPass, curCam);
+#if _DEBUG
+    GpuProfileBegin();
+#endif
+    RunPass(*shadowPass, GP_Shadow, curCam);
+    if (forwardOnly)
+    {
+        // Deferred 패스를 건너뛰므로 LightPass가 하던 sceneHDR clear를 대신 한다
+        const float black[4] = { 0, 0, 0, 1 };
+        dxRenderer->GetDeviceContext()->ClearRenderTargetView(ShaderManager::Instance().sceneHDRRTV.Get(), black);
+    }
+    else
+    {
+        RunPass(*geometryPass, GP_Geometry, curCam);
+        RunPass(*decalPass, GP_Decal, curCam);
+        RunPass(*lightPass, GP_Light, curCam);
+    }
+    RunPass(*skyboxPass, GP_Skybox, curCam);
+    RunPass(*forwardTransparentPass, GP_Forward, curCam);
+    RunPass(*effectPass, GP_Effect, curCam);    // note : 26.02.09 파티클 패스
+    RunPass(*bloomPass, GP_Bloom, curCam);
+    RunPass(*postProcessPass, GP_PostProcess, curCam);
+    RunPass(*uiPass, GP_UI, curCam);
+#if _DEBUG
+    GpuProfileEnd();
+#endif
 
 
 #if _DEBUG
     editor->Render(hwnd); 	// 엔진 오버레이 렌더링
+    RenderGpuProfiler();
+    if (benchExitFrames > 0 && --benchExitFrames == 0) PostMessage(hwnd, WM_CLOSE, 0, 0);
     imguiRenderer->Render();		// imgui 렌더링
     editor->RenderEnd(dxRenderer->GetDeviceContext());
 #endif
 
     EndRender(); 					// 업데이트 마무리
 }
+
+void EngineApp::RunPass(IRenderPass& pass, GpuPass id, Camera* cam)
+{
+    dxRenderer->ProcessScene(*renderQueue, pass, cam);
+
+#if _DEBUG
+    // 패스가 끝난 시점의 GPU timestamp (이전 timestamp와의 차이 = 이 패스의 GPU 시간)
+    auto& q = gpuQueries[gpuFrameIndex % kQueryLatency];
+    if (gpuProfilerEnabled && q.count < GP_Count && q.stamps[q.count])
+    {
+        q.ids[q.count] = id;
+        dxRenderer->GetDeviceContext()->End(q.stamps[q.count].Get());
+        q.count++;
+    }
+#endif
+}
+
+#if _DEBUG
+void EngineApp::GpuProfileBegin()
+{
+    if (!gpuProfilerEnabled) return;
+    auto device = dxRenderer->GetDevice();
+    auto context = dxRenderer->GetDeviceContext();
+    auto& q = gpuQueries[gpuFrameIndex % kQueryLatency];
+
+    if (!q.disjoint)
+    {
+        D3D11_QUERY_DESC desc = { D3D11_QUERY_TIMESTAMP_DISJOINT, 0 };
+        HR_T(device->CreateQuery(&desc, q.disjoint.GetAddressOf()));
+        desc.Query = D3D11_QUERY_TIMESTAMP;
+        HR_T(device->CreateQuery(&desc, q.start.GetAddressOf()));
+        for (auto& stamp : q.stamps)
+            HR_T(device->CreateQuery(&desc, stamp.GetAddressOf()));
+    }
+
+    q.count = 0;
+    q.mode = lightingMode;
+    context->Begin(q.disjoint.Get());
+    context->End(q.start.Get());
+}
+
+void EngineApp::GpuProfileEnd()
+{
+    if (!gpuProfilerEnabled) return;
+    auto context = dxRenderer->GetDeviceContext();
+    context->End(gpuQueries[gpuFrameIndex % kQueryLatency].disjoint.Get());
+    gpuQueries[gpuFrameIndex % kQueryLatency].issued = true;
+    gpuFrameIndex++;
+
+    // 가장 오래된 (kQueryLatency - 1 프레임 전) 결과 읽기. 다음 프레임에 이 슬롯을 다시 쓴다.
+    auto& r = gpuQueries[gpuFrameIndex % kQueryLatency];
+    if (!r.issued) return;
+    r.issued = false;
+
+    D3D11_QUERY_DATA_TIMESTAMP_DISJOINT dj = {};
+    if (context->GetData(r.disjoint.Get(), &dj, sizeof(dj), D3D11_ASYNC_GETDATA_DONOTFLUSH) != S_OK) return;
+    if (dj.Disjoint || dj.Frequency == 0) return;   // GPU 클럭이 바뀐 프레임은 버림
+
+    UINT64 prev = 0;
+    if (context->GetData(r.start.Get(), &prev, sizeof(prev), D3D11_ASYNC_GETDATA_DONOTFLUSH) != S_OK) return;
+    const UINT64 first = prev;
+
+    double passMs[GP_Count] = {};
+    bool used[GP_Count] = {};
+    for (int i = 0; i < r.count; i++)
+    {
+        UINT64 t = 0;
+        if (context->GetData(r.stamps[i].Get(), &t, sizeof(t), D3D11_ASYNC_GETDATA_DONOTFLUSH) != S_OK) return;
+        passMs[r.ids[i]] = double(t - prev) * 1000.0 / double(dj.Frequency);
+        used[r.ids[i]] = true;
+        prev = t;
+    }
+
+    // 모드가 바뀌면 누적을 새로 시작 (모드가 섞인 평균 방지)
+    if (r.mode != accumMode)
+    {
+        accumMode = r.mode;
+        accumFrames = 0;
+        accumFrameMs = 0.0;
+        for (int i = 0; i < GP_Count; i++) { accumPassMs[i] = 0.0; accumPassUsed[i] = false; }
+    }
+
+    for (int i = 0; i < GP_Count; i++)
+    {
+        accumPassMs[i] += passMs[i];
+        accumPassUsed[i] |= used[i];
+    }
+    accumFrameMs += double(prev - first) * 1000.0 / double(dj.Frequency);
+    accumFrames++;
+
+    if (accumFrames >= kAverageFrames)
+    {
+        auto& res = gpuResults[(int)accumMode];
+        res.valid = true;
+        res.frameMs = float(accumFrameMs / accumFrames);
+        for (int i = 0; i < GP_Count; i++)
+        {
+            res.passMs[i] = float(accumPassMs[i] / accumFrames);
+            res.passUsed[i] = accumPassUsed[i];
+            accumPassMs[i] = 0.0;
+            accumPassUsed[i] = false;
+        }
+        // Forward Only는 LightPass를 건너뛰므로 카운트가 없음
+        const bool deferred = accumMode != LightingMode::ForwardOnly;
+        res.volumeLights = deferred ? lightPass->volumeLightCount : 0;
+        res.fullScreenLights = deferred ? lightPass->fullScreenLightCount : 0;
+        accumFrameMs = 0.0;
+        accumFrames = 0;
+
+        if (gpuBench) GpuBenchStep();
+    }
+}
+
+void EngineApp::GpuBenchStep()
+{
+    if (benchExitFrames >= 0) return;
+    if (++benchPublishes < 2) return;   // 모드 전환 직후 평균은 버리고 두 번째 평균을 사용
+
+    benchPublishes = 0;
+    int next = (int)lightingMode + 1;
+    if (next < (int)LightingMode::Count)
+    {
+        lightingMode = (LightingMode)next;
+        return;
+    }
+
+    GpuBenchWrite();
+    benchExitFrames = 300;  // 결과 창을 캡처할 시간
+}
+
+void EngineApp::GpuBenchWrite()
+{
+    static const char* modeNames[] = { "ForwardOnly", "DeferredFullScreen", "DeferredLightVolume" };
+    static const char* passNames[] = { "Shadow", "Geometry", "Decal", "Light", "Skybox",
+                                       "Forward", "Effect", "Bloom", "PostProcess", "UI" };
+    const auto& vp = ShaderManager::Instance().viewport_screen;
+
+    FILE* fp = nullptr;
+    if (fopen_s(&fp, "gpu_bench.txt", "w") != 0 || !fp) return;
+    fprintf(fp, "resolution=%.0fx%.0f opaque=%d transparent=%d lights=%d shaderOptimized=%d averageFrames=%d\n",
+        vp.Width, vp.Height, (int)renderQueue->GetOpaqueQueue().size(),
+        (int)renderQueue->GetTransparentQueue().size(),
+        (int)LightSystem::Instance().GetComponents().size(), 1, kAverageFrames);  // --gpu-bench는 항상 셰이더 최적화
+    fprintf(fp, "pass");
+    for (auto* m : modeNames) fprintf(fp, ",%s", m);
+    fprintf(fp, "\nFrame");
+    for (auto& r : gpuResults) fprintf(fp, ",%.3f", r.frameMs);
+    for (int p = 0; p < GP_Count; p++)
+    {
+        fprintf(fp, "\n%s", passNames[p]);
+        for (auto& r : gpuResults)
+            r.passUsed[p] ? fprintf(fp, ",%.3f", r.passMs[p]) : fprintf(fp, ",skip");
+    }
+    fprintf(fp, "\nVolumeLights");
+    for (auto& r : gpuResults) fprintf(fp, ",%d", r.volumeLights);
+    fprintf(fp, "\nFullScreenLights");
+    for (auto& r : gpuResults) fprintf(fp, ",%d", r.fullScreenLights);
+    fprintf(fp, "\n");
+    fclose(fp);
+}
+
+void EngineApp::RenderGpuProfiler()
+{
+    if (!gpuProfilerEnabled) return;
+
+    static const char* modeNames[] = { "Forward Only", "Deferred (FullScreen)", "Deferred + LightVolume" };
+    static const char* passNames[] = { "Shadow", "Geometry", "Decal", "Light", "Skybox",
+                                       "Forward", "Effect", "Bloom", "PostProcess", "UI" };
+    static_assert(sizeof(passNames) / sizeof(passNames[0]) == GP_Count, "pass name count");
+
+    ImGui::Begin("GPU Profiler");
+
+    int mode = (int)lightingMode;
+    ImGui::Text("Lighting Mode");
+    for (int i = 0; i < (int)LightingMode::Count; i++)
+    {
+        ImGui::SameLine();
+        ImGui::RadioButton(modeNames[i], &mode, i);
+    }
+    lightingMode = (LightingMode)mode;
+
+    const auto& vp = ShaderManager::Instance().viewport_screen;
+    ImGui::Text("Resolution : %.0f x %.0f   Opaque : %d   Transparent : %d   Lights : %d",
+        vp.Width, vp.Height,
+        (int)renderQueue->GetOpaqueQueue().size(), (int)renderQueue->GetTransparentQueue().size(),
+        (int)LightSystem::Instance().GetComponents().size());
+    ImGui::TextDisabled("%d frame average. Switch mode and wait a few seconds.", kAverageFrames);
+    ImGui::TextColored(ImVec4(0.4f, 1, 0.4f, 1), "Shader : optimized (--gpu-profiler / --gpu-bench)");
+
+    if (ImGui::BeginTable("gpu", 1 + (int)LightingMode::Count, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+    {
+        ImGui::TableSetupColumn("ms");
+        for (auto* name : modeNames) ImGui::TableSetupColumn(name);
+        ImGui::TableHeadersRow();
+
+        auto row = [&](const char* label, auto cell)
+        {
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn(); ImGui::TextUnformatted(label);
+            for (int m = 0; m < (int)LightingMode::Count; m++)
+            {
+                ImGui::TableNextColumn();
+                if (gpuResults[m].valid) cell(gpuResults[m]);
+                else ImGui::TextDisabled("-");
+            }
+        };
+
+        row("GPU Frame Time", [](const GpuModeResult& r) { ImGui::Text("%.3f", r.frameMs); });
+        for (int p = 0; p < GP_Count; p++)
+        {
+            row(passNames[p], [p](const GpuModeResult& r)
+            {
+                if (r.passUsed[p]) ImGui::Text("%.3f", r.passMs[p]);
+                else ImGui::TextDisabled("skip");
+            });
+        }
+        row("Point/Spot : Volume", [](const GpuModeResult& r) { ImGui::Text("%d", r.volumeLights); });
+        row("Point/Spot : FullScreen", [](const GpuModeResult& r) { ImGui::Text("%d", r.fullScreenLights); });
+
+        ImGui::EndTable();
+    }
+
+    ImGui::End();
+}
+#endif
 
 void EngineApp::OnFixedUpdate()
 {
@@ -319,6 +584,17 @@ void EngineApp::LoadSavedFirstScene()
 
     fs::path sceneFile;
 
+#if _DEBUG
+    // --scene=04_MainGameScene.json : 지정한 씬으로 시작 (GPU 벤치마크용)
+    std::wstring cmd = GetCommandLineW();
+    if (auto pos = cmd.find(L"--scene="); pos != std::wstring::npos)
+    {
+        std::wstring name = cmd.substr(pos + 8);
+        sceneFile = *sceneDir / name.substr(0, name.find(L' '));
+    }
+#endif
+
+    if (sceneFile.empty())
     for (const auto& entry : fs::directory_iterator(*sceneDir))
     {
         if (!entry.is_regular_file()) continue; // 일반 파일일지 설정하기

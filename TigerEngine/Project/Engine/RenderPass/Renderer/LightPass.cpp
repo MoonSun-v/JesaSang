@@ -30,7 +30,7 @@ void LightPass::Init(const ComPtr<ID3D11Device>& device)
 
 void LightPass::Execute(ComPtr<ID3D11DeviceContext>& context, RenderQueue& queue, Camera* cam)
 {
-    StencilPass(context, cam);
+    if (!forceFullScreen) StencilPass(context, cam);
     LightingPass(context, cam);
 }
 
@@ -147,6 +147,8 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
     // Emissive는 라이트 수와 무관하게 화면 전체에 한 번만 더한다 (첫 Full Screen 드로우에서)
     bool emissiveAdded = false;
     const UINT stencilRef = 0x02;       // StencilPass와 같은 값이어야 함 (ReadMask 0x02와 비교)
+    volumeLightCount = 0;
+    fullScreenLightCount = 0;
     for (Light*& light : lights)
     {
        auto lightPos = light->GetOwner()->GetTransform()->GetWorldPosition();
@@ -157,10 +159,13 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
        Vector3 spotDir = light->direction;
        spotDir.Normalize();
 
-       bool fullScreen = light->type == LightType::Directional
+       bool fullScreen = forceFullScreen || light->type == LightType::Directional
            || (!useCone && sphereVolume->IsInsidePointLight(camPos, lightPos, light->range))
            || (useCone && coneVolume->IsInsideSpotLight(camPos, lightPos, spotDir,
                    light->range, XMConvertToRadians(SpotAngleDeg(*light))));
+
+       if (light->type != LightType::Directional)
+           (fullScreen ? fullScreenLightCount : volumeLightCount)++;
 
        // CB - Light
        sm.lightingCBData.lightType = static_cast<int>(light->type);
