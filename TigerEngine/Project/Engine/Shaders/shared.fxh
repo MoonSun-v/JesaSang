@@ -99,6 +99,9 @@ cbuffer LightingCB : register(b2)
     
     float indirectIntensity;
     bool useIBL;
+
+    bool addEmissive;           // Deferred Lighting: Emissive는 한 번만 더함
+    float3 emissivePadding;
 }
 
 cbuffer MaterialCB : register(b3)

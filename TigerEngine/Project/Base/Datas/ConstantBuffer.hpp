@@ -70,6 +70,9 @@ struct alignas(16) LightingCB
 
     float indirectIntensity = 0.2f;
     BOOL  useIBL = 0;
+
+    BOOL    addEmissive = 0;    // Deferred Lighting에서 Emissive를 한 번만 더하기 위한 플래그
+    Vector3 emissivePadding;
 };
 
 // MaterialCB -> b3

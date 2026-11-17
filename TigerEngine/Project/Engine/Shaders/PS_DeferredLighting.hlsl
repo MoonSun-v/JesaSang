@@ -266,7 +266,8 @@ float4 main(PS_FullScreen_Input input) : SV_TARGET
 
     
     // --- [Final Color]  ----------------------------------
-    float3 finalColor = (DirectColor * shadowFactor) + IndirectColor + emissive;
+    // Additive Blend로 라이트마다 그려지므로 Emissive는 addEmissive인 드로우에서만 더함
+    float3 finalColor = (DirectColor * shadowFactor) + IndirectColor + (addEmissive ? emissive : 0);
 
      // LDR 단독패스일 때만 감마보정
     if (useDefaultGamma && !isHDR)
