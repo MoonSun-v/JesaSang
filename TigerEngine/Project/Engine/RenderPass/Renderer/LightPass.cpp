@@ -8,6 +8,12 @@
 
 using namespace std;
 
+// 셰이더(PS_DeferredLighting)는 inner/outer 중 큰 각도까지 빛을 계산하므로 볼륨도 같은 각도를 써야 함
+static float SpotAngleDeg(const Light& light) { return (std::max)(light.innerAngle, light.outerAngle); }
+
+// 45도 초과 콘은 반지름(range * tan)이 range보다 커져 구보다 비효율적 -> 콘을 포함하는 구 볼륨 사용
+static bool UseCone(const Light& light) { return light.type == LightType::Spot && SpotAngleDeg(light) <= 45.0f; }
+
 LightPass::~LightPass()
 {
     if (sphereVolume) delete sphereVolume;
@@ -18,7 +24,7 @@ void LightPass::Init(const ComPtr<ID3D11Device>& device)
 {
     // light volume create
     sphereVolume = CreateLightVolumeSphere(device.Get(), 24, 16);
-    coneVolume = CreateLightVolumeCone(device.Get(), 24, false);
+    coneVolume = CreateLightVolumeCone(device.Get(), 24, true);     // 닫힌 볼륨이어야 밑면 방향에서도 마크됨
 }
 
 
@@ -64,16 +70,11 @@ void LightPass::StencilPass(ComPtr<ID3D11DeviceContext>& context, Camera* camera
     // Render
     for (Light*& light : lights)
     {
-        if (light->type == LightType::Point)
-        {
-            sphereVolume->UpdateWolrd(*light);
-            sphereVolume->Draw(context, *camera);
-        }
-        else if (light->type == LightType::Spot)
-        {
-            coneVolume->UpdateWolrd(*light);
-            coneVolume->Draw(context, *camera);
-        }
+        if (light->type == LightType::Directional) continue;
+
+        LightVolumeMesh* volume = UseCone(*light) ? coneVolume : sphereVolume;
+        volume->UpdateWolrd(*light);
+        volume->Draw(context, *camera);
     }
 
     // clear
@@ -133,10 +134,33 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
     sm.lightingCBData.indirectIntensity = wm.indirectIntensity;
     context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
 
+    auto drawFullScreen = [&]()
+    {
+        context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
+        context->RSSetState(nullptr);
+        context->IASetInputLayout(nullptr);
+        context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
+        context->Draw(3, 0);
+    };
+
     // Render
+    // Emissive는 라이트 수와 무관하게 화면 전체에 한 번만 더한다 (첫 Full Screen 드로우에서)
+    bool emissiveAdded = false;
+    const UINT stencilRef = 0x02;       // StencilPass와 같은 값이어야 함 (ReadMask 0x02와 비교)
     for (Light*& light : lights)
     {
        auto lightPos = light->GetOwner()->GetTransform()->GetWorldPosition();
+
+       // Directional, 카메라가 볼륨 안 : Full Screen (Stencil off)
+       // Point, Spot : Light Volume + Stencil Test (StencilPass에서 마크한 영역만)
+       bool useCone = UseCone(*light);
+       Vector3 spotDir = light->direction;
+       spotDir.Normalize();
+
+       bool fullScreen = light->type == LightType::Directional
+           || (!useCone && sphereVolume->IsInsidePointLight(camPos, lightPos, light->range))
+           || (useCone && coneVolume->IsInsideSpotLight(camPos, lightPos, spotDir,
+                   light->range, XMConvertToRadians(SpotAngleDeg(*light))));
 
        // CB - Light
        sm.lightingCBData.lightType = static_cast<int>(light->type);
@@ -148,104 +172,38 @@ void LightPass::LightingPass(ComPtr<ID3D11DeviceContext>& context, Camera* camer
        sm.lightingCBData.lightRange = light->range;
        sm.lightingCBData.innerAngle = light->innerAngle;
        sm.lightingCBData.outerAngle = light->outerAngle;
+       sm.lightingCBData.addEmissive = fullScreen && !emissiveAdded;
+       emissiveAdded |= fullScreen;
        context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
 
-       // 임시 Lighting
-       // TODO :: Lighting Volume Stencil 디버깅
-       // 지금 데칼패스 해야돼서 일단 FullScreen으로 통일함
+       if (fullScreen)
        {
-           context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
-
-           // RS
-           context.Get()->RSSetState(nullptr);
-
-           // Full Screen Quad
-           context->IASetInputLayout(nullptr);
-           context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-           context.Get()->Draw(3, 0);
+           drawFullScreen();
        }
+       else
+       {
+           context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), stencilRef);
+           context->RSSetState(sm.cullfrontRS.Get());
+           context->IASetInputLayout(sm.inputLayout_Position.Get());
+           context->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
 
-       // TODO :: 아래 주석 해제 후 테스트 필요
-        //// Light Volume 렌더링
-        //if (light->type == LightType::Directional)
-        //{
-        //    // Stencil Test off
-        //    context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
-
-        //    // RS
-        //    context.Get()->RSSetState(nullptr);
-
-        //    // Full Screen Quad
-        //    context->IASetInputLayout(nullptr);
-        //    context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-        //    context.Get()->Draw(3, 0);
-        //}
-        //else
-        //{
-        //    // Light Volume
-        //    if (light->type == LightType::Point)
-        //    {
-        //        if (sphereVolume->IsInsidePointLight(camPos, lightPos, light->range))
-        //        {
-        //            // Stencil Test off
-        //            context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
-
-        //            // RS
-        //            context.Get()->RSSetState(nullptr);
-
-        //            // Full Screen Quad
-        //            context->IASetInputLayout(nullptr);
-        //            context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-        //            context.Get()->Draw(3, 0);
-        //        }
-        //        else
-        //        {
-        //            // Stencil Test on
-        //            context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
-
-        //            // RS
-        //            context.Get()->RSSetState(sm.cullfrontRS.Get());
-
-        //            // Light Volume
-        //            context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
-        //            context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
-        //            sphereVolume->UpdateWolrd(*light);
-        //            sphereVolume->Draw(context, *camera);
-        //        }
-        //    }
-        //    else if (light->type == LightType::Spot)
-        //    {
-        //        if (sphereVolume->IsInsideSpotLight(camPos, lightPos,
-        //            light->direction, light->range, light->outerAngle))
-        //        {
-        //            // Stencil Test off
-        //            context->OMSetDepthStencilState(sm.disableDSS.Get(), 0);
-
-        //            // RS
-        //            context.Get()->RSSetState(nullptr);
-
-        //            // Full Screen Quad
-        //            context->IASetInputLayout(nullptr);
-        //            context->VSSetShader(sm.VS_FullScreen.Get(), NULL, 0);
-        //            context.Get()->Draw(3, 0);
-        //        }
-        //        else
-        //        {
-        //            // Stencil Test on
-        //            context->OMSetDepthStencilState(sm.lightingVolumeTestDSS.Get(), 1);
-
-        //            // RS
-        //            context.Get()->RSSetState(sm.cullfrontRS.Get());
-
-        //            // Light Volum
-        //            context.Get()->IASetInputLayout(sm.inputLayout_Position.Get());
-        //            context.Get()->VSSetShader(sm.VS_LightVolume.Get(), nullptr, 0);
-        //            coneVolume->UpdateWolrd(*light);
-        //            coneVolume->Draw(context, *camera);
-        //        }
-        //    }
-        //}
+           LightVolumeMesh* volume = useCone ? coneVolume : sphereVolume;
+           volume->UpdateWolrd(*light);
+           volume->Draw(context, *camera);
+       }
     }
+
+    // Full Screen 라이트가 하나도 없었으면 Emissive만 따로 한 번 더한다 (직접광 0, IBL 없음)
+    if (!emissiveAdded)
+    {
+        sm.lightingCBData.lightType = static_cast<int>(LightType::Directional);
+        sm.lightingCBData.isSunLight = FALSE;
+        sm.lightingCBData.directIntensity = 0.0f;
+        sm.lightingCBData.addEmissive = TRUE;
+        context->UpdateSubresource(sm.lightingCB.Get(), 0, nullptr, &sm.lightingCBData, 0, 0);
+        drawFullScreen();
+    }
+    sm.lightingCBData.addEmissive = FALSE;
 
     // clear
     context->OMSetDepthStencilState(nullptr, 0);

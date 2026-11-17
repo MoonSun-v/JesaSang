@@ -25,7 +25,8 @@ void LightVolumeMesh::UpdateWolrd(Light& light)
     else if (volumeType == LightVolumeType::Cone)
     {
         float height = light.range;
-        float outerRad = DirectX::XMConvertToRadians(light.outerAngle);
+        // 셰이더와 동일하게 inner/outer 중 큰 각도 사용 (outer가 0인 데이터도 존재)
+        float outerRad = DirectX::XMConvertToRadians((std::max)(light.innerAngle, light.outerAngle));
         float radius = height * tanf(outerRad);
         
         Vector3 coneForward(0, 0, 1);
